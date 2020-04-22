@@ -120,7 +120,7 @@ reclassify(){
 prep_circuitscape(){
   print_vars
   echo "Prep Circuitscape"
-  rm -rf config/ini_circuitscape/all/*
+  rm -rf config/ini_circuitscape/all/*.ini
   ## Prepare for circuitscape
   Rscript scripts/6.1_prep_circuitscape_inputs.R
   # sed -i 's/2\.0/2/g' `ls outputs/reclassed_with_buffer/*.asc`

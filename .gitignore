@@ -8,3 +8,7 @@
 # Circuitscape
 *.ini
 !ini_template.ini
+
+# Figures 
+*.pdf
+*.png
