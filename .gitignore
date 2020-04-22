@@ -7,3 +7,4 @@
 
 # Circuitscape
 *.ini
+!ini_template.ini
