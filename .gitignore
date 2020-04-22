@@ -3,7 +3,7 @@
 .Rhistory
 .RData
 .Ruserdata
-.Rproj
+*.Rproj
 
 # Circuitscape
 *.ini
