@@ -14,9 +14,9 @@
 *.png
 
 # data folders
-data/
+data/*
 !data/readme.md
-data_raw/
+data_raw/*
 !data_raw/readme.md
 
 # libraries folders
