@@ -1,0 +1,22 @@
+### Folder structure of /data
+
+- census
+   - vector
+- distances
+  - roads
+  - urban
+- env_vars
+  - CLI
+  - elevation
+  - patch_size
+- land_use
+  - aggregated
+  - roads
+  - urban
+- mun
+- RMN
+  - MCTPQ
+- stsim
+  - aggregated
+  - spatial_multipliers
+- temp
