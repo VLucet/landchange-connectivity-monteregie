@@ -1,0 +1,157 @@
+#-------------------------------------------------------------------------------
+## 2.2 Prepare transition targets for stsim
+## 2020
+## Inputs: land use
+## Outputs: Transition targets
+#-------------------------------------------------------------------------------
+
+# reviewed 2020 
+
+# Remove all in environment
+rm(list = ls())
+
+# Load required packages
+library(raster)
+library(sf)
+library(tidyverse)
+library(fasterize)
+
+# Reset Raster tmp files
+removeTmpFiles(0)
+showTmpFiles()
+
+#-------------------------------------------------------------------------------
+
+# Transition size ==> RERUN CODE IN script 1 with reclassed 120 by 120 raster
+source("scripts/functions/extract_vals_and_trans.R")
+lu.18.sub <- stack(raster("data/land_use/LandUse_mont_aafc_30by30_1990.tif"),
+                   raster("data/land_use/LandUse_mont_aafc_30by30_2000.tif"),
+                   raster("data/land_use/LandUse_mont_aafc_30by30_2010.tif"))
+
+names(lu.18.sub) <- c("lu.1990.18", "lu.2000.18", "lu.2010.18")
+mun.sub.18.clean <- st_read("data/mun//munic_SHP_clean.shp")
+mun.list <- as.character(unique((mun.sub.18.clean$MUS_NM_MUN)))
+classes <- data.frame(Code=seq(1:7)-1, Label=c("Other","Agriculture", "Anthropic", 
+                                               "Forest", "Roads", "Water","Wetlands"))
+
+All.Mont <- ExtractValsAndTrans(
+  shape_vec = mun.list,
+  shape_sf = mun.sub.18.clean,
+  attribute = "MUS_NM_MUN",
+  landUse_stack = lu.18.sub,
+  classes = classes
+)
+
+TransTotal <- All.Mont$Transitions
+
+# Make dtaframe (from script 1)
+TransTotal_saved.df <- data.frame()
+for (mun in mun.list) {
+  trans.df <- TransTotal[[mun]] %>%
+    mutate(Mun = mun)
+  TransTotal_saved.df <- bind_rows(TransTotal_saved.df, trans.df)
+}
+
+#-------------------------------------------------------------------------------
+
+# select and format for SSIM
+
+TransTotal_saved.df$Freq[is.na(TransTotal_saved.df$Freq)] <- 0
+
+SSIM_targets <- TransTotal_saved.df %>% 
+  dplyr::rename("SecondaryStratumID"=Mun, "Amount"=Freq) %>% 
+  mutate("TransitionGroupID"= "") 
+
+for (i in 1:length(SSIM_targets$From)){
+  From <- SSIM_targets$From[i]
+  To <- SSIM_targets$To[i]
+  
+  if (From == To){
+    trans = "SAME"
+  }
+  
+  if (From == 1 & To == 2){
+    trans <- "Agricultural Loss [Type]"
+  } else if (From == 3 & To == 1){
+    trans <- "Agricultural Expansion [Type]"
+  } else if (From == 3 & To == 2){
+    trans <- "Deforestation [Type]"
+  } else {
+    trans <- "Other"
+  }
+  
+  SSIM_targets$TransitionGroupID[i] <- trans
+}
+
+SSIM_targets_selected_h_per_y <-
+  SSIM_targets %>% 
+  dplyr::filter(TransitionGroupID != "SAME") %>% 
+  dplyr::filter(TransitionGroupID != "Other") %>% 
+  group_by(SecondaryStratumID, TransitionGroupID) %>% 
+  summarise(Amount=sum(Amount)*0.09/20)
+
+SSIM_targets_selected_h_per_10y <-
+  SSIM_targets %>% 
+  dplyr::filter(TransitionGroupID != "SAME") %>% 
+  dplyr::filter(TransitionGroupID != "Other") %>% 
+  rename(Timestep=Trans) %>% 
+  group_by(SecondaryStratumID, TransitionGroupID, Timestep) %>% 
+  summarise(Amount=sum(Amount)*0.09) %>%
+  ungroup() %>% glimpse() 
+SSIM_targets_selected_h_per_10y$Timestep <- 
+  ifelse(SSIM_targets_selected_h_per_10y$Timestep == "1990to2000", 1, 2) %>% glimpse()
+
+SSIM_targets_selected_h_per_10y_mean <- SSIM_targets_selected_h_per_10y %>% 
+  group_by(SecondaryStratumID, TransitionGroupID) %>% 
+  summarise(Amount=mean(Amount)) %>% 
+  mutate(Timestep = 3)
+
+SSIM_targets_selected_h_per_10y_final <- 
+  bind_rows(SSIM_targets_selected_h_per_10y,SSIM_targets_selected_h_per_10y_mean)
+
+write.csv(SSIM_targets_selected_h_per_y, "config/stsim/TransitionTarget_1y.csv", 
+          row.names=F)
+write.csv(SSIM_targets_selected_h_per_10y_final, "config/stsim/TransitionTarget_10y.csv", 
+          row.names=F)
+
+## TEST
+name <-"Saint-Bruno-de-Montarville"
+submun <- subset(mun.sub.18.clean, MUS_NM_MUN == name)
+test <- mask(crop(lu.18.sub, submun), submun)
+crosstab(test$lu.1990.18, test$lu.2010.18)
+plot(test==2)
+freq(test$lu.1990.18)
+freq(test$lu.2010.18)
+
+#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+# 
+# ## PROCESSING OF BRONWYN'S TARGETS
+# mun.sub.18.clean <- st_read(paste0(dataDir,"munic_SHP_clean/munic_SHP_clean.shp"))
+# BTSL_stc_targets <- read_csv("../landuse_model_full/BTSL_StConnect/BTSL_targets_swap/TransitionTargetsSTconnectBTSL.csv")
+# old_targets <- read_csv("Part_B_landuseModel/StSim_rsyncrosim/config_files/TransitionTarget_10y.csv") %>% 
+#   pull(TransitionGroupID) %>% unique()
+# head(BTSL_stc_targets)
+# 
+# # simple function to assess overlap between two vectors
+# source("Part_B_landuseModel/Scripts/functions/get_overlap.R")
+# 
+# overlap <- get_overlap(x = mun.sub.18.clean$MUS_NM_MRC, 
+#                        y = BTSL_stc_targets$SecondaryStratumID, TRUE, "fuzzy")
+# 
+# get_overlap(mun.sub.18.clean$MUS_NM_MRC, 
+#             BTSL_stc_targets[overlap$match_ind$y,]$SecondaryStratumID, TRUE, "fuzzy")
+# 
+# # write out only monteregie 
+# BTSL_stc_targets_mont <- BTSL_stc_targets[overlap$match_ind$y,] %>% 
+#   rename(old_TransitionGroupID = TransitionGroupID)
+# 
+# # Make looup table
+# new_TransitionGroupID = c("Agricultural Loss [Type]", "Agricultural Expansion [Type]", 
+#                           "Deforestation [Type]", "Treed Wetland Loss to Ag [Type]", 
+#                           "Treed Wetland Loss to Urb [Type]","Open Wetland Loss to Ag [Type]",
+#                           "Open Wetland Loss to Urb [Type]")
+# lookup <- tibble(old_TransitionGroupID = sort(unique(BTSL_stc_targets_mont$old_TransitionGroupID)),
+#                  TransitionGroupID = new_TransitionGroupID)
+# BTSL_stc_targets_mont_mod <- BTSL_stc_targets_mont %>% 
+#   left_join(lookup, by = "old_TransitionGroupID")

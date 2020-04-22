@@ -1,0 +1,9 @@
+# R and R studio related
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+.Rproj
+
+# Circuitscape
+*.ini
