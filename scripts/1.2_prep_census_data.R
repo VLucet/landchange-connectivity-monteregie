@@ -39,41 +39,41 @@ chass.DA.1991.sh.sf <- st_read(paste0(
   "DLI_1991_Census_DBF_Eng_Nat_ea.shp"
 ))
 chass.DA.1991.sh.sf <- st_transform(chass.DA.1991.sh.sf, crs = st_crs(mun_sub_18_clean))
-length(unique(chass.DA.1991.sh.sf$EA)) # 7831
+#length(unique(chass.DA.1991.sh.sf$EA)) # 7831
 
-sum(unique(chass.DA.1991.sh.sf$EA) %in% unique(chass.DA.1991.data$EA)) # 7347
-sum(unique(chass.DA.1991.data$EA) %in% unique(chass.DA.1991.sh.sf$EA)) # 7347
+#sum(unique(chass.DA.1991.sh.sf$EA) %in% unique(chass.DA.1991.data$EA)) # 7347
+#sum(unique(chass.DA.1991.data$EA) %in% unique(chass.DA.1991.sh.sf$EA)) # 7347
 
 test <- chass.DA.1991.sh.sf %>%
   left_join(chass.DA.1991.data, by = "EA")
 test <- fasterize(sf = test, raster = raster_mont, field = "COL7")
-plot(is.na(test))
+#plot(is.na(test))
 
 ## INTERSERCT DOESNT WORK
 # chass.DA.1991.sh.sf.i = st_intersection(chass.DA.1991.sh.sf, mun_sub_18_clean)
 
 chass.DA.1991.sh.sf.j <-
   st_join(st_centroid(chass.DA.1991.sh.sf), mun_sub_18_clean, left = F)
-length(unique(chass.DA.1991.sh.sf.j$EA))
-dim(chass.DA.1991.sh.sf.j)
+#length(unique(chass.DA.1991.sh.sf.j$EA))
+#dim(chass.DA.1991.sh.sf.j)
 # 1493   26
-plot(chass.DA.1991.sh.sf.j$geometry)
-plot(chass.DA.1991.sh.sf.j["MUS_NM_MUN"])
+#plot(chass.DA.1991.sh.sf.j$geometry)
+#plot(chass.DA.1991.sh.sf.j["MUS_NM_MUN"])
 
 # re-inject right geometry
 right_geom <- chass.DA.1991.sh.sf %>%
   filter(EA %in% unique(chass.DA.1991.sh.sf.j$EA))
-plot(right_geom$geometry, col = 2)
+#plot(right_geom$geometry, col = 2)
 st_geometry(chass.DA.1991.sh.sf.j) <- st_geometry(right_geom)
-plot(chass.DA.1991.sh.sf.j["MUS_NM_MUN"])
+#plot(chass.DA.1991.sh.sf.j["MUS_NM_MUN"])
 
 # Test, they match
 test_2 <- chass.DA.1991.sh.sf.j %>%
   filter(MUS_NM_MUN == "Yamaska")
 test_3 <- chass.DA.1991.sh.sf %>%
   filter(EA %in% test_2$EA)
-plot(test_2$geometry, col = 2)
-plot(test_3$geometry)
+#plot(test_2$geometry, col = 2)
+#plot(test_3$geometry)
 # See https://www12.statcan.gc.ca/census-recensement/2011/geo/
 # map-carte/pdf/CSD_SDR/2011-92145-2453072-00.pdf
 
@@ -83,9 +83,9 @@ matches.NA <- which(is.na(matches))
 unmachted <- chass.DA.1991.sh.sf.j[matches.NA, ]
 
 # Plot to see where the NAs are
-ggplot() +
-  geom_sf(data = chass.DA.1991.sh.sf.j) +
-  geom_sf(data = unmachted, aes(fill = AREA))
+# ggplot() +
+#   geom_sf(data = chass.DA.1991.sh.sf.j) +
+#   geom_sf(data = unmachted, aes(fill = AREA))
 
 chass.DA.1991.data.matched <-
   chass.DA.1991.sh.sf.j[which(!is.na(match(
@@ -97,7 +97,7 @@ chass.DA.1991.data.matched <-
 colnames(chass.DA.1991.data)[1] <- "EA"
 CHASS.1991 <- left_join(chass.DA.1991.sh.sf.j, chass.DA.1991.data, by = "EA")
 
-plot(CHASS.1991["COL7"])
+#plot(CHASS.1991["COL7"])
 
 # ggplot() + geom_sf(data = CHASS.1991, aes(fill = CHASS.1991$COL2), color = 'black', lwd =
 # 0.05) + theme(panel.background = element_rect(fill = NA), legend.position = 'top',
@@ -111,7 +111,7 @@ income.90 <- fasterize(st_read("data/census/vector/CHASS_1991.shp"),
                        raster = raster_mont,
                        field = "COL494"
 )
-plot(income.90)
+#plot(income.90)
 writeRaster(income.90, "data/census/Income_1991.tif", 
             overwrite = TRUE, format = "GTiff")
 
@@ -128,16 +128,16 @@ chass.DA.2001.sh.sf <- st_transform(chass.DA.2001.sh.sf, crs = st_crs(mun_sub_18
 
 chass.DA.2001.sh.sf.j <-
   st_join(st_centroid(chass.DA.2001.sh.sf), mun_sub_18_clean, left = F)
-length(unique(chass.DA.2001.sh.sf.j$DAUID))
-dim(chass.DA.2001.sh.sf.j)
-plot(chass.DA.2001.sh.sf.j$geometry)
-plot(chass.DA.2001.sh.sf.j["MUS_NM_MUN"])
+#length(unique(chass.DA.2001.sh.sf.j$DAUID))
+#dim(chass.DA.2001.sh.sf.j)
+#plot(chass.DA.2001.sh.sf.j$geometry)
+#plot(chass.DA.2001.sh.sf.j["MUS_NM_MUN"])
 
 # re-inject right geometry
 right_geom <- chass.DA.2001.sh.sf %>% filter(DAUID %in% unique(chass.DA.2001.sh.sf.j$DAUID))
-plot(right_geom$geometry, col = 2)
+#plot(right_geom$geometry, col = 2)
 st_geometry(chass.DA.2001.sh.sf.j) <- st_geometry(right_geom)
-plot(chass.DA.2001.sh.sf.j["MUS_NM_MUN"])
+#plot(chass.DA.2001.sh.sf.j["MUS_NM_MUN"])
 
 # Join with census data
 matches <- match(chass.DA.2001.sh.sf.j$DAUID, chass.DA.2001.data$COL0)
@@ -145,7 +145,7 @@ matches <- match(chass.DA.2001.sh.sf.j$DAUID, chass.DA.2001.data$COL0)
 matches.NA <- which(is.na(matches))
 unmachted <- chass.DA.2001.sh.sf.j[matches.NA, ]
 
-chass.DA.2001.data[matches, ] # NOT EMPTY good
+#chass.DA.2001.data[matches, ] # NOT EMPTY good
 
 chass.DA.2001.data.matched <-
   chass.DA.2001.sh.sf.j[which(!is.na(match(
@@ -159,7 +159,7 @@ colnames(chass.DA.2001.data)[1] <- "DAUID"
 chass.DA.2001.sh.sf.j$DAUID <- as.double(as.character(chass.DA.2001.sh.sf.j$DAUID)) 
 CHASS.2001 <- left_join(chass.DA.2001.sh.sf.j, chass.DA.2001.data, by = "DAUID")
 
-plot(CHASS.2001["COL899"])
+#plot(CHASS.2001["COL899"])
 
 # Rasterizing
 st_write(CHASS.2001, delete_dsn = T, "data/census/vector/CHASS_2001.shp")
@@ -169,7 +169,7 @@ income.01 <- fasterize(st_read("data/census/vector/CHASS_2001.shp"),
                        raster = raster_mont,
                        field = "COL899"
 )
-plot(income.01)
+#plot(income.01)
 writeRaster(income.01, "data/census/Income_2001.tif", overwrite = TRUE, format = "GTiff")
 
 #-------------------------------------------------------------------------------
@@ -191,7 +191,7 @@ chass.DA.2011.sh.sf <- st_transform(chass.DA.2011.sh.sf, crs = st_crs(mun_sub_18
 chass.DA.2011.sh.sf.i <- st_intersection(chass.DA.2011.sh.sf, mun_sub_18_clean)
 
 # test length
-sum(table(unique(chass.DA.2011.sh.sf.i$DAUID)))
+#sum(table(unique(chass.DA.2011.sh.sf.i$DAUID)))
 
 # Need to union
 chass.DA.2011.sh.sf.iU <- chass.DA.2011.sh.sf.i %>% aggregate(list(chass.DA.2011.sh.sf.i$DAUID), 
@@ -203,7 +203,7 @@ matches <- match(chass.DA.2011.sh.sf.iU$DAUID, chass.DA.2011.sht.data$COL0)
 matches.NA <- which(is.na(matches))
 unmachted <- chass.DA.2011.sh.sf.iU[matches.NA, ]
 
-chass.DA.2011.sht.data[matches, ]  # NOT EMPTY good
+#chass.DA.2011.sht.data[matches, ]  # NOT EMPTY good
 
 # # Plot to see where the NAs are # NO NAs ggplot()+ geom_sf(data = chass.DA.1991.sh.sf.iU) +
 # geom_sf(data = unmachted, aes(fill = AREA))
@@ -218,7 +218,7 @@ colnames(chass.DA.2011.sht.data)[1] <- "DAUID"
 chass.DA.2011.sh.sf.iU$DAUID <- as.double(as.character(chass.DA.2011.sh.sf.iU$DAUID)) 
 CHASS.2011.short <- left_join(chass.DA.2011.sh.sf.iU, chass.DA.2011.sht.data, by = "DAUID")
 
-plot(CHASS.2011.short["COL88"])
+#plot(CHASS.2011.short["COL88"])
 
 # Attempt at rasterizing
 st_write(CHASS.2011.short, delete_dsn = T, "data/census/vector/CHASS_2011_short.shp")
@@ -226,7 +226,7 @@ st_write(CHASS.2011.short, delete_dsn = T, "data/census/vector/CHASS_2011_short.
 short.11 <- fasterize(st_read("data/census/vector/CHASS_2011_short.shp"), 
                       raster = raster_mont, 
                       field = "COL88")
-plot(short.11)
+#plot(short.11)
 
 # Summarize 
 
@@ -282,7 +282,7 @@ chass.DA.2011.sh.sf <- st_transform(chass.DA.2011.sh.sf, crs = st_crs(mun_sub_18
 chass.DA.2011.sh.sf.i <- st_intersection(chass.DA.2011.sh.sf, mun_sub_18_clean)
 
 # Length differ (but should be 2479)
-sum(table(unique(chass.DA.2011.sh.sf.i$DAUID)))
+#sum(table(unique(chass.DA.2011.sh.sf.i$DAUID)))
 
 # Need to union
 chass.DA.2011.sh.sf.iU <- chass.DA.2011.sh.sf.i %>% aggregate(
@@ -296,7 +296,7 @@ matches <- match(chass.DA.2011.sh.sf.iU$DAUID, chass.DA.2011.nhs.data$COL0)
 matches.NA <- which(is.na(matches))
 unmachted <- chass.DA.2011.sh.sf.iU[matches.NA, ]
 
-chass.DA.2011.nhs.data[matches, ] # NOT EMPTY good
+#chass.DA.2011.nhs.data[matches, ] # NOT EMPTY good
 
 chass.DA.2011.data.matched <- chass.DA.2011.sh.sf.iU[which(!is.na(match(
   chass.DA.2011.sh.sf.iU$DAUID,
@@ -309,7 +309,7 @@ colnames(chass.DA.2011.nhs.data)[1] <- "DAUID"
 chass.DA.2011.sh.sf.iU$DAUID <- as.double(as.character(chass.DA.2011.sh.sf.iU$DAUID))
 CHASS.2011.NHS <- left_join(chass.DA.2011.sh.sf.iU, chass.DA.2011.nhs.data, by = "DAUID")
 
-plot(CHASS.2011.NHS["COL366"])
+#plot(CHASS.2011.NHS["COL366"])
 
 # Rasterizing
 st_write(CHASS.2011.NHS, delete_dsn = T, "data/census/vector/CHASS_2011_NHS.shp")
@@ -319,7 +319,7 @@ income.11 <- fasterize(st_read("data/census/vector/CHASS_2011_NHS.shp"),
                        raster = raster_mont,
                        field = "COL366"
 )
-plot(income.11)
+#plot(income.11)
 writeRaster(income.11, "data/census/Income_2011.tif", overwrite = TRUE, format = "GTiff")
 
 #-------------------------------------------------------------------------------

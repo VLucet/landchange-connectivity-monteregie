@@ -238,9 +238,9 @@ rast.250 = raster("data/env_vars/CLI/CLI_250k.tif")
 mosaic = raster("data/env_vars/CLI/CLI_mosaic.tif")
 
 # Check and fix NAs
-plot(mosaic)  # NAs are black
+#plot(mosaic)  # NAs are black
 mosaic[mosaic==0] <- NA
-plot(mosaic$layer)
+#plot(mosaic$layer)
 ## Write out to input file
 writeRaster(mosaic$layer, "data/env_vars/CLI/CLI_mosaic_no0.tif", overwrite=TRUE)
 

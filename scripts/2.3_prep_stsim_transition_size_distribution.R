@@ -76,7 +76,7 @@ for (dim1 in c("urb", "agex")){
                      stringsAsFactors = FALSE)
     
     all_areas <- list.append(all_areas, df)
-    str(all_areas)
+    #str(all_areas)
   }
   
 }

@@ -118,10 +118,10 @@ write.csv(SSIM_targets_selected_h_per_10y_final, "config/stsim/TransitionTarget_
 name <-"Saint-Bruno-de-Montarville"
 submun <- subset(mun.sub.18.clean, MUS_NM_MUN == name)
 test <- mask(crop(lu.18.sub, submun), submun)
-crosstab(test$lu.1990.18, test$lu.2010.18)
-plot(test==2)
-freq(test$lu.1990.18)
-freq(test$lu.2010.18)
+#crosstab(test$lu.1990.18, test$lu.2010.18)
+#plot(test==2)
+#freq(test$lu.1990.18)
+#freq(test$lu.2010.18)
 
 #-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------

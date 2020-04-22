@@ -47,8 +47,8 @@ corridors_rpj_buffer <- st_buffer(corridors_rpj, 1000)
 # Rasterize
 corridors_rpj_buffer_rast <- fasterize(corridors_rpj_buffer, raster = lu)
 areas_rpj_buffer_rast <- fasterize(areas_rpj, raster = lu)
-plot(corridors_rpj_buffer_rast)
-plot(areas_rpj_buffer_rast)
+#plot(corridors_rpj_buffer_rast)
+#plot(areas_rpj_buffer_rast)
 
 # Mask
 corridors_rast_masked <- mask(lu_forest, corridors_rpj_buffer_rast)
