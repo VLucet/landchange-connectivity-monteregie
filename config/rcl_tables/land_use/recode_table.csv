@@ -1,0 +1,16 @@
+﻿source ,name,class,subclass,old_code,new_code,new_class
+AAFC,Unclassified,Unclassified,NA,11,0,Other
+AAFC,Settlement,Settlement,NA,21,2,Anthropic
+AAFC,Roads,Roads,NA,25,4,Roads
+AAFC,Water,Water,NA,31,5,Water
+AAFC,Forest,Forest,NA,41,3,Forest
+AAFC,Forest Wetland ,Forest Wetland ,NA,42,6,Wetlands
+AAFC,Trees,Trees,NA,45,3,Forest
+AAFC,Treed Wetland ,Treed Wetland ,NA,46,6,Wetlands
+AAFC,Cropland,Cropland,NA,51,1,Agriculture
+AAFC,Grassland Managed,Grassland Managed,NA,61,0,Other
+AAFC,Grassland Unmanaged,Grassland Unmanaged,NA,62,0,Other
+AAFC,Wetland,Wetland,NA,71,6,Wetlands
+AAFC,Wetland Shrub,Wetland Shrub,NA,73,6,Wetlands
+AAFC,Wetland Herb ,Wetland Herb ,NA,74,6,Wetlands
+AAFC,Other land ,Other land ,NA,91,0,Other

@@ -1,0 +1,1594 @@
+"SecondaryStratumID","TransitionGroupID","Timestep","Amount"
+"Abercorn","Agricultural Expansion [Type]",1,12.24
+"Abercorn","Agricultural Expansion [Type]",2,1.98
+"Abercorn","Agricultural Loss [Type]",1,16.65
+"Abercorn","Agricultural Loss [Type]",2,7.29
+"Abercorn","Deforestation [Type]",1,18.9
+"Abercorn","Deforestation [Type]",2,2.07
+"Acton Vale","Agricultural Expansion [Type]",1,96.93
+"Acton Vale","Agricultural Expansion [Type]",2,4.23
+"Acton Vale","Agricultural Loss [Type]",1,38.7
+"Acton Vale","Agricultural Loss [Type]",2,63
+"Acton Vale","Deforestation [Type]",1,111.15
+"Acton Vale","Deforestation [Type]",2,29.52
+"Akwesasne","Agricultural Expansion [Type]",1,0.27
+"Akwesasne","Agricultural Expansion [Type]",2,0
+"Akwesasne","Agricultural Loss [Type]",1,0
+"Akwesasne","Agricultural Loss [Type]",2,10.98
+"Akwesasne","Deforestation [Type]",1,0.09
+"Akwesasne","Deforestation [Type]",2,8.82
+"Ange-Gardien","Agricultural Expansion [Type]",1,202.14
+"Ange-Gardien","Agricultural Expansion [Type]",2,7.11
+"Ange-Gardien","Agricultural Loss [Type]",1,10.89
+"Ange-Gardien","Agricultural Loss [Type]",2,29.88
+"Ange-Gardien","Deforestation [Type]",1,5.94
+"Ange-Gardien","Deforestation [Type]",2,4.23
+"Beauharnois","Agricultural Expansion [Type]",1,89.64
+"Beauharnois","Agricultural Expansion [Type]",2,2.25
+"Beauharnois","Agricultural Loss [Type]",1,43.47
+"Beauharnois","Agricultural Loss [Type]",2,50.76
+"Beauharnois","Deforestation [Type]",1,42.66
+"Beauharnois","Deforestation [Type]",2,28.44
+"Bedford","Agricultural Expansion [Type]",1,8.91
+"Bedford","Agricultural Expansion [Type]",2,1.26
+"Bedford","Agricultural Loss [Type]",1,21.96
+"Bedford","Agricultural Loss [Type]",2,13.41
+"Bedford","Deforestation [Type]",1,4.86
+"Bedford","Deforestation [Type]",2,12.51
+"Beloeil","Agricultural Expansion [Type]",1,4.86
+"Beloeil","Agricultural Expansion [Type]",2,0
+"Beloeil","Agricultural Loss [Type]",1,32.4
+"Beloeil","Agricultural Loss [Type]",2,118.8
+"Beloeil","Deforestation [Type]",1,3.69
+"Beloeil","Deforestation [Type]",2,0.09
+"Béthanie","Agricultural Expansion [Type]",1,237.33
+"Béthanie","Agricultural Expansion [Type]",2,9.9
+"Béthanie","Agricultural Loss [Type]",1,8.82
+"Béthanie","Agricultural Loss [Type]",2,0.72
+"Béthanie","Deforestation [Type]",1,13.59
+"Béthanie","Deforestation [Type]",2,0.27
+"Bolton-Ouest","Agricultural Expansion [Type]",1,119.43
+"Bolton-Ouest","Agricultural Expansion [Type]",2,4.86
+"Bolton-Ouest","Agricultural Loss [Type]",1,29.34
+"Bolton-Ouest","Agricultural Loss [Type]",2,3.69
+"Bolton-Ouest","Deforestation [Type]",1,186.39
+"Bolton-Ouest","Deforestation [Type]",2,56.07
+"Boucherville","Agricultural Expansion [Type]",1,59.67
+"Boucherville","Agricultural Expansion [Type]",2,3.6
+"Boucherville","Agricultural Loss [Type]",1,163.8
+"Boucherville","Agricultural Loss [Type]",2,265.95
+"Boucherville","Deforestation [Type]",1,85.68
+"Boucherville","Deforestation [Type]",2,54.99
+"Brigham","Agricultural Expansion [Type]",1,221.85
+"Brigham","Agricultural Expansion [Type]",2,16.65
+"Brigham","Agricultural Loss [Type]",1,42.39
+"Brigham","Agricultural Loss [Type]",2,48.24
+"Brigham","Deforestation [Type]",1,56.34
+"Brigham","Deforestation [Type]",2,51.03
+"Brome","Agricultural Expansion [Type]",1,16.11
+"Brome","Agricultural Expansion [Type]",2,0.72
+"Brome","Agricultural Loss [Type]",1,0.81
+"Brome","Agricultural Loss [Type]",2,1.35
+"Brome","Deforestation [Type]",1,0.81
+"Brome","Deforestation [Type]",2,7.11
+"Bromont","Agricultural Expansion [Type]",1,237.6
+"Bromont","Agricultural Expansion [Type]",2,11.16
+"Bromont","Agricultural Loss [Type]",1,52.83
+"Bromont","Agricultural Loss [Type]",2,81
+"Bromont","Deforestation [Type]",1,171.36
+"Bromont","Deforestation [Type]",2,320.58
+"Brossard","Agricultural Expansion [Type]",1,31.23
+"Brossard","Agricultural Expansion [Type]",2,1.17
+"Brossard","Agricultural Loss [Type]",1,109.26
+"Brossard","Agricultural Loss [Type]",2,278.28
+"Brossard","Deforestation [Type]",1,58.86
+"Brossard","Deforestation [Type]",2,14.13
+"Calixa-Lavallée","Agricultural Expansion [Type]",1,6.93
+"Calixa-Lavallée","Agricultural Expansion [Type]",2,0.09
+"Calixa-Lavallée","Agricultural Loss [Type]",1,5.22
+"Calixa-Lavallée","Agricultural Loss [Type]",2,2.61
+"Calixa-Lavallée","Deforestation [Type]",1,0
+"Calixa-Lavallée","Deforestation [Type]",2,0.09
+"Candiac","Agricultural Expansion [Type]",1,14.04
+"Candiac","Agricultural Expansion [Type]",2,0.09
+"Candiac","Agricultural Loss [Type]",1,39.51
+"Candiac","Agricultural Loss [Type]",2,102.24
+"Candiac","Deforestation [Type]",1,57.42
+"Candiac","Deforestation [Type]",2,87.48
+"Carignan","Agricultural Expansion [Type]",1,70.83
+"Carignan","Agricultural Expansion [Type]",2,2.34
+"Carignan","Agricultural Loss [Type]",1,34.38
+"Carignan","Agricultural Loss [Type]",2,88.29
+"Carignan","Deforestation [Type]",1,52.29
+"Carignan","Deforestation [Type]",2,68.85
+"Chambly","Agricultural Expansion [Type]",1,26.1
+"Chambly","Agricultural Expansion [Type]",2,0.45
+"Chambly","Agricultural Loss [Type]",1,36.09
+"Chambly","Agricultural Loss [Type]",2,142.11
+"Chambly","Deforestation [Type]",1,53.82
+"Chambly","Deforestation [Type]",2,26.46
+"Châteauguay","Agricultural Expansion [Type]",1,7.74
+"Châteauguay","Agricultural Expansion [Type]",2,0.45
+"Châteauguay","Agricultural Loss [Type]",1,51.48
+"Châteauguay","Agricultural Loss [Type]",2,79.11
+"Châteauguay","Deforestation [Type]",1,57.87
+"Châteauguay","Deforestation [Type]",2,35.19
+"Contrecoeur","Agricultural Expansion [Type]",1,42.48
+"Contrecoeur","Agricultural Expansion [Type]",2,1.98
+"Contrecoeur","Agricultural Loss [Type]",1,26.82
+"Contrecoeur","Agricultural Loss [Type]",2,35.91
+"Contrecoeur","Deforestation [Type]",1,50.04
+"Contrecoeur","Deforestation [Type]",2,65.07
+"Coteau-du-Lac","Agricultural Expansion [Type]",1,27.45
+"Coteau-du-Lac","Agricultural Expansion [Type]",2,0.45
+"Coteau-du-Lac","Agricultural Loss [Type]",1,46.08
+"Coteau-du-Lac","Agricultural Loss [Type]",2,83.79
+"Coteau-du-Lac","Deforestation [Type]",1,44.73
+"Coteau-du-Lac","Deforestation [Type]",2,22.77
+"Cowansville","Agricultural Expansion [Type]",1,47.16
+"Cowansville","Agricultural Expansion [Type]",2,3.6
+"Cowansville","Agricultural Loss [Type]",1,37.8
+"Cowansville","Agricultural Loss [Type]",2,23.94
+"Cowansville","Deforestation [Type]",1,83.16
+"Cowansville","Deforestation [Type]",2,63.63
+"Delson","Agricultural Expansion [Type]",1,0.54
+"Delson","Agricultural Expansion [Type]",2,0
+"Delson","Agricultural Loss [Type]",1,66.15
+"Delson","Agricultural Loss [Type]",2,8.19
+"Delson","Deforestation [Type]",1,32.85
+"Delson","Deforestation [Type]",2,11.34
+"Dundee","Agricultural Expansion [Type]",1,270.18
+"Dundee","Agricultural Expansion [Type]",2,5.58
+"Dundee","Agricultural Loss [Type]",1,17.46
+"Dundee","Agricultural Loss [Type]",2,2.07
+"Dundee","Deforestation [Type]",1,0.72
+"Dundee","Deforestation [Type]",2,0.9
+"Dunham","Agricultural Expansion [Type]",1,139.59
+"Dunham","Agricultural Expansion [Type]",2,13.86
+"Dunham","Agricultural Loss [Type]",1,88.65
+"Dunham","Agricultural Loss [Type]",2,25.83
+"Dunham","Deforestation [Type]",1,107.19
+"Dunham","Deforestation [Type]",2,63.18
+"East Farnham","Agricultural Expansion [Type]",1,10.08
+"East Farnham","Agricultural Expansion [Type]",2,2.43
+"East Farnham","Agricultural Loss [Type]",1,2.61
+"East Farnham","Agricultural Loss [Type]",2,0.27
+"East Farnham","Deforestation [Type]",1,8.73
+"East Farnham","Deforestation [Type]",2,3.06
+"Elgin","Agricultural Expansion [Type]",1,119.25
+"Elgin","Agricultural Expansion [Type]",2,3.78
+"Elgin","Agricultural Loss [Type]",1,7.29
+"Elgin","Agricultural Loss [Type]",2,0.99
+"Elgin","Deforestation [Type]",1,1.26
+"Elgin","Deforestation [Type]",2,0
+"Farnham","Agricultural Expansion [Type]",1,131.49
+"Farnham","Agricultural Expansion [Type]",2,5.67
+"Farnham","Agricultural Loss [Type]",1,29.79
+"Farnham","Agricultural Loss [Type]",2,66.15
+"Farnham","Deforestation [Type]",1,38.34
+"Farnham","Deforestation [Type]",2,78.75
+"Franklin","Agricultural Expansion [Type]",1,196.74
+"Franklin","Agricultural Expansion [Type]",2,22.05
+"Franklin","Agricultural Loss [Type]",1,1.8
+"Franklin","Agricultural Loss [Type]",2,6.66
+"Franklin","Deforestation [Type]",1,3.24
+"Franklin","Deforestation [Type]",2,3.06
+"Frelighsburg","Agricultural Expansion [Type]",1,39.24
+"Frelighsburg","Agricultural Expansion [Type]",2,7.47
+"Frelighsburg","Agricultural Loss [Type]",1,32.4
+"Frelighsburg","Agricultural Loss [Type]",2,9.36
+"Frelighsburg","Deforestation [Type]",1,52.47
+"Frelighsburg","Deforestation [Type]",2,9.54
+"Godmanchester","Agricultural Expansion [Type]",1,331.65
+"Godmanchester","Agricultural Expansion [Type]",2,5.85
+"Godmanchester","Agricultural Loss [Type]",1,14.76
+"Godmanchester","Agricultural Loss [Type]",2,10.26
+"Godmanchester","Deforestation [Type]",1,4.68
+"Godmanchester","Deforestation [Type]",2,1.8
+"Granby","Agricultural Expansion [Type]",1,198
+"Granby","Agricultural Expansion [Type]",2,4.59
+"Granby","Agricultural Loss [Type]",1,79.11
+"Granby","Agricultural Loss [Type]",2,200.97
+"Granby","Deforestation [Type]",1,183.33
+"Granby","Deforestation [Type]",2,308.07
+"Havelock","Agricultural Expansion [Type]",1,83.88
+"Havelock","Agricultural Expansion [Type]",2,11.43
+"Havelock","Agricultural Loss [Type]",1,1.98
+"Havelock","Agricultural Loss [Type]",2,8.1
+"Havelock","Deforestation [Type]",1,2.61
+"Havelock","Deforestation [Type]",2,22.32
+"Hemmingford","Agricultural Expansion [Type]",1,147.87
+"Hemmingford","Agricultural Expansion [Type]",2,25.47
+"Hemmingford","Agricultural Loss [Type]",1,10.35
+"Hemmingford","Agricultural Loss [Type]",2,9.54
+"Hemmingford","Deforestation [Type]",1,8.64
+"Hemmingford","Deforestation [Type]",2,17.01
+"Henryville","Agricultural Expansion [Type]",1,9.45
+"Henryville","Agricultural Expansion [Type]",2,0.36
+"Henryville","Agricultural Loss [Type]",1,6.84
+"Henryville","Agricultural Loss [Type]",2,18
+"Henryville","Deforestation [Type]",1,1.26
+"Henryville","Deforestation [Type]",2,0.45
+"Hinchinbrooke","Agricultural Expansion [Type]",1,291.69
+"Hinchinbrooke","Agricultural Expansion [Type]",2,17.82
+"Hinchinbrooke","Agricultural Loss [Type]",1,6.57
+"Hinchinbrooke","Agricultural Loss [Type]",2,43.83
+"Hinchinbrooke","Deforestation [Type]",1,11.07
+"Hinchinbrooke","Deforestation [Type]",2,65.52
+"Howick","Agricultural Expansion [Type]",1,0.18
+"Howick","Agricultural Expansion [Type]",2,0
+"Howick","Agricultural Loss [Type]",1,0.63
+"Howick","Agricultural Loss [Type]",2,6.12
+"Howick","Deforestation [Type]",1,0.09
+"Howick","Deforestation [Type]",2,0
+"Hudson","Agricultural Expansion [Type]",1,14.13
+"Hudson","Agricultural Expansion [Type]",2,0.63
+"Hudson","Agricultural Loss [Type]",1,12.24
+"Hudson","Agricultural Loss [Type]",2,19.08
+"Hudson","Deforestation [Type]",1,39.06
+"Hudson","Deforestation [Type]",2,151.47
+"Huntingdon","Agricultural Expansion [Type]",1,0.45
+"Huntingdon","Agricultural Expansion [Type]",2,0
+"Huntingdon","Agricultural Loss [Type]",1,11.88
+"Huntingdon","Agricultural Loss [Type]",2,10.62
+"Huntingdon","Deforestation [Type]",1,0.81
+"Huntingdon","Deforestation [Type]",2,0.54
+"Kahnawake","Agricultural Expansion [Type]",1,31.68
+"Kahnawake","Agricultural Expansion [Type]",2,3.06
+"Kahnawake","Agricultural Loss [Type]",1,29.61
+"Kahnawake","Agricultural Loss [Type]",2,16.74
+"Kahnawake","Deforestation [Type]",1,82.08
+"Kahnawake","Deforestation [Type]",2,47.61
+"L'Île-Cadieux","Agricultural Expansion [Type]",1,0
+"L'Île-Cadieux","Agricultural Expansion [Type]",2,0
+"L'Île-Cadieux","Agricultural Loss [Type]",1,0
+"L'Île-Cadieux","Agricultural Loss [Type]",2,0
+"L'Île-Cadieux","Deforestation [Type]",1,0
+"L'Île-Cadieux","Deforestation [Type]",2,0
+"L'Île-Perrot","Agricultural Expansion [Type]",1,0
+"L'Île-Perrot","Agricultural Expansion [Type]",2,0
+"L'Île-Perrot","Agricultural Loss [Type]",1,0.18
+"L'Île-Perrot","Agricultural Loss [Type]",2,1.26
+"L'Île-Perrot","Deforestation [Type]",1,24.66
+"L'Île-Perrot","Deforestation [Type]",2,38.43
+"La Prairie","Agricultural Expansion [Type]",1,54.36
+"La Prairie","Agricultural Expansion [Type]",2,0.45
+"La Prairie","Agricultural Loss [Type]",1,50.49
+"La Prairie","Agricultural Loss [Type]",2,30.6
+"La Prairie","Deforestation [Type]",1,24.3
+"La Prairie","Deforestation [Type]",2,51.57
+"La Présentation","Agricultural Expansion [Type]",1,77.85
+"La Présentation","Agricultural Expansion [Type]",2,2.79
+"La Présentation","Agricultural Loss [Type]",1,0.9
+"La Présentation","Agricultural Loss [Type]",2,12.69
+"La Présentation","Deforestation [Type]",1,3.24
+"La Présentation","Deforestation [Type]",2,7.11
+"Lac-Brome","Agricultural Expansion [Type]",1,310.95
+"Lac-Brome","Agricultural Expansion [Type]",2,16.74
+"Lac-Brome","Agricultural Loss [Type]",1,71.64
+"Lac-Brome","Agricultural Loss [Type]",2,29.97
+"Lac-Brome","Deforestation [Type]",1,246.6
+"Lac-Brome","Deforestation [Type]",2,180.45
+"Lacolle","Agricultural Expansion [Type]",1,23.85
+"Lacolle","Agricultural Expansion [Type]",2,2.25
+"Lacolle","Agricultural Loss [Type]",1,9.81
+"Lacolle","Agricultural Loss [Type]",2,22.68
+"Lacolle","Deforestation [Type]",1,1.98
+"Lacolle","Deforestation [Type]",2,0.63
+"Léry","Agricultural Expansion [Type]",1,8.46
+"Léry","Agricultural Expansion [Type]",2,0.54
+"Léry","Agricultural Loss [Type]",1,10.08
+"Léry","Agricultural Loss [Type]",2,0.54
+"Léry","Deforestation [Type]",1,11.79
+"Léry","Deforestation [Type]",2,2.43
+"Les Cèdres","Agricultural Expansion [Type]",1,35.46
+"Les Cèdres","Agricultural Expansion [Type]",2,3.15
+"Les Cèdres","Agricultural Loss [Type]",1,121.77
+"Les Cèdres","Agricultural Loss [Type]",2,91.89
+"Les Cèdres","Deforestation [Type]",1,25.47
+"Les Cèdres","Deforestation [Type]",2,24.84
+"Les Coteaux","Agricultural Expansion [Type]",1,17.28
+"Les Coteaux","Agricultural Expansion [Type]",2,0.09
+"Les Coteaux","Agricultural Loss [Type]",1,31.5
+"Les Coteaux","Agricultural Loss [Type]",2,26.91
+"Les Coteaux","Deforestation [Type]",1,20.79
+"Les Coteaux","Deforestation [Type]",2,24.12
+"Longueuil","Agricultural Expansion [Type]",1,65.43
+"Longueuil","Agricultural Expansion [Type]",2,6.12
+"Longueuil","Agricultural Loss [Type]",1,81.72
+"Longueuil","Agricultural Loss [Type]",2,185.67
+"Longueuil","Deforestation [Type]",1,165.69
+"Longueuil","Deforestation [Type]",2,124.92
+"Marieville","Agricultural Expansion [Type]",1,81
+"Marieville","Agricultural Expansion [Type]",2,0.72
+"Marieville","Agricultural Loss [Type]",1,11.97
+"Marieville","Agricultural Loss [Type]",2,96.21
+"Marieville","Deforestation [Type]",1,1.44
+"Marieville","Deforestation [Type]",2,4.14
+"Massueville","Agricultural Expansion [Type]",1,2.16
+"Massueville","Agricultural Expansion [Type]",2,0
+"Massueville","Agricultural Loss [Type]",1,1.26
+"Massueville","Agricultural Loss [Type]",2,6.39
+"Massueville","Deforestation [Type]",1,0.63
+"Massueville","Deforestation [Type]",2,0.99
+"McMasterville","Agricultural Expansion [Type]",1,0.09
+"McMasterville","Agricultural Expansion [Type]",2,0
+"McMasterville","Agricultural Loss [Type]",1,6.75
+"McMasterville","Agricultural Loss [Type]",2,39.06
+"McMasterville","Deforestation [Type]",1,1.71
+"McMasterville","Deforestation [Type]",2,2.25
+"Mercier","Agricultural Expansion [Type]",1,43.83
+"Mercier","Agricultural Expansion [Type]",2,1.62
+"Mercier","Agricultural Loss [Type]",1,34.02
+"Mercier","Agricultural Loss [Type]",2,99.81
+"Mercier","Deforestation [Type]",1,9.45
+"Mercier","Deforestation [Type]",2,14.22
+"Mont-Saint-Grégoire","Agricultural Expansion [Type]",1,86.49
+"Mont-Saint-Grégoire","Agricultural Expansion [Type]",2,2.25
+"Mont-Saint-Grégoire","Agricultural Loss [Type]",1,2.43
+"Mont-Saint-Grégoire","Agricultural Loss [Type]",2,54.63
+"Mont-Saint-Grégoire","Deforestation [Type]",1,0.81
+"Mont-Saint-Grégoire","Deforestation [Type]",2,2.16
+"Mont-Saint-Hilaire","Agricultural Expansion [Type]",1,26.64
+"Mont-Saint-Hilaire","Agricultural Expansion [Type]",2,3.06
+"Mont-Saint-Hilaire","Agricultural Loss [Type]",1,119.34
+"Mont-Saint-Hilaire","Agricultural Loss [Type]",2,81.18
+"Mont-Saint-Hilaire","Deforestation [Type]",1,101.61
+"Mont-Saint-Hilaire","Deforestation [Type]",2,60.57
+"Napierville","Agricultural Expansion [Type]",1,0.18
+"Napierville","Agricultural Expansion [Type]",2,0
+"Napierville","Agricultural Loss [Type]",1,10.35
+"Napierville","Agricultural Loss [Type]",2,23.31
+"Napierville","Deforestation [Type]",1,3.06
+"Napierville","Deforestation [Type]",2,4.86
+"Notre-Dame-de-l'Île-Perrot","Agricultural Expansion [Type]",1,3.87
+"Notre-Dame-de-l'Île-Perrot","Agricultural Expansion [Type]",2,0.54
+"Notre-Dame-de-l'Île-Perrot","Agricultural Loss [Type]",1,14.4
+"Notre-Dame-de-l'Île-Perrot","Agricultural Loss [Type]",2,48.96
+"Notre-Dame-de-l'Île-Perrot","Deforestation [Type]",1,47.34
+"Notre-Dame-de-l'Île-Perrot","Deforestation [Type]",2,69.75
+"Notre-Dame-de-Stanbridge","Agricultural Expansion [Type]",1,4.14
+"Notre-Dame-de-Stanbridge","Agricultural Expansion [Type]",2,0.27
+"Notre-Dame-de-Stanbridge","Agricultural Loss [Type]",1,1.26
+"Notre-Dame-de-Stanbridge","Agricultural Loss [Type]",2,12.78
+"Notre-Dame-de-Stanbridge","Deforestation [Type]",1,0.09
+"Notre-Dame-de-Stanbridge","Deforestation [Type]",2,0.72
+"Noyan","Agricultural Expansion [Type]",1,22.23
+"Noyan","Agricultural Expansion [Type]",2,0.36
+"Noyan","Agricultural Loss [Type]",1,14.31
+"Noyan","Agricultural Loss [Type]",2,62.19
+"Noyan","Deforestation [Type]",1,4.68
+"Noyan","Deforestation [Type]",2,17.28
+"Ormstown","Agricultural Expansion [Type]",1,204.03
+"Ormstown","Agricultural Expansion [Type]",2,5.22
+"Ormstown","Agricultural Loss [Type]",1,5.04
+"Ormstown","Agricultural Loss [Type]",2,25.74
+"Ormstown","Deforestation [Type]",1,5.4
+"Ormstown","Deforestation [Type]",2,7.29
+"Otterburn Park","Agricultural Expansion [Type]",1,2.97
+"Otterburn Park","Agricultural Expansion [Type]",2,0
+"Otterburn Park","Agricultural Loss [Type]",1,3.87
+"Otterburn Park","Agricultural Loss [Type]",2,12.06
+"Otterburn Park","Deforestation [Type]",1,44.28
+"Otterburn Park","Deforestation [Type]",2,9.18
+"Pike River","Agricultural Expansion [Type]",1,2.7
+"Pike River","Agricultural Expansion [Type]",2,0.09
+"Pike River","Agricultural Loss [Type]",1,1.89
+"Pike River","Agricultural Loss [Type]",2,11.34
+"Pike River","Deforestation [Type]",1,2.79
+"Pike River","Deforestation [Type]",2,1.35
+"Pincourt","Agricultural Expansion [Type]",1,0
+"Pincourt","Agricultural Expansion [Type]",2,0
+"Pincourt","Agricultural Loss [Type]",1,1.98
+"Pincourt","Agricultural Loss [Type]",2,3.33
+"Pincourt","Deforestation [Type]",1,17.46
+"Pincourt","Deforestation [Type]",2,106.83
+"Pointe-des-Cascades","Agricultural Expansion [Type]",1,0.99
+"Pointe-des-Cascades","Agricultural Expansion [Type]",2,0.63
+"Pointe-des-Cascades","Agricultural Loss [Type]",1,2.52
+"Pointe-des-Cascades","Agricultural Loss [Type]",2,4.5
+"Pointe-des-Cascades","Deforestation [Type]",1,8.73
+"Pointe-des-Cascades","Deforestation [Type]",2,5.4
+"Pointe-Fortune","Agricultural Expansion [Type]",1,13.41
+"Pointe-Fortune","Agricultural Expansion [Type]",2,1.8
+"Pointe-Fortune","Agricultural Loss [Type]",1,5.22
+"Pointe-Fortune","Agricultural Loss [Type]",2,4.41
+"Pointe-Fortune","Deforestation [Type]",1,5.13
+"Pointe-Fortune","Deforestation [Type]",2,14.76
+"Richelieu","Agricultural Expansion [Type]",1,38.97
+"Richelieu","Agricultural Expansion [Type]",2,0.63
+"Richelieu","Agricultural Loss [Type]",1,4.68
+"Richelieu","Agricultural Loss [Type]",2,30.78
+"Richelieu","Deforestation [Type]",1,3.96
+"Richelieu","Deforestation [Type]",2,1.62
+"Rigaud","Agricultural Expansion [Type]",1,33.75
+"Rigaud","Agricultural Expansion [Type]",2,3.06
+"Rigaud","Agricultural Loss [Type]",1,30.33
+"Rigaud","Agricultural Loss [Type]",2,115.56
+"Rigaud","Deforestation [Type]",1,35.19
+"Rigaud","Deforestation [Type]",2,180.81
+"Rivière-Beaudette","Agricultural Expansion [Type]",1,16.47
+"Rivière-Beaudette","Agricultural Expansion [Type]",2,0.27
+"Rivière-Beaudette","Agricultural Loss [Type]",1,18.63
+"Rivière-Beaudette","Agricultural Loss [Type]",2,43.47
+"Rivière-Beaudette","Deforestation [Type]",1,29.97
+"Rivière-Beaudette","Deforestation [Type]",2,29.25
+"Rougemont","Agricultural Expansion [Type]",1,46.62
+"Rougemont","Agricultural Expansion [Type]",2,8.37
+"Rougemont","Agricultural Loss [Type]",1,9.27
+"Rougemont","Agricultural Loss [Type]",2,8.64
+"Rougemont","Deforestation [Type]",1,7.11
+"Rougemont","Deforestation [Type]",2,4.14
+"Roxton","Agricultural Expansion [Type]",1,170.82
+"Roxton","Agricultural Expansion [Type]",2,7.74
+"Roxton","Agricultural Loss [Type]",1,22.41
+"Roxton","Agricultural Loss [Type]",2,7.11
+"Roxton","Deforestation [Type]",1,19.53
+"Roxton","Deforestation [Type]",2,2.88
+"Roxton Falls","Agricultural Expansion [Type]",1,3.15
+"Roxton Falls","Agricultural Expansion [Type]",2,0.09
+"Roxton Falls","Agricultural Loss [Type]",1,2.88
+"Roxton Falls","Agricultural Loss [Type]",2,12.51
+"Roxton Falls","Deforestation [Type]",1,11.88
+"Roxton Falls","Deforestation [Type]",2,6.12
+"Roxton Pond","Agricultural Expansion [Type]",1,193.5
+"Roxton Pond","Agricultural Expansion [Type]",2,10.53
+"Roxton Pond","Agricultural Loss [Type]",1,7.92
+"Roxton Pond","Agricultural Loss [Type]",2,9
+"Roxton Pond","Deforestation [Type]",1,31.77
+"Roxton Pond","Deforestation [Type]",2,40.86
+"Saint-Aimé","Agricultural Expansion [Type]",1,76.32
+"Saint-Aimé","Agricultural Expansion [Type]",2,1.35
+"Saint-Aimé","Agricultural Loss [Type]",1,14.76
+"Saint-Aimé","Agricultural Loss [Type]",2,1.35
+"Saint-Aimé","Deforestation [Type]",1,1.17
+"Saint-Aimé","Deforestation [Type]",2,0
+"Saint-Alexandre","Agricultural Expansion [Type]",1,46.98
+"Saint-Alexandre","Agricultural Expansion [Type]",2,1.62
+"Saint-Alexandre","Agricultural Loss [Type]",1,2.25
+"Saint-Alexandre","Agricultural Loss [Type]",2,12.87
+"Saint-Alexandre","Deforestation [Type]",1,4.41
+"Saint-Alexandre","Deforestation [Type]",2,4.68
+"Saint-Alphonse-de-Granby","Agricultural Expansion [Type]",1,89.28
+"Saint-Alphonse-de-Granby","Agricultural Expansion [Type]",2,5.13
+"Saint-Alphonse-de-Granby","Agricultural Loss [Type]",1,10.53
+"Saint-Alphonse-de-Granby","Agricultural Loss [Type]",2,18.36
+"Saint-Alphonse-de-Granby","Deforestation [Type]",1,42.48
+"Saint-Alphonse-de-Granby","Deforestation [Type]",2,162.27
+"Saint-Amable","Agricultural Expansion [Type]",1,43.47
+"Saint-Amable","Agricultural Expansion [Type]",2,1.62
+"Saint-Amable","Agricultural Loss [Type]",1,37.17
+"Saint-Amable","Agricultural Loss [Type]",2,88.29
+"Saint-Amable","Deforestation [Type]",1,29.61
+"Saint-Amable","Deforestation [Type]",2,10.89
+"Saint-Anicet","Agricultural Expansion [Type]",1,155.25
+"Saint-Anicet","Agricultural Expansion [Type]",2,8.1
+"Saint-Anicet","Agricultural Loss [Type]",1,23.76
+"Saint-Anicet","Agricultural Loss [Type]",2,83.79
+"Saint-Anicet","Deforestation [Type]",1,12.6
+"Saint-Anicet","Deforestation [Type]",2,60.3
+"Saint-Antoine-sur-Richelieu","Agricultural Expansion [Type]",1,56.79
+"Saint-Antoine-sur-Richelieu","Agricultural Expansion [Type]",2,0.9
+"Saint-Antoine-sur-Richelieu","Agricultural Loss [Type]",1,1.26
+"Saint-Antoine-sur-Richelieu","Agricultural Loss [Type]",2,19.17
+"Saint-Antoine-sur-Richelieu","Deforestation [Type]",1,0.72
+"Saint-Antoine-sur-Richelieu","Deforestation [Type]",2,0.36
+"Saint-Armand","Agricultural Expansion [Type]",1,60.48
+"Saint-Armand","Agricultural Expansion [Type]",2,7.29
+"Saint-Armand","Agricultural Loss [Type]",1,15.57
+"Saint-Armand","Agricultural Loss [Type]",2,16.38
+"Saint-Armand","Deforestation [Type]",1,9.72
+"Saint-Armand","Deforestation [Type]",2,39.42
+"Saint-Barnabé-Sud","Agricultural Expansion [Type]",1,39.24
+"Saint-Barnabé-Sud","Agricultural Expansion [Type]",2,0.36
+"Saint-Barnabé-Sud","Agricultural Loss [Type]",1,0.27
+"Saint-Barnabé-Sud","Agricultural Loss [Type]",2,2.34
+"Saint-Barnabé-Sud","Deforestation [Type]",1,0.09
+"Saint-Barnabé-Sud","Deforestation [Type]",2,0.18
+"Saint-Basile-le-Grand","Agricultural Expansion [Type]",1,23.04
+"Saint-Basile-le-Grand","Agricultural Expansion [Type]",2,0.54
+"Saint-Basile-le-Grand","Agricultural Loss [Type]",1,67.59
+"Saint-Basile-le-Grand","Agricultural Loss [Type]",2,109.8
+"Saint-Basile-le-Grand","Deforestation [Type]",1,11.16
+"Saint-Basile-le-Grand","Deforestation [Type]",2,3.6
+"Saint-Bernard-de-Lacolle","Agricultural Expansion [Type]",1,25.74
+"Saint-Bernard-de-Lacolle","Agricultural Expansion [Type]",2,4.68
+"Saint-Bernard-de-Lacolle","Agricultural Loss [Type]",1,26.55
+"Saint-Bernard-de-Lacolle","Agricultural Loss [Type]",2,34.47
+"Saint-Bernard-de-Lacolle","Deforestation [Type]",1,5.67
+"Saint-Bernard-de-Lacolle","Deforestation [Type]",2,18.9
+"Saint-Bernard-de-Michaudville","Agricultural Expansion [Type]",1,70.65
+"Saint-Bernard-de-Michaudville","Agricultural Expansion [Type]",2,1.71
+"Saint-Bernard-de-Michaudville","Agricultural Loss [Type]",1,2.61
+"Saint-Bernard-de-Michaudville","Agricultural Loss [Type]",2,2.97
+"Saint-Bernard-de-Michaudville","Deforestation [Type]",1,0.09
+"Saint-Bernard-de-Michaudville","Deforestation [Type]",2,0.09
+"Saint-Blaise-sur-Richelieu","Agricultural Expansion [Type]",1,1.98
+"Saint-Blaise-sur-Richelieu","Agricultural Expansion [Type]",2,0.18
+"Saint-Blaise-sur-Richelieu","Agricultural Loss [Type]",1,25.83
+"Saint-Blaise-sur-Richelieu","Agricultural Loss [Type]",2,35.1
+"Saint-Blaise-sur-Richelieu","Deforestation [Type]",1,1.35
+"Saint-Blaise-sur-Richelieu","Deforestation [Type]",2,10.17
+"Saint-Bruno-de-Montarville","Agricultural Expansion [Type]",1,44.1
+"Saint-Bruno-de-Montarville","Agricultural Expansion [Type]",2,1.98
+"Saint-Bruno-de-Montarville","Agricultural Loss [Type]",1,104.76
+"Saint-Bruno-de-Montarville","Agricultural Loss [Type]",2,130.05
+"Saint-Bruno-de-Montarville","Deforestation [Type]",1,96.03
+"Saint-Bruno-de-Montarville","Deforestation [Type]",2,61.38
+"Saint-Césaire","Agricultural Expansion [Type]",1,96.3
+"Saint-Césaire","Agricultural Expansion [Type]",2,0.99
+"Saint-Césaire","Agricultural Loss [Type]",1,4.95
+"Saint-Césaire","Agricultural Loss [Type]",2,49.05
+"Saint-Césaire","Deforestation [Type]",1,2.79
+"Saint-Césaire","Deforestation [Type]",2,2.61
+"Saint-Charles-sur-Richelieu","Agricultural Expansion [Type]",1,64.8
+"Saint-Charles-sur-Richelieu","Agricultural Expansion [Type]",2,1.71
+"Saint-Charles-sur-Richelieu","Agricultural Loss [Type]",1,2.25
+"Saint-Charles-sur-Richelieu","Agricultural Loss [Type]",2,6.48
+"Saint-Charles-sur-Richelieu","Deforestation [Type]",1,1.17
+"Saint-Charles-sur-Richelieu","Deforestation [Type]",2,0.36
+"Saint-Chrysostome","Agricultural Expansion [Type]",1,243.81
+"Saint-Chrysostome","Agricultural Expansion [Type]",2,13.59
+"Saint-Chrysostome","Agricultural Loss [Type]",1,8.37
+"Saint-Chrysostome","Agricultural Loss [Type]",2,17.73
+"Saint-Chrysostome","Deforestation [Type]",1,7.11
+"Saint-Chrysostome","Deforestation [Type]",2,12.96
+"Saint-Clet","Agricultural Expansion [Type]",1,14.58
+"Saint-Clet","Agricultural Expansion [Type]",2,1.17
+"Saint-Clet","Agricultural Loss [Type]",1,13.95
+"Saint-Clet","Agricultural Loss [Type]",2,24.39
+"Saint-Clet","Deforestation [Type]",1,0.63
+"Saint-Clet","Deforestation [Type]",2,0.09
+"Saint-Constant","Agricultural Expansion [Type]",1,33.12
+"Saint-Constant","Agricultural Expansion [Type]",2,0.99
+"Saint-Constant","Agricultural Loss [Type]",1,22.68
+"Saint-Constant","Agricultural Loss [Type]",2,86.04
+"Saint-Constant","Deforestation [Type]",1,15.75
+"Saint-Constant","Deforestation [Type]",2,11.52
+"Saint-Cyprien-de-Napierville","Agricultural Expansion [Type]",1,9.27
+"Saint-Cyprien-de-Napierville","Agricultural Expansion [Type]",2,1.35
+"Saint-Cyprien-de-Napierville","Agricultural Loss [Type]",1,14.76
+"Saint-Cyprien-de-Napierville","Agricultural Loss [Type]",2,25.83
+"Saint-Cyprien-de-Napierville","Deforestation [Type]",1,0.45
+"Saint-Cyprien-de-Napierville","Deforestation [Type]",2,3.15
+"Saint-Damase","Agricultural Expansion [Type]",1,57.87
+"Saint-Damase","Agricultural Expansion [Type]",2,0.27
+"Saint-Damase","Agricultural Loss [Type]",1,4.14
+"Saint-Damase","Agricultural Loss [Type]",2,6.21
+"Saint-Damase","Deforestation [Type]",1,0.18
+"Saint-Damase","Deforestation [Type]",2,0.18
+"Saint-David","Agricultural Expansion [Type]",1,97.02
+"Saint-David","Agricultural Expansion [Type]",2,5.49
+"Saint-David","Agricultural Loss [Type]",1,0.9
+"Saint-David","Agricultural Loss [Type]",2,5.31
+"Saint-David","Deforestation [Type]",1,2.25
+"Saint-David","Deforestation [Type]",2,2.25
+"Saint-Denis-sur-Richelieu","Agricultural Expansion [Type]",1,61.02
+"Saint-Denis-sur-Richelieu","Agricultural Expansion [Type]",2,1.17
+"Saint-Denis-sur-Richelieu","Agricultural Loss [Type]",1,0.81
+"Saint-Denis-sur-Richelieu","Agricultural Loss [Type]",2,20.61
+"Saint-Denis-sur-Richelieu","Deforestation [Type]",1,0.54
+"Saint-Denis-sur-Richelieu","Deforestation [Type]",2,0.09
+"Saint-Dominique","Agricultural Expansion [Type]",1,145.98
+"Saint-Dominique","Agricultural Expansion [Type]",2,2.43
+"Saint-Dominique","Agricultural Loss [Type]",1,14.4
+"Saint-Dominique","Agricultural Loss [Type]",2,18.72
+"Saint-Dominique","Deforestation [Type]",1,3.69
+"Saint-Dominique","Deforestation [Type]",2,0.27
+"Saint-Édouard","Agricultural Expansion [Type]",1,105.3
+"Saint-Édouard","Agricultural Expansion [Type]",2,6.93
+"Saint-Édouard","Agricultural Loss [Type]",1,6.48
+"Saint-Édouard","Agricultural Loss [Type]",2,19.53
+"Saint-Édouard","Deforestation [Type]",1,1.08
+"Saint-Édouard","Deforestation [Type]",2,0
+"Saint-Étienne-de-Beauharnois","Agricultural Expansion [Type]",1,44.91
+"Saint-Étienne-de-Beauharnois","Agricultural Expansion [Type]",2,0.18
+"Saint-Étienne-de-Beauharnois","Agricultural Loss [Type]",1,3.15
+"Saint-Étienne-de-Beauharnois","Agricultural Loss [Type]",2,12.69
+"Saint-Étienne-de-Beauharnois","Deforestation [Type]",1,6.75
+"Saint-Étienne-de-Beauharnois","Deforestation [Type]",2,0
+"Saint-Georges-de-Clarenceville","Agricultural Expansion [Type]",1,15.66
+"Saint-Georges-de-Clarenceville","Agricultural Expansion [Type]",2,0.81
+"Saint-Georges-de-Clarenceville","Agricultural Loss [Type]",1,17.28
+"Saint-Georges-de-Clarenceville","Agricultural Loss [Type]",2,57.15
+"Saint-Georges-de-Clarenceville","Deforestation [Type]",1,10.89
+"Saint-Georges-de-Clarenceville","Deforestation [Type]",2,30.51
+"Saint-Gérard-Majella","Agricultural Expansion [Type]",1,34.74
+"Saint-Gérard-Majella","Agricultural Expansion [Type]",2,1.08
+"Saint-Gérard-Majella","Agricultural Loss [Type]",1,0.63
+"Saint-Gérard-Majella","Agricultural Loss [Type]",2,11.25
+"Saint-Gérard-Majella","Deforestation [Type]",1,0.09
+"Saint-Gérard-Majella","Deforestation [Type]",2,0
+"Saint-Hugues","Agricultural Expansion [Type]",1,61.56
+"Saint-Hugues","Agricultural Expansion [Type]",2,0.81
+"Saint-Hugues","Agricultural Loss [Type]",1,9.81
+"Saint-Hugues","Agricultural Loss [Type]",2,26.1
+"Saint-Hugues","Deforestation [Type]",1,2.79
+"Saint-Hugues","Deforestation [Type]",2,3.87
+"Saint-Hyacinthe","Agricultural Expansion [Type]",1,143.64
+"Saint-Hyacinthe","Agricultural Expansion [Type]",2,2.88
+"Saint-Hyacinthe","Agricultural Loss [Type]",1,145.8
+"Saint-Hyacinthe","Agricultural Loss [Type]",2,249.93
+"Saint-Hyacinthe","Deforestation [Type]",1,31.23
+"Saint-Hyacinthe","Deforestation [Type]",2,18.09
+"Saint-Ignace-de-Stanbridge","Agricultural Expansion [Type]",1,90
+"Saint-Ignace-de-Stanbridge","Agricultural Expansion [Type]",2,11.61
+"Saint-Ignace-de-Stanbridge","Agricultural Loss [Type]",1,17.01
+"Saint-Ignace-de-Stanbridge","Agricultural Loss [Type]",2,2.25
+"Saint-Ignace-de-Stanbridge","Deforestation [Type]",1,13.32
+"Saint-Ignace-de-Stanbridge","Deforestation [Type]",2,0.9
+"Saint-Isidore","Agricultural Expansion [Type]",1,42.39
+"Saint-Isidore","Agricultural Expansion [Type]",2,0.72
+"Saint-Isidore","Agricultural Loss [Type]",1,21.06
+"Saint-Isidore","Agricultural Loss [Type]",2,11.07
+"Saint-Isidore","Deforestation [Type]",1,0.54
+"Saint-Isidore","Deforestation [Type]",2,0
+"Saint-Jacques-le-Mineur","Agricultural Expansion [Type]",1,16.65
+"Saint-Jacques-le-Mineur","Agricultural Expansion [Type]",2,1.44
+"Saint-Jacques-le-Mineur","Agricultural Loss [Type]",1,19.53
+"Saint-Jacques-le-Mineur","Agricultural Loss [Type]",2,19.53
+"Saint-Jacques-le-Mineur","Deforestation [Type]",1,1.62
+"Saint-Jacques-le-Mineur","Deforestation [Type]",2,0.18
+"Saint-Jean-Baptiste","Agricultural Expansion [Type]",1,56.97
+"Saint-Jean-Baptiste","Agricultural Expansion [Type]",2,1.8
+"Saint-Jean-Baptiste","Agricultural Loss [Type]",1,14.58
+"Saint-Jean-Baptiste","Agricultural Loss [Type]",2,21.69
+"Saint-Jean-Baptiste","Deforestation [Type]",1,6.3
+"Saint-Jean-Baptiste","Deforestation [Type]",2,0.81
+"Saint-Jean-sur-Richelieu","Agricultural Expansion [Type]",1,201.6
+"Saint-Jean-sur-Richelieu","Agricultural Expansion [Type]",2,1.89
+"Saint-Jean-sur-Richelieu","Agricultural Loss [Type]",1,213.12
+"Saint-Jean-sur-Richelieu","Agricultural Loss [Type]",2,463.59
+"Saint-Jean-sur-Richelieu","Deforestation [Type]",1,90.81
+"Saint-Jean-sur-Richelieu","Deforestation [Type]",2,92.61
+"Saint-Joachim-de-Shefford","Agricultural Expansion [Type]",1,358.02
+"Saint-Joachim-de-Shefford","Agricultural Expansion [Type]",2,21.15
+"Saint-Joachim-de-Shefford","Agricultural Loss [Type]",1,12.6
+"Saint-Joachim-de-Shefford","Agricultural Loss [Type]",2,1.17
+"Saint-Joachim-de-Shefford","Deforestation [Type]",1,30.51
+"Saint-Joachim-de-Shefford","Deforestation [Type]",2,15.48
+"Saint-Joseph-de-Sorel","Agricultural Expansion [Type]",1,0
+"Saint-Joseph-de-Sorel","Agricultural Expansion [Type]",2,0
+"Saint-Joseph-de-Sorel","Agricultural Loss [Type]",1,0
+"Saint-Joseph-de-Sorel","Agricultural Loss [Type]",2,0
+"Saint-Joseph-de-Sorel","Deforestation [Type]",1,0.18
+"Saint-Joseph-de-Sorel","Deforestation [Type]",2,0.09
+"Saint-Jude","Agricultural Expansion [Type]",1,83.97
+"Saint-Jude","Agricultural Expansion [Type]",2,4.05
+"Saint-Jude","Agricultural Loss [Type]",1,1.8
+"Saint-Jude","Agricultural Loss [Type]",2,3.42
+"Saint-Jude","Deforestation [Type]",1,4.5
+"Saint-Jude","Deforestation [Type]",2,0.45
+"Saint-Lambert","Agricultural Expansion [Type]",1,0
+"Saint-Lambert","Agricultural Expansion [Type]",2,0
+"Saint-Lambert","Agricultural Loss [Type]",1,0
+"Saint-Lambert","Agricultural Loss [Type]",2,0
+"Saint-Lambert","Deforestation [Type]",1,0
+"Saint-Lambert","Deforestation [Type]",2,0.09
+"Saint-Lazare","Agricultural Expansion [Type]",1,10.53
+"Saint-Lazare","Agricultural Expansion [Type]",2,1.08
+"Saint-Lazare","Agricultural Loss [Type]",1,54.18
+"Saint-Lazare","Agricultural Loss [Type]",2,100.17
+"Saint-Lazare","Deforestation [Type]",1,103.23
+"Saint-Lazare","Deforestation [Type]",2,431.1
+"Saint-Liboire","Agricultural Expansion [Type]",1,88.92
+"Saint-Liboire","Agricultural Expansion [Type]",2,4.32
+"Saint-Liboire","Agricultural Loss [Type]",1,22.86
+"Saint-Liboire","Agricultural Loss [Type]",2,19.35
+"Saint-Liboire","Deforestation [Type]",1,15.21
+"Saint-Liboire","Deforestation [Type]",2,4.77
+"Saint-Louis","Agricultural Expansion [Type]",1,64.08
+"Saint-Louis","Agricultural Expansion [Type]",2,2.7
+"Saint-Louis","Agricultural Loss [Type]",1,4.95
+"Saint-Louis","Agricultural Loss [Type]",2,14.67
+"Saint-Louis","Deforestation [Type]",1,2.34
+"Saint-Louis","Deforestation [Type]",2,1.8
+"Saint-Louis-de-Gonzague","Agricultural Expansion [Type]",1,69.66
+"Saint-Louis-de-Gonzague","Agricultural Expansion [Type]",2,1.08
+"Saint-Louis-de-Gonzague","Agricultural Loss [Type]",1,27
+"Saint-Louis-de-Gonzague","Agricultural Loss [Type]",2,18
+"Saint-Louis-de-Gonzague","Deforestation [Type]",1,27.54
+"Saint-Louis-de-Gonzague","Deforestation [Type]",2,2.16
+"Saint-Marc-sur-Richelieu","Agricultural Expansion [Type]",1,38.34
+"Saint-Marc-sur-Richelieu","Agricultural Expansion [Type]",2,0.09
+"Saint-Marc-sur-Richelieu","Agricultural Loss [Type]",1,4.77
+"Saint-Marc-sur-Richelieu","Agricultural Loss [Type]",2,17.37
+"Saint-Marc-sur-Richelieu","Deforestation [Type]",1,0.9
+"Saint-Marc-sur-Richelieu","Deforestation [Type]",2,2.79
+"Saint-Marcel-de-Richelieu","Agricultural Expansion [Type]",1,51.93
+"Saint-Marcel-de-Richelieu","Agricultural Expansion [Type]",2,0.81
+"Saint-Marcel-de-Richelieu","Agricultural Loss [Type]",1,6.3
+"Saint-Marcel-de-Richelieu","Agricultural Loss [Type]",2,6.57
+"Saint-Marcel-de-Richelieu","Deforestation [Type]",1,3.69
+"Saint-Marcel-de-Richelieu","Deforestation [Type]",2,0
+"Saint-Mathias-sur-Richelieu","Agricultural Expansion [Type]",1,83.34
+"Saint-Mathias-sur-Richelieu","Agricultural Expansion [Type]",2,1.17
+"Saint-Mathias-sur-Richelieu","Agricultural Loss [Type]",1,3.78
+"Saint-Mathias-sur-Richelieu","Agricultural Loss [Type]",2,37.08
+"Saint-Mathias-sur-Richelieu","Deforestation [Type]",1,5.94
+"Saint-Mathias-sur-Richelieu","Deforestation [Type]",2,0.45
+"Saint-Mathieu","Agricultural Expansion [Type]",1,12.51
+"Saint-Mathieu","Agricultural Expansion [Type]",2,0.09
+"Saint-Mathieu","Agricultural Loss [Type]",1,10.17
+"Saint-Mathieu","Agricultural Loss [Type]",2,25.38
+"Saint-Mathieu","Deforestation [Type]",1,2.97
+"Saint-Mathieu","Deforestation [Type]",2,0.72
+"Saint-Mathieu-de-Beloeil","Agricultural Expansion [Type]",1,11.79
+"Saint-Mathieu-de-Beloeil","Agricultural Expansion [Type]",2,0.09
+"Saint-Mathieu-de-Beloeil","Agricultural Loss [Type]",1,55.71
+"Saint-Mathieu-de-Beloeil","Agricultural Loss [Type]",2,49.77
+"Saint-Mathieu-de-Beloeil","Deforestation [Type]",1,12.51
+"Saint-Mathieu-de-Beloeil","Deforestation [Type]",2,0.09
+"Saint-Michel","Agricultural Expansion [Type]",1,82.08
+"Saint-Michel","Agricultural Expansion [Type]",2,5.13
+"Saint-Michel","Agricultural Loss [Type]",1,6.21
+"Saint-Michel","Agricultural Loss [Type]",2,16.2
+"Saint-Michel","Deforestation [Type]",1,5.22
+"Saint-Michel","Deforestation [Type]",2,10.08
+"Saint-Nazaire-d'Acton","Agricultural Expansion [Type]",1,56.52
+"Saint-Nazaire-d'Acton","Agricultural Expansion [Type]",2,5.67
+"Saint-Nazaire-d'Acton","Agricultural Loss [Type]",1,7.11
+"Saint-Nazaire-d'Acton","Agricultural Loss [Type]",2,9.36
+"Saint-Nazaire-d'Acton","Deforestation [Type]",1,0.99
+"Saint-Nazaire-d'Acton","Deforestation [Type]",2,0
+"Saint-Ours","Agricultural Expansion [Type]",1,55.53
+"Saint-Ours","Agricultural Expansion [Type]",2,2.34
+"Saint-Ours","Agricultural Loss [Type]",1,11.61
+"Saint-Ours","Agricultural Loss [Type]",2,20.25
+"Saint-Ours","Deforestation [Type]",1,4.05
+"Saint-Ours","Deforestation [Type]",2,0
+"Saint-Patrice-de-Sherrington","Agricultural Expansion [Type]",1,160.65
+"Saint-Patrice-de-Sherrington","Agricultural Expansion [Type]",2,13.86
+"Saint-Patrice-de-Sherrington","Agricultural Loss [Type]",1,6.39
+"Saint-Patrice-de-Sherrington","Agricultural Loss [Type]",2,18.27
+"Saint-Patrice-de-Sherrington","Deforestation [Type]",1,1.35
+"Saint-Patrice-de-Sherrington","Deforestation [Type]",2,0.27
+"Saint-Paul-d'Abbotsford","Agricultural Expansion [Type]",1,153.72
+"Saint-Paul-d'Abbotsford","Agricultural Expansion [Type]",2,10.08
+"Saint-Paul-d'Abbotsford","Agricultural Loss [Type]",1,11.79
+"Saint-Paul-d'Abbotsford","Agricultural Loss [Type]",2,12.69
+"Saint-Paul-d'Abbotsford","Deforestation [Type]",1,12.51
+"Saint-Paul-d'Abbotsford","Deforestation [Type]",2,2.88
+"Saint-Paul-de-l'Île-aux-Noix","Agricultural Expansion [Type]",1,0.18
+"Saint-Paul-de-l'Île-aux-Noix","Agricultural Expansion [Type]",2,0
+"Saint-Paul-de-l'Île-aux-Noix","Agricultural Loss [Type]",1,22.68
+"Saint-Paul-de-l'Île-aux-Noix","Agricultural Loss [Type]",2,28.17
+"Saint-Paul-de-l'Île-aux-Noix","Deforestation [Type]",1,3.69
+"Saint-Paul-de-l'Île-aux-Noix","Deforestation [Type]",2,6.75
+"Saint-Philippe","Agricultural Expansion [Type]",1,28.17
+"Saint-Philippe","Agricultural Expansion [Type]",2,0.63
+"Saint-Philippe","Agricultural Loss [Type]",1,18.45
+"Saint-Philippe","Agricultural Loss [Type]",2,68.76
+"Saint-Philippe","Deforestation [Type]",1,3.51
+"Saint-Philippe","Deforestation [Type]",2,3.96
+"Saint-Pie","Agricultural Expansion [Type]",1,125.46
+"Saint-Pie","Agricultural Expansion [Type]",2,2.43
+"Saint-Pie","Agricultural Loss [Type]",1,26.01
+"Saint-Pie","Agricultural Loss [Type]",2,60.12
+"Saint-Pie","Deforestation [Type]",1,10.35
+"Saint-Pie","Deforestation [Type]",2,10.08
+"Saint-Polycarpe","Agricultural Expansion [Type]",1,18.36
+"Saint-Polycarpe","Agricultural Expansion [Type]",2,0.54
+"Saint-Polycarpe","Agricultural Loss [Type]",1,16.56
+"Saint-Polycarpe","Agricultural Loss [Type]",2,50.31
+"Saint-Polycarpe","Deforestation [Type]",1,1.26
+"Saint-Polycarpe","Deforestation [Type]",2,1.62
+"Saint-Rémi","Agricultural Expansion [Type]",1,107.73
+"Saint-Rémi","Agricultural Expansion [Type]",2,7.02
+"Saint-Rémi","Agricultural Loss [Type]",1,14.76
+"Saint-Rémi","Agricultural Loss [Type]",2,70.65
+"Saint-Rémi","Deforestation [Type]",1,4.95
+"Saint-Rémi","Deforestation [Type]",2,0.36
+"Saint-Robert","Agricultural Expansion [Type]",1,64.44
+"Saint-Robert","Agricultural Expansion [Type]",2,4.14
+"Saint-Robert","Agricultural Loss [Type]",1,13.41
+"Saint-Robert","Agricultural Loss [Type]",2,11.25
+"Saint-Robert","Deforestation [Type]",1,6.48
+"Saint-Robert","Deforestation [Type]",2,1.08
+"Saint-Roch-de-Richelieu","Agricultural Expansion [Type]",1,25.56
+"Saint-Roch-de-Richelieu","Agricultural Expansion [Type]",2,2.88
+"Saint-Roch-de-Richelieu","Agricultural Loss [Type]",1,7.11
+"Saint-Roch-de-Richelieu","Agricultural Loss [Type]",2,14.22
+"Saint-Roch-de-Richelieu","Deforestation [Type]",1,16.92
+"Saint-Roch-de-Richelieu","Deforestation [Type]",2,17.19
+"Saint-Sébastien","Agricultural Expansion [Type]",1,5.31
+"Saint-Sébastien","Agricultural Expansion [Type]",2,0.72
+"Saint-Sébastien","Agricultural Loss [Type]",1,1.62
+"Saint-Sébastien","Agricultural Loss [Type]",2,8.73
+"Saint-Sébastien","Deforestation [Type]",1,0
+"Saint-Sébastien","Deforestation [Type]",2,0
+"Saint-Simon","Agricultural Expansion [Type]",1,47.61
+"Saint-Simon","Agricultural Expansion [Type]",2,1.08
+"Saint-Simon","Agricultural Loss [Type]",1,6.3
+"Saint-Simon","Agricultural Loss [Type]",2,16.83
+"Saint-Simon","Deforestation [Type]",1,3.6
+"Saint-Simon","Deforestation [Type]",2,0.09
+"Saint-Stanislas-de-Kostka","Agricultural Expansion [Type]",1,101.25
+"Saint-Stanislas-de-Kostka","Agricultural Expansion [Type]",2,2.25
+"Saint-Stanislas-de-Kostka","Agricultural Loss [Type]",1,34.92
+"Saint-Stanislas-de-Kostka","Agricultural Loss [Type]",2,33.57
+"Saint-Stanislas-de-Kostka","Deforestation [Type]",1,8.37
+"Saint-Stanislas-de-Kostka","Deforestation [Type]",2,26.46
+"Saint-Télesphore","Agricultural Expansion [Type]",1,34.65
+"Saint-Télesphore","Agricultural Expansion [Type]",2,1.44
+"Saint-Télesphore","Agricultural Loss [Type]",1,13.32
+"Saint-Télesphore","Agricultural Loss [Type]",2,15.57
+"Saint-Télesphore","Deforestation [Type]",1,3.6
+"Saint-Télesphore","Deforestation [Type]",2,5.49
+"Saint-Théodore-d'Acton","Agricultural Expansion [Type]",1,95.31
+"Saint-Théodore-d'Acton","Agricultural Expansion [Type]",2,5.94
+"Saint-Théodore-d'Acton","Agricultural Loss [Type]",1,17.28
+"Saint-Théodore-d'Acton","Agricultural Loss [Type]",2,12.06
+"Saint-Théodore-d'Acton","Deforestation [Type]",1,13.32
+"Saint-Théodore-d'Acton","Deforestation [Type]",2,9.09
+"Saint-Urbain-Premier","Agricultural Expansion [Type]",1,87.57
+"Saint-Urbain-Premier","Agricultural Expansion [Type]",2,2.34
+"Saint-Urbain-Premier","Agricultural Loss [Type]",1,4.05
+"Saint-Urbain-Premier","Agricultural Loss [Type]",2,31.95
+"Saint-Urbain-Premier","Deforestation [Type]",1,1.35
+"Saint-Urbain-Premier","Deforestation [Type]",2,0.36
+"Saint-Valentin","Agricultural Expansion [Type]",1,1.08
+"Saint-Valentin","Agricultural Expansion [Type]",2,0.27
+"Saint-Valentin","Agricultural Loss [Type]",1,0.18
+"Saint-Valentin","Agricultural Loss [Type]",2,2.16
+"Saint-Valentin","Deforestation [Type]",1,0
+"Saint-Valentin","Deforestation [Type]",2,0
+"Saint-Valérien-de-Milton","Agricultural Expansion [Type]",1,110.07
+"Saint-Valérien-de-Milton","Agricultural Expansion [Type]",2,3.15
+"Saint-Valérien-de-Milton","Agricultural Loss [Type]",1,10.35
+"Saint-Valérien-de-Milton","Agricultural Loss [Type]",2,19.98
+"Saint-Valérien-de-Milton","Deforestation [Type]",1,6.57
+"Saint-Valérien-de-Milton","Deforestation [Type]",2,1.8
+"Saint-Zotique","Agricultural Expansion [Type]",1,10.53
+"Saint-Zotique","Agricultural Expansion [Type]",2,0.27
+"Saint-Zotique","Agricultural Loss [Type]",1,17.55
+"Saint-Zotique","Agricultural Loss [Type]",2,45.09
+"Saint-Zotique","Deforestation [Type]",1,26.19
+"Saint-Zotique","Deforestation [Type]",2,40.77
+"Sainte-Angèle-de-Monnoir","Agricultural Expansion [Type]",1,34.56
+"Sainte-Angèle-de-Monnoir","Agricultural Expansion [Type]",2,0.45
+"Sainte-Angèle-de-Monnoir","Agricultural Loss [Type]",1,3.24
+"Sainte-Angèle-de-Monnoir","Agricultural Loss [Type]",2,11.97
+"Sainte-Angèle-de-Monnoir","Deforestation [Type]",1,0.72
+"Sainte-Angèle-de-Monnoir","Deforestation [Type]",2,0.45
+"Sainte-Anne-de-Sabrevois","Agricultural Expansion [Type]",1,11.25
+"Sainte-Anne-de-Sabrevois","Agricultural Expansion [Type]",2,0.36
+"Sainte-Anne-de-Sabrevois","Agricultural Loss [Type]",1,12.69
+"Sainte-Anne-de-Sabrevois","Agricultural Loss [Type]",2,67.95
+"Sainte-Anne-de-Sabrevois","Deforestation [Type]",1,2.79
+"Sainte-Anne-de-Sabrevois","Deforestation [Type]",2,13.5
+"Sainte-Anne-de-Sorel","Agricultural Expansion [Type]",1,11.79
+"Sainte-Anne-de-Sorel","Agricultural Expansion [Type]",2,0.63
+"Sainte-Anne-de-Sorel","Agricultural Loss [Type]",1,29.07
+"Sainte-Anne-de-Sorel","Agricultural Loss [Type]",2,12.06
+"Sainte-Anne-de-Sorel","Deforestation [Type]",1,7.11
+"Sainte-Anne-de-Sorel","Deforestation [Type]",2,1.17
+"Sainte-Barbe","Agricultural Expansion [Type]",1,38.7
+"Sainte-Barbe","Agricultural Expansion [Type]",2,0.72
+"Sainte-Barbe","Agricultural Loss [Type]",1,40.14
+"Sainte-Barbe","Agricultural Loss [Type]",2,12.15
+"Sainte-Barbe","Deforestation [Type]",1,8.19
+"Sainte-Barbe","Deforestation [Type]",2,14.58
+"Sainte-Brigide-d'Iberville","Agricultural Expansion [Type]",1,72.45
+"Sainte-Brigide-d'Iberville","Agricultural Expansion [Type]",2,0.81
+"Sainte-Brigide-d'Iberville","Agricultural Loss [Type]",1,3.06
+"Sainte-Brigide-d'Iberville","Agricultural Loss [Type]",2,28.26
+"Sainte-Brigide-d'Iberville","Deforestation [Type]",1,2.34
+"Sainte-Brigide-d'Iberville","Deforestation [Type]",2,0.99
+"Sainte-Catherine","Agricultural Expansion [Type]",1,3.96
+"Sainte-Catherine","Agricultural Expansion [Type]",2,0.36
+"Sainte-Catherine","Agricultural Loss [Type]",1,23.22
+"Sainte-Catherine","Agricultural Loss [Type]",2,8.55
+"Sainte-Catherine","Deforestation [Type]",1,25.65
+"Sainte-Catherine","Deforestation [Type]",2,1.71
+"Sainte-Cécile-de-Milton","Agricultural Expansion [Type]",1,131.85
+"Sainte-Cécile-de-Milton","Agricultural Expansion [Type]",2,4.5
+"Sainte-Cécile-de-Milton","Agricultural Loss [Type]",1,4.14
+"Sainte-Cécile-de-Milton","Agricultural Loss [Type]",2,23.67
+"Sainte-Cécile-de-Milton","Deforestation [Type]",1,8.19
+"Sainte-Cécile-de-Milton","Deforestation [Type]",2,14.67
+"Sainte-Christine","Agricultural Expansion [Type]",1,163.89
+"Sainte-Christine","Agricultural Expansion [Type]",2,9.54
+"Sainte-Christine","Agricultural Loss [Type]",1,17.64
+"Sainte-Christine","Agricultural Loss [Type]",2,0.54
+"Sainte-Christine","Deforestation [Type]",1,17.01
+"Sainte-Christine","Deforestation [Type]",2,0.27
+"Sainte-Clotilde","Agricultural Expansion [Type]",1,162.99
+"Sainte-Clotilde","Agricultural Expansion [Type]",2,21.96
+"Sainte-Clotilde","Agricultural Loss [Type]",1,21.06
+"Sainte-Clotilde","Agricultural Loss [Type]",2,8.91
+"Sainte-Clotilde","Deforestation [Type]",1,19.17
+"Sainte-Clotilde","Deforestation [Type]",2,10.35
+"Sainte-Hélène-de-Bagot","Agricultural Expansion [Type]",1,98.28
+"Sainte-Hélène-de-Bagot","Agricultural Expansion [Type]",2,3.15
+"Sainte-Hélène-de-Bagot","Agricultural Loss [Type]",1,14.94
+"Sainte-Hélène-de-Bagot","Agricultural Loss [Type]",2,32.85
+"Sainte-Hélène-de-Bagot","Deforestation [Type]",1,5.76
+"Sainte-Hélène-de-Bagot","Deforestation [Type]",2,2.79
+"Sainte-Julie","Agricultural Expansion [Type]",1,22.68
+"Sainte-Julie","Agricultural Expansion [Type]",2,1.08
+"Sainte-Julie","Agricultural Loss [Type]",1,76.14
+"Sainte-Julie","Agricultural Loss [Type]",2,166.86
+"Sainte-Julie","Deforestation [Type]",1,14.67
+"Sainte-Julie","Deforestation [Type]",2,5.76
+"Sainte-Justine-de-Newton","Agricultural Expansion [Type]",1,40.14
+"Sainte-Justine-de-Newton","Agricultural Expansion [Type]",2,4.59
+"Sainte-Justine-de-Newton","Agricultural Loss [Type]",1,2.34
+"Sainte-Justine-de-Newton","Agricultural Loss [Type]",2,3.78
+"Sainte-Justine-de-Newton","Deforestation [Type]",1,0.36
+"Sainte-Justine-de-Newton","Deforestation [Type]",2,1.26
+"Sainte-Madeleine","Agricultural Expansion [Type]",1,2.88
+"Sainte-Madeleine","Agricultural Expansion [Type]",2,0.09
+"Sainte-Madeleine","Agricultural Loss [Type]",1,3.33
+"Sainte-Madeleine","Agricultural Loss [Type]",2,8.73
+"Sainte-Madeleine","Deforestation [Type]",1,2.79
+"Sainte-Madeleine","Deforestation [Type]",2,0
+"Sainte-Marie-Madeleine","Agricultural Expansion [Type]",1,31.41
+"Sainte-Marie-Madeleine","Agricultural Expansion [Type]",2,0.27
+"Sainte-Marie-Madeleine","Agricultural Loss [Type]",1,2.25
+"Sainte-Marie-Madeleine","Agricultural Loss [Type]",2,14.31
+"Sainte-Marie-Madeleine","Deforestation [Type]",1,46.35
+"Sainte-Marie-Madeleine","Deforestation [Type]",2,19.62
+"Sainte-Marthe","Agricultural Expansion [Type]",1,15.75
+"Sainte-Marthe","Agricultural Expansion [Type]",2,0.27
+"Sainte-Marthe","Agricultural Loss [Type]",1,5.85
+"Sainte-Marthe","Agricultural Loss [Type]",2,1.53
+"Sainte-Marthe","Deforestation [Type]",1,3.87
+"Sainte-Marthe","Deforestation [Type]",2,5.13
+"Sainte-Martine","Agricultural Expansion [Type]",1,16.02
+"Sainte-Martine","Agricultural Expansion [Type]",2,0.09
+"Sainte-Martine","Agricultural Loss [Type]",1,14.94
+"Sainte-Martine","Agricultural Loss [Type]",2,74.16
+"Sainte-Martine","Deforestation [Type]",1,2.7
+"Sainte-Martine","Deforestation [Type]",2,1.08
+"Sainte-Sabine","Agricultural Expansion [Type]",1,90.99
+"Sainte-Sabine","Agricultural Expansion [Type]",2,1.8
+"Sainte-Sabine","Agricultural Loss [Type]",1,12.33
+"Sainte-Sabine","Agricultural Loss [Type]",2,12.24
+"Sainte-Sabine","Deforestation [Type]",1,7.2
+"Sainte-Sabine","Deforestation [Type]",2,23.58
+"Sainte-Victoire-de-Sorel","Agricultural Expansion [Type]",1,69.93
+"Sainte-Victoire-de-Sorel","Agricultural Expansion [Type]",2,3.42
+"Sainte-Victoire-de-Sorel","Agricultural Loss [Type]",1,20.52
+"Sainte-Victoire-de-Sorel","Agricultural Loss [Type]",2,30.42
+"Sainte-Victoire-de-Sorel","Deforestation [Type]",1,16.92
+"Sainte-Victoire-de-Sorel","Deforestation [Type]",2,5.04
+"Salaberry-de-Valleyfield","Agricultural Expansion [Type]",1,122.04
+"Salaberry-de-Valleyfield","Agricultural Expansion [Type]",2,4.05
+"Salaberry-de-Valleyfield","Agricultural Loss [Type]",1,149.4
+"Salaberry-de-Valleyfield","Agricultural Loss [Type]",2,160.11
+"Salaberry-de-Valleyfield","Deforestation [Type]",1,70.02
+"Salaberry-de-Valleyfield","Deforestation [Type]",2,16.65
+"Shefford","Agricultural Expansion [Type]",1,306.81
+"Shefford","Agricultural Expansion [Type]",2,11.16
+"Shefford","Agricultural Loss [Type]",1,41.67
+"Shefford","Agricultural Loss [Type]",2,47.61
+"Shefford","Deforestation [Type]",1,126.27
+"Shefford","Deforestation [Type]",2,467.91
+"Sorel-Tracy","Agricultural Expansion [Type]",1,36
+"Sorel-Tracy","Agricultural Expansion [Type]",2,4.32
+"Sorel-Tracy","Agricultural Loss [Type]",1,43.2
+"Sorel-Tracy","Agricultural Loss [Type]",2,66.15
+"Sorel-Tracy","Deforestation [Type]",1,228.51
+"Sorel-Tracy","Deforestation [Type]",2,93.6
+"Stanbridge East","Agricultural Expansion [Type]",1,12.15
+"Stanbridge East","Agricultural Expansion [Type]",2,1.35
+"Stanbridge East","Agricultural Loss [Type]",1,19.44
+"Stanbridge East","Agricultural Loss [Type]",2,10.44
+"Stanbridge East","Deforestation [Type]",1,8.82
+"Stanbridge East","Deforestation [Type]",2,3.15
+"Stanbridge Station","Agricultural Expansion [Type]",1,2.97
+"Stanbridge Station","Agricultural Expansion [Type]",2,0.36
+"Stanbridge Station","Agricultural Loss [Type]",1,8.91
+"Stanbridge Station","Agricultural Loss [Type]",2,4.14
+"Stanbridge Station","Deforestation [Type]",1,3.51
+"Stanbridge Station","Deforestation [Type]",2,5.67
+"Sutton","Agricultural Expansion [Type]",1,52.92
+"Sutton","Agricultural Expansion [Type]",2,9.54
+"Sutton","Agricultural Loss [Type]",1,41.13
+"Sutton","Agricultural Loss [Type]",2,33.48
+"Sutton","Deforestation [Type]",1,75.6
+"Sutton","Deforestation [Type]",2,145.89
+"Terrasse-Vaudreuil","Agricultural Expansion [Type]",1,0
+"Terrasse-Vaudreuil","Agricultural Expansion [Type]",2,0
+"Terrasse-Vaudreuil","Agricultural Loss [Type]",1,0
+"Terrasse-Vaudreuil","Agricultural Loss [Type]",2,0
+"Terrasse-Vaudreuil","Deforestation [Type]",1,0.99
+"Terrasse-Vaudreuil","Deforestation [Type]",2,3.42
+"Très-Saint-Rédempteur","Agricultural Expansion [Type]",1,19.44
+"Très-Saint-Rédempteur","Agricultural Expansion [Type]",2,0.9
+"Très-Saint-Rédempteur","Agricultural Loss [Type]",1,7.47
+"Très-Saint-Rédempteur","Agricultural Loss [Type]",2,3.6
+"Très-Saint-Rédempteur","Deforestation [Type]",1,10.62
+"Très-Saint-Rédempteur","Deforestation [Type]",2,31.14
+"Très-Saint-Sacrement","Agricultural Expansion [Type]",1,97.02
+"Très-Saint-Sacrement","Agricultural Expansion [Type]",2,2.88
+"Très-Saint-Sacrement","Agricultural Loss [Type]",1,1.17
+"Très-Saint-Sacrement","Agricultural Loss [Type]",2,6.48
+"Très-Saint-Sacrement","Deforestation [Type]",1,1.17
+"Très-Saint-Sacrement","Deforestation [Type]",2,0.09
+"Upton","Agricultural Expansion [Type]",1,105.39
+"Upton","Agricultural Expansion [Type]",2,1.17
+"Upton","Agricultural Loss [Type]",1,5.49
+"Upton","Agricultural Loss [Type]",2,23.94
+"Upton","Deforestation [Type]",1,4.23
+"Upton","Deforestation [Type]",2,13.68
+"Varennes","Agricultural Expansion [Type]",1,18.18
+"Varennes","Agricultural Expansion [Type]",2,0.81
+"Varennes","Agricultural Loss [Type]",1,98.46
+"Varennes","Agricultural Loss [Type]",2,106.92
+"Varennes","Deforestation [Type]",1,15.66
+"Varennes","Deforestation [Type]",2,2.07
+"Vaudreuil-Dorion","Agricultural Expansion [Type]",1,24.3
+"Vaudreuil-Dorion","Agricultural Expansion [Type]",2,1.35
+"Vaudreuil-Dorion","Agricultural Loss [Type]",1,141.21
+"Vaudreuil-Dorion","Agricultural Loss [Type]",2,450.9
+"Vaudreuil-Dorion","Deforestation [Type]",1,46.53
+"Vaudreuil-Dorion","Deforestation [Type]",2,94.14
+"Vaudreuil-sur-le-Lac","Agricultural Expansion [Type]",1,0
+"Vaudreuil-sur-le-Lac","Agricultural Expansion [Type]",2,0
+"Vaudreuil-sur-le-Lac","Agricultural Loss [Type]",1,0.09
+"Vaudreuil-sur-le-Lac","Agricultural Loss [Type]",2,13.41
+"Vaudreuil-sur-le-Lac","Deforestation [Type]",1,1.89
+"Vaudreuil-sur-le-Lac","Deforestation [Type]",2,14.4
+"Venise-en-Québec","Agricultural Expansion [Type]",1,2.34
+"Venise-en-Québec","Agricultural Expansion [Type]",2,0
+"Venise-en-Québec","Agricultural Loss [Type]",1,6.48
+"Venise-en-Québec","Agricultural Loss [Type]",2,21.51
+"Venise-en-Québec","Deforestation [Type]",1,7.65
+"Venise-en-Québec","Deforestation [Type]",2,20.25
+"Verchères","Agricultural Expansion [Type]",1,10.89
+"Verchères","Agricultural Expansion [Type]",2,0
+"Verchères","Agricultural Loss [Type]",1,20.16
+"Verchères","Agricultural Loss [Type]",2,40.59
+"Verchères","Deforestation [Type]",1,22.59
+"Verchères","Deforestation [Type]",2,1.26
+"Warden","Agricultural Expansion [Type]",1,38.88
+"Warden","Agricultural Expansion [Type]",2,0.36
+"Warden","Agricultural Loss [Type]",1,1.71
+"Warden","Agricultural Loss [Type]",2,0
+"Warden","Deforestation [Type]",1,5.4
+"Warden","Deforestation [Type]",2,2.16
+"Waterloo","Agricultural Expansion [Type]",1,26.19
+"Waterloo","Agricultural Expansion [Type]",2,0.99
+"Waterloo","Agricultural Loss [Type]",1,2.61
+"Waterloo","Agricultural Loss [Type]",2,7.2
+"Waterloo","Deforestation [Type]",1,18.72
+"Waterloo","Deforestation [Type]",2,17.91
+"Yamaska","Agricultural Expansion [Type]",1,99.18
+"Yamaska","Agricultural Expansion [Type]",2,3.96
+"Yamaska","Agricultural Loss [Type]",1,5.58
+"Yamaska","Agricultural Loss [Type]",2,27.9
+"Yamaska","Deforestation [Type]",1,3.96
+"Yamaska","Deforestation [Type]",2,0.72
+"Abercorn","Agricultural Expansion [Type]",3,7.11
+"Abercorn","Agricultural Loss [Type]",3,11.97
+"Abercorn","Deforestation [Type]",3,10.485
+"Acton Vale","Agricultural Expansion [Type]",3,50.58
+"Acton Vale","Agricultural Loss [Type]",3,50.85
+"Acton Vale","Deforestation [Type]",3,70.335
+"Akwesasne","Agricultural Expansion [Type]",3,0.135
+"Akwesasne","Agricultural Loss [Type]",3,5.49
+"Akwesasne","Deforestation [Type]",3,4.455
+"Ange-Gardien","Agricultural Expansion [Type]",3,104.625
+"Ange-Gardien","Agricultural Loss [Type]",3,20.385
+"Ange-Gardien","Deforestation [Type]",3,5.085
+"Beauharnois","Agricultural Expansion [Type]",3,45.945
+"Beauharnois","Agricultural Loss [Type]",3,47.115
+"Beauharnois","Deforestation [Type]",3,35.55
+"Bedford","Agricultural Expansion [Type]",3,5.085
+"Bedford","Agricultural Loss [Type]",3,17.685
+"Bedford","Deforestation [Type]",3,8.685
+"Beloeil","Agricultural Expansion [Type]",3,2.43
+"Beloeil","Agricultural Loss [Type]",3,75.6
+"Beloeil","Deforestation [Type]",3,1.89
+"Béthanie","Agricultural Expansion [Type]",3,123.615
+"Béthanie","Agricultural Loss [Type]",3,4.77
+"Béthanie","Deforestation [Type]",3,6.93
+"Bolton-Ouest","Agricultural Expansion [Type]",3,62.145
+"Bolton-Ouest","Agricultural Loss [Type]",3,16.515
+"Bolton-Ouest","Deforestation [Type]",3,121.23
+"Boucherville","Agricultural Expansion [Type]",3,31.635
+"Boucherville","Agricultural Loss [Type]",3,214.875
+"Boucherville","Deforestation [Type]",3,70.335
+"Brigham","Agricultural Expansion [Type]",3,119.25
+"Brigham","Agricultural Loss [Type]",3,45.315
+"Brigham","Deforestation [Type]",3,53.685
+"Brome","Agricultural Expansion [Type]",3,8.415
+"Brome","Agricultural Loss [Type]",3,1.08
+"Brome","Deforestation [Type]",3,3.96
+"Bromont","Agricultural Expansion [Type]",3,124.38
+"Bromont","Agricultural Loss [Type]",3,66.915
+"Bromont","Deforestation [Type]",3,245.97
+"Brossard","Agricultural Expansion [Type]",3,16.2
+"Brossard","Agricultural Loss [Type]",3,193.77
+"Brossard","Deforestation [Type]",3,36.495
+"Calixa-Lavallée","Agricultural Expansion [Type]",3,3.51
+"Calixa-Lavallée","Agricultural Loss [Type]",3,3.915
+"Calixa-Lavallée","Deforestation [Type]",3,0.045
+"Candiac","Agricultural Expansion [Type]",3,7.065
+"Candiac","Agricultural Loss [Type]",3,70.875
+"Candiac","Deforestation [Type]",3,72.45
+"Carignan","Agricultural Expansion [Type]",3,36.585
+"Carignan","Agricultural Loss [Type]",3,61.335
+"Carignan","Deforestation [Type]",3,60.57
+"Chambly","Agricultural Expansion [Type]",3,13.275
+"Chambly","Agricultural Loss [Type]",3,89.1
+"Chambly","Deforestation [Type]",3,40.14
+"Châteauguay","Agricultural Expansion [Type]",3,4.095
+"Châteauguay","Agricultural Loss [Type]",3,65.295
+"Châteauguay","Deforestation [Type]",3,46.53
+"Contrecoeur","Agricultural Expansion [Type]",3,22.23
+"Contrecoeur","Agricultural Loss [Type]",3,31.365
+"Contrecoeur","Deforestation [Type]",3,57.555
+"Coteau-du-Lac","Agricultural Expansion [Type]",3,13.95
+"Coteau-du-Lac","Agricultural Loss [Type]",3,64.935
+"Coteau-du-Lac","Deforestation [Type]",3,33.75
+"Cowansville","Agricultural Expansion [Type]",3,25.38
+"Cowansville","Agricultural Loss [Type]",3,30.87
+"Cowansville","Deforestation [Type]",3,73.395
+"Delson","Agricultural Expansion [Type]",3,0.27
+"Delson","Agricultural Loss [Type]",3,37.17
+"Delson","Deforestation [Type]",3,22.095
+"Dundee","Agricultural Expansion [Type]",3,137.88
+"Dundee","Agricultural Loss [Type]",3,9.765
+"Dundee","Deforestation [Type]",3,0.81
+"Dunham","Agricultural Expansion [Type]",3,76.725
+"Dunham","Agricultural Loss [Type]",3,57.24
+"Dunham","Deforestation [Type]",3,85.185
+"East Farnham","Agricultural Expansion [Type]",3,6.255
+"East Farnham","Agricultural Loss [Type]",3,1.44
+"East Farnham","Deforestation [Type]",3,5.895
+"Elgin","Agricultural Expansion [Type]",3,61.515
+"Elgin","Agricultural Loss [Type]",3,4.14
+"Elgin","Deforestation [Type]",3,0.63
+"Farnham","Agricultural Expansion [Type]",3,68.58
+"Farnham","Agricultural Loss [Type]",3,47.97
+"Farnham","Deforestation [Type]",3,58.545
+"Franklin","Agricultural Expansion [Type]",3,109.395
+"Franklin","Agricultural Loss [Type]",3,4.23
+"Franklin","Deforestation [Type]",3,3.15
+"Frelighsburg","Agricultural Expansion [Type]",3,23.355
+"Frelighsburg","Agricultural Loss [Type]",3,20.88
+"Frelighsburg","Deforestation [Type]",3,31.005
+"Godmanchester","Agricultural Expansion [Type]",3,168.75
+"Godmanchester","Agricultural Loss [Type]",3,12.51
+"Godmanchester","Deforestation [Type]",3,3.24
+"Granby","Agricultural Expansion [Type]",3,101.295
+"Granby","Agricultural Loss [Type]",3,140.04
+"Granby","Deforestation [Type]",3,245.7
+"Havelock","Agricultural Expansion [Type]",3,47.655
+"Havelock","Agricultural Loss [Type]",3,5.04
+"Havelock","Deforestation [Type]",3,12.465
+"Hemmingford","Agricultural Expansion [Type]",3,86.67
+"Hemmingford","Agricultural Loss [Type]",3,9.945
+"Hemmingford","Deforestation [Type]",3,12.825
+"Henryville","Agricultural Expansion [Type]",3,4.905
+"Henryville","Agricultural Loss [Type]",3,12.42
+"Henryville","Deforestation [Type]",3,0.855
+"Hinchinbrooke","Agricultural Expansion [Type]",3,154.755
+"Hinchinbrooke","Agricultural Loss [Type]",3,25.2
+"Hinchinbrooke","Deforestation [Type]",3,38.295
+"Howick","Agricultural Expansion [Type]",3,0.09
+"Howick","Agricultural Loss [Type]",3,3.375
+"Howick","Deforestation [Type]",3,0.045
+"Hudson","Agricultural Expansion [Type]",3,7.38
+"Hudson","Agricultural Loss [Type]",3,15.66
+"Hudson","Deforestation [Type]",3,95.265
+"Huntingdon","Agricultural Expansion [Type]",3,0.225
+"Huntingdon","Agricultural Loss [Type]",3,11.25
+"Huntingdon","Deforestation [Type]",3,0.675
+"Kahnawake","Agricultural Expansion [Type]",3,17.37
+"Kahnawake","Agricultural Loss [Type]",3,23.175
+"Kahnawake","Deforestation [Type]",3,64.845
+"L'Île-Cadieux","Agricultural Expansion [Type]",3,0
+"L'Île-Cadieux","Agricultural Loss [Type]",3,0
+"L'Île-Cadieux","Deforestation [Type]",3,0
+"L'Île-Perrot","Agricultural Expansion [Type]",3,0
+"L'Île-Perrot","Agricultural Loss [Type]",3,0.72
+"L'Île-Perrot","Deforestation [Type]",3,31.545
+"La Prairie","Agricultural Expansion [Type]",3,27.405
+"La Prairie","Agricultural Loss [Type]",3,40.545
+"La Prairie","Deforestation [Type]",3,37.935
+"La Présentation","Agricultural Expansion [Type]",3,40.32
+"La Présentation","Agricultural Loss [Type]",3,6.795
+"La Présentation","Deforestation [Type]",3,5.175
+"Lac-Brome","Agricultural Expansion [Type]",3,163.845
+"Lac-Brome","Agricultural Loss [Type]",3,50.805
+"Lac-Brome","Deforestation [Type]",3,213.525
+"Lacolle","Agricultural Expansion [Type]",3,13.05
+"Lacolle","Agricultural Loss [Type]",3,16.245
+"Lacolle","Deforestation [Type]",3,1.305
+"Léry","Agricultural Expansion [Type]",3,4.5
+"Léry","Agricultural Loss [Type]",3,5.31
+"Léry","Deforestation [Type]",3,7.11
+"Les Cèdres","Agricultural Expansion [Type]",3,19.305
+"Les Cèdres","Agricultural Loss [Type]",3,106.83
+"Les Cèdres","Deforestation [Type]",3,25.155
+"Les Coteaux","Agricultural Expansion [Type]",3,8.685
+"Les Coteaux","Agricultural Loss [Type]",3,29.205
+"Les Coteaux","Deforestation [Type]",3,22.455
+"Longueuil","Agricultural Expansion [Type]",3,35.775
+"Longueuil","Agricultural Loss [Type]",3,133.695
+"Longueuil","Deforestation [Type]",3,145.305
+"Marieville","Agricultural Expansion [Type]",3,40.86
+"Marieville","Agricultural Loss [Type]",3,54.09
+"Marieville","Deforestation [Type]",3,2.79
+"Massueville","Agricultural Expansion [Type]",3,1.08
+"Massueville","Agricultural Loss [Type]",3,3.825
+"Massueville","Deforestation [Type]",3,0.81
+"McMasterville","Agricultural Expansion [Type]",3,0.045
+"McMasterville","Agricultural Loss [Type]",3,22.905
+"McMasterville","Deforestation [Type]",3,1.98
+"Mercier","Agricultural Expansion [Type]",3,22.725
+"Mercier","Agricultural Loss [Type]",3,66.915
+"Mercier","Deforestation [Type]",3,11.835
+"Mont-Saint-Grégoire","Agricultural Expansion [Type]",3,44.37
+"Mont-Saint-Grégoire","Agricultural Loss [Type]",3,28.53
+"Mont-Saint-Grégoire","Deforestation [Type]",3,1.485
+"Mont-Saint-Hilaire","Agricultural Expansion [Type]",3,14.85
+"Mont-Saint-Hilaire","Agricultural Loss [Type]",3,100.26
+"Mont-Saint-Hilaire","Deforestation [Type]",3,81.09
+"Napierville","Agricultural Expansion [Type]",3,0.09
+"Napierville","Agricultural Loss [Type]",3,16.83
+"Napierville","Deforestation [Type]",3,3.96
+"Notre-Dame-de-l'Île-Perrot","Agricultural Expansion [Type]",3,2.205
+"Notre-Dame-de-l'Île-Perrot","Agricultural Loss [Type]",3,31.68
+"Notre-Dame-de-l'Île-Perrot","Deforestation [Type]",3,58.545
+"Notre-Dame-de-Stanbridge","Agricultural Expansion [Type]",3,2.205
+"Notre-Dame-de-Stanbridge","Agricultural Loss [Type]",3,7.02
+"Notre-Dame-de-Stanbridge","Deforestation [Type]",3,0.405
+"Noyan","Agricultural Expansion [Type]",3,11.295
+"Noyan","Agricultural Loss [Type]",3,38.25
+"Noyan","Deforestation [Type]",3,10.98
+"Ormstown","Agricultural Expansion [Type]",3,104.625
+"Ormstown","Agricultural Loss [Type]",3,15.39
+"Ormstown","Deforestation [Type]",3,6.345
+"Otterburn Park","Agricultural Expansion [Type]",3,1.485
+"Otterburn Park","Agricultural Loss [Type]",3,7.965
+"Otterburn Park","Deforestation [Type]",3,26.73
+"Pike River","Agricultural Expansion [Type]",3,1.395
+"Pike River","Agricultural Loss [Type]",3,6.615
+"Pike River","Deforestation [Type]",3,2.07
+"Pincourt","Agricultural Expansion [Type]",3,0
+"Pincourt","Agricultural Loss [Type]",3,2.655
+"Pincourt","Deforestation [Type]",3,62.145
+"Pointe-des-Cascades","Agricultural Expansion [Type]",3,0.81
+"Pointe-des-Cascades","Agricultural Loss [Type]",3,3.51
+"Pointe-des-Cascades","Deforestation [Type]",3,7.065
+"Pointe-Fortune","Agricultural Expansion [Type]",3,7.605
+"Pointe-Fortune","Agricultural Loss [Type]",3,4.815
+"Pointe-Fortune","Deforestation [Type]",3,9.945
+"Richelieu","Agricultural Expansion [Type]",3,19.8
+"Richelieu","Agricultural Loss [Type]",3,17.73
+"Richelieu","Deforestation [Type]",3,2.79
+"Rigaud","Agricultural Expansion [Type]",3,18.405
+"Rigaud","Agricultural Loss [Type]",3,72.945
+"Rigaud","Deforestation [Type]",3,108
+"Rivière-Beaudette","Agricultural Expansion [Type]",3,8.37
+"Rivière-Beaudette","Agricultural Loss [Type]",3,31.05
+"Rivière-Beaudette","Deforestation [Type]",3,29.61
+"Rougemont","Agricultural Expansion [Type]",3,27.495
+"Rougemont","Agricultural Loss [Type]",3,8.955
+"Rougemont","Deforestation [Type]",3,5.625
+"Roxton","Agricultural Expansion [Type]",3,89.28
+"Roxton","Agricultural Loss [Type]",3,14.76
+"Roxton","Deforestation [Type]",3,11.205
+"Roxton Falls","Agricultural Expansion [Type]",3,1.62
+"Roxton Falls","Agricultural Loss [Type]",3,7.695
+"Roxton Falls","Deforestation [Type]",3,9
+"Roxton Pond","Agricultural Expansion [Type]",3,102.015
+"Roxton Pond","Agricultural Loss [Type]",3,8.46
+"Roxton Pond","Deforestation [Type]",3,36.315
+"Saint-Aimé","Agricultural Expansion [Type]",3,38.835
+"Saint-Aimé","Agricultural Loss [Type]",3,8.055
+"Saint-Aimé","Deforestation [Type]",3,0.585
+"Saint-Alexandre","Agricultural Expansion [Type]",3,24.3
+"Saint-Alexandre","Agricultural Loss [Type]",3,7.56
+"Saint-Alexandre","Deforestation [Type]",3,4.545
+"Saint-Alphonse-de-Granby","Agricultural Expansion [Type]",3,47.205
+"Saint-Alphonse-de-Granby","Agricultural Loss [Type]",3,14.445
+"Saint-Alphonse-de-Granby","Deforestation [Type]",3,102.375
+"Saint-Amable","Agricultural Expansion [Type]",3,22.545
+"Saint-Amable","Agricultural Loss [Type]",3,62.73
+"Saint-Amable","Deforestation [Type]",3,20.25
+"Saint-Anicet","Agricultural Expansion [Type]",3,81.675
+"Saint-Anicet","Agricultural Loss [Type]",3,53.775
+"Saint-Anicet","Deforestation [Type]",3,36.45
+"Saint-Antoine-sur-Richelieu","Agricultural Expansion [Type]",3,28.845
+"Saint-Antoine-sur-Richelieu","Agricultural Loss [Type]",3,10.215
+"Saint-Antoine-sur-Richelieu","Deforestation [Type]",3,0.54
+"Saint-Armand","Agricultural Expansion [Type]",3,33.885
+"Saint-Armand","Agricultural Loss [Type]",3,15.975
+"Saint-Armand","Deforestation [Type]",3,24.57
+"Saint-Barnabé-Sud","Agricultural Expansion [Type]",3,19.8
+"Saint-Barnabé-Sud","Agricultural Loss [Type]",3,1.305
+"Saint-Barnabé-Sud","Deforestation [Type]",3,0.135
+"Saint-Basile-le-Grand","Agricultural Expansion [Type]",3,11.79
+"Saint-Basile-le-Grand","Agricultural Loss [Type]",3,88.695
+"Saint-Basile-le-Grand","Deforestation [Type]",3,7.38
+"Saint-Bernard-de-Lacolle","Agricultural Expansion [Type]",3,15.21
+"Saint-Bernard-de-Lacolle","Agricultural Loss [Type]",3,30.51
+"Saint-Bernard-de-Lacolle","Deforestation [Type]",3,12.285
+"Saint-Bernard-de-Michaudville","Agricultural Expansion [Type]",3,36.18
+"Saint-Bernard-de-Michaudville","Agricultural Loss [Type]",3,2.79
+"Saint-Bernard-de-Michaudville","Deforestation [Type]",3,0.09
+"Saint-Blaise-sur-Richelieu","Agricultural Expansion [Type]",3,1.08
+"Saint-Blaise-sur-Richelieu","Agricultural Loss [Type]",3,30.465
+"Saint-Blaise-sur-Richelieu","Deforestation [Type]",3,5.76
+"Saint-Bruno-de-Montarville","Agricultural Expansion [Type]",3,23.04
+"Saint-Bruno-de-Montarville","Agricultural Loss [Type]",3,117.405
+"Saint-Bruno-de-Montarville","Deforestation [Type]",3,78.705
+"Saint-Césaire","Agricultural Expansion [Type]",3,48.645
+"Saint-Césaire","Agricultural Loss [Type]",3,27
+"Saint-Césaire","Deforestation [Type]",3,2.7
+"Saint-Charles-sur-Richelieu","Agricultural Expansion [Type]",3,33.255
+"Saint-Charles-sur-Richelieu","Agricultural Loss [Type]",3,4.365
+"Saint-Charles-sur-Richelieu","Deforestation [Type]",3,0.765
+"Saint-Chrysostome","Agricultural Expansion [Type]",3,128.7
+"Saint-Chrysostome","Agricultural Loss [Type]",3,13.05
+"Saint-Chrysostome","Deforestation [Type]",3,10.035
+"Saint-Clet","Agricultural Expansion [Type]",3,7.875
+"Saint-Clet","Agricultural Loss [Type]",3,19.17
+"Saint-Clet","Deforestation [Type]",3,0.36
+"Saint-Constant","Agricultural Expansion [Type]",3,17.055
+"Saint-Constant","Agricultural Loss [Type]",3,54.36
+"Saint-Constant","Deforestation [Type]",3,13.635
+"Saint-Cyprien-de-Napierville","Agricultural Expansion [Type]",3,5.31
+"Saint-Cyprien-de-Napierville","Agricultural Loss [Type]",3,20.295
+"Saint-Cyprien-de-Napierville","Deforestation [Type]",3,1.8
+"Saint-Damase","Agricultural Expansion [Type]",3,29.07
+"Saint-Damase","Agricultural Loss [Type]",3,5.175
+"Saint-Damase","Deforestation [Type]",3,0.18
+"Saint-David","Agricultural Expansion [Type]",3,51.255
+"Saint-David","Agricultural Loss [Type]",3,3.105
+"Saint-David","Deforestation [Type]",3,2.25
+"Saint-Denis-sur-Richelieu","Agricultural Expansion [Type]",3,31.095
+"Saint-Denis-sur-Richelieu","Agricultural Loss [Type]",3,10.71
+"Saint-Denis-sur-Richelieu","Deforestation [Type]",3,0.315
+"Saint-Dominique","Agricultural Expansion [Type]",3,74.205
+"Saint-Dominique","Agricultural Loss [Type]",3,16.56
+"Saint-Dominique","Deforestation [Type]",3,1.98
+"Saint-Édouard","Agricultural Expansion [Type]",3,56.115
+"Saint-Édouard","Agricultural Loss [Type]",3,13.005
+"Saint-Édouard","Deforestation [Type]",3,0.54
+"Saint-Étienne-de-Beauharnois","Agricultural Expansion [Type]",3,22.545
+"Saint-Étienne-de-Beauharnois","Agricultural Loss [Type]",3,7.92
+"Saint-Étienne-de-Beauharnois","Deforestation [Type]",3,3.375
+"Saint-Georges-de-Clarenceville","Agricultural Expansion [Type]",3,8.235
+"Saint-Georges-de-Clarenceville","Agricultural Loss [Type]",3,37.215
+"Saint-Georges-de-Clarenceville","Deforestation [Type]",3,20.7
+"Saint-Gérard-Majella","Agricultural Expansion [Type]",3,17.91
+"Saint-Gérard-Majella","Agricultural Loss [Type]",3,5.94
+"Saint-Gérard-Majella","Deforestation [Type]",3,0.045
+"Saint-Hugues","Agricultural Expansion [Type]",3,31.185
+"Saint-Hugues","Agricultural Loss [Type]",3,17.955
+"Saint-Hugues","Deforestation [Type]",3,3.33
+"Saint-Hyacinthe","Agricultural Expansion [Type]",3,73.26
+"Saint-Hyacinthe","Agricultural Loss [Type]",3,197.865
+"Saint-Hyacinthe","Deforestation [Type]",3,24.66
+"Saint-Ignace-de-Stanbridge","Agricultural Expansion [Type]",3,50.805
+"Saint-Ignace-de-Stanbridge","Agricultural Loss [Type]",3,9.63
+"Saint-Ignace-de-Stanbridge","Deforestation [Type]",3,7.11
+"Saint-Isidore","Agricultural Expansion [Type]",3,21.555
+"Saint-Isidore","Agricultural Loss [Type]",3,16.065
+"Saint-Isidore","Deforestation [Type]",3,0.27
+"Saint-Jacques-le-Mineur","Agricultural Expansion [Type]",3,9.045
+"Saint-Jacques-le-Mineur","Agricultural Loss [Type]",3,19.53
+"Saint-Jacques-le-Mineur","Deforestation [Type]",3,0.9
+"Saint-Jean-Baptiste","Agricultural Expansion [Type]",3,29.385
+"Saint-Jean-Baptiste","Agricultural Loss [Type]",3,18.135
+"Saint-Jean-Baptiste","Deforestation [Type]",3,3.555
+"Saint-Jean-sur-Richelieu","Agricultural Expansion [Type]",3,101.745
+"Saint-Jean-sur-Richelieu","Agricultural Loss [Type]",3,338.355
+"Saint-Jean-sur-Richelieu","Deforestation [Type]",3,91.71
+"Saint-Joachim-de-Shefford","Agricultural Expansion [Type]",3,189.585
+"Saint-Joachim-de-Shefford","Agricultural Loss [Type]",3,6.885
+"Saint-Joachim-de-Shefford","Deforestation [Type]",3,22.995
+"Saint-Joseph-de-Sorel","Agricultural Expansion [Type]",3,0
+"Saint-Joseph-de-Sorel","Agricultural Loss [Type]",3,0
+"Saint-Joseph-de-Sorel","Deforestation [Type]",3,0.135
+"Saint-Jude","Agricultural Expansion [Type]",3,44.01
+"Saint-Jude","Agricultural Loss [Type]",3,2.61
+"Saint-Jude","Deforestation [Type]",3,2.475
+"Saint-Lambert","Agricultural Expansion [Type]",3,0
+"Saint-Lambert","Agricultural Loss [Type]",3,0
+"Saint-Lambert","Deforestation [Type]",3,0.045
+"Saint-Lazare","Agricultural Expansion [Type]",3,5.805
+"Saint-Lazare","Agricultural Loss [Type]",3,77.175
+"Saint-Lazare","Deforestation [Type]",3,267.165
+"Saint-Liboire","Agricultural Expansion [Type]",3,46.62
+"Saint-Liboire","Agricultural Loss [Type]",3,21.105
+"Saint-Liboire","Deforestation [Type]",3,9.99
+"Saint-Louis","Agricultural Expansion [Type]",3,33.39
+"Saint-Louis","Agricultural Loss [Type]",3,9.81
+"Saint-Louis","Deforestation [Type]",3,2.07
+"Saint-Louis-de-Gonzague","Agricultural Expansion [Type]",3,35.37
+"Saint-Louis-de-Gonzague","Agricultural Loss [Type]",3,22.5
+"Saint-Louis-de-Gonzague","Deforestation [Type]",3,14.85
+"Saint-Marc-sur-Richelieu","Agricultural Expansion [Type]",3,19.215
+"Saint-Marc-sur-Richelieu","Agricultural Loss [Type]",3,11.07
+"Saint-Marc-sur-Richelieu","Deforestation [Type]",3,1.845
+"Saint-Marcel-de-Richelieu","Agricultural Expansion [Type]",3,26.37
+"Saint-Marcel-de-Richelieu","Agricultural Loss [Type]",3,6.435
+"Saint-Marcel-de-Richelieu","Deforestation [Type]",3,1.845
+"Saint-Mathias-sur-Richelieu","Agricultural Expansion [Type]",3,42.255
+"Saint-Mathias-sur-Richelieu","Agricultural Loss [Type]",3,20.43
+"Saint-Mathias-sur-Richelieu","Deforestation [Type]",3,3.195
+"Saint-Mathieu","Agricultural Expansion [Type]",3,6.3
+"Saint-Mathieu","Agricultural Loss [Type]",3,17.775
+"Saint-Mathieu","Deforestation [Type]",3,1.845
+"Saint-Mathieu-de-Beloeil","Agricultural Expansion [Type]",3,5.94
+"Saint-Mathieu-de-Beloeil","Agricultural Loss [Type]",3,52.74
+"Saint-Mathieu-de-Beloeil","Deforestation [Type]",3,6.3
+"Saint-Michel","Agricultural Expansion [Type]",3,43.605
+"Saint-Michel","Agricultural Loss [Type]",3,11.205
+"Saint-Michel","Deforestation [Type]",3,7.65
+"Saint-Nazaire-d'Acton","Agricultural Expansion [Type]",3,31.095
+"Saint-Nazaire-d'Acton","Agricultural Loss [Type]",3,8.235
+"Saint-Nazaire-d'Acton","Deforestation [Type]",3,0.495
+"Saint-Ours","Agricultural Expansion [Type]",3,28.935
+"Saint-Ours","Agricultural Loss [Type]",3,15.93
+"Saint-Ours","Deforestation [Type]",3,2.025
+"Saint-Patrice-de-Sherrington","Agricultural Expansion [Type]",3,87.255
+"Saint-Patrice-de-Sherrington","Agricultural Loss [Type]",3,12.33
+"Saint-Patrice-de-Sherrington","Deforestation [Type]",3,0.81
+"Saint-Paul-d'Abbotsford","Agricultural Expansion [Type]",3,81.9
+"Saint-Paul-d'Abbotsford","Agricultural Loss [Type]",3,12.24
+"Saint-Paul-d'Abbotsford","Deforestation [Type]",3,7.695
+"Saint-Paul-de-l'Île-aux-Noix","Agricultural Expansion [Type]",3,0.09
+"Saint-Paul-de-l'Île-aux-Noix","Agricultural Loss [Type]",3,25.425
+"Saint-Paul-de-l'Île-aux-Noix","Deforestation [Type]",3,5.22
+"Saint-Philippe","Agricultural Expansion [Type]",3,14.4
+"Saint-Philippe","Agricultural Loss [Type]",3,43.605
+"Saint-Philippe","Deforestation [Type]",3,3.735
+"Saint-Pie","Agricultural Expansion [Type]",3,63.945
+"Saint-Pie","Agricultural Loss [Type]",3,43.065
+"Saint-Pie","Deforestation [Type]",3,10.215
+"Saint-Polycarpe","Agricultural Expansion [Type]",3,9.45
+"Saint-Polycarpe","Agricultural Loss [Type]",3,33.435
+"Saint-Polycarpe","Deforestation [Type]",3,1.44
+"Saint-Rémi","Agricultural Expansion [Type]",3,57.375
+"Saint-Rémi","Agricultural Loss [Type]",3,42.705
+"Saint-Rémi","Deforestation [Type]",3,2.655
+"Saint-Robert","Agricultural Expansion [Type]",3,34.29
+"Saint-Robert","Agricultural Loss [Type]",3,12.33
+"Saint-Robert","Deforestation [Type]",3,3.78
+"Saint-Roch-de-Richelieu","Agricultural Expansion [Type]",3,14.22
+"Saint-Roch-de-Richelieu","Agricultural Loss [Type]",3,10.665
+"Saint-Roch-de-Richelieu","Deforestation [Type]",3,17.055
+"Saint-Sébastien","Agricultural Expansion [Type]",3,3.015
+"Saint-Sébastien","Agricultural Loss [Type]",3,5.175
+"Saint-Sébastien","Deforestation [Type]",3,0
+"Saint-Simon","Agricultural Expansion [Type]",3,24.345
+"Saint-Simon","Agricultural Loss [Type]",3,11.565
+"Saint-Simon","Deforestation [Type]",3,1.845
+"Saint-Stanislas-de-Kostka","Agricultural Expansion [Type]",3,51.75
+"Saint-Stanislas-de-Kostka","Agricultural Loss [Type]",3,34.245
+"Saint-Stanislas-de-Kostka","Deforestation [Type]",3,17.415
+"Saint-Télesphore","Agricultural Expansion [Type]",3,18.045
+"Saint-Télesphore","Agricultural Loss [Type]",3,14.445
+"Saint-Télesphore","Deforestation [Type]",3,4.545
+"Saint-Théodore-d'Acton","Agricultural Expansion [Type]",3,50.625
+"Saint-Théodore-d'Acton","Agricultural Loss [Type]",3,14.67
+"Saint-Théodore-d'Acton","Deforestation [Type]",3,11.205
+"Saint-Urbain-Premier","Agricultural Expansion [Type]",3,44.955
+"Saint-Urbain-Premier","Agricultural Loss [Type]",3,18
+"Saint-Urbain-Premier","Deforestation [Type]",3,0.855
+"Saint-Valentin","Agricultural Expansion [Type]",3,0.675
+"Saint-Valentin","Agricultural Loss [Type]",3,1.17
+"Saint-Valentin","Deforestation [Type]",3,0
+"Saint-Valérien-de-Milton","Agricultural Expansion [Type]",3,56.61
+"Saint-Valérien-de-Milton","Agricultural Loss [Type]",3,15.165
+"Saint-Valérien-de-Milton","Deforestation [Type]",3,4.185
+"Saint-Zotique","Agricultural Expansion [Type]",3,5.4
+"Saint-Zotique","Agricultural Loss [Type]",3,31.32
+"Saint-Zotique","Deforestation [Type]",3,33.48
+"Sainte-Angèle-de-Monnoir","Agricultural Expansion [Type]",3,17.505
+"Sainte-Angèle-de-Monnoir","Agricultural Loss [Type]",3,7.605
+"Sainte-Angèle-de-Monnoir","Deforestation [Type]",3,0.585
+"Sainte-Anne-de-Sabrevois","Agricultural Expansion [Type]",3,5.805
+"Sainte-Anne-de-Sabrevois","Agricultural Loss [Type]",3,40.32
+"Sainte-Anne-de-Sabrevois","Deforestation [Type]",3,8.145
+"Sainte-Anne-de-Sorel","Agricultural Expansion [Type]",3,6.21
+"Sainte-Anne-de-Sorel","Agricultural Loss [Type]",3,20.565
+"Sainte-Anne-de-Sorel","Deforestation [Type]",3,4.14
+"Sainte-Barbe","Agricultural Expansion [Type]",3,19.71
+"Sainte-Barbe","Agricultural Loss [Type]",3,26.145
+"Sainte-Barbe","Deforestation [Type]",3,11.385
+"Sainte-Brigide-d'Iberville","Agricultural Expansion [Type]",3,36.63
+"Sainte-Brigide-d'Iberville","Agricultural Loss [Type]",3,15.66
+"Sainte-Brigide-d'Iberville","Deforestation [Type]",3,1.665
+"Sainte-Catherine","Agricultural Expansion [Type]",3,2.16
+"Sainte-Catherine","Agricultural Loss [Type]",3,15.885
+"Sainte-Catherine","Deforestation [Type]",3,13.68
+"Sainte-Cécile-de-Milton","Agricultural Expansion [Type]",3,68.175
+"Sainte-Cécile-de-Milton","Agricultural Loss [Type]",3,13.905
+"Sainte-Cécile-de-Milton","Deforestation [Type]",3,11.43
+"Sainte-Christine","Agricultural Expansion [Type]",3,86.715
+"Sainte-Christine","Agricultural Loss [Type]",3,9.09
+"Sainte-Christine","Deforestation [Type]",3,8.64
+"Sainte-Clotilde","Agricultural Expansion [Type]",3,92.475
+"Sainte-Clotilde","Agricultural Loss [Type]",3,14.985
+"Sainte-Clotilde","Deforestation [Type]",3,14.76
+"Sainte-Hélène-de-Bagot","Agricultural Expansion [Type]",3,50.715
+"Sainte-Hélène-de-Bagot","Agricultural Loss [Type]",3,23.895
+"Sainte-Hélène-de-Bagot","Deforestation [Type]",3,4.275
+"Sainte-Julie","Agricultural Expansion [Type]",3,11.88
+"Sainte-Julie","Agricultural Loss [Type]",3,121.5
+"Sainte-Julie","Deforestation [Type]",3,10.215
+"Sainte-Justine-de-Newton","Agricultural Expansion [Type]",3,22.365
+"Sainte-Justine-de-Newton","Agricultural Loss [Type]",3,3.06
+"Sainte-Justine-de-Newton","Deforestation [Type]",3,0.81
+"Sainte-Madeleine","Agricultural Expansion [Type]",3,1.485
+"Sainte-Madeleine","Agricultural Loss [Type]",3,6.03
+"Sainte-Madeleine","Deforestation [Type]",3,1.395
+"Sainte-Marie-Madeleine","Agricultural Expansion [Type]",3,15.84
+"Sainte-Marie-Madeleine","Agricultural Loss [Type]",3,8.28
+"Sainte-Marie-Madeleine","Deforestation [Type]",3,32.985
+"Sainte-Marthe","Agricultural Expansion [Type]",3,8.01
+"Sainte-Marthe","Agricultural Loss [Type]",3,3.69
+"Sainte-Marthe","Deforestation [Type]",3,4.5
+"Sainte-Martine","Agricultural Expansion [Type]",3,8.055
+"Sainte-Martine","Agricultural Loss [Type]",3,44.55
+"Sainte-Martine","Deforestation [Type]",3,1.89
+"Sainte-Sabine","Agricultural Expansion [Type]",3,46.395
+"Sainte-Sabine","Agricultural Loss [Type]",3,12.285
+"Sainte-Sabine","Deforestation [Type]",3,15.39
+"Sainte-Victoire-de-Sorel","Agricultural Expansion [Type]",3,36.675
+"Sainte-Victoire-de-Sorel","Agricultural Loss [Type]",3,25.47
+"Sainte-Victoire-de-Sorel","Deforestation [Type]",3,10.98
+"Salaberry-de-Valleyfield","Agricultural Expansion [Type]",3,63.045
+"Salaberry-de-Valleyfield","Agricultural Loss [Type]",3,154.755
+"Salaberry-de-Valleyfield","Deforestation [Type]",3,43.335
+"Shefford","Agricultural Expansion [Type]",3,158.985
+"Shefford","Agricultural Loss [Type]",3,44.64
+"Shefford","Deforestation [Type]",3,297.09
+"Sorel-Tracy","Agricultural Expansion [Type]",3,20.16
+"Sorel-Tracy","Agricultural Loss [Type]",3,54.675
+"Sorel-Tracy","Deforestation [Type]",3,161.055
+"Stanbridge East","Agricultural Expansion [Type]",3,6.75
+"Stanbridge East","Agricultural Loss [Type]",3,14.94
+"Stanbridge East","Deforestation [Type]",3,5.985
+"Stanbridge Station","Agricultural Expansion [Type]",3,1.665
+"Stanbridge Station","Agricultural Loss [Type]",3,6.525
+"Stanbridge Station","Deforestation [Type]",3,4.59
+"Sutton","Agricultural Expansion [Type]",3,31.23
+"Sutton","Agricultural Loss [Type]",3,37.305
+"Sutton","Deforestation [Type]",3,110.745
+"Terrasse-Vaudreuil","Agricultural Expansion [Type]",3,0
+"Terrasse-Vaudreuil","Agricultural Loss [Type]",3,0
+"Terrasse-Vaudreuil","Deforestation [Type]",3,2.205
+"Très-Saint-Rédempteur","Agricultural Expansion [Type]",3,10.17
+"Très-Saint-Rédempteur","Agricultural Loss [Type]",3,5.535
+"Très-Saint-Rédempteur","Deforestation [Type]",3,20.88
+"Très-Saint-Sacrement","Agricultural Expansion [Type]",3,49.95
+"Très-Saint-Sacrement","Agricultural Loss [Type]",3,3.825
+"Très-Saint-Sacrement","Deforestation [Type]",3,0.63
+"Upton","Agricultural Expansion [Type]",3,53.28
+"Upton","Agricultural Loss [Type]",3,14.715
+"Upton","Deforestation [Type]",3,8.955
+"Varennes","Agricultural Expansion [Type]",3,9.495
+"Varennes","Agricultural Loss [Type]",3,102.69
+"Varennes","Deforestation [Type]",3,8.865
+"Vaudreuil-Dorion","Agricultural Expansion [Type]",3,12.825
+"Vaudreuil-Dorion","Agricultural Loss [Type]",3,296.055
+"Vaudreuil-Dorion","Deforestation [Type]",3,70.335
+"Vaudreuil-sur-le-Lac","Agricultural Expansion [Type]",3,0
+"Vaudreuil-sur-le-Lac","Agricultural Loss [Type]",3,6.75
+"Vaudreuil-sur-le-Lac","Deforestation [Type]",3,8.145
+"Venise-en-Québec","Agricultural Expansion [Type]",3,1.17
+"Venise-en-Québec","Agricultural Loss [Type]",3,13.995
+"Venise-en-Québec","Deforestation [Type]",3,13.95
+"Verchères","Agricultural Expansion [Type]",3,5.445
+"Verchères","Agricultural Loss [Type]",3,30.375
+"Verchères","Deforestation [Type]",3,11.925
+"Warden","Agricultural Expansion [Type]",3,19.62
+"Warden","Agricultural Loss [Type]",3,0.855
+"Warden","Deforestation [Type]",3,3.78
+"Waterloo","Agricultural Expansion [Type]",3,13.59
+"Waterloo","Agricultural Loss [Type]",3,4.905
+"Waterloo","Deforestation [Type]",3,18.315
+"Yamaska","Agricultural Expansion [Type]",3,51.57
+"Yamaska","Agricultural Loss [Type]",3,16.74
+"Yamaska","Deforestation [Type]",3,2.34

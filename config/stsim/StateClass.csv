@@ -1,0 +1,5 @@
+Name,StateLabelXID,StateLabelYID,ID,Color,Legend
+Agriculture:Cultivated,Agriculture,Cultivated,1,"146, 173, 197, 57",a
+Forest:Deciduous,Forest,Deciduous,3,"37, 29, 248, 182",b
+Urban:Nonlinear,Urban,Nonlinear,2,"64, 248, 86, 251",c
+Roads:Linear,Roads,Linear,4,"120, 54, 148, 95",d
