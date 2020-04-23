@@ -30,7 +30,7 @@ export R_AGGR='TRUE'
 export R_AGGR_FACT='3'
 export R_PART='0.7'
 export R_BUFF='TRUE'
-export R_METHOD='all'
+export R_METHOD='rf'
 export R_METHOD_STSIM='rf'
 export R_SAMPLING_METHOD="bal"
 # Variables for STSIM
@@ -102,6 +102,7 @@ run_stsim(){
   rm -rf librairies/stsim/*
   ## Run Stsim
   Rscript scripts/4.1_run_stsim.R
+  Rscript scripts/4.2_validate_stsim_results.R
 }
 
 reclassify(){
@@ -208,7 +209,7 @@ while getopts ":pmafsrcd" opt; do
       ;;
     f )
       export R_METHOD='all'
-      export R_N_TREES='500'
+      export R_N_TREES='100'
       fit_predict_model 
       ;;
     s )
