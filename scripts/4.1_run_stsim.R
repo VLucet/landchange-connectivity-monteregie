@@ -32,7 +32,7 @@ if (is.na(OMP_NUM_THREADS)) {
 }
 
 # !!! To be commented out
-#ST_SIM_DIR <- "/home/vlucet/Documents/Apex/syncrosim_2_10"
+ST_SIM_DIR <- "/home/vlucet/Documents/Apex/syncrosim_2_10"
 # !!! To be commented out
 
 #-------------------------------------------------------------------------------
@@ -148,6 +148,19 @@ loadSheet("TransitionSpatialMultiplier", NULL, spatial_multiplier_default,
                                                paste0(getwd(), "/data/stsim/spatial_multipliers/",
                                                       R_METHOD_STSIM,"_", R_SAMPLING_METHOD, "_agex_spa_mul.tif"))))
 
+spatial_multiplier_corrs <-
+  scenario(Definitions,scenario = "Spatial Multiplier: Corrs/Areas")
+
+loadSheet("TransitionSpatialMultiplier", NULL, spatial_multiplier_corrs,
+          params = list(TransitionGroupID = c("Deforestation [Type]",
+                                              #"Agricultural Loss [Type]",
+                                              "Agricultural Expansion [Type]"), 
+                        MultiplierFileName = c(paste0(getwd(), "/data/stsim/spatial_multipliers/corrs_and_areas.tif"), 
+                                               # paste0(getwd(), "/data/stsim/spatial_multipliers/",
+                                               #        R_METHOD_STSIM, "_", R_SAMPLING_METHOD, "_urb_spa_mul.tif"),
+                                               paste0(getwd(), "/data/stsim/spatial_multipliers/corrs_and_areas.tif"))))
+
+
 # Transition Adjacency
 #transition_adjacency <- scenario(Definitions, scenario = "Transition Adjacency: Default")
 #loadSheet("StateAttributeValue", NULL, transition_adjacency, path = "config/stsim/")
@@ -158,20 +171,26 @@ loadSheet("TransitionSpatialMultiplier", NULL, spatial_multiplier_default,
 ## Full Scenarios ##
 ####################
 
-scenario_1_test <- scenario(Definitions, scenario = "Test-scenario1")
-#dependency(scenario_1_test, c(run_default, transition_adjacency, transmul_default, 
-#                              spatial_multiplier_default, targets_default))# Removed adajcency
-dependency(scenario_1_test, c(run_default, transmul_default,
-                              spatial_multiplier_default, targets_default))
+scenario_1_default <- scenario(Definitions, scenario = "Full-scenario-default")
+dependency(scenario_1_default, c(run_default, transmul_default,
+                                 spatial_multiplier_default, targets_default))
 
-print("Running StSIM");Sys.time()
+scenario_1_corrs <- scenario(Definitions, scenario = "Fall-scenario-corrs")
+dependency(scenario_1_corrs, c(run_default, transmul_default,
+                               spatial_multiplier_default, spatial_multiplier_corrs,
+                               targets_default))
+mergeDependencies(scenario_1_corrs) <- TRUE
+
+print(datasheet(scenario_1_corrs, "TransitionSpatialMultiplier"))
 
 #########
 ## RUN ##
 #########
 
 if (STSIM_RUN){
-  results <- run(scenario_1_test, summary = TRUE, jobs = OMP_NUM_THREADS)
+  print("Running StSIM");Sys.time()
+  results <- run(list(scenario_1_default, scenario_1_corrs),
+                 summary = TRUE, jobs = OMP_NUM_THREADS)
   print(results)
   saveRDS(results, "data/temp/stsim_run_results.rds")
 }
