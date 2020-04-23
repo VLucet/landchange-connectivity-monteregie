@@ -161,6 +161,10 @@ loadSheet("TransitionSpatialMultiplier", NULL, spatial_multiplier_corrs,
                                                paste0(getwd(), "/data/stsim/spatial_multipliers/corrs_and_areas.tif"))))
 
 
+# Transition size distribution
+trans_size_distribution <- scenario(Definitions, scenario = "Transition Size Distribution: Default") 
+loadSheet("TransitionSizeDistribution", NULL, trans_size_distribution, path = "config/stsim/")
+
 # Transition Adjacency
 #transition_adjacency <- scenario(Definitions, scenario = "Transition Adjacency: Default")
 #loadSheet("StateAttributeValue", NULL, transition_adjacency, path = "config/stsim/")
@@ -173,12 +177,14 @@ loadSheet("TransitionSpatialMultiplier", NULL, spatial_multiplier_corrs,
 
 scenario_1_default <- scenario(Definitions, scenario = "Full-scenario-default")
 dependency(scenario_1_default, c(run_default, transmul_default,
-                                 spatial_multiplier_default, targets_default))
+                                 spatial_multiplier_default, targets_default,
+                                 trans_size_distribution))
 
 scenario_1_corrs <- scenario(Definitions, scenario = "Fall-scenario-corrs")
 dependency(scenario_1_corrs, c(run_default, transmul_default,
                                spatial_multiplier_default, spatial_multiplier_corrs,
-                               targets_default))
+                               targets_default,
+                               trans_size_distribution))
 mergeDependencies(scenario_1_corrs) <- TRUE
 
 #print(datasheet(scenario_1_corrs, "TransitionSpatialMultiplier"))
