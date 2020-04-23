@@ -44,8 +44,7 @@ results <- read_rds("data/temp/stsim_run_results.rds")
 trans_results <- datasheet(myLibrary, scenario = results$scenarioId, 
                            "stsim_OutputStratumTransition")
 # mun_set <- sample(trans_results$SecondaryStratumID, size = 20)
-
-print(head(trans_results))
+#print(head(trans_results))
 
 targets <- read_csv("config/stsim/TransitionTarget_10y.csv") %>% 
   #filter(SecondaryStratumID %in% mun_set) %>% 
@@ -58,7 +57,7 @@ trans_results_mod <- trans_results  %>%
   summarise(Amount_mean = mean(Amount)) %>% ungroup
 trans_results_mod_only_3 <- trans_results_mod %>% 
   filter(Timestep >= 3) %>% 
-  group_by(SecondaryStratumID, TransitionGroupID) %>%
+  group_by(ScenarioID, SecondaryStratumID, TransitionGroupID) %>%
   summarise(Amount_mean = mean(Amount_mean)) %>% ungroup %>% 
   mutate(Timestep=3)
 trans_results_toplot <- bind_rows(subset(trans_results_mod, Timestep < 3), 
@@ -69,7 +68,7 @@ trans_results_toplot %>%
   filter(TransitionGroupID != "Urbanisation") %>% 
   ggplot(aes(x=Timestep, y=Amount_mean)) +
   geom_line(show.legend = F) + 
-  facet_grid_paginate(TransitionGroupID~SecondaryStratumID, nrow=3, ncol=5, page = 1, scales = "free") +
+  facet_grid_paginate(TransitionGroupID~SecondaryStratumID, nrow=3, ncol=5, page = 3, scales = "free") +
   geom_line(data=targets, inherit.aes = T, linetype=2)
 ggsave("outputs/figures/one_to_one_mun.png") 
 
