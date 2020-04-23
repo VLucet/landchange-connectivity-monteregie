@@ -244,7 +244,7 @@ mosaic = raster("data/env_vars/CLI/CLI_mosaic.tif")
 mosaic[mosaic==0] <- NA
 #plot(mosaic$layer)
 ## Write out to input file
-writeRaster(mosaic$layer, "data/env_vars/CLI/CLI_mosaic_no0.tif", overwrite=TRUE)
+writeRaster(mosaic, "data/env_vars/CLI/CLI_mosaic_no0.tif", overwrite=TRUE)
 
 # -----------------------------------------------------------------------------
 
