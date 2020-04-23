@@ -181,7 +181,7 @@ dependency(scenario_1_corrs, c(run_default, transmul_default,
                                targets_default))
 mergeDependencies(scenario_1_corrs) <- TRUE
 
-print(datasheet(scenario_1_corrs, "TransitionSpatialMultiplier"))
+#print(datasheet(scenario_1_corrs, "TransitionSpatialMultiplier"))
 
 #########
 ## RUN ##
