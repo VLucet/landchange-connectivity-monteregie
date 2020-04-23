@@ -201,6 +201,9 @@ while getopts ":pmafsrcd" opt; do
       run_model_no_prep
       ;;
     a )
+      export R_METHOD='all'
+      export R_N_TREES='500'
+      export STSIM_RUN='TRUE'
       run_all
       ;;
     f )
