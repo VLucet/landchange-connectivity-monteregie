@@ -102,7 +102,12 @@ run_stsim(){
   rm -rf librairies/stsim/*
   ## Run Stsim
   Rscript scripts/4.1_run_stsim.R
-  Rscript scripts/4.2_validate_stsim_results.R
+  if [ $STSIM_RUN = "TRUE" ]
+    then
+      Rscript scripts/4.2_validate_stsim_results.R
+    else
+      echo "STSIM not run"
+  fi
 }
 
 reclassify(){
