@@ -44,6 +44,9 @@ All.Mont <- ExtractValsAndTrans(
   classes = classes
 )
 
+saveRDS(All.Mont, "data/temp/vanls_and_trans.RDS")
+# All.Mont <- readRDS("data/temp/vanls_and_trans.RDS")
+
 TransTotal <- All.Mont$Transitions
 
 # Make dtaframe (from script 1)
@@ -116,11 +119,42 @@ write.csv(SSIM_targets_selected_h_per_y, "config/stsim/TransitionTarget_1y.csv",
 write.csv(SSIM_targets_selected_h_per_10y_final, "config/stsim/TransitionTarget_10y.csv", 
           row.names=F)
 
-## TEST
-name <-"Saint-Bruno-de-Montarville"
-submun <- subset(mun.sub.18.clean, MUS_NM_MUN == name)
-test <- mask(crop(lu.18.sub, submun), submun)
-#crosstab(test$lu.1990.18, test$lu.2010.18)
+# ## TEST
+# non_equal <- data.frame()
+# for(mun in unique(mun.sub.18.clean$MUS_NM_MUN)){
+#   
+#   submun <- subset(mun.sub.18.clean, MUS_NM_MUN == mun)
+#   test <- mask(crop(lu.18.sub, submun), submun)
+#   tab_list <- list(crosstab(test$lu.1990.18, test$lu.2000.18)*0.09,
+#                    crosstab(test$lu.2000.18, test$lu.2010.18)*0.09)
+#   
+#   for (ts in 1:2){
+#       
+#       subtargets <- SSIM_targets_selected_h_per_10y_final %>% 
+#         filter(Timestep == ts) %>% 
+#         filter(SecondaryStratumID == mun) #%>% 
+#         #filter(TransitionGroupID == trans)
+#       subtab <- tab_list[[ts]]
+#       
+#       # print(c(subtab[4,2], subtab[2,3], subtab[4,3]))
+#       # print(subtargets$Amount)
+#       test_e <- (c(subtab[4,2], subtab[2,3], subtab[4,3]) == subtargets$Amount)
+#       #print(test_e)
+#       if (any(!test_e)){
+#         print(subtargets)
+#         print(subtab)
+#         print(test_e)
+#         print(c(subtab[4,2], subtab[2,3], subtab[4,3]))
+#         print(subtargets$Amount)
+#         print(mun)
+#         non_equal <- rbind(non_equal, subtargets)
+#         plot(test)
+#         readline()
+#       }
+#   }
+#   # 3,1  1,2  3,2
+# }
+
 #plot(test==2)
 #freq(test$lu.1990.18)
 #freq(test$lu.2010.18)
