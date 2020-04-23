@@ -4,6 +4,8 @@
 ## Inputs: Physisical data [stat model output?]
 ## Outputs: Transition Spatial multipliers
 #-------------------------------------------------------------------------------
+# Remove all in environment
+rm(list = ls())
 
 # reviewed 2020 
 #-------------------------------------------------------------------------------
@@ -11,8 +13,7 @@ R_AGGR <- list(ag = as.logical(Sys.getenv("R_AGGR")),
                factor = as.numeric(Sys.getenv("R_AGGR_FACT")))
 #-------------------------------------------------------------------------------
 
-# Remove all in environment
-rm(list = ls())
+print(R_AGGR)
 
 ## Load required packages ##
 suppressPackageStartupMessages({
