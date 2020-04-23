@@ -11,7 +11,8 @@
 Pkg.build("Circuitscape")
 
 # Read the ini files
-@everywhere ini_list = readdir("config/ini_circuitscape/all/")
+searchdir(path,key) = filter(x->occursin(key,x), readdir(path))
+@everywhere ini_list = searchdir("config/ini_circuitscape/all/", "ini")
 
 @everywhere function comp(file)
     println(file)
