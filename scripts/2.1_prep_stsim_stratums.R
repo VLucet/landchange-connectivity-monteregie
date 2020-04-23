@@ -115,7 +115,7 @@ write.csv(stratum_df, "config/stsim/TertiaryStratum.csv", row.names=F)
 # raster
 RMN_data <- st_read("data/rmn/MCTPQ/MCTPQ_extraitQC20190527.shp", quiet = TRUE) %>% 
   st_transform(crs=crs(lu.stack$lu_1990))
-RMN_data_cropped <- st_crop(lwgeom::st_make_valid(RMN_data), lu.stack$lu_1990)
+RMN_data_cropped <- st_crop(sf::st_make_valid(RMN_data), lu.stack$lu_1990)
 RMN_data_cropped$stratum <- 1
 
 RMN_data_cropped_rast <- 
