@@ -28,9 +28,11 @@ STSIM_TS_END <- as.numeric(Sys.getenv("STSIM_TS_END"))
 # STSIM_TS_END <- 11
 
 # Load important libraries
-suppressPackageStartupMessages(library(stringr))
-suppressPackageStartupMessages(library(raster))
-suppressPackageStartupMessages(library(gtools))
+suppressPackageStartupMessages({
+  library(stringr)
+  library(raster)
+  library(gtools)
+})
 
 # Reset Raster tmp files
 removeTmpFiles(0)

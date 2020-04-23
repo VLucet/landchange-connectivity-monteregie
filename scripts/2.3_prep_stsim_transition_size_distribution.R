@@ -11,10 +11,12 @@
 rm(list = ls())
 
 # Load packages 
-library(raster)
-library(sf)
-library(tidyverse)
-library(rlist)
+suppressPackageStartupMessages({
+  library(raster)
+  library(sf)
+  library(tidyverse)
+  library(rlist)
+})
 
 # Reset Raster tmp files
 removeTmpFiles(0)

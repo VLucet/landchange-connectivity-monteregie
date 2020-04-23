@@ -11,11 +11,13 @@
 rm(list = ls())
 
 # Load required packages
-library(raster)
-library(sf)
-library(tidyverse)
-library(fasterize)
-# library(rgrass7)
+suppressPackageStartupMessages({
+  library(raster)
+  library(sf)
+  library(tidyverse)
+  library(fasterize)
+  # library(rgrass7)
+})
 
 # Reset Raster tmp files
 removeTmpFiles(0)
@@ -48,8 +50,8 @@ classes <- read.csv("data_raw/land_use/LandUse_AAFC/landUse_class.csv", sep = ";
 
 # Vector data: Municipalities and MRCs - data from Donnees Quebec
 # Using sf package
-mun_all <- st_read("data_raw/vector/munic_SHP/munic_polygone.shp")
-mrc_all <- st_read("data_raw/vector/mrc_SHP/mrc_polygone.shp")
+mun_all <- st_read("data_raw/vector/munic_SHP/munic_polygone.shp", quiet = TRUE)
+mrc_all <- st_read("data_raw/vector/mrc_SHP/mrc_polygone.shp", quiet = TRUE)
 
 # Select Monteregie ONLY and reproject
 

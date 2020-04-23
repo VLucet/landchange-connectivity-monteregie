@@ -32,16 +32,18 @@ if (is.na(OMP_NUM_THREADS)) {
 # setwd(wd)
 
 ## Load required packages ##
-suppressPackageStartupMessages(library(raster))
-suppressPackageStartupMessages(library(parallel))
-suppressPackageStartupMessages(library(mgcv))
-suppressPackageStartupMessages(library(ranger))
-suppressPackageStartupMessages(library(dplyr))
-suppressPackageStartupMessages(library(tidyr))
-suppressPackageStartupMessages(library(ROCR))
-suppressPackageStartupMessages(library(brms))
-suppressPackageStartupMessages(library(keras))
-suppressPackageStartupMessages(library(rlist))
+suppressPackageStartupMessages({
+  library(raster)
+  library(parallel)
+  library(mgcv)
+  library(ranger)
+  library(dplyr)
+  library(tidyr)
+  library(ROCR)
+  library(brms)
+  library(keras)
+  library(rlist)
+})
 
 # Reset Raster tmp files
 removeTmpFiles(0)

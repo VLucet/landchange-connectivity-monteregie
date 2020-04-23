@@ -10,8 +10,10 @@ rm(list=ls())
 set.seed(77)
 
 # Load important libraries
-suppressPackageStartupMessages(library(raster))
-suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages({
+  library(raster)
+  library(tidyverse)
+})
 
 options(stringsAsFactors = FALSE)
 #-------------------------------------------------------------------------------

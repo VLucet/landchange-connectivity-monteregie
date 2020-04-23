@@ -10,8 +10,10 @@ set.seed(77)
 
 #-------------------------------------------------------------------------------
 # Load important libraries
-suppressPackageStartupMessages(library(stringr))
-suppressPackageStartupMessages(library(raster))
+suppressPackageStartupMessages({
+  library(stringr)
+  library(raster)
+})
 
 print("Preparing circuitscape inputs"); Sys.time()
 

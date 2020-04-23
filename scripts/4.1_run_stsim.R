@@ -45,10 +45,12 @@ source("scripts/functions/rsyncrosim_helpr.R")
 print("Preparing library");Sys.time()
 
 # Load important libraries
-suppressPackageStartupMessages(library(raster))
-suppressPackageStartupMessages(library(tidyverse))
-suppressPackageStartupMessages(library(ggforce))
-suppressPackageStartupMessages(library(rsyncrosim))
+suppressPackageStartupMessages({
+  library(raster)
+  library(tidyverse)
+  library(ggforce)
+  library(rsyncrosim)
+})
 
 # Set options (according to BR)
 options("scipen"=100, "digits"=4)

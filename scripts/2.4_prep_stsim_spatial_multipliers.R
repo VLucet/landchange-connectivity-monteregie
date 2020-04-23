@@ -11,11 +11,13 @@
 rm(list = ls())
 
 ## Load required packages ##
-library(raster)
-library(sf)
-library(tidyverse)
-library(fasterize)
-library(RStoolbox)
+suppressPackageStartupMessages({
+  library(raster)
+  library(sf)
+  library(tidyverse)
+  library(fasterize)
+  library(RStoolbox)
+})
 
 # Reset Raster tmp files
 removeTmpFiles(0)
@@ -24,8 +26,10 @@ showTmpFiles()
 #-------------------------------------------------------------------------------
 
 ## Import data
-corridors <- st_read("data_raw/workshop/corridors/Key_links_smoothed_RegTables.shp")
-areas <- st_read("data_raw/workshop/ensembles/Key_ensembles_smoothed_RegTables.shp")
+corridors <- st_read("data_raw/workshop/corridors/Key_links_smoothed_RegTables.shp", 
+                     quiet = TRUE)
+areas <- st_read("data_raw/workshop/ensembles/Key_ensembles_smoothed_RegTables.shp", 
+                 quiet = TRUE)
 
 # Spatial Mul raster
 lu <- raster("data/land_use/LandUse_mont_aafc_30by30_1990.tif")  

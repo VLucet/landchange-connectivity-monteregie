@@ -11,11 +11,12 @@
 rm(list=ls())
 
 # Load packages 
-library(tidyverse)
-library(raster)
-library(sf) 
-library(rgrass7)
-
+suppressPackageStartupMessages({
+  library(tidyverse)
+  library(raster)
+  library(sf)
+  library(rgrass7)
+})
 # Reset Raster tmp files
 removeTmpFiles(0)
 showTmpFiles()
@@ -34,7 +35,7 @@ lu.mont.aafc.buffered <-
 
 
 ## Import shapefile of monteregie (clean)
-mont.clean.aafc <- st_read("data/mun/munic_SHP_clean.shp")
+mont.clean.aafc <- st_read("data/mun/munic_SHP_clean.shp", quiet = TRUE)
 
 ## Import reclass table
 reclass_table <- read_csv("config/rcl_tables/land_use/recode_table.csv")

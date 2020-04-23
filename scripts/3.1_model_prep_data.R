@@ -39,14 +39,16 @@ if (is.na(R_CROP[1]) || is.na(R_AGGR[1]) || is.na(R_PART[1] || is.na(OMP_NUM_THR
 #-------------------------------------------------------------------------------
 
 ## Load required packages ##
-suppressPackageStartupMessages(library(raster))
-suppressPackageStartupMessages(library(sf))
-suppressPackageStartupMessages(library(fasterize))
-suppressPackageStartupMessages(library(dplyr))
-suppressPackageStartupMessages(library(tidyr))
-suppressPackageStartupMessages(library(normalr))
-suppressPackageStartupMessages(library(parallel))
-suppressPackageStartupMessages(library(rlist))
+suppressPackageStartupMessages({
+  library(raster)
+  library(sf)
+  library(fasterize)
+  library(dplyr)
+  library(tidyr)
+  library(normalr)
+  library(parallel)
+  library(rlist)
+})
 
 # Reset Raster tmp files
 removeTmpFiles(0)
@@ -235,7 +237,7 @@ if (R_AGGR$ag){
   
   # Tertiary
   tertiary_stratum_ag <- aggregate(tertiary_stratum, fun=modal_custom_first, 
-                                       fact=R_AGGR$factor)
+                                   fact=R_AGGR$factor)
   writeRaster(tertiary_stratum_ag, "data/stsim/aggregated/tertiary_stratum", 
               format="GTiff", overwrite=T)
   

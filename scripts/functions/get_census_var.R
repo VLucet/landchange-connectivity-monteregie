@@ -18,15 +18,15 @@ get_census_var <- function(year_list, # census year
       # Load the correct census year
       if (year == 1991){
         census.sf <- sf::st_read(file.path(datadir,"CHASS_1991.shp"), 
-                                 quiet=T)
+                                 quiet = TRUE)
         print("1991 Census loaded")
       } else if (year == 2001){
         census.sf <- sf::st_read(file.path(datadir,"CHASS_2001.shp"), 
-                                 quiet=T)
+                                 quiet = TRUE)
         print("2001 Census loaded")
       } else if (year == 2011){
         census.sf <- sf::st_read(file.path(datadir,"CHASS_2011_short.shp"), 
-                                 quiet=T)
+                                 quiet = TRUE)
         print("2011 Census loaded")
       }
     }

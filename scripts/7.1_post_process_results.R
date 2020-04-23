@@ -26,11 +26,13 @@ STSIM_TS_END <- as.numeric(Sys.getenv("STSIM_TS_END"))
 print(c(STSIM_ITER, STSIM_TS_END, aggregation, STSIM_STEP_SAVE))
 
 # Load important libraries
-suppressPackageStartupMessages(library(raster))
-suppressPackageStartupMessages(library(dplyr))
-suppressPackageStartupMessages(library(RStoolbox))
-suppressPackageStartupMessages(library(SDMTools))
-suppressPackageStartupMessages(library(ggplot2))
+suppressPackageStartupMessages({
+  library(raster)
+  library(dplyr)
+  library(RStoolbox)
+  library(SDMTools)
+  library(ggplot2)
+})
 # suppressPackageStartupMessages(library(exactextractr))
 
 # Source functions and remove temp files

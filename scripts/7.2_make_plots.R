@@ -16,18 +16,20 @@ set.seed(77)
 ##--
 
 # Load important libraries
-suppressPackageStartupMessages(library(raster))
-suppressPackageStartupMessages(library(sf))
-suppressPackageStartupMessages(library(tidyverse))
-suppressPackageStartupMessages(library(ggplot2))
-suppressPackageStartupMessages(library(gganimate))
-suppressPackageStartupMessages(library(transformr))
-suppressPackageStartupMessages(library(animation))
-suppressPackageStartupMessages(library(rasterVis))
-suppressPackageStartupMessages(library(ggmap))
-suppressPackageStartupMessages(library(gifski))
-suppressPackageStartupMessages(library(gtools))
-#suppressPackageStartupMessages(library(caret))
+suppressPackageStartupMessages({
+  library(raster)
+  library(sf)
+  library(tidyverse)
+  library(ggplot2)
+  library(gganimate)
+  library(transformr)
+  library(animation)
+  library(rasterVis)
+  library(ggmap)
+  library(gifski)
+  library(gtools)
+  #library(caret)
+})
 
 # Set theme
 theme_set(theme_bw())
@@ -35,7 +37,7 @@ theme_set(theme_bw())
 #listofiles <- list.files("it1_lasterun/it1_MAAM_Current/", full.names = T)
 df_final <- readRDS("outputs/final_df_current_density.RDS")
 df_final_origin <- readRDS("outputs/final_df_origin_current_density.RDS")
-mun <- st_read("data/mun/munic_SHP_clean.shp")
+mun <- st_read("data/mun/munic_SHP_clean.shp", quiet = TRUE)
 
 # Data prep
 df_summarised <- df_final %>%

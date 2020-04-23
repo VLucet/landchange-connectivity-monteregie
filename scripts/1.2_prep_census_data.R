@@ -12,15 +12,17 @@
 rm(list = ls())
 
 # Load required packages
-library(raster)
-library(sf)
-library(tidyverse)
-library(fasterize)
-library(rasterVis)
-library(ggplot2)
+suppressPackageStartupMessages({
+  library(raster)
+  library(sf)
+  library(tidyverse)
+  library(fasterize)
+  library(rasterVis)
+  library(ggplot2)
+})
 
 # Import geometries and land use
-mun_sub_18_clean <- st_read("data/mun/munic_SHP_clean.shp")
+mun_sub_18_clean <- st_read("data/mun/munic_SHP_clean.shp", quiet = TRUE)
 raster_mont <- raster("data/land_use/AAFC_zone18_mont_mask_1990.tif")
 
 #------------------------------------------------------------------------------
@@ -37,7 +39,7 @@ chass.DA.1991.data <- read.csv("data_raw//census/CHASS_data/1991/1991_data.csv")
 chass.DA.1991.sh.sf <- st_read(paste0(
   "data_raw/census/boundary_files/EAs_1991/EAs_1991_shapes/",
   "DLI_1991_Census_DBF_Eng_Nat_ea.shp"
-))
+), quiet = TRUE)
 chass.DA.1991.sh.sf <- st_transform(chass.DA.1991.sh.sf, crs = st_crs(mun_sub_18_clean))
 #length(unique(chass.DA.1991.sh.sf$EA)) # 7831
 
@@ -104,10 +106,10 @@ CHASS.1991 <- left_join(chass.DA.1991.sh.sf.j, chass.DA.1991.data, by = "EA")
 # legend.direction = 'horizontal') + scale_fill_viridis_c(trans = 'sqrt', alpha = .4)
 
 # Rasterizzing
-st_write(CHASS.1991, "data/census/vector/CHASS_1991.shp", delete_dsn = T)
+st_write(CHASS.1991, "data/census/vector/CHASS_1991.shp", delete_dsn = T, quiet = TRUE)
 
 # VAR: Income, col 494
-income.90 <- fasterize(st_read("data/census/vector/CHASS_1991.shp"),
+income.90 <- fasterize(st_read("data/census/vector/CHASS_1991.shp", quiet = TRUE),
                        raster = raster_mont,
                        field = "COL494"
 )
@@ -123,7 +125,8 @@ writeRaster(income.90, "data/census/Income_1991.tif",
 chass.DA.2001.data <- read.csv("data_raw/census/CHASS_data/2001/2001_data.csv")
 
 chass.DA.2001.sh.sf <- 
-  st_read("data_raw/census/boundary_files//DAs_2001/DAs_2001_shapes/DLI_2001_Census_CBF_Eng_Nat_da.shp")
+  st_read("data_raw/census/boundary_files//DAs_2001/DAs_2001_shapes/DLI_2001_Census_CBF_Eng_Nat_da.shp",
+          quiet = TRUE)
 chass.DA.2001.sh.sf <- st_transform(chass.DA.2001.sh.sf, crs = st_crs(mun_sub_18_clean))
 
 chass.DA.2001.sh.sf.j <-
@@ -162,10 +165,10 @@ CHASS.2001 <- left_join(chass.DA.2001.sh.sf.j, chass.DA.2001.data, by = "DAUID")
 #plot(CHASS.2001["COL899"])
 
 # Rasterizing
-st_write(CHASS.2001, delete_dsn = T, "data/census/vector/CHASS_2001.shp")
+st_write(CHASS.2001, delete_dsn = T, "data/census/vector/CHASS_2001.shp", quiet = TRUE)
 
 # VAR: Income, col 899
-income.01 <- fasterize(st_read("data/census/vector/CHASS_2001.shp"),
+income.01 <- fasterize(st_read("data/census/vector/CHASS_2001.shp", quiet = TRUE),
                        raster = raster_mont,
                        field = "COL899"
 )
@@ -182,7 +185,8 @@ chass.DA.2011.sht.data <- read.csv("data_raw/census/CHASS_data/2011/2011_short_d
 # chass.DA.2011.sh = shapefile(paste0(inputDir, 'Boundary_files/DAs_2011/DAs_2011_shapes/',
 # 'DLI_2011_Census_CBF_Eng_Nat_da.shp'))
 chass.DA.2011.sh.sf <- 
-  st_read("data_raw/census/boundary_files/DAs_2011/DAs_2011_shapes/DLI_2011_Census_CBF_Eng_Nat_da.shp")
+  st_read("data_raw/census/boundary_files/DAs_2011/DAs_2011_shapes/DLI_2011_Census_CBF_Eng_Nat_da.shp",
+          quiet = TRUE)
 
 # chass.DA.2011.sh = spTransform(chass.DA.2011.sh, crs(mun.data))
 chass.DA.2011.sh.sf <- st_transform(chass.DA.2011.sh.sf, crs = st_crs(mun_sub_18_clean))
@@ -223,7 +227,7 @@ CHASS.2011.short <- left_join(chass.DA.2011.sh.sf.iU, chass.DA.2011.sht.data, by
 # Attempt at rasterizing
 st_write(CHASS.2011.short, delete_dsn = T, "data/census/vector/CHASS_2011_short.shp")
 
-short.11 <- fasterize(st_read("data/census/vector/CHASS_2011_short.shp"), 
+short.11 <- fasterize(st_read("data/census/vector/CHASS_2011_short.shp", quiet = TRUE), 
                       raster = raster_mont, 
                       field = "COL88")
 #plot(short.11)
@@ -273,7 +277,8 @@ chass.DA.2011.nhs.data <- read.csv("data_raw/census/CHASS_data/2011/2011_NHS_dat
 # chass.DA.2011.sh = shapefile(paste0(inputDir, 'Boundary_files/DAs_2011/DAs_2011_shapes/',
 # 'DLI_2011_Census_CBF_Eng_Nat_da.shp'))
 chass.DA.2011.sh.sf <- 
-  st_read("data_raw/census/boundary_files/DAs_2011/DAs_2011_shapes/DLI_2011_Census_CBF_Eng_Nat_da.shp")
+  st_read("data_raw/census/boundary_files/DAs_2011/DAs_2011_shapes/DLI_2011_Census_CBF_Eng_Nat_da.shp", 
+          quiet = TRUE)
 
 # chass.DA.2011.sh = spTransform(chass.DA.2011.sh, crs(mun.data))
 chass.DA.2011.sh.sf <- st_transform(chass.DA.2011.sh.sf, crs = st_crs(mun_sub_18_clean))
@@ -315,7 +320,7 @@ CHASS.2011.NHS <- left_join(chass.DA.2011.sh.sf.iU, chass.DA.2011.nhs.data, by =
 st_write(CHASS.2011.NHS, delete_dsn = T, "data/census/vector/CHASS_2011_NHS.shp")
 
 # VAR: Income, col 366
-income.11 <- fasterize(st_read("data/census/vector/CHASS_2011_NHS.shp"),
+income.11 <- fasterize(st_read("data/census/vector/CHASS_2011_NHS.shp", quiet = TRUE),
                        raster = raster_mont,
                        field = "COL366"
 )

@@ -11,10 +11,12 @@
 rm(list = ls())
 
 # Load required packages
-library(raster)
-library(sf)
-library(tidyverse)
-library(fasterize)
+suppressPackageStartupMessages({
+  library(raster)
+  library(sf)
+  library(tidyverse)
+  library(fasterize)
+})
 
 # Reset Raster tmp files
 removeTmpFiles(0)
@@ -64,7 +66,7 @@ writeRaster(stratum, "data/stsim/primary_stratum_mont_or_not_30by30",
 #-------------------------------------------------------------------------------
 
 # SECONDARY STRATUM => MUNICIPALITIES
-mun.sub.18.clean <- st_read("data/mun/munic_SHP_clean.shp")
+mun.sub.18.clean <- st_read("data/mun/munic_SHP_clean.shp", quiet = TRUE)
 
 # datasheet
 mun_for_stsim <- mun.sub.18.clean %>% 
@@ -111,7 +113,7 @@ stratum_df <- data.frame(Name= c("PA", "Not PA"),
 write.csv(stratum_df, "config/stsim/TertiaryStratum.csv", row.names=F)
 
 # raster
-RMN_data <- st_read("data/rmn/MCTPQ/MCTPQ_extraitQC20190527.shp") %>% 
+RMN_data <- st_read("data/rmn/MCTPQ/MCTPQ_extraitQC20190527.shp", quiet = TRUE) %>% 
   st_transform(crs=crs(lu.stack$lu_1990))
 RMN_data_cropped <- st_crop(lwgeom::st_make_valid(RMN_data), lu.stack$lu_1990)
 RMN_data_cropped$stratum <- 1

@@ -11,14 +11,16 @@
 rm(list = ls())
 
 # Load required packages
-library(raster)
-library(sp)
-library(rgrass7)
-library(rgdal)
+suppressPackageStartupMessages({
+  library(raster)
+  library(sp)
+  library(rgrass7)
+  library(rgdal)
+})
 # library(devtools)
 # install_github('loicdtx/bfastSpatial')
 # install.packages("igraph")
-library(bfastSpatial)
+suppressPackageStartupMessages(library(bfastSpatial))
 
 # For troublehsooting if raster package use too much memory
 removeTmpFiles(0)
