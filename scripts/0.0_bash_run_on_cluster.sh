@@ -14,7 +14,7 @@
 
 echo "LAND USE CHANGE AND CON MODEL - 2020"
 echo ""
-export OMP_NUM_THREADS='6' # six on thinkpad, 16 on cluster
+export OMP_NUM_THREADS='16' # six on thinkpad, 16 on cluster
 echo "Running main script using $OMP_NUM_THREADS cores"
 echo ""
 
@@ -40,7 +40,7 @@ export STSIM_TS_END='2'
 export STSIM_STEP_SAVE='1'
 export STSIM_STEP_COMPUTE='10'
 # Variables for CS
-export CS_CORES='2' # 2 on thinkpad, 12 on cluster
+export CS_CORES='9' # 2 on thinkpad, 12 on cluster
 
 print_vars(){
   echo "Variables for R: R_crop = $R_CROP, R_AGGR = $R_AGGR"
