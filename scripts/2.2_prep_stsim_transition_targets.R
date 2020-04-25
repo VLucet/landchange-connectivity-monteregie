@@ -33,7 +33,7 @@ lu.18.sub <- stack(raster("data/land_use/LandUse_mont_aafc_30by30_1990.tif"),
 names(lu.18.sub) <- c("lu.1990.18", "lu.2000.18", "lu.2010.18")
 mun.sub.18.clean <- st_read("data/mun//munic_SHP_clean.shp", quiet = TRUE)
 mun.list <- as.character(unique((mun.sub.18.clean$MUS_NM_MUN)))
-classes <- data.frame(Code=seq(1:7)-1, Label=c("Other","Agriculture", "Anthropic", 
+classes <- data.frame(Code=(0:6), Label=c("Other","Agriculture", "Urban", 
                                                "Forest", "Roads", "Water","Wetlands"))
 
 All.Mont <- ExtractValsAndTrans(

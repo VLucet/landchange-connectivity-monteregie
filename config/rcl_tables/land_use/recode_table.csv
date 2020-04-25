@@ -1,6 +1,6 @@
-﻿source ,name,class,subclass,old_code,new_code,new_class
+source ,name,class,subclass,old_code,new_code,new_class
 AAFC,Unclassified,Unclassified,NA,11,0,Other
-AAFC,Settlement,Settlement,NA,21,2,Anthropic
+AAFC,Settlement,Settlement,NA,21,2,Urban
 AAFC,Roads,Roads,NA,25,4,Roads
 AAFC,Water,Water,NA,31,5,Water
 AAFC,Forest,Forest,NA,41,3,Forest
