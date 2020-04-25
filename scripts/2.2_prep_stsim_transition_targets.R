@@ -44,7 +44,7 @@ All.Mont <- ExtractValsAndTrans(
   classes = classes
 )
 
-saveRDS(All.Mont, "data/temp/vanls_and_trans.RDS")
+saveRDS(All.Mont, "data/temp/vals_and_trans.RDS")
 # All.Mont <- readRDS("data/temp/vanls_and_trans.RDS")
 
 TransTotal <- All.Mont$Transitions
