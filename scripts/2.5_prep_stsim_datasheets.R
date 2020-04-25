@@ -29,7 +29,7 @@ random_rgb <- function(n){
   vec
 }
 #-------------------------------------------------------------------------------
-# CANT BE AUTOMATATIZED
+# CANT BE AUTOMATIZED
 
 # Terminology 
 term <- data.frame(
@@ -56,17 +56,6 @@ trans_group <- data.frame(
   IsAuto = c("")
 )
 write_csv(trans_group, "config/stsim/TransitionGroup.csv")
-
-# TransitionMultiplierValue
-trans_mul_val <- data.frame(
-  StratumID = c("Not_Monteregie", "Not_Monteregie", "Not_Monteregie", "", "", ""),
-  TertiaryStratumID = c("", "", "", "PA", "PA", "PA"), 
-  TransitionGroupID = c("Deforestation [Type]", "Agricultural Loss [Type]", 
-                        "Agricultural Expansion [Type]", "Agricultural Expansion [Type]", 
-                        "Agricultural Loss [Type]", "Deforestation [Type]"),
-  Amount = c(0, 0, 0, 0, 0, 0)
-)
-write_csv(trans_mul_val, "config/stsim/TransitionMultiplierValue.csv")
 
 #-------------------------------------------------------------------------------
 # FROM:
@@ -149,6 +138,21 @@ trans_sub_group <- trans %>%
 trans_type_group <- bind_rows(trans_sub_type, trans_sub_group) %>% 
   arrange(TransitionTypeID)
 write_csv(trans_type_group, "config/stsim/TransitionTypeGroup.csv")
+
+#-------------------------------------------------------------------------------
+# CANT BE AUTOMATIZED but downstream
+
+# TransitionMultiplierValue
+trans_mul_val <- data.frame(
+  StratumID = c("Not_Monteregie", "Not_Monteregie", "Not_Monteregie", "", "", ""),
+  TertiaryStratumID = c("", "", "", "PA", "PA", "PA"), 
+  TransitionGroupID = c("Deforestation [Type]", "Agricultural Loss [Type]", 
+                        "Agricultural Expansion [Type]", "Agricultural Expansion [Type]", 
+                        "Agricultural Loss [Type]", "Deforestation [Type]"),
+  Amount = c(0, 0, 0, 0, 0, 0)
+)
+write_csv(trans_mul_val, "config/stsim/TransitionMultiplierValue.csv")
+
 
 #-------------------------------------------------------------------------------
 
