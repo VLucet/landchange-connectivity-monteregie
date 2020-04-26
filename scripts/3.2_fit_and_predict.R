@@ -43,6 +43,7 @@ suppressPackageStartupMessages({
   library(tidymodels)
   library(raster)
   library(dplyr)
+  library(tidyr)
   library(rlist)
 })
 
