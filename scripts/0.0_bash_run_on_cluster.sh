@@ -31,6 +31,7 @@ export R_AGGR_FACT='3'
 export R_PART='0.7'
 export R_BUFF='TRUE'
 export R_METHOD='rf'
+export R_RATIO='2'
 export R_METHOD_STSIM='rf'
 export R_SAMPLING_METHOD="bal"
 # Variables for STSIM
@@ -46,7 +47,7 @@ print_vars(){
   echo "Variables for R: R_crop = $R_CROP, R_AGGR = $R_AGGR"
   echo "                 R_AGGR_FACT = $R_AGGR_FACT, R_PART = $R_PART"       
   echo "                 R_BUFF = $R_BUFF, R_METHOD = $R_METHOD"
-  echo "                 R_N_TREES = $R_N_TREES"
+  echo "                 R_N_TREES = $R_N_TREES, R_RATIO = $R_RATIO"
   echo ""
   echo "Variables for ST-SIM: STSIM_ITER = $STSIM_ITER" 
   echo "                      STSIM_TS_START = $STSIM_TS_START" 
@@ -207,14 +208,14 @@ while getopts ":pmafsrcd" opt; do
       run_model_no_prep
       ;;
     a )
-      export R_METHOD='all'
+      #export R_METHOD='all'
       export R_N_TREES='500'
       export STSIM_RUN='TRUE'
       run_all
       ;;
     f )
-      export R_METHOD='all'
-      export R_N_TREES='100'
+      #export R_METHOD='all'
+      export R_N_TREES='500'
       fit_predict_model 
       ;;
     s )

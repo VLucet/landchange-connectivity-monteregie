@@ -53,8 +53,6 @@ showTmpFiles()
 #-------------------------------------------------------------------------------
 # Raster template
 template <- raster("data/temp/template.tif")
-method <- "rf"
-ratio <- 2
 
 # test <- readRDS("data/temp/data_temp.RDS")
 
@@ -88,7 +86,7 @@ methics_df <- data.frame()
 
 #-------------------------------------------------------------------------------
 
-for (response in c("urb", "agex")){
+for (response in c("agex","urb")){
   
   for (ratio in R_RATIO){
     
@@ -111,16 +109,18 @@ for (response in c("urb", "agex")){
                  -has_role("Other response"), 
                  -has_role("ID/group Variables")) %>% 
       step_dummy(mun) %>% 
-      step_downsample(outcome_fact, skip = TRUE, under_ratio = ratio)
+      step_downsample(outcome_fact, skip = TRUE, under_ratio = R_RATIO)
     
-    if (method == "rf"){
+    if (R_METHOD == "rf"){
       
       mod <- 
         rand_forest(trees = R_N_TREES, mode = "regression") %>% 
         set_engine("ranger", 
                    num.threads = OMP_NUM_THREADS)
     } else {
+      
       stop("Method not implemented")
+      
     }
     
     wflow <- 
@@ -145,12 +145,12 @@ for (response in c("urb", "agex")){
                     roc_auc(truth = outcome_fact, .pred))$.estimate, 4)
     plot <- pred %>% 
       roc_curve(truth = outcome_fact, .pred) %>% 
-      autoplot() + ggtitle(paste("Roc Curve for", method, response)) +
+      autoplot() + ggtitle(paste("Roc Curve for", R_METHOD, response)) +
       annotate(x = 0.75, y = 0.25, geom="label", 
                label = as.character(paste("AUC =", auc))) +
       annotate(x = 0.75, y = 0.10, geom="label", 
                label = as.character(paste("Av Prec =", av_prec)))
-    ggsave(file.path("outputs", method, paste0(method, "_ratio_", ratio,"_", response,"_roc.png")))
+    ggsave(file.path("outputs", R_METHOD, paste0(R_METHOD, "_ratio_", R_RATIO,"_", response,"_roc.png")))
     
     methics_df <- rbind(methics_df, 
                         list(method = R_METHOD,
@@ -173,7 +173,7 @@ for (response in c("urb", "agex")){
     
     writeRaster(spa_mul, 
                 file.path("data/stsim/spatial_multipliers/",
-                          paste0(method, "_ratio_", ratio,"_", response,"_c_spamul.tif")), 
+                          paste0(R_METHOD, "_ratio_", R_RATIO,"_", response,"_c_spamul.tif")), 
                 overwrite = TRUE)
     
     # Pred Future
@@ -199,11 +199,11 @@ for (response in c("urb", "agex")){
     spa_mul_fut <- template
     values(spa_mul_fut) <- NA
     spa_mul_fut[future_data$row_nb] <- full_pred_future$.pred
-    plot(spa_mul_fut)
+    #plot(spa_mul_fut)
     
     writeRaster(spa_mul_fut, 
                 file.path("data/stsim/spatial_multipliers/",
-                          paste0(method, "_ratio_", ratio,"_", response,"_f_spamul.tif")), 
+                          paste0(R_METHOD, "_ratio_", R_RATIO,"_", response,"_f_spamul.tif")), 
                 overwrite = TRUE)
     
   }
