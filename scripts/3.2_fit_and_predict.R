@@ -1,5 +1,5 @@
 #-------------------------------------------------------------------------------
-## 3.2 
+## 3.2 Fit and predict model with tidymodels
 ## 2020
 ## Inputs: Dataframe etc.
 ## Outputs: Spatial multipliers, model fit
@@ -12,18 +12,22 @@ set.seed(77)
 # Set parameters 
 OMP_NUM_THREADS <- as.numeric(Sys.getenv("OMP_NUM_THREADS"))-1
 options(mc.cores=OMP_NUM_THREADS)
+
 R_METHOD <- Sys.getenv("R_METHOD")
-# R_CROP <- as.logical(Sys.getenv("R_CROP")) => never got implemented 
 R_N_TREES <- as.numeric(Sys.getenv("R_N_TREES"))
 R_PART <- as.numeric(Sys.getenv("R_PART"))
+R_RATIO <- as.numeric(Sys.getenv("R_RATIO"))
 
 options(stringsAsFactors = FALSE)
 
 if (is.na(OMP_NUM_THREADS)) { 
   OMP_NUM_THREADS <- 6 
   options(mc.cores = OMP_NUM_THREADS)
+  
+  R_METHOD <- "rf"
   R_N_TREES <- 500
   R_PART <- 0.7
+  R_RATIO <- 2
   
   print("Running on 6 cores only and using default input parameters") 
   setwd("~/Documents/Master/Thesis/land_con_monteregie/")
@@ -80,75 +84,134 @@ agex_set <-
 
 full_set <- list(urb = urb_set, agex = agex_set)
 
+methics_df <- data.frame()
+
 #-------------------------------------------------------------------------------
 
-for (response in c("agex")){
+for (response in c("urb", "agex")){
   
-  temp_data <- full_set[[response]]$current
-  
-  data_split <- initial_split(temp_data, prop = R_PART)
-  train_data <- training(data_split)
-  test_data  <- testing(data_split)
-  
-  # formula("urb ~ .")
-  
-  rec <- 
-    recipe(formula(paste0(response, " ~ .")), data = temp_data) %>% 
-    update_role(timestep, row_nb, outcome_fact, 
-                new_role = "ID/group Variables") %>% 
-    step_zv(all_predictors()) %>% 
-    step_scale(all_numeric(), 
-               -all_outcomes(), 
-               -has_role("Other response"), 
-               -has_role("ID/group Variables")) %>% 
-    step_dummy(mun) %>% 
-    step_downsample(outcome_fact, skip = TRUE, under_ratio = ratio)
-  
-  rf_mod <- 
-    rand_forest(trees = R_N_TREES, mode = "regression") %>% 
-    set_engine("ranger", 
-               num.threads = OMP_NUM_THREADS)
-  
-  rf_wflow <- 
-    workflow() %>% 
-    add_model(rf_mod) %>% 
-    add_recipe(rec)
-  
-  # Fit
-  rf_fit <- 
-    rf_wflow %>% 
-    fit(data = train_data)
-  
-  # Pred
-  rf_pred <- 
-    rf_fit %>% 
-    predict(test_data) %>% 
-    bind_cols(test_data %>% dplyr::select(outcome_fact))
-  
-  auc <- round((rf_pred %>% 
-                  roc_auc(truth = outcome_fact, .pred))$.estimate, 4)
-  plot <- rf_pred %>% 
-    roc_curve(truth = outcome_fact, .pred) %>% 
-    autoplot() + ggtitle(paste("Roc Curve for", method, response)) +
-    annotate(x = 0.75, y = 0.25, geom="label", 
-             label = as.character(paste("AUC =", auc)))
-  ggsave(file.path("outputs", method, paste0(response,"_roc.png")))
-  
-  full_rf_pred <- 
-    rf_fit %>% 
-    predict(new_data=temp_data)
-  
-  spa_mul <- template
-  values(spa_mul) <- NA
-  spa_mul[temp_data$row_nb] <- full_rf_pred$.pred
-  plot(spa_mul)
-  
-  writeRaster(spa_mul, 
-              file.path("data/stsim/spatial_multipliers/",
-                        paste0(method, "_ratio_", ratio,"_", response,"_spamul.tif")), 
-              overwrite = TRUE)
+  for (ratio in R_RATIO){
+    
+    temp_data <- full_set[[response]]$current
+    future_data <- full_set[[response]]$future
+    
+    data_split <- initial_split(temp_data, prop = R_PART)
+    train_data <- training(data_split)
+    test_data  <- testing(data_split)
+    
+    # formula("urb ~ .")
+    
+    rec <- 
+      recipe(formula(paste0(response, " ~ .")), data = temp_data) %>% 
+      update_role(timestep, row_nb, outcome_fact, 
+                  new_role = "ID/group Variables") %>% 
+      step_zv(all_predictors()) %>% 
+      step_scale(all_numeric(), 
+                 -all_outcomes(), 
+                 -has_role("Other response"), 
+                 -has_role("ID/group Variables")) %>% 
+      step_dummy(mun) %>% 
+      step_downsample(outcome_fact, skip = TRUE, under_ratio = ratio)
+    
+    if (method == "rf"){
+      
+      mod <- 
+        rand_forest(trees = R_N_TREES, mode = "regression") %>% 
+        set_engine("ranger", 
+                   num.threads = OMP_NUM_THREADS)
+    } else {
+      stop("Method not implemented")
+    }
+    
+    wflow <- 
+      workflow() %>% 
+      add_model(mod) %>% 
+      add_recipe(rec)
+    
+    # Fit
+    mod_fit <- 
+      wflow %>% 
+      fit(data = train_data)
+    
+    # Pred
+    pred <- 
+      mod_fit %>% 
+      predict(test_data) %>% 
+      bind_cols(test_data %>% dplyr::select(outcome_fact))
+    
+    av_prec <- round((pred %>% 
+                        average_precision(truth = outcome_fact, .pred))$.estimate, 4)
+    auc <- round((pred %>% 
+                    roc_auc(truth = outcome_fact, .pred))$.estimate, 4)
+    plot <- pred %>% 
+      roc_curve(truth = outcome_fact, .pred) %>% 
+      autoplot() + ggtitle(paste("Roc Curve for", method, response)) +
+      annotate(x = 0.75, y = 0.25, geom="label", 
+               label = as.character(paste("AUC =", auc))) +
+      annotate(x = 0.75, y = 0.10, geom="label", 
+               label = as.character(paste("Av Prec =", av_prec)))
+    ggsave(file.path("outputs", method, paste0(method, "_ratio_", ratio,"_", response,"_roc.png")))
+    
+    methics_df <- rbind(methics_df, 
+                        list(method = R_METHOD,
+                             ratio = R_RATIO, 
+                             response = response,
+                             data = "test",
+                             R2 = mod_fit$fit$fit$fit$r.squared,
+                             auc = auc, 
+                             av_prec = av_prec))
+    
+    # Pred Current
+    full_pred <- 
+      mod_fit %>% 
+      predict(new_data=temp_data)
+    
+    spa_mul <- template
+    values(spa_mul) <- NA
+    spa_mul[temp_data$row_nb] <- full_pred$.pred
+    plot(spa_mul)
+    
+    writeRaster(spa_mul, 
+                file.path("data/stsim/spatial_multipliers/",
+                          paste0(method, "_ratio_", ratio,"_", response,"_c_spamul.tif")), 
+                overwrite = TRUE)
+    
+    # Pred Future
+    full_pred_future <- 
+      mod_fit %>% 
+      predict(new_data=future_data) %>% 
+      bind_cols(future_data %>% dplyr::select(outcome_fact))
+    
+    av_prec_fut <- round((full_pred_future %>% 
+                            average_precision(truth = outcome_fact, .pred))$.estimate, 4)
+    auc_fut <- round((full_pred_future %>% 
+                        roc_auc(truth = outcome_fact, .pred))$.estimate, 4)
+    
+    methics_df <- rbind(methics_df, 
+                        list(method = R_METHOD,
+                             ratio = R_RATIO, 
+                             response = response,
+                             data = "future",
+                             R2 = mod_fit$fit$fit$fit$r.squared,
+                             auc = auc_fut, 
+                             av_prec = av_prec_fut))
+    
+    spa_mul_fut <- template
+    values(spa_mul_fut) <- NA
+    spa_mul_fut[future_data$row_nb] <- full_pred_future$.pred
+    plot(spa_mul_fut)
+    
+    writeRaster(spa_mul_fut, 
+                file.path("data/stsim/spatial_multipliers/",
+                          paste0(method, "_ratio_", ratio,"_", response,"_f_spamul.tif")), 
+                overwrite = TRUE)
+    
+  }
 }
 
+write.csv(methics_df, "outputs/metrics_table.csv")
+
+#-------------------------------------------------------------------------------
 
 # urb_rec <- 
 #   recipe(urb ~ ., data = urb_set$current) %>% 
