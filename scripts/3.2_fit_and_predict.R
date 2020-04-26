@@ -1,5 +1,5 @@
 #-------------------------------------------------------------------------------
-## 3.2 Fit and predict model
+## 3.2 
 ## 2020
 ## Inputs: Dataframe etc.
 ## Outputs: Spatial multipliers, model fit
@@ -15,15 +15,18 @@ options(mc.cores=OMP_NUM_THREADS)
 R_METHOD <- Sys.getenv("R_METHOD")
 # R_CROP <- as.logical(Sys.getenv("R_CROP")) => never got implemented 
 R_N_TREES <- as.numeric(Sys.getenv("R_N_TREES"))
+R_PART <- as.numeric(Sys.getenv("R_PART"))
 
 options(stringsAsFactors = FALSE)
 
 if (is.na(OMP_NUM_THREADS)) { 
   OMP_NUM_THREADS <- 6 
   options(mc.cores = OMP_NUM_THREADS)
-  R_N_TREES <- 1000
+  R_N_TREES <- 500
+  R_PART <- 0.7
+  
   print("Running on 6 cores only and using default input parameters") 
-  setwd("~/Documents/Master/landuse_model_full/landuse_model_workflow/")
+  setwd("~/Documents/Master/Thesis/land_con_monteregie/")
 }
 #-------------------------------------------------------------------------------
 
@@ -33,15 +36,9 @@ if (is.na(OMP_NUM_THREADS)) {
 
 ## Load required packages ##
 suppressPackageStartupMessages({
+  library(tidymodels)
   library(raster)
-  library(parallel)
-  library(mgcv)
-  library(ranger)
   library(dplyr)
-  library(tidyr)
-  library(ROCR)
-  library(brms)
-  library(keras)
   library(rlist)
 })
 
@@ -49,150 +46,129 @@ suppressPackageStartupMessages({
 removeTmpFiles(0)
 showTmpFiles()
 
-## Source functions
-source("scripts/functions/get_change_raster.R")
-source("scripts/functions/train_NN_model.R")
-source("scripts/functions/custom_perf.R")
-source("scripts/functions/custom_fit_and_predict.R")
-
 #-------------------------------------------------------------------------------
+# Raster template
+template <- raster("data/temp/template.tif")
+method <- "rf"
+ratio <- 2
+
+# test <- readRDS("data/temp/data_temp.RDS")
+
 # Load inputs
-data <- readRDS("data/temp/data_temp.RDS")
+full_data <- readRDS("data/temp/full_df.RDS") %>% 
+  mutate(pop_change = (pop_01-pop_90)) %>%
+  # mutate(urb_fact = as.factor(urb)) %>% 
+  # mutate(agex_fact = as.factor(agex)) %>% 
+  dplyr::select(row_nb, agex, urb, timestep, 
+                pop_change, dis_90, in_90, for_90, elev, mun)
 
-lu.template <- raster("data/temp/template.tif")
-lu.buffer.template <- raster("data/temp/template_with_buffer.tif")
+urb_set <- 
+  full_data %>% 
+  dplyr::select(-agex) %>% 
+  mutate(outcome_fact = as.factor(urb)) %>% 
+  drop_na() %>% 
+  split(.$timestep) %>% 
+  `names<-`(x=., value=c("current", "future"))
+
+agex_set <- 
+  full_data %>% 
+  dplyr::select(-urb) %>% 
+  mutate(outcome_fact = as.factor(agex)) %>% 
+  drop_na() %>% 
+  split(.$timestep) %>% 
+  `names<-`(x=., value=c("current", "future"))
+
+full_set <- list(urb = urb_set, agex = agex_set)
 
 #-------------------------------------------------------------------------------
-# Models
-if (R_METHOD == "all"){
-  methodlist <- c("glm", "nn", "rf") #  "brms" "gam"
-} else {
-  methodlist <- c(R_METHOD)
-}
 
-responselist <- c("urb", "agex")
-samplingmethodlist <- c("bal", "imbal")
-measureslist <- c("auc", "rch", "fpr", "tpr", "prec")
-
-# Emmpty objects for collection
-auc.df <- data.frame()
-
-for (method in methodlist){
+for (response in c("agex")){
   
-  outdir <- file.path("outputs", method)
+  temp_data <- full_set[[response]]$current
   
-  if (method == "gam"){
-    # different formula for gam
-    formulalist <- 
-      list(urb = "urb~s(pop_change_norm, k=6)+s(urb_norm, k=6)+s(in_norm, k=6)+s(for_norm, k=6)+s(elev_norm, k=6)+s(ag_neigh_norm, k=6)+s(for_neigh_norm, k=6)+s(urb_neigh_norm, k=6)+s(roa_neigh_norm, k=6)",
-           agex = "agex~s(pop_change_norm, k=6)+s(urb_norm, k=6)+s(in_norm, k=6)+s(for_norm, k=6)+s(elev_norm, k=6)+s(ag_neigh_norm, k=6)+s(for_neigh_norm, k=6)+s(urb_neigh_norm, k=6)+s(roa_neigh_norm, k=6)")
-  } else {
-    # same formula for the remaining methods
-    formulalist <- 
-      list(urb = "urb~pop_change_norm+urb_norm+in_norm+for_norm+elev_norm+ag_neigh_norm+for_neigh_norm+urb_neigh_norm+roa_neigh_norm", 
-           agex = "agex~pop_change_norm+urb_norm+in_norm+for_norm+elev_norm+ag_neigh_norm+for_neigh_norm+urb_neigh_norm+roa_neigh_norm")
-  }
+  data_split <- initial_split(temp_data, prop = R_PART)
+  train_data <- training(data_split)
+  test_data  <- testing(data_split)
   
-  for (response in responselist){
-    
-    for(samplingmethod in samplingmethodlist){
-      
-      message(paste("Using sampling method... ", samplingmethod)) ; Sys.time()
-      
-      if(samplingmethod == "imbal"){
-        
-        train_data <- data$imbal_train
-        test_data <- data$imbal_test
-        
-      } else if (samplingmethod == "bal"){
-        
-        train_data <- data[[response]]$bal_train
-        test_data <- data[[response]]$bal_test
-        
-      }
-      
-      message(paste("Train data has shape", dim(train_data), collapse = " "))
-      message(paste("Test data has shape", dim(test_data), collapse = " "))
-      
-      fit.out <- custom_fit_and_predict(modelformula = formulalist[[response]], 
-                                        method = method,
-                                        samplingmethod = samplingmethod,
-                                        train = train_data,
-                                        test = test_data,
-                                        
-                                        IDs = data$frame_IDs,
-                                        step_list = list(present = data$df.change, 
-                                                         future = data$df.change.future),
-                                        nb_cores = OMP_NUM_THREADS, 
-                                        
-                                        predict=T, 
-                                        check_model=T, 
-                                        make_plot = T, 
-                                        save_rasters = T, 
-                                        save_fit=T,
-                                        
-                                        template = lu.template, 
-                                        template_buffer = lu.buffer.template,
-                                        ntrees=R_N_TREES)
-      
-      saveRDS(fit.out, paste0(file.path("outputs", method), 
-                              paste("/output", response, samplingmethod, sep="_"), 
-                              ".rds"))
-      
-      # Calculate the performance
-      # predictions
-      message("Calculating performance...") ; Sys.time()
-      
-      # create empty list and df
-      
-      perf_list <- custom_perf(predictions_list = list(fit.out$prediction.train,
-                                                       fit.out$prediction.test,
-                                                       fit.out$raster.current, 
-                                                       fit.out$raster.future),
-                               labels_list = list(train_data[[response]], 
-                                                  test_data[[response]],
-                                                  data$df.change[[response]], 
-                                                  data$df.change.future[[response]]),
-                               predictions_steps = c("train", "test", "current", "future"),
-                               method = method, 
-                               samplingmethod = samplingmethod,
-                               measures_list = measureslist)
-      
-      for(step in names(perf_list)){
-        for (measure in measureslist){
-          
-          # TODO plot_roc function
-          # # Plots 
-          # png(file.path(outdir, paste(response,samplingmethod,step,"roc.png", sep="_")))
-          # plot(perf.out[[step]]$rch, col=2)
-          # title(response)
-          # text(0.8,0.2,paste("AUC =", round(perf.out[[step]]$auc@y.values[[1]], 2)))
-          # dev.off()
-          
-          # as.double(perf.out[[step]]$auc@y.values[[1]]))
-          
-          # Build the performance table
-          the_row <- data.frame(method=as.character(method), 
-                                response=as.character(response),
-                                samplingmethod=as.character(samplingmethod),
-                                step=step,
-                                measure=measure, 
-                                value=as.double(perf_list[[step]][[measure]]))
-          auc.df <- rbind(auc.df, the_row)
-        }
-      }
-    }
-  }
+  # formula("urb ~ .")
+  
+  rec <- 
+    recipe(formula(paste0(response, " ~ .")), data = temp_data) %>% 
+    update_role(timestep, row_nb, outcome_fact, 
+                new_role = "ID/group Variables") %>% 
+    step_zv(all_predictors()) %>% 
+    step_scale(all_numeric(), 
+               -all_outcomes(), 
+               -has_role("Other response"), 
+               -has_role("ID/group Variables")) %>% 
+    step_dummy(mun) %>% 
+    step_downsample(outcome_fact, skip = TRUE, under_ratio = ratio)
+  
+  rf_mod <- 
+    rand_forest(trees = R_N_TREES, mode = "regression") %>% 
+    set_engine("ranger", 
+               num.threads = OMP_NUM_THREADS)
+  
+  rf_wflow <- 
+    workflow() %>% 
+    add_model(rf_mod) %>% 
+    add_recipe(rec)
+  
+  # Fit
+  rf_fit <- 
+    rf_wflow %>% 
+    fit(data = train_data)
+  
+  # Pred
+  rf_pred <- 
+    rf_fit %>% 
+    predict(test_data) %>% 
+    bind_cols(test_data %>% dplyr::select(outcome_fact))
+  
+  auc <- round((rf_pred %>% 
+                  roc_auc(truth = outcome_fact, .pred))$.estimate, 4)
+  plot <- rf_pred %>% 
+    roc_curve(truth = outcome_fact, .pred) %>% 
+    autoplot() + ggtitle(paste("Roc Curve for", method, response)) +
+    annotate(x = 0.75, y = 0.25, geom="label", 
+             label = as.character(paste("AUC =", auc)))
+  ggsave(file.path("outputs", method, paste0(response,"_roc.png")))
+  
+  full_rf_pred <- 
+    rf_fit %>% 
+    predict(new_data=temp_data)
+  
+  spa_mul <- template
+  values(spa_mul) <- NA
+  spa_mul[temp_data$row_nb] <- full_rf_pred$.pred
+  plot(spa_mul)
+  
+  writeRaster(spa_mul, 
+              file.path("data/stsim/spatial_multipliers/",
+                        paste0(method, "_ratio_", ratio,"_", response,"_spamul.tif")), 
+              overwrite = TRUE)
 }
 
 
-write.csv(auc.df, "outputs/AUC_table.csv",)
+# urb_rec <- 
+#   recipe(urb ~ ., data = urb_set$current) %>% 
+#   # step_rm(agex) %>% 
+#   update_role(timestep, row_nb, urb_fact, new_role = "ID/group Variables") %>% 
+#   step_zv(all_predictors()) %>% 
+#   step_scale(all_numeric(), 
+#              -all_outcomes(), 
+#              -has_role("Other response"), 
+#              -has_role("ID/group Variables")) %>% 
+#   step_dummy(mun, skip) %>% 
+#   step_downsample(urb_fact, skip = TRUE, under_ratio = 2)
 
-# perf.list <- readRDS("outputs/rf/rf_perf.rds")
+# %>% 
+#   prep()
 
-# sum(!is.na(values(fit.list$urb$raster.current)))
-# 1291174
-# sum(!is.na((data$df.change$urb)))
-# 1291174
-# length(perf.list$urb$current$pred@predictions[[1]])
-# 1291174
+# urb_rec_prep <- prep(urb_rec)
+# urb_rec_juice <- juice(urb_rec_prep)
+
+# boop <- full_data_current
+# boop[,5:9] <- apply(full_data_current[5:9],FUN = scale,MARGIN = 2)
+# 
+# full_data_current_baked <- bake(urb_rec_prep, full_data_current)

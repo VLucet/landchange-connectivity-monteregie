@@ -40,6 +40,7 @@ if (is.na(R_CROP[1]) || is.na(R_AGGR[1]) || is.na(R_PART[1] || is.na(OMP_NUM_THR
 
 ## Load required packages ##
 suppressPackageStartupMessages({
+  library(tidymodels)
   library(raster)
   library(sf)
   library(fasterize)
@@ -74,6 +75,8 @@ lu.stack.buf <- stack(raster("data/land_use/LandUse_mont_aafc_buffered_30by30_19
                       raster("data/land_use/LandUse_mont_aafc_buffered_30by30_2010.tif"))
 names(lu.stack) <- c("lu_1990", "lu_2000", "lu_2010")
 names(lu.stack.buf) <- c("lu_1990", "lu_2000", "lu_2010")
+
+mun <- st_read("data/mun/munic_SHP_clean.shp")
 
 #-------------------------------------------------------------------------------
 # Variables 
@@ -212,6 +215,7 @@ primary_stratum <- raster("data/stsim/primary_stratum_mont_or_not_30by30.tif")
 secondary_stratum <- raster("data/stsim/secondary_stratun_mun_30by30.tif")
 tertiary_stratum <- raster("data/stsim/tertiary_stratum_PA_30by30.tif")
 
+
 if (R_AGGR$ag){
   
   print("Aggregating rasters...") ; Sys.time()
@@ -244,7 +248,17 @@ if (R_AGGR$ag){
   # vars
   var.stack.final <- aggregate(var.stack, fun=mean, fact=R_AGGR$factor)
   
+  #secondary_stratum_layerized <- layerize(secondary_stratum_ag)
+  secondary_stratum_final <- secondary_stratum_ag
+  
+} else {
+  #secondary_stratum_layerized <- layerize(secondary_stratum)
+  secondary_stratum_final <- secondary_stratum
 }
+
+# Secondary stratum
+SS_final_cropped <- crop(secondary_stratum_final,  var.stack.final$dis_90)
+extent(SS_final_cropped) <- extent(var.stack.final$dis_90)
 
 #-------------------------------------------------------------------------------
 # Prepare transition data
@@ -264,6 +278,9 @@ raster_base[["agex"]] <- prepare_transition_data(lu.stack = lu.stack,
                                                  from = 3, 
                                                  only_from = T, 
                                                  aggregation = R_AGGR)
+
+writeRaster(raster_base[[1]][[1]],
+            "data/temp/template.tif", overwrite=TRUE)
 
 #-------------------------------------------------------------------------------
 ## DEAL WITH BUFFER OPERATIONS
@@ -286,27 +303,42 @@ if (R_AGGR$ag){
   frame_IDs <- NA
 }
 
+writeRaster(buffer_allextent_with_ones_final, "
+            data/temp/template_with_buffer.tif", overwrite=TRUE)
+
 #-------------------------------------------------------------------------------
 ## BUILD DATAFRAME
 
 # Get coordinates
 coords <- coordinates(raster_base[[1]][[1]])
+
 # Build dataframe
 df.trans <- cbind(as.data.frame(stack(raster_base$urb$chg.raster.final.class.2,
                                       raster_base$agex$chg.raster.final.class.1,
-                                      var.stack.final, neighbor_props)),coords)
-names(df.trans)[1:2] <- c("urb", "agex")
+                                      var.stack.final, 
+                                      neighbor_props, 
+                                      SS_final_cropped)),coords) %>% 
+  rename(mun = secondary_stratun_mun_30by30, 
+         urb = new.1, agex = new.2) %>% 
+  mutate(mun = as.factor(mun), 
+         timestep = 1, 
+         row_nb = as.numeric(row.names(.)))
+# names(df.trans)[1:2] <- c("urb", "agex")
 
 # Build dataframe for valdiation set
 df.trans.future <- cbind(as.data.frame(stack(raster_base$urb$chg.raster.future.final.class.2,
                                              raster_base$agex$chg.raster.future.final.class.1,
-                                             var.stack.final, neighbor_props_future)),coords)
-names(df.trans.future)[1:2] <- c("urb", "agex") 
+                                             var.stack.final, 
+                                             neighbor_props_future,
+                                             SS_final_cropped)),coords) %>% 
+  rename(mun = secondary_stratun_mun_30by30, 
+         urb = new.1, agex = new.2) %>% 
+  mutate(mun = as.factor(mun), 
+         timestep = 2,
+         row_nb = as.numeric(row.names(.)))
+# names(df.trans.future)[1:2] <- c("urb", "agex") 
 
-# Add variables
-# normalize <- fuOMP_NUM_THREADStion(x) {
-#   return ((x - min(x,na.rm = TRUE)) / (max(x,na.rm = TRUE) - min(x,na.rm = TRUE)))
-# }
+full.df <- bind_rows(df.trans, df.trans.future)
 
 # Timestep 1
 df.trans.mod <- df.trans %>%
@@ -361,8 +393,19 @@ df.trans.mod.future <- df.trans.future %>%
 
 # Remove Nas for fittingy
 df.noNa <- df.trans.mod %>% # 589982
+  # dplyr::select(-mun) %>% 
   drop_na()
 nonNA.loc <- as.numeric(rownames(df.noNa))
+
+# Without Mun
+# > table(df.noNa$agex)
+# 
+# 0      1 
+# 545385  44597 
+# > table(df.noNa$urb)
+# 
+# 0      1 
+# 579311  10671 
 
 train.idx <- sample(1:nrow(df.noNa),R_PART*nrow(df.noNa))
 
@@ -399,10 +442,7 @@ data_temp <- list.append(data_temp,
 #-------------------------------------------------------------------------------
 # Save outputs 
 saveRDS(data_temp, "data/temp/data_temp.RDS")
-writeRaster(raster_base$urb$chg.raster.final.class.2, 
-            "data/temp/template.tif", overwrite=TRUE)
-writeRaster(buffer_allextent_with_ones_final, "
-            data/temp/template_with_buffer.tif", overwrite=TRUE)
+saveRDS(full.df, "data/temp/full_df.RDS")
 print("Data Preparation Done") ; Sys.time()
 
 # which(!((df.trans.mod %>% select(!contains("neigh")) %>% drop_na() %>% 
