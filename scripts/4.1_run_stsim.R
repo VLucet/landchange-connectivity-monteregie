@@ -197,5 +197,5 @@ if (STSIM_RUN){
   results <- run(list(scenario_1_default, scenario_1_corrs),
                  summary = TRUE, jobs = OMP_NUM_THREADS)
   print(results)
-  saveRDS(results, "data/temp/stsim_run_results.rds")
+  saveRDS(results, "data/temp/stsim_run_results.RDS")
 }

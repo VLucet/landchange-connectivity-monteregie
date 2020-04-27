@@ -39,7 +39,7 @@ myLibrary <- ssimLibrary(myLibraryName, session=mySession)
 #-------------------------------------------------------------------------------
 
 ## DIAGNOSTICS 
-results <- read_rds("data/temp/stsim_run_results.rds")
+results <- read_rds("data/temp/stsim_run_results.RDS")
 
 trans_results <- datasheet(myLibrary, scenario = results$scenarioId, 
                            "stsim_OutputStratumTransition")
