@@ -94,6 +94,7 @@ for (sce in sce_nb_vec){
                                     grepl(x = list_files, pattern = iter) &
                                     grepl(x = list_files, pattern = sce)]
         # Step 2 sum NS and EW
+        print(stack_files)
         iter_list[[iter]] <- sum(stack(lapply(stack_files, FUN = raster)))      
       }
       
@@ -115,25 +116,32 @@ for (sce in sce_nb_vec){
       df$sce <- sce
       df$zone <- as.factor(df$zone)
       df$species <- species
-      df$timestep <-ts_steps[which(ts_template == timestep)]
-      extracted_list[[paste(species, timestep, sep = "_")]] <- df
+      df$timestep <- ts_steps[which(ts_template == timestep)]
+      
+      print(head(df))
+      
+      extracted_list[[paste(sce, species, timestep, sep = "_")]] <- df
     }
     spe_list[[species]] <- ts_list
   }
   assembled_list[[paste0("sce_",sce)]] <- spe_list
 }
 
+# Save list
+saveRDS(assembled_list, "outputs/final_raster_means.rds")
+print("LARGE LOOP DONE")
+
 # assemble last dataset
 final_df <- extracted_list[[1]]
 for (df in extracted_list[2:length(extracted_list)]) {
-  final_df <- full_join(final_df, df, by = c("zone", "timestep", "species", "mean"))
+  final_df <- full_join(final_df, df, by = c("sce", "zone", "timestep", "species", "mean"))
 }
-
 final_df$timestep <- as.numeric(final_df$timestep)
 
+# Save final df
 saveRDS(final_df, "outputs/final_df_current_density.RDS")
 
-saveRDS(assembled_list, "outputs/final_raster_means.rds")
+print("HERE")
 
 # FULL SUM FOR FINAL OUTPUTS
 full_stack=list()
@@ -150,6 +158,8 @@ for(raster in names(full_stack)){
                         paste0("full_sum_", raster, ".tif")), 
               overwrite=T)
 }
+
+print("THERE")
 
 #-------------------------------------------------------------------------------
 
