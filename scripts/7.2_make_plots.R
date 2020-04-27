@@ -39,6 +39,12 @@ df_final <- readRDS("outputs/final_df_current_density.RDS")
 df_final_origin <- readRDS("outputs/final_df_origin_current_density.RDS")
 mun <- st_read("data/mun/munic_SHP_clean.shp", quiet = TRUE)
 
+# FIGURE 0 
+png("outputs/figures/final_graph.png")
+ggplot(final_df) + aes(x = timestep, y = mean, color = zone) + geom_line(show.legend = FALSE) + 
+  scale_color_viridis_d(option = "plasma") + theme_minimal() + facet_wrap(vars(species))
+dev.off()
+
 # Data prep
 df_summarised <- df_final %>%
   group_by(timestep, species) %>% 

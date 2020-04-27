@@ -131,7 +131,7 @@ for (sce in sce_nb_vec){
 }
 
 # Save list
-saveRDS(assembled_list, "outputs/final_raster_means.rds")
+saveRDS(assembled_list, "outputs/final_raster_means.RDS")
 print("LARGE LOOP DONE")
 
 # assemble last dataset
@@ -181,7 +181,9 @@ extracted_list_T <- list()
 
 for (species in species_vec) {
   extracted_list_T=list()
+  print(species)
   for (timestep in 1:3){
+    print(timestep)
     stack_files <- list_files_origin[grepl(x = list_files_origin, pattern = species) & 
                                        grepl(x = list_files_origin, 
                                              pattern = paste0("lu_",timestep,"_"))]
@@ -199,7 +201,7 @@ for (species in species_vec) {
   assembled_list_T[[species]] <- extracted_list_T
 }
 
-saveRDS(assembled_list_T, "outputs/final_raster_means_TRUE.rds")
+saveRDS(assembled_list_T, "outputs/final_raster_means_TRUE.RDS")
 
 unlisted <- unlist(assembled_list_T, recursive = FALSE)
 final_df_origin <- unlisted[[1]]
@@ -211,9 +213,3 @@ final_df_origin$timestep <- as.numeric(final_df_origin$timestep)
 saveRDS(final_df_origin, "outputs/final_df_origin_current_density.RDS")
 
 #-------------------------------------------------------------------------------
-
-# DATA VIZ
-png("outputs/figures/final_graph.png")
-ggplot(final_df) + aes(x = timestep, y = mean, color = zone) + geom_line(show.legend = FALSE) + 
-  scale_color_viridis_d(option = "plasma") + theme_minimal() + facet_wrap(vars(species))
-dev.off()
