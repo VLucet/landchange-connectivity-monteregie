@@ -29,7 +29,7 @@ STSIM_TS_END <- as.numeric(Sys.getenv("STSIM_TS_END"))
 
 # Load important libraries
 suppressPackageStartupMessages({
-  library(stringr)
+  library(tidyverse)
   library(raster)
   library(gtools)
 })
