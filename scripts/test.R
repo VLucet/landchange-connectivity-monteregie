@@ -1,6 +1,6 @@
 library(tidyverse)
 
-final_df <- readRDS("outputs/final_df_current_density.RDS")
+assembled_list <- readRDS("outputs/final_raster_means.rds")
 
 print("HERE")
 
@@ -9,7 +9,9 @@ full_stack=list()
 count <- 1
 for (sce in 1:length(assembled_list)) { 
   temp_list <- assembled_list[[sce]]
+  print(sce)
   for (ts in 1:length(temp)) {
+    print(ts)
     the_stack <-  (stack(lapply(temp, `[[`, ts)))
     the_sum <- sum(the_stack)
     full_stack[[count]] <- the_sum
