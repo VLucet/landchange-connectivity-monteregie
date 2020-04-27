@@ -25,7 +25,7 @@ STSIM_RUN  <- as.logical(Sys.getenv("STSIM_RUN"))
 
 R_METHOD_STSIM <- Sys.getenv("R_METHOD_STSIM")
 # R_SAMPLING_METHOD <- Sys.getenv("R_SAMPLING_METHOD")
-R_RATIO <- Sys.getenv(as.numeric("R_RATIO"))
+R_RATIO <- as.numeric(Sys.getenv("R_RATIO"))
 
 message(R_RATIO)
 
