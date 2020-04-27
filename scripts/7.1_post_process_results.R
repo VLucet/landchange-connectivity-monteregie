@@ -19,35 +19,30 @@ STSIM_TS_END <- as.numeric(Sys.getenv("STSIM_TS_END"))
 #-------------------------------------------------------------------------------
 
 ##-- for shorter tests
-#STSIM_ITER=2
-#STSIM_TS_END=2
+# STSIM_STEP_SAVE=1
+# STSIM_ITER=2
+# STSIM_TS_START=0
+# STSIM_TS_END=5
 ##--
 
 print(c(STSIM_ITER, STSIM_TS_END, aggregation, STSIM_STEP_SAVE))
 
 # Load important libraries
 suppressPackageStartupMessages({
+  library(tidyverse)
   library(raster)
-  library(dplyr)
   library(RStoolbox)
   library(SDMTools)
   library(ggplot2)
 })
 # suppressPackageStartupMessages(library(exactextractr))
 
+#-------------------------------------------------------------------------------
+
 # Source functions and remove temp files
 source("scripts/functions/rescale_raster_layer.R")
-showTmpFiles()
 removeTmpFiles(h = 0)
 showTmpFiles()
-
-# Load raster inputs (maybe this will take too much ram?)
-iter_template <- paste0("it_", 1:STSIM_ITER, "_")
-ts_template <- unique(paste0("ts_", c(STSIM_TS_START, seq(STSIM_STEP_SAVE, STSIM_TS_END, STSIM_STEP_SAVE)), "_"))
-ts_steps <- as.numeric(unique(c(STSIM_TS_START, seq(STSIM_STEP_SAVE, STSIM_TS_END, STSIM_STEP_SAVE))))
-species_list <- tools::file_path_sans_ext(list.files("config/rcl_tables/species/"))
-
-list_files <- list.files("outputs/current_density", full.names = T, pattern = "curmap")
 
 # For zonal statistics
 if (aggregation$ag) {
@@ -60,42 +55,72 @@ key <- read.csv("config/stsim/SecondaryStratum.csv")
 # For removing outside NAs
 template <- raster("outputs/reclassed_with_buffer/circuitscape_buffer.tif")
 
+#-------------------------------------------------------------------------------
+
+# Get result secenario directory 
+sce_dir_vec <- list.files("libraries/stsim/monteregie-conncons-scripted.ssim.output", 
+                          full.names = T)
+sce_nb_vec <- as.numeric(unlist(lapply(str_split(sce_dir_vec, "-"), FUN = last)))
+
+# Templates
+iter_template <- paste0("it_", 1:STSIM_ITER, "_")
+ts_template <- unique(paste0("ts_", c(STSIM_TS_START, seq(STSIM_STEP_SAVE, STSIM_TS_END, STSIM_STEP_SAVE)), "_"))
+ts_steps <- as.numeric(unique(c(STSIM_TS_START, seq(STSIM_STEP_SAVE, STSIM_TS_END, STSIM_STEP_SAVE))))
+
+#-------------------------------------------------------------------------------
+
+# Load raster inputs (maybe this will take too much ram?)
+species_vec <- tools::file_path_sans_ext(list.files("config/rcl_tables/species/"))
+list_files <- list.files("outputs/current_density", full.names = T, pattern = "curmap")
+
 # Split data repeteadly => for loop
 assembled_list <- list()
 extracted_list <- list()
+full_list <- list()
 
-for (species in species_list) {
-  print(species)
-  ts_list <- list()
-  for (timestep in ts_template) {
-    print(timestep)
-    iter_list <- list()
-    for (iter in iter_template) {
-      # Step 1 assemble NS and EW
-      stack_files <- list_files[grepl(x = list_files, pattern = species) & 
-                                  grepl(x = list_files, pattern = timestep) & grepl(x = list_files, 
-                                                                                    pattern = iter)]
-      #print(stack_files)
-      iter_list[[iter]] <- sum(stack(lapply(stack_files, FUN = raster)))      
+for (sce in sce_nb_vec){
+  print(sce)
+  spe_list <- list() 
+  for (species in species_vec) {
+    print(species)
+    ts_list <- list()
+    for (timestep in ts_template) {
+      print(timestep)
+      iter_list <- list()
+      for (iter in iter_template) {
+        # Step 1 assemble NS and EW for each spe, ts, iter, sce
+        stack_files <- list_files[grepl(x = list_files, pattern = species) & 
+                                    grepl(x = list_files, pattern = timestep) & 
+                                    grepl(x = list_files, pattern = iter) &
+                                    grepl(x = list_files, pattern = sce)]
+        # Step 2 sum NS and EW
+        iter_list[[iter]] <- sum(stack(lapply(stack_files, FUN = raster)))      
+      }
+      
+      # Step 3 take the mean accross all iterations
+      mean_raster <- mean(stack(iter_list))
+      ts_list[[timestep]] <- mean_raster
+      
+      # Step 4 remove the NA default value
+      mean_raster[template == 2] <- NA
+      # mean_raster <- rescale_raster_layer(mean_raster)
+      
+      # Make zonal stats directly on the mean raster
+      # df <- as.data.frame(zonal(x = crop(mean_raster, mun_zonal), mun_zonal), 
+      #                     z = mun_zonal, fun = "mean", na.rm = T)
+      mean_raster_cropped <- crop(mean_raster, mun_zonal)
+      df <- as.data.frame(zonal(x = mean_raster_cropped, 
+                                z = mun_zonal, 
+                                fun = "mean", na.rm = TRUE))
+      df$sce <- sce
+      df$zone <- as.factor(df$zone)
+      df$species <- species
+      df$timestep <-ts_steps[which(ts_template == timestep)]
+      extracted_list[[paste(species, timestep, sep = "_")]] <- df
     }
-    #print(iter_list)
-    
-    mean.of.rasters <- mean(stack(iter_list))
-    ts_list[[timestep]] <- mean.of.rasters
-    
-    mean.of.rasters[template == 2] <- NA
-    # mean.of.rasters <- rescale_raster_layer(mean.of.rasters)
-    
-    # Make zonal stats directly
-    df <- as.data.frame(zonal(x = crop(mean.of.rasters, mun_zonal), mun_zonal), 
-                        z = mun_zonal, fun = "mean", na.rm = T)
-    df$zone <- as.factor(df$zone)
-    df$species <- species
-    df$timestep <-ts_steps[which(ts_template == timestep)]
-    extracted_list[[paste(species, timestep, sep = "_")]] <- df
-    
+    spe_list[[species]] <- ts_list
   }
-  assembled_list[[species]] <- ts_list
+  assembled_list[[paste0("sce_",sce)]] <- spe_list
 }
 
 # assemble last dataset
@@ -105,6 +130,7 @@ for (df in extracted_list[2:length(extracted_list)]) {
 }
 
 final_df$timestep <- as.numeric(final_df$timestep)
+
 saveRDS(final_df, "outputs/final_df_current_density.RDS")
 
 saveRDS(assembled_list, "outputs/final_raster_means.rds")
@@ -125,13 +151,15 @@ for(raster in names(full_stack)){
               overwrite=T)
 }
 
+#-------------------------------------------------------------------------------
+
 # Now with original data
 list_files_origin <- list_files[grepl(x = list_files, pattern = "TRUE")]
 
 assembled_list_T <- list()
 extracted_list_T <- list()
 
-for (species in species_list) {
+for (species in species_vec) {
   extracted_list_T=list()
   for (timestep in 1:3){
     stack_files <- list_files_origin[grepl(x = list_files_origin, pattern = species) & 
@@ -161,6 +189,8 @@ for (df in unlisted[2:length(unlisted)]) {
 
 final_df_origin$timestep <- as.numeric(final_df_origin$timestep)
 saveRDS(final_df_origin, "outputs/final_df_origin_current_density.RDS")
+
+#-------------------------------------------------------------------------------
 
 # DATA VIZ
 png("outputs/figures/final_graph.png")
