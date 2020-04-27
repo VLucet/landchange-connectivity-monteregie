@@ -162,7 +162,7 @@ for (sce in 1:length(assembled_list)) {
     
     writeRaster(full_stack[[count]],
                 file.path("outputs", "current_density_sum", 
-                          paste0("full_sum_", file_name, ".tif")), 
+                          paste0("full_sum_", raster_name, ".tif")), 
                 overwrite=T)
     
     count <- count+1
