@@ -144,8 +144,6 @@ final_df$timestep <- as.numeric(final_df$timestep)
 # Save final df
 saveRDS(final_df, "outputs/final_df_current_density.RDS")
 
-print("HERE")
-
 # FULL SUM FOR FINAL OUTPUTS
 full_stack=list()
 count <- 1
@@ -170,7 +168,7 @@ for (sce in 1:length(assembled_list)) {
     count <- count+1
   }
 }  
-print("THERE")
+
 saveRDS(full_stack, "outputs/cur_sum_sce_per_ts.RDS")
 
 #-------------------------------------------------------------------------------
@@ -203,7 +201,7 @@ for (species in species_vec) {
 
 saveRDS(assembled_list_T, "outputs/final_raster_means_TRUE.rds")
 
-unlisted <- unlist(assembled_list_T, recursive = F)
+unlisted <- unlist(assembled_list_T, recursive = FALSE)
 final_df_origin <- unlisted[[1]]
 for (df in unlisted[2:length(unlisted)]) {
   final_df_origin <- full_join(final_df_origin, df, by = c("zone", "timestep", "species", "mean"))
