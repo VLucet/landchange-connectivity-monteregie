@@ -42,7 +42,7 @@ showTmpFiles()
 
 ## Load inputs
 # Get result secenario directory 
-sce_dir <- list.files("libraries/stsim/monteregie-conncons-scripted.ssim.output", 
+sce_dir_vec <- list.files("libraries/stsim/monteregie-conncons-scripted.ssim.output", 
                       full.names = T)
 sce_nb_vec <- as.numeric(unlist(lapply(str_split(sce_dir, "-"), FUN = last)))
 
@@ -91,9 +91,9 @@ print("TRUE LAND USE DONE")
 
 print("MODELLED LAND USE")
 # Loop all scenarios (OBS)
-for (sce in 1:length(sce_dir)){
+for (sce in 1:length(sce_dir_vec)){
 
-  sce_dir <- sce_dir[sce]
+  sce_dir <- sce_dir_vec[sce]
   sce_nb <- sce_nb_vec[sce]
   
   print(sce_dir)
