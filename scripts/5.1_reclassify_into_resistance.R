@@ -73,6 +73,7 @@ print("Reclassifying") ; Sys.time()
 # initial_reclassed <- lapply(rcls, reclassify, x=initial)
 
 # Looping TRUE 
+print("TRUE LAND USE")
 true_landuse_reclassed <- list()
 for (ts in 1:length(true_landuse)){
   true_landuse_reclassed[[names(true_landuse)[ts]]] <- list()
@@ -86,14 +87,17 @@ for (ts in 1:length(true_landuse)){
   }
 }
 print(true_landuse_reclassed)
+print("TRUE LAND USE DONE")
 
-
-
+print("MODELLED LAND USE")
 # Loop all scenarios (OBS)
 for (sce in 1:length(sce_dir)){
-  
+
   sce_dir <- sce_dir[sce]
   sce_nb <- sce_nb_vec[sce]
+  
+  print(sce_dir)
+  print(sce_nb)
   
   # Get file list and iteration memberships
   files_iter_list <- mixedsort(list.files(paste0(sce_dir, "/stsim_OutputSpatialState"),
@@ -108,8 +112,7 @@ for (sce in 1:length(sce_dir)){
   # Load rasters 
   split_by_iter_rasters <- lapply(split_by_iter, FUN=stack) # Will take up memory
   
-  
-  
+  print("-----")
   print(ts_template)
   
   # Looping OBSERVATIONS
