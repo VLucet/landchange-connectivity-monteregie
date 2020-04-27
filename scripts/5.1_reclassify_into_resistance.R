@@ -119,7 +119,8 @@ for (sce in 1:length(sce_dir_vec)){
   for (it in 1:length(split_by_iter_rasters)){
     for (spe in 1:length(rcls)){
       temp <- reclassify(split_by_iter_rasters[[it]], rcls[[spe]])
-      print(temp)
+      print(spe)
+      # print(temp)
       for (ts in 1:length(ts_template)){
         writeRaster(temp[[ts]],
                     paste0("outputs/reclassed/", 
