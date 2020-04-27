@@ -27,8 +27,6 @@ R_METHOD_STSIM <- Sys.getenv("R_METHOD_STSIM")
 # R_SAMPLING_METHOD <- Sys.getenv("R_SAMPLING_METHOD")
 R_RATIO <- as.numeric(Sys.getenv("R_RATIO"))
 
-message(R_RATIO)
-
 if (is.na(OMP_NUM_THREADS)) { 
   OMP_NUM_THREADS <- 2 ; print("Running on 2 cores only")
   ST_SIM_DIR <- "/home/vlucet/Documents/Apex/syncrosim_2_10"
