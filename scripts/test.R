@@ -1,6 +1,6 @@
 library(tidyverse)
 
-final_dfreadRDS("outputs/final_df_current_density.RDS")
+final_df <- readRDS("outputs/final_df_current_density.RDS")
 
 print("HERE")
 
