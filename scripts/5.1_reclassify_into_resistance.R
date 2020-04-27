@@ -38,41 +38,35 @@ suppressPackageStartupMessages({
 removeTmpFiles(0)
 showTmpFiles()
 
+#-------------------------------------------------------------------------------
+
 ## Load inputs
 # Get result secenario directory 
 sce_dir <- list.files("libraries/stsim/monteregie-conncons-scripted.ssim.output", 
                       full.names = T)
-# Get the spatial state 
-# make templates of names
+sce_nb_vec <- as.numeric(unlist(lapply(str_split(sce_dir, "-"), FUN = last)))
+
+# Template
 iter_template <- paste0("it", 1:STSIM_ITER)
 ts_template <- unique(paste0("ts_", c(STSIM_TS_START,seq(STSIM_STEP_SAVE,STSIM_TS_END,STSIM_STEP_SAVE))))
-
-# Get file list and iteration memberships
-files_iter_list <- mixedsort(list.files(paste0(sce_dir, "/stsim_OutputSpatialState"),
-                                        full.names = T))
-
-# First split by iterations
-iter_membreships <- lapply(X=paste0(iter_template, "\\."), FUN=grep, x=files_iter_list)
-split_by_iter <- lapply(seq_along(iter_membreships), 
-                        function(x){files_iter_list[iter_membreships[[x]]]})
-names(split_by_iter) <- iter_template
-
-# Load rasters 
-split_by_iter_rasters <- lapply(split_by_iter, FUN=stack) # Will take up memory
-
-if (aggregation$ag){
-  true_landuse_list <- list.files("data/land_use/aggregated/", full.names=T)
-} else{
-  true_landuse_list <- list.files("data/land_use/", full.names=T)
-}
-true_landuse <- lapply(true_landuse_list, FUN = raster)
-names(true_landuse) <- c("lu_1990", "lu_2000", "lu2010")
 
 ## Load classification matrices
 species_list <- tools::file_path_sans_ext(list.files("config/rcl_tables/species/"))
 list_rcl <- list.files("config/rcl_tables/species/", full.names = T)
 rcls <- lapply(list_rcl, read.csv) 
 names(rcls) <- species_list
+
+#-------------------------------------------------------------------------------
+
+# TRUE LAND USE ONLY NEEDED ONCE
+if (aggregation$ag){
+  true_landuse_list <- list.files("data/land_use/aggregated/", full.names=T)
+} else{
+  true_landuse_list <- list.files("data/land_use/", full.names=T)
+}
+
+true_landuse <- lapply(true_landuse_list, FUN = raster)
+names(true_landuse) <- c("lu_1990", "lu_2000", "lu2010")
 
 ## Reclassify and rename
 print("Reclassifying") ; Sys.time()
@@ -93,28 +87,50 @@ for (ts in 1:length(true_landuse)){
 }
 print(true_landuse_reclassed)
 
-print(ts_template)
 
-# Looping OBSERVATIONS
-for (it in 1:length(split_by_iter_rasters)){
-  for (spe in 1:length(rcls)){
-    temp <- reclassify(split_by_iter_rasters[[it]], rcls[[spe]])
-    print(temp)
-    for (ts in 1:length(ts_template)){
-      writeRaster(temp[[ts]],
-                  paste0("outputs/reclassed/", 
-                         paste0("it_",it,"_",ts_template[ts],"_",species_list[spe],sep="_")), 
-                  format="GTiff", overwrite =T)
+
+# Loop all scenarios (OBS)
+for (sce in 1:length(sce_dir)){
+  
+  sce_dir <- sce_dir[sce]
+  sce_nb <- sce_nb_vec[sce]
+  
+  # Get file list and iteration memberships
+  files_iter_list <- mixedsort(list.files(paste0(sce_dir, "/stsim_OutputSpatialState"),
+                                          full.names = T))
+  
+  # First split by iterations
+  iter_membreships <- lapply(X=paste0(iter_template, "\\."), FUN=grep, x=files_iter_list)
+  split_by_iter <- lapply(seq_along(iter_membreships), 
+                          function(x){files_iter_list[iter_membreships[[x]]]})
+  names(split_by_iter) <- iter_template
+  
+  # Load rasters 
+  split_by_iter_rasters <- lapply(split_by_iter, FUN=stack) # Will take up memory
+  
+  
+  
+  print(ts_template)
+  
+  # Looping OBSERVATIONS
+  for (it in 1:length(split_by_iter_rasters)){
+    for (spe in 1:length(rcls)){
+      temp <- reclassify(split_by_iter_rasters[[it]], rcls[[spe]])
+      print(temp)
+      for (ts in 1:length(ts_template)){
+        writeRaster(temp[[ts]],
+                    paste0("outputs/reclassed/", 
+                           paste("sce",sce_nb,"it",it,ts_template[ts],species_list[spe],"", sep="_")), 
+                    format="GTiff", overwrite =T)
+      }
     }
   }
 }
-
 #-------------------------------------------------------------------------------
 
 ## Build script for adding rows 
 print("Building script") ; Sys.time()
 reclassed_list <- tools::file_path_sans_ext(list.files("outputs/reclassed/"))
-reclassed_list_withex <- paste0(reclassed_list, ".tif")
 
 custom_paste <- function(file){
   paste0("sh ","scripts/0.1_add_buffer_lowlands_modified.sh ",
