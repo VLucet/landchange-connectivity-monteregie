@@ -150,24 +150,28 @@ print("HERE")
 full_stack=list()
 count <- 1
 for (sce in 1:length(assembled_list)) { 
-  temp_list <- assembled_list[[sce]]
-  for (ts in 1:length(temp)) {
-    the_stack <-  (stack(lapply(temp, `[[`, ts)))
+  temp <- assembled_list[[sce]]
+  print(sce)
+  for (timestep in 1:length(temp)) {
+    print(timestep)
+    
+    the_stack <- stack(lapply(temp, `[[`, timestep))
     the_sum <- sum(the_stack)
+    
     full_stack[[count]] <- the_sum
+    raster_name <- paste("sce", sce, "ts", timestep, sep = "_")
+    names(full_stack[[count]]) 
+    
+    writeRaster(full_stack[[count]],
+                file.path("outputs", "current_density_sum", 
+                          paste0("full_sum_", file_name, ".tif")), 
+                overwrite=T)
+    
     count <- count+1
   }
 }  
-print(head(names(full_stack)))
-
-for(raster in names(full_stack)){
-  writeRaster(full_stack[[raster]],
-              file.path("outputs", "current_density_sum", 
-                        paste0("full_sum_", raster, ".tif")), 
-              overwrite=T)
-}
-
 print("THERE")
+saveRDS(full_stack, "outputs/cur_sum_sce_per_ts.RDS")
 
 #-------------------------------------------------------------------------------
 
