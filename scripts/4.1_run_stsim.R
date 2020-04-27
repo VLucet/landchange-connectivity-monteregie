@@ -27,6 +27,8 @@ R_METHOD_STSIM <- Sys.getenv("R_METHOD_STSIM")
 # R_SAMPLING_METHOD <- Sys.getenv("R_SAMPLING_METHOD")
 R_RATIO <- Sys.getenv(as.numeric("R_RATIO"))
 
+message(R_RATIO)
+
 if (is.na(OMP_NUM_THREADS)) { 
   OMP_NUM_THREADS <- 2 ; print("Running on 2 cores only")
   ST_SIM_DIR <- "/home/vlucet/Documents/Apex/syncrosim_2_10"
@@ -157,8 +159,6 @@ loadSheet("TransitionSpatialMultiplier", NULL, spatial_multiplier_corrs,
                                               #"Agricultural Loss [Type]",
                                               "Agricultural Expansion [Type]"), 
                         MultiplierFileName = c(paste0(getwd(), "/data/stsim/spatial_multipliers/corrs_and_areas.tif"), 
-                                               # paste0(getwd(), "/data/stsim/spatial_multipliers/",
-                                               #        R_METHOD_STSIM, "_", R_SAMPLING_METHOD, "_urb_spa_mul.tif"),
                                                paste0(getwd(), "/data/stsim/spatial_multipliers/corrs_and_areas.tif"))))
 
 
