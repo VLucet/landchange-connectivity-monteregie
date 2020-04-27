@@ -143,7 +143,6 @@ run_circuitscape(){
   print_vars
   echo "Run Circuitscape"
   rm -rf outputs/current_density/*
-  rm -rf outputs/current_density_sum/*
   ## Run circuitscapes
   ~/julia-1.3.1/bin/julia -p $CS_CORES scripts/6.2_run_circuitscape.jl
   # Remove cron job
@@ -156,6 +155,7 @@ run_circuitscape(){
 post_process(){
   print_vars
   echo "Run post-precessing"
+  rm -rf outputs/current_density_sum/*
   ## Run diagnostics and plots
   Rscript scripts/7.1_post_process_results.R
   Rscript scripts/7.2_make_plots.R
