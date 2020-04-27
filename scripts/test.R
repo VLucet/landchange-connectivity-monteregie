@@ -8,7 +8,7 @@ print("HERE")
 full_stack=list()
 count <- 1
 for (sce in 1:length(assembled_list)) { 
-  temp_list <- assembled_list[[sce]]
+  temp <- assembled_list[[sce]]
   print(sce)
   for (ts in 1:length(temp)) {
     print(ts)
