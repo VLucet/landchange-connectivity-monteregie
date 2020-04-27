@@ -44,7 +44,7 @@ showTmpFiles()
 # Get result secenario directory 
 sce_dir_vec <- list.files("libraries/stsim/monteregie-conncons-scripted.ssim.output", 
                       full.names = T)
-sce_nb_vec <- as.numeric(unlist(lapply(str_split(sce_dir, "-"), FUN = last)))
+sce_nb_vec <- as.numeric(unlist(lapply(str_split(sce_dir_vec, "-"), FUN = last)))
 
 # Template
 iter_template <- paste0("it", 1:STSIM_ITER)
