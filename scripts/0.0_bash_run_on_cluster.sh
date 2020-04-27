@@ -37,7 +37,7 @@ export R_SAMPLING_METHOD="bal"
 # Variables for STSIM
 export STSIM_ITER='2'
 export STSIM_TS_START='0'
-export STSIM_TS_END='6'
+export STSIM_TS_END='5'
 export STSIM_STEP_SAVE='1'
 export STSIM_STEP_COMPUTE='10'
 # Variables for CS
@@ -45,14 +45,14 @@ export CS_CORES='9' # 2 on thinkpad, 12 on cluster
 
 print_vars(){
   echo "Variables for R: R_crop = $R_CROP, R_AGGR = $R_AGGR"
-  echo "                 R_AGGR_FACT = $R_AGGR_FACT, R_PART = $R_PART"       
+  echo "                 R_AGGR_FACT = $R_AGGR_FACT, R_PART = $R_PART"
   echo "                 R_BUFF = $R_BUFF, R_METHOD = $R_METHOD"
   echo "                 R_N_TREES = $R_N_TREES, R_RATIO = $R_RATIO"
   echo ""
-  echo "Variables for ST-SIM: STSIM_ITER = $STSIM_ITER" 
-  echo "                      STSIM_TS_START = $STSIM_TS_START" 
-  echo "                      STSIM_TS_END = $STSIM_TS_END" 
-  echo "                      STSIM_STEP_SAVE = $STSIM_STEP_SAVE" 
+  echo "Variables for ST-SIM: STSIM_ITER = $STSIM_ITER"
+  echo "                      STSIM_TS_START = $STSIM_TS_START"
+  echo "                      STSIM_TS_END = $STSIM_TS_END"
+  echo "                      STSIM_STEP_SAVE = $STSIM_STEP_SAVE"
   echo "                      STSIM_STEP_COMPUTE = $STSIM_STEP_COMPUTE"
   echo ""
   echo "Variables for CS: CS_CORES = $CS_CORES"
