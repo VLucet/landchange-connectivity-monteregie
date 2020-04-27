@@ -118,9 +118,12 @@ for (sce in sce_nb_vec){
       df$species <- species
       df$timestep <- ts_steps[which(ts_template == timestep)]
       
+      raster_name <- paste(sce, species, timestep, sep = "_")
+      names(mean_raster) <- raster_name
+      
       print(head(df))
       
-      extracted_list[[paste(sce, species, timestep, sep = "_")]] <- df
+      extracted_list[[raster_name]] <- df
     }
     spe_list[[species]] <- ts_list
   }
@@ -145,12 +148,17 @@ print("HERE")
 
 # FULL SUM FOR FINAL OUTPUTS
 full_stack=list()
-for (x in 1:length(assembled_list[[1]])) { 
-  the_stack <-  (stack(lapply(assembled_list, `[[`, x)))
-  the_sum <- sum(the_stack)
-  full_stack[[x]] <- the_sum
+count <- 1
+for (sce in 1:length(assembled_list)) { 
+  temp_list <- assembled_list[[sce]]
+  for (ts in 1:length(temp)) {
+    the_stack <-  (stack(lapply(temp, `[[`, ts)))
+    the_sum <- sum(the_stack)
+    full_stack[[count]] <- the_sum
+    count <- count+1
+  }
 }  
-names(full_stack) <- names(assembled_list[[1]])
+print(head(names(full_stack)))
 
 for(raster in names(full_stack)){
   writeRaster(full_stack[[raster]],
