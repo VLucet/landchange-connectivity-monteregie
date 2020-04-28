@@ -189,6 +189,7 @@ for (species in species_vec) {
     stack_files <- list_files_origin[grepl(x = list_files_origin, pattern = species) & 
                                        grepl(x = list_files_origin, 
                                              pattern = paste0("lu_",timestep,"_"))]
+    assert_that(length(stack_files)==2)
     print(stack_files)
     sum.of.rasters <- sum(stack(lapply(stack_files, FUN = raster::raster)))
     
