@@ -11,6 +11,8 @@ rm(list = ls())
 #-------------------------------------------------------------------------------
 R_AGGR <- list(ag = as.logical(Sys.getenv("R_AGGR")), 
                factor = as.numeric(Sys.getenv("R_AGGR_FACT")))
+# R_AGGR <- list(ag = as.logical(TRUE), 
+#                factor = as.numeric(3))
 #-------------------------------------------------------------------------------
 
 print(R_AGGR)
@@ -41,10 +43,13 @@ areas <- st_read("data_raw/workshop/ensembles/Key_ensembles_smoothed_RegTables.s
 # Spatial Mul raster
 lu <- raster("data/land_use/LandUse_mont_aafc_30by30_1990.tif")  
 
+CORR = 0
+AREAS = 0
+  
 # Only forest
 lu_forest <- (lu == 3)
 lu_forest[lu_forest == 0] <- NA
-lu_forest[lu_forest == 1] <- 0
+lu_forest[lu_forest == 1] <- CORR
 
 # lu_forest_vec <- st_as_sf(lu_forest)
 
@@ -66,14 +71,14 @@ corridors_rast_masked <- mask(lu_forest, corridors_rpj_buffer_rast)
 areas_rast_masked <- mask(lu_forest, areas_rpj_buffer_rast)
 
 # make areas less susceptible to deforestion
-areas_rast_masked[areas_rast_masked == 0] <- 0.5
+areas_rast_masked[!is.na(areas_rast_masked)] <- AREAS
 
 # Make mosaic
 lu_1 <- lu
 lu_1[!is.na(lu_1)] <- 1
 corrs_and_areas <- merge(areas_rast_masked, 
                          corridors_rast_masked, 
-                         lu_1,corridors_rast_masked,
+                         lu_1,
                          tolerance = 0)
 
 # Aggregate or not 
@@ -83,4 +88,6 @@ if(R_AGGR$ag){
 }
 
 # Write out 
-writeRaster(corrs_and_areas, "data/stsim/spatial_multipliers/corrs_and_areas.tif")
+writeRaster(corrs_and_areas, 
+            "data/stsim/spatial_multipliers/corrs_and_areas.tif", 
+            overwrite =TRUE)
