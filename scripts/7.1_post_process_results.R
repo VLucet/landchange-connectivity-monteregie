@@ -34,6 +34,7 @@ suppressPackageStartupMessages({
   library(RStoolbox)
   library(SDMTools)
   library(ggplot2)
+  library(assertthat)
 })
 # suppressPackageStartupMessages(library(exactextractr))
 
@@ -93,6 +94,7 @@ for (sce in sce_nb_vec){
                                     grepl(x = list_files, pattern = timestep) & 
                                     grepl(x = list_files, pattern = iter) &
                                     grepl(x = list_files, pattern = sce)]
+        assert_that(length(stack_files)==2)
         # Step 2 sum NS and EW
         print(stack_files)
         iter_list[[iter]] <- sum(stack(lapply(stack_files, FUN = raster)))      
