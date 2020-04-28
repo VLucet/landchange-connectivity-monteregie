@@ -32,7 +32,7 @@ suppressPackageStartupMessages({
 })
 
 # Set theme
-theme_set(theme_bw())
+theme_set(theme_minimal())
 
 #listofiles <- list.files("it1_lasterun/it1_MAAM_Current/", full.names = T)
 df_final <- readRDS("outputs/final_df_current_density.RDS")
@@ -41,55 +41,71 @@ mun <- st_read("data/mun/munic_SHP_clean.shp", quiet = TRUE)
 
 # FIGURE 0 
 png("outputs/figures/final_graph.png")
-ggplot(final_df) + aes(x = timestep, y = mean, color = zone) + geom_line(show.legend = FALSE) + 
-  scale_color_viridis_d(option = "plasma") + theme_minimal() + facet_wrap(vars(species))
+ggplot(df_final) + 
+  aes(x = timestep, y = mean, color = zone) + 
+  geom_line(show.legend = FALSE) + 
+  scale_color_viridis_d(option = "plasma") + 
+  facet_grid(sce ~ species)
 dev.off()
 
 # Data prep
 df_summarised <- df_final %>%
-  group_by(timestep, species) %>% 
+  group_by(sce, timestep, species) %>% 
   summarise(sum_cur = sum(mean)) %>% ungroup %>%
   mutate(timestep = (timestep*10)+1990, source = "model")
 
 df_summarised_withzone <- df_final %>%
-  group_by(timestep, species, zone) %>% 
+  group_by(sce, timestep, species, zone) %>% 
   summarise(sum_cur = sum(mean)) %>% ungroup %>% 
   mutate(timestep = (timestep*10)+1990, source = "model")
 
+# Temporary solution
 df_origin_summarised <- df_final_origin %>%
   group_by(timestep, species) %>% 
   summarise(sum_cur = sum(mean)) %>% ungroup %>% 
-  mutate(timestep = (timestep*10)+1980, source = "observation")
+  mutate(timestep = (timestep*10)+1980, source = "observation") %>% 
+  mutate(sce = 9) 
+# df_origin_summarised_2 <- df_origin_summarised %>% 
+#   mutate(sce = 10)
+# df_origin_summarised <- bind_rows(df_origin_summarised, df_origin_summarised_2)
 
-joined <- full_join(df_summarised, df_origin_summarised, by=c("source", "species", 
+joined <- full_join(df_summarised, df_origin_summarised, by=c("sce","source", "species", 
                                                               "timestep", "sum_cur"))
 
 ## FIGURE 1
-animated <- ggplot(joined) +
+animated <- joined %>% 
+  mutate(sce = as.factor(sce)) %>% 
+  ggplot() +
   aes(x=timestep, y=sum_cur, col=source) +
-  geom_line() +
+  geom_line(aes(linetype = sce)) +
   scale_color_manual(values=c('#d8b365','#5ab4ac')) +
-  geom_point(aes(group = seq_along(timestep))) +
-  facet_wrap(~species) +
+  #geom_point(aes(group = seq_along(timestep), pch = sce)) +
+  facet_grid(~species, scales = "fixed") +
+  #facet_grid(sce~species, scales = "fixed") +
   labs(title = "Cumulative Connectivity for each species through time",
        subtitle = "Year:{frame_along}",
        y = "Cummulative Connectivity",
        x = "Year",
-       col = "Source") +
-  theme(legend.position = c(0.95, 0),
-        legend.justification = c(1, -0.2),
+       col = "Source", 
+       linetype = "Scenario") +
+  theme(#legend.position = c(0.95, 0),
+        #legend.justification = c(1, -0.2),
         legend.title = element_text(size = 20),
         legend.text = element_text(size = 18),
         plot.title = element_text(size=22),
         plot.subtitle = element_text(size=22),
-        strip.text.x = element_blank(),
-        strip.text.y = element_blank(),
+        axis.text.x = element_text(angle=65, vjust=0.6),
+        #strip.text.x = element_blank(),
+        #strip.text.y = element_blank(),
         axis.title=element_text(size=18)) +
   transition_reveal(as.integer(timestep))
 options(gganimate.dev_args = list(width = 800, height = 800))
 plot_anim <- animate(animated, renderer = gifski_renderer())
 anim_save(animation = plot_anim, 
           filename = "outputs/figures/connectivity_decrease_x5species.gif")
+
+stop("stop plotting here")
+### stopped here on monday apr 27
 
 ## FIGURE 2
 key <- read_csv("config/stsim/SecondaryStratum.csv") %>%
