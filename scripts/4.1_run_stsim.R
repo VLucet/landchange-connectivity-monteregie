@@ -33,7 +33,7 @@ if (is.na(OMP_NUM_THREADS)) {
 }
 
 # !!! To be commented out
-# ST_SIM_DIR <- "/home/vlucet/Documents/Apex/syncrosim_2_10"
+#ST_SIM_DIR <- "/home/vlucet/Documents/Apex/syncrosim_2_10"
 # !!! To be commented out
 
 #-------------------------------------------------------------------------------
@@ -76,8 +76,10 @@ Definitions <- project(myLibrary, project="Definitions")
 # Model basic settings ----------------------------------------------------     
 
 definition_settings <- 
-  c("Terminology", "Stratum", "SecondaryStratum", "TertiaryStratum", "StateLabelX", "StateLabelY", # TODO add it here
-    "StateClass", "TransitionType", "TransitionGroup", "TransitionTypeGroup", 
+  c("Terminology", 
+    "Stratum", "SecondaryStratum", "TertiaryStratum", 
+    "StateLabelX", "StateLabelY", "StateClass", 
+    "TransitionType", "TransitionGroup", "TransitionTypeGroup", 
     "StateAttributeType")
 
 for (sheetname in definition_settings){
@@ -138,6 +140,7 @@ loadSheet("TransitionMultiplierValue", NULL, transmul_default, path = "config/st
 spatial_multiplier_default <-
   scenario(Definitions,scenario = "Spatial Multiplier: Default")
 
+# SCE 1
 loadSheet("TransitionSpatialMultiplier", NULL, spatial_multiplier_default,
           params = list(TransitionGroupID = c("Deforestation [Type]",
                                               "Agricultural Loss [Type]",
@@ -149,15 +152,41 @@ loadSheet("TransitionSpatialMultiplier", NULL, spatial_multiplier_default,
                                                paste0(getwd(), "/data/stsim/spatial_multipliers/",
                                                       R_METHOD_STSIM, "_ratio_", R_RATIO, "_agex_f_spamul.tif"))))
 
+
+# SCE 2 
+# first need to do the multiplication 
+urb <- raster(paste0("data/stsim/spatial_multipliers/",
+                     R_METHOD_STSIM, "_ratio_", R_RATIO, "_urb_f_spamul.tif"))
+corrs_and_areas <- raster("data/stsim/spatial_multipliers/corrs_and_areas.tif")
+urb_times_corrs_and_areas <- urb*corrs_and_areas
+writeRaster(urb_times_corrs_and_areas, 
+            "data/stsim/spatial_multipliers/urb_f_corrs_and_areas_spa_mul.tif", 
+            overwrite = TRUE)
+
 spatial_multiplier_corrs <-
   scenario(Definitions,scenario = "Spatial Multiplier: Corrs/Areas")
 
+# ASSUMES 10 YEARs TIMESTEP
 loadSheet("TransitionSpatialMultiplier", NULL, spatial_multiplier_corrs,
           params = list(TransitionGroupID = c("Deforestation [Type]",
-                                              #"Agricultural Loss [Type]",
+                                              "Agricultural Loss [Type]",
+                                              "Agricultural Expansion [Type]",
+                                              "Deforestation [Type]",
+                                              "Agricultural Loss [Type]",
                                               "Agricultural Expansion [Type]"), 
-                        MultiplierFileName = c(paste0(getwd(), "/data/stsim/spatial_multipliers/corrs_and_areas.tif"), 
-                                               paste0(getwd(), "/data/stsim/spatial_multipliers/corrs_and_areas.tif"))))
+                        Timestep = c(0,0,0,4,4,4),
+                        MultiplierFileName = c(paste0(getwd(), "/data/stsim/spatial_multipliers/",
+                                                      R_METHOD_STSIM, "_ratio_", R_RATIO, "_urb_f_spamul.tif"), 
+                                               paste0(getwd(), "/data/stsim/spatial_multipliers/",
+                                                      R_METHOD_STSIM, "_ratio_", R_RATIO, "_urb_f_spamul.tif"),
+                                               paste0(getwd(), "/data/stsim/spatial_multipliers/", 
+                                                      R_METHOD_STSIM, "_ratio_", R_RATIO, "_agex_f_spamul.tif"),
+                                               paste0(getwd(), 
+                                                      "/data/stsim/spatial_multipliers/urb_f_corrs_and_areas_spa_mul.tif"),
+                                               paste0(getwd(), 
+                                                      "/data/stsim/spatial_multipliers/urb_f_corrs_and_areas_spa_mul.tif"),
+                                               paste0(getwd(), "/data/stsim/spatial_multipliers/", 
+                                                      R_METHOD_STSIM, "_ratio_", R_RATIO, "_agex_f_spamul.tif"))))
 
 
 # Transition size distribution
