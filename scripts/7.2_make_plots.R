@@ -166,8 +166,8 @@ ggsave("outputs/figures/connectivit_change_mun.gif", plot)
 stop()
 
 ## FIGURE 4
-it_1 <- list.files("libraries/stsim/monteregie-conncons-scripted.ssim.output/Scenario-9/stsim_OutputSpatialState",
-                   pattern = "it1\\.",
+it_1 <- list.files("test/it/",
+                   pattern = "*MAAM*",
                    full.names = T)
 list_lu <-  stack(lapply(mixedsort(it_1),FUN=raster))
 list_lu_masked <- crop(mask(list_lu,mun),mun)
