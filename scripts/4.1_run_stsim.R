@@ -33,7 +33,7 @@ if (is.na(OMP_NUM_THREADS)) {
 }
 
 # !!! To be commented out
-#ST_SIM_DIR <- "/home/vlucet/Documents/Apex/syncrosim_2_10"
+ST_SIM_DIR <- "/home/vlucet/Documents/Apex/syncrosim_2_10"
 # !!! To be commented out
 
 #-------------------------------------------------------------------------------
@@ -183,7 +183,7 @@ loadSheet("TransitionSpatialMultiplier", NULL, spatial_multiplier_corrs,
                                               "Deforestation [Type]",
                                               "Agricultural Loss [Type]",
                                               "Agricultural Expansion [Type]"), 
-                        Timestep = c(0,0,0,4,4,4),
+                        Timestep = c(1,1,1,4,4,4),
                         MultiplierFileName = c(paste0(getwd(), "/data/stsim/spatial_multipliers/",
                                                       R_METHOD_STSIM, "_ratio_", R_RATIO, "_urb_f_spamul.tif"), 
                                                paste0(getwd(), "/data/stsim/spatial_multipliers/",
