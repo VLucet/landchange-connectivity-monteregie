@@ -33,7 +33,7 @@ if (is.na(OMP_NUM_THREADS)) {
 }
 
 # !!! To be commented out
-ST_SIM_DIR <- "/home/vlucet/Documents/Apex/syncrosim_2_10"
+#ST_SIM_DIR <- "/home/vlucet/Documents/Apex/syncrosim_2_10"
 # !!! To be commented out
 
 #-------------------------------------------------------------------------------
