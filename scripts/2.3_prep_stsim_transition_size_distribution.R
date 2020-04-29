@@ -86,7 +86,7 @@ df_change <- all_areas_df %>%
 df_change$TransitionGroupID[df_change$TransitionGroupID=="urb"] <- 
   "Urbanisation"
 df_change$TransitionGroupID[df_change$TransitionGroupID=="agex"] <- 
-  "Agricultural Expansion [Type]"
+  "Agricultural Expansion Gr"
 
 write.csv(df_change, "config/stsim/TransitionSizeDistribution.csv", 
           row.names = F)

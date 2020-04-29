@@ -51,9 +51,10 @@ atr_type <- data.frame(
 write_csv(atr_type, "config/stsim/StateAttributeType.csv")
 
 # TransitionGroup
+# TODO automatize
 trans_group <- data.frame(
-  Name = c("Urbanisation"),
-  IsAuto = c("")
+  Name = c("Urbanisation", "Agricultural Expansion Gr"),
+  IsAuto = c("","")
 )
 write_csv(trans_group, "config/stsim/TransitionGroup.csv")
 
@@ -64,7 +65,7 @@ trans <- data.frame(
   StateClassIDSource = c("Agriculture:Cultivated", "Forest:Deciduous", "Forest:Deciduous"),
   StateClassIDDest = c("Urban:Nonlinear", "Agriculture:Cultivated", "Urban:Nonlinear"),
   TransitionTypeID = c("Agricultural Loss", "Agricultural Expansion", "Deforestation"),
-  TransitionGroupID = c("Urbanisation", NA, "Urbanisation"),
+  TransitionGroupID = c("Urbanisation", "Agricultural Expansion Gr", "Urbanisation"),
   Probability = c(1, 1, 1)
 )
 trans_to_write <- trans %>% 

@@ -1,5 +1,6 @@
 TransitionTypeID,TransitionGroupID,IsAuto
 Agricultural Expansion,Agricultural Expansion [Type],TRUE
+Agricultural Expansion,Agricultural Expansion Gr,NA
 Agricultural Loss,Agricultural Loss [Type],TRUE
 Agricultural Loss,Urbanisation,NA
 Deforestation,Deforestation [Type],TRUE

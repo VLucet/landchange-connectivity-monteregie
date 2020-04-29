@@ -65,12 +65,19 @@ trans_results_toplot <- bind_rows(subset(trans_results_mod, Timestep < 3),
 
 # Plots 
 trans_results_toplot %>% 
-  filter(TransitionGroupID != "Urbanisation") %>% 
+  filter(TransitionGroupID != "Urbanisation", ScenarioID==9) %>% 
   ggplot(aes(x=Timestep, y=Amount_mean)) +
   geom_line(show.legend = F) + 
-  facet_grid_paginate(TransitionGroupID~SecondaryStratumID, nrow=3, ncol=5, page = 3, scales = "free") +
+  facet_grid_paginate(TransitionGroupID~SecondaryStratumID, nrow=3, ncol=5, page = 8, scales = "free") +
   geom_line(data=targets, inherit.aes = T, linetype=2)
 ggsave("outputs/figures/one_to_one_mun.png") 
+
+trans_results_toplot %>% 
+  filter(TransitionGroupID != "Urbanisation", ScenarioID==10) %>% 
+  ggplot(aes(x=Timestep, y=Amount_mean)) +
+  geom_line(show.legend = F) + 
+  facet_grid_paginate(TransitionGroupID~SecondaryStratumID, nrow=3, ncol=5, page = 8, scales = "free") +
+  geom_line(data=targets, inherit.aes = T, linetype=2)
 
 ## JOIN for general diagnoctic plot
 gen_plot_df <- left_join(trans_results_toplot, targets, 
@@ -81,7 +88,8 @@ gen_plot_df <- left_join(trans_results_toplot, targets,
 
 # general plot
 gen_plot_df %>% 
-  #filter(ScenarioID == 8) %>% 
+  #filter(ScenarioID == 9) %>% 
+  filter(TransitionGroupID == "Agricultural Expansion [Type]") %>% 
   ggplot(aes(x=targets, y=observed, color=as.factor(Timestep))) +
   geom_point(show.legend = F) +
   geom_abline(slope = 1, intercept = 0, linetype=2) +
