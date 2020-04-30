@@ -99,7 +99,7 @@ for (response in c("agex","urb")){
     train_data <- training(data_split)
     test_data  <- testing(data_split)
     
-    tran_data_folds <- 
+    train_data_folds <- 
       vfold_cv(train_data, v = 10)
     
     # formula("urb ~ .")
@@ -142,10 +142,10 @@ for (response in c("agex","urb")){
     # Resample
     mod_fit_rs <- 
       wflow %>% 
-      fit_resamples(data = tran_data_folds)
+      fit_resamples(train_data_folds)
     
     rs_metrics <- rbind(rs_metrics,
-                        collect_metrics(rf_fit_rs) %>% 
+                        collect_metrics(mod_fit_rs) %>% 
                           mutate(method = R_METHOD,
                                  ratio = R_RATIO, 
                                  response = response))
