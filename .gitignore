@@ -26,3 +26,6 @@ libraries/*
 # output folder
 outputs/*
 !outputs/readme.md
+
+# test folder 
+test/
