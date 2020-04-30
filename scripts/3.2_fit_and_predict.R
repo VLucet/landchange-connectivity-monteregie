@@ -204,7 +204,7 @@ for (response in c("agex","urb")){
     #plot(spa_mul_fut)
     
     final_spa_mul <- lu.buffer.template
-    lu.buffer.template[lu.buffer.template==1] <- values(final_spa_mul)
+    final_spa_mul[final_spa_mul==1] <- values(spa_mul_fut)
     
     writeRaster(final_spa_mul, 
                 file.path("data/stsim/spatial_multipliers/",
