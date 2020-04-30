@@ -142,13 +142,13 @@ spatial_multiplier_default <-
 
 # SCE 1
 loadSheet("TransitionSpatialMultiplier", NULL, spatial_multiplier_default,
-          params = list(TransitionGroupID = c("Deforestation [Type]",
-                                              "Agricultural Loss [Type]",
-                                              "Agricultural Expansion [Type]"), 
+          params = list(TransitionGroupID = c("Urbanisation",
+                                              #"Agricultural Loss [Type]",
+                                              "Agricultural Expansion Gr"), 
                         MultiplierFileName = c(paste0(getwd(), "/data/stsim/spatial_multipliers/",
                                                       R_METHOD_STSIM, "_ratio_", R_RATIO, "_urb_f_spamul.tif"), 
-                                               paste0(getwd(), "/data/stsim/spatial_multipliers/",
-                                                      R_METHOD_STSIM, "_ratio_", R_RATIO, "_urb_f_spamul.tif"),
+                                               #paste0(getwd(), "/data/stsim/spatial_multipliers/",
+                                               #       R_METHOD_STSIM, "_ratio_", R_RATIO, "_urb_f_spamul.tif"),
                                                paste0(getwd(), "/data/stsim/spatial_multipliers/",
                                                       R_METHOD_STSIM, "_ratio_", R_RATIO, "_agex_f_spamul.tif"))))
 
@@ -180,9 +180,9 @@ loadSheet("TransitionSpatialMultiplier", NULL, spatial_multiplier_corrs,
           params = list(TransitionGroupID = c(#"Deforestation [Type]",
                                               #"Agricultural Loss [Type]",
                                               #"Agricultural Expansion [Type]",
-                                              "Deforestation [Type]",
-                                              "Agricultural Loss [Type]",
-                                              "Agricultural Expansion [Type]"), 
+                                              "Urbanisation",
+                                              #"Agricultural Loss [Type]",
+                                              "Agricultural Expansion Gr"), 
                         #Timestep = c(1,1,1),
                         MultiplierFileName = c(#paste0(getwd(), "/data/stsim/spatial_multipliers/",
                                                       #R_METHOD_STSIM, "_ratio_", R_RATIO, "_urb_f_spamul.tif"), 
@@ -192,8 +192,8 @@ loadSheet("TransitionSpatialMultiplier", NULL, spatial_multiplier_corrs,
                                                       #R_METHOD_STSIM, "_ratio_", R_RATIO, "_agex_f_spamul.tif"),
                                                paste0(getwd(), 
                                                       "/data/stsim/spatial_multipliers/urb_f_corrs_and_areas_spa_mul.tif"),
-                                               paste0(getwd(), 
-                                                      "/data/stsim/spatial_multipliers/urb_f_corrs_and_areas_spa_mul.tif"),
+                                               #paste0(getwd(), 
+                                                      #"/data/stsim/spatial_multipliers/urb_f_corrs_and_areas_spa_mul.tif"),
                                                paste0(getwd(),
                                                       "/data/stsim/spatial_multipliers/agex_f_corrs_and_areas_spa_mul.tif")
                                               )))
@@ -216,7 +216,7 @@ loadSheet("TransitionSizeDistribution", NULL, trans_size_distribution, path = "c
 scenario_1_default <- scenario(Definitions, scenario = "Full-scenario-default")
 dependency(scenario_1_default, c(run_default, 
                                  transmul_default,
-                                 #spatial_multiplier_default, 
+                                 spatial_multiplier_default, 
                                  targets_default,
                                  trans_size_distribution))
 
