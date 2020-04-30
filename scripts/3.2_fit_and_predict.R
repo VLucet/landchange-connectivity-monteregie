@@ -51,6 +51,8 @@ suppressPackageStartupMessages({
 removeTmpFiles(0)
 showTmpFiles()
 
+options(yardstick.event_first = FALSE)
+
 #-------------------------------------------------------------------------------
 # Raster template
 template <- raster("data/temp/template.tif")
@@ -86,6 +88,8 @@ full_set <- list(urb = urb_set, agex = agex_set)
 
 methics_df <- data.frame()
 rs_metrics <- data.frame()
+
+cls_metrics <- metric_set(roc_auc)
 #-------------------------------------------------------------------------------
 
 for (response in c("agex","urb")){
@@ -145,7 +149,7 @@ for (response in c("agex","urb")){
       fit_resamples(train_data_folds)
     
     rs_metrics <- rbind(rs_metrics,
-                        collect_metrics(mod_fit_rs) %>% 
+                        collect_metrics(mod_fit_rs, cls_metrics) %>% 
                           mutate(method = R_METHOD,
                                  ratio = R_RATIO, 
                                  response = response))
