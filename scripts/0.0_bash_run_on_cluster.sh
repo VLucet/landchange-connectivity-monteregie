@@ -40,7 +40,7 @@ export R_SAMPLING_METHOD="bal"
 # Variables for STSIM
 export STSIM_ITER='2'
 export STSIM_TS_START='0'
-export STSIM_TS_END='8'
+export STSIM_TS_END='10'
 export STSIM_STEP_SAVE='1'
 export STSIM_STEP_COMPUTE='10'
 # Variables for CS

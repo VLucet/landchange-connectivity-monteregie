@@ -143,12 +143,9 @@ spatial_multiplier_default <-
 # SCE 1
 loadSheet("TransitionSpatialMultiplier", NULL, spatial_multiplier_default,
           params = list(TransitionGroupID = c("Urbanisation",
-                                              #"Agricultural Loss [Type]",
                                               "Agricultural Expansion Gr"), 
                         MultiplierFileName = c(paste0(getwd(), "/data/stsim/spatial_multipliers/",
-                                                      R_METHOD_STSIM, "_ratio_", R_RATIO, "_urb_f_spamul.tif"), 
-                                               #paste0(getwd(), "/data/stsim/spatial_multipliers/",
-                                               #       R_METHOD_STSIM, "_ratio_", R_RATIO, "_urb_f_spamul.tif"),
+                                                      R_METHOD_STSIM, "_ratio_", R_RATIO, "_urb_f_spamul.tif"),
                                                paste0(getwd(), "/data/stsim/spatial_multipliers/",
                                                       R_METHOD_STSIM, "_ratio_", R_RATIO, "_agex_f_spamul.tif"))))
 
@@ -177,23 +174,11 @@ spatial_multiplier_corrs <-
 
 # ASSUMES 10 YEARs TIMESTEP
 loadSheet("TransitionSpatialMultiplier", NULL, spatial_multiplier_corrs,
-          params = list(TransitionGroupID = c(#"Deforestation [Type]",
-                                              #"Agricultural Loss [Type]",
-                                              #"Agricultural Expansion [Type]",
-                                              "Urbanisation",
-                                              #"Agricultural Loss [Type]",
+          params = list(TransitionGroupID = c("Urbanisation",
                                               "Agricultural Expansion Gr"), 
                         #Timestep = c(1,1,1),
-                        MultiplierFileName = c(#paste0(getwd(), "/data/stsim/spatial_multipliers/",
-                                                      #R_METHOD_STSIM, "_ratio_", R_RATIO, "_urb_f_spamul.tif"), 
-                                               #paste0(getwd(), "/data/stsim/spatial_multipliers/",
-                                                      #R_METHOD_STSIM, "_ratio_", R_RATIO, "_urb_f_spamul.tif"),
-                                               #paste0(getwd(), "/data/stsim/spatial_multipliers/", 
-                                                      #R_METHOD_STSIM, "_ratio_", R_RATIO, "_agex_f_spamul.tif"),
-                                               paste0(getwd(), 
+                        MultiplierFileName = c(paste0(getwd(), 
                                                       "/data/stsim/spatial_multipliers/urb_f_corrs_and_areas_spa_mul.tif"),
-                                               #paste0(getwd(), 
-                                                      #"/data/stsim/spatial_multipliers/urb_f_corrs_and_areas_spa_mul.tif"),
                                                paste0(getwd(),
                                                       "/data/stsim/spatial_multipliers/agex_f_corrs_and_areas_spa_mul.tif")
                                               )))
