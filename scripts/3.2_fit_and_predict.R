@@ -142,7 +142,7 @@ for (response in c("agex","urb")){
     # Resample
     mod_fit_rs <- 
       wflow %>% 
-      fit_resamples(data = train_data)
+      fit_resamples(data = tran_data_folds)
     
     rs_metrics <- rbind(rs_metrics,
                         collect_metrics(rf_fit_rs) %>% 
