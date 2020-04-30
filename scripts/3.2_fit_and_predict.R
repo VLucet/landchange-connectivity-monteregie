@@ -85,7 +85,7 @@ agex_set <-
 full_set <- list(urb = urb_set, agex = agex_set)
 
 methics_df <- data.frame()
-
+rs_metrics <- data.frame()
 #-------------------------------------------------------------------------------
 
 for (response in c("agex","urb")){
@@ -99,8 +99,12 @@ for (response in c("agex","urb")){
     train_data <- training(data_split)
     test_data  <- testing(data_split)
     
+    tran_data_folds <- 
+      vfold_cv(train_data, v = 10)
+    
     # formula("urb ~ .")
     
+    ## RECIPE ##
     rec <- 
       recipe(formula(paste0(response, " ~ .")), data = temp_data) %>% 
       update_role(timestep, row_nb, outcome_fact, 
@@ -113,38 +117,49 @@ for (response in c("agex","urb")){
       step_dummy(mun) %>% 
       step_downsample(outcome_fact, skip = TRUE, under_ratio = R_RATIO)
     
+    ## ENGINE ##
     if (R_METHOD == "rf"){
-      
       mod <- 
         rand_forest(trees = R_N_TREES, mode = "regression") %>% 
         set_engine("ranger", 
                    num.threads = OMP_NUM_THREADS)
     } else {
-      
       stop("Method not implemented")
-      
     }
     
+    ## WORKFLOW ##
     wflow <- 
       workflow() %>% 
       add_model(mod) %>% 
       add_recipe(rec)
     
-    # Fit
+    ## FIT ##
+    # Classic
     mod_fit <- 
       wflow %>% 
       fit(data = train_data)
     
-    # Pred
+    # Resample
+    mod_fit_rs <- 
+      wflow %>% 
+      fit_resamples(data = train_data)
+    
+    rs_metrics <- rbind(rs_metrics,
+                        collect_metrics(rf_fit_rs) %>% 
+                          mutate(method = R_METHOD,
+                                 ratio = R_RATIO, 
+                                 response = response))
+    
+    ## TEST ##
     pred <- 
       mod_fit %>% 
       predict(test_data) %>% 
       bind_cols(test_data %>% dplyr::select(outcome_fact))
-    
     av_prec <- round((pred %>% 
                         average_precision(truth = outcome_fact, .pred))$.estimate, 4)
     auc <- round((pred %>% 
                     roc_auc(truth = outcome_fact, .pred))$.estimate, 4)
+    
     plot <- pred %>% 
       roc_curve(truth = outcome_fact, .pred) %>% 
       autoplot() + ggtitle(paste("Roc Curve for", R_METHOD, response)) +
@@ -163,7 +178,7 @@ for (response in c("agex","urb")){
                              auc = auc, 
                              av_prec = av_prec))
     
-    # Pred Current
+    ## PREDICTIONS Current ##
     full_pred <- 
       mod_fit %>% 
       predict(new_data=temp_data)
@@ -178,7 +193,7 @@ for (response in c("agex","urb")){
                           paste0(R_METHOD, "_ratio_", R_RATIO,"_", response,"_c_spamul.tif")), 
                 overwrite = TRUE)
     
-    # Pred Future
+    ## PREDICTIONS FUTURE ##
     full_pred_future <- 
       mod_fit %>% 
       predict(new_data=future_data) %>% 
@@ -215,6 +230,7 @@ for (response in c("agex","urb")){
 }
 
 write.csv(methics_df, "outputs/metrics_table.csv")
+write.csv(rs_metrics, "outputs/metrics/metrics_table_resample.csv")
 
 #-------------------------------------------------------------------------------
 

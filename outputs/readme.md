@@ -6,6 +6,7 @@
 - reclassed
 - reclassed_with_buffer
 - rf
+- metrics
 - old
   - nn
   - glm
