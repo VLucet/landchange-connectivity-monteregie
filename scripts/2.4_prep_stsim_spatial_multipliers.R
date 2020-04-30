@@ -41,7 +41,7 @@ areas <- st_read("data_raw/workshop/ensembles/Key_ensembles_smoothed_RegTables.s
                  quiet = TRUE)
 
 # Spatial Mul raster
-lu <- raster("data/land_use/LandUse_mont_aafc_30by30_1990.tif")  
+lu <- raster("data/land_use/LandUse_mont_aafc_buffered_30by30_1990.tif")  
 
 CORR = 0
 AREAS = 0

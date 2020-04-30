@@ -54,6 +54,7 @@ showTmpFiles()
 #-------------------------------------------------------------------------------
 # Raster template
 template <- raster("data/temp/template.tif")
+lu.buffer.template <- raster("data/temp/template_with_buffer.tif")
 
 # test <- readRDS("data/temp/data_temp.RDS")
 
@@ -202,7 +203,10 @@ for (response in c("agex","urb")){
     spa_mul_fut[future_data$row_nb] <- full_pred_future$.pred
     #plot(spa_mul_fut)
     
-    writeRaster(spa_mul_fut, 
+    final_spa_mul <- lu.buffer.template
+    lu.buffer.template[lu.buffer.template==1] <- values(final_spa_mul)
+    
+    writeRaster(final_spa_mul, 
                 file.path("data/stsim/spatial_multipliers/",
                           paste0(R_METHOD, "_ratio_", R_RATIO,"_", response,"_f_spamul.tif")), 
                 overwrite = TRUE)
