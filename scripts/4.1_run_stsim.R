@@ -215,14 +215,14 @@ loadSheet("TransitionSizeDistribution", NULL, trans_size_distribution, path = "c
 
 scenario_1_default <- scenario(Definitions, scenario = "Full-scenario-default")
 dependency(scenario_1_default, c(run_default, 
-                                 #transmul_default,
+                                 transmul_default,
                                  spatial_multiplier_default, 
                                  targets_default,
                                  trans_size_distribution))
 
 scenario_1_corrs <- scenario(Definitions, scenario = "Fall-scenario-corrs")
 dependency(scenario_1_corrs, c(run_default, 
-                               #transmul_default,
+                               transmul_default,
                                spatial_multiplier_corrs,
                                targets_default,
                                trans_size_distribution))
