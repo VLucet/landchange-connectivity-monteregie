@@ -79,8 +79,7 @@ definition_settings <-
   c("Terminology", 
     "Stratum", "SecondaryStratum", "TertiaryStratum", 
     "StateLabelX", "StateLabelY", "StateClass", 
-    "TransitionType", "TransitionGroup", "TransitionTypeGroup", 
-    "StateAttributeType")
+    "TransitionType", "TransitionGroup", "TransitionTypeGroup")
 
 for (sheetname in definition_settings){
   loadSheet(sheetname,NULL, Definitions, path = "config/stsim/")  
@@ -190,6 +189,7 @@ loadSheet("TransitionSizeDistribution", NULL, trans_size_distribution, path = "c
 
 # Transition Adjacency
 transition_adjacency <- scenario(Definitions, scenario = "Transition Adjacency: Default")
+loadSheet("StateAttributeType", NULL, transition_adjacency, path = "config/stsim/")
 loadSheet("StateAttributeValue", NULL, transition_adjacency, path = "config/stsim/")
 loadSheet("TransitionAdjacencySetting", NULL, transition_adjacency, path = "config/stsim/")
 loadSheet("TransitionAdjacencyMultiplier", NULL, transition_adjacency, path = "config/stsim/")
@@ -203,6 +203,7 @@ dependency(scenario_1_default, c(run_default,
                                  transmul_default,
                                  spatial_multiplier_default, 
                                  targets_default,
+                                 transition_adjacency,
                                  trans_size_distribution))
 
 scenario_1_corrs <- scenario(Definitions, scenario = "Fall-scenario-corrs")
@@ -210,6 +211,7 @@ dependency(scenario_1_corrs, c(run_default,
                                transmul_default,
                                spatial_multiplier_corrs,
                                targets_default,
+                               transition_adjacency,
                                trans_size_distribution))
 # mergeDependencies(scenario_1_corrs) <- TRUE
 # print(datasheet(scenario_1_corrs, "TransitionSpatialMultiplier"))

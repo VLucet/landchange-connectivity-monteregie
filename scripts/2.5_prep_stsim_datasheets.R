@@ -50,6 +50,14 @@ atr_type <- data.frame(
 )
 write_csv(atr_type, "config/stsim/StateAttributeType.csv")
 
+# StateAttributeValue
+atr_val <- data.frame(
+  StateClassID = c("Agriculture:Cultivated", "Urban:Nonlinear"),
+  StateAttributeTypeID = c("Agriculture", "Urban"),
+  Value = c(1, 1)
+)
+write_csv(atr_val, "config/stsim/StateAttributeValue.csv")
+
 # TransitionAdjacencySetting
 adj_settings <- data.frame(
   TransitionGroupID = c("Urbanisation", "Agricultural Expansion Gr") ,
