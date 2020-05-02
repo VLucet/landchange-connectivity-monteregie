@@ -45,13 +45,24 @@ suppressPackageStartupMessages({
   library(dplyr)
   library(tidyr)
   library(rlist)
+  library(parallel)
+  library(doParallel)
+  library(foreach)
+  library(purrr)
 })
 
 # Reset Raster tmp files
 removeTmpFiles(0)
 showTmpFiles()
 
+# Yardstick option 
 options(yardstick.event_first = FALSE)
+
+# cl <- makeForkCluster(OMP_NUM_THREADS)
+# doParallel::registerDoParallel(cl)
+# foreach::getDoParWorkers()
+
+# Register the cluster
 
 #-------------------------------------------------------------------------------
 # Raster template
@@ -89,8 +100,11 @@ full_set <- list(urb = urb_set, agex = agex_set)
 methics_df <- data.frame()
 rs_metrics <- data.frame()
 
-cls_metrics <- metric_set(roc_auc)
+cls_metrics <- metric_set(roc_auc, sens, spec)
 #-------------------------------------------------------------------------------
+
+# response <-"urb"
+# ratio <- 2
 
 for (response in c("agex","urb")){
   
@@ -146,13 +160,21 @@ for (response in c("agex","urb")){
     # Resample
     mod_fit_rs <- 
       wflow %>% 
-      fit_resamples(train_data_folds, metrics = cls_metrics)
+      fit_resamples(train_data_folds, # metrics = cls_metrics,
+                    control = control_resamples(save_pred = TRUE)) 
+    mod_fit_rs_pred <- mod_fit_rs$.predictions
+    mod_fit_rs_pred_with_outcome <- 
+      purrr::map(mod_fit_rs_pred, ~cbind(., outcome_fact = train_data[.$.row,"outcome_fact"]))
+    all_metrics <- 
+      purrr::map(mod_fit_rs_pred_with_outcome, ~roc_auc(data = ., truth = outcome_fact, .pred)) %>% 
+      purrr::map(~.$.estimate) %>% unlist()
     
     rs_metrics <- rbind(rs_metrics,
-                        collect_metrics(mod_fit_rs) %>% 
-                          mutate(method = R_METHOD,
-                                 ratio = R_RATIO, 
-                                 response = response))
+                        data.frame(mean_auc = mean(all_metrics), 
+                                   sd_auc = sd(all_metrics), 
+                                   method = R_METHOD,
+                                   ratio = R_RATIO, 
+                                   response = response))
     
     ## TEST ##
     pred <- 
