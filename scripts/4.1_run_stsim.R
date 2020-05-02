@@ -189,10 +189,10 @@ trans_size_distribution <- scenario(Definitions, scenario = "Transition Size Dis
 loadSheet("TransitionSizeDistribution", NULL, trans_size_distribution, path = "config/stsim/")
 
 # Transition Adjacency
-#transition_adjacency <- scenario(Definitions, scenario = "Transition Adjacency: Default")
-#loadSheet("StateAttributeValue", NULL, transition_adjacency, path = "config/stsim/")
-#loadSheet("TransitionAdjacencySetting", NULL, transition_adjacency, path = "config/stsim/")
-#loadSheet("TransitionAdjacencyMultiplier", NULL, transition_adjacency, path = "config/stsim/")
+transition_adjacency <- scenario(Definitions, scenario = "Transition Adjacency: Default")
+loadSheet("StateAttributeValue", NULL, transition_adjacency, path = "config/stsim/")
+loadSheet("TransitionAdjacencySetting", NULL, transition_adjacency, path = "config/stsim/")
+loadSheet("TransitionAdjacencyMultiplier", NULL, transition_adjacency, path = "config/stsim/")
 
 ####################
 ## Full Scenarios ##

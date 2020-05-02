@@ -50,13 +50,23 @@ atr_type <- data.frame(
 )
 write_csv(atr_type, "config/stsim/StateAttributeType.csv")
 
-# TransitionGroup
-# TODO automatize
-trans_group <- data.frame(
-  Name = c("Urbanisation", "Agricultural Expansion Gr"),
-  IsAuto = c("","")
+# TransitionAdjacencySetting
+adj_settings <- data.frame(
+  TransitionGroupID = c("Urbanisation", "Agricultural Expansion Gr") ,
+  StateAttributeTypeID = c("Urban", "Agriculture"),
+  NeighborhoodRadius = c(130, 130), 
+  UpdateFrequency = c(1, 1)
 )
-write_csv(trans_group, "config/stsim/TransitionGroup.csv")
+write_csv(adj_settings, "config/stsim/TransitionAdjacencySetting.csv")
+
+# TransitionAdjacencyMultiplier
+adj_mul <- data.frame(
+  TransitionGroupID = c("Urbanisation", "Urbanisation",
+                        "Agricultural Expansion Gr", "Agricultural Expansion Gr"),
+  AttributeValue = c(0.000, 0.899, 0.000, 0.899),
+  Amount = c(0,1,0,1)
+)
+write_csv(adj_mul, "config/stsim/TransitionAdjacencyMultiplier.csv")
 
 #-------------------------------------------------------------------------------
 # FROM:
@@ -126,6 +136,14 @@ trans_type <- data.frame(
   Color = random_rgb(3)
 )
 write_csv(trans_type, "config/stsim/TransitionType.csv")
+
+# TransitionGroup
+all_groups <- unique(trans$TransitionGroupID)
+trans_group <- data.frame(
+  Name = all_groups,
+  IsAuto = rep("", length(all_groups))
+)
+write_csv(trans_group, "config/stsim/TransitionGroup.csv")
 
 # TransitionTypeGroup
 trans_sub_type <- trans %>% 
