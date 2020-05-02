@@ -70,14 +70,13 @@ theme_set(theme_minimal())
 #-------------------------------------------------------------------------------
 
 # FIGURE 0 
-png("outputs/figures/final_graph.png")
-ggplot(df_final) + 
+all_facetted <- ggplot(df_final) + 
   aes(x = timestep, y = mean, group = zone, color=zone) + 
   geom_line(show.legend = FALSE, alpha=0.2) + 
   scale_color_viridis_d(option = "plasma") + 
   facet_grid(sce ~ species)+
   theme(legend.position = "none") 
-dev.off()
+ggsave("outputs/figures/final_graph.png", all_facetted)
 
 ## FIGURE 1
 animated <- joined %>% 
