@@ -71,12 +71,12 @@ trans_results_toplot <- bind_rows(subset(trans_results_mod, Timestep < 3),
 
 for (sce in sce_nb_vec){
   theplot <- trans_results_toplot %>% 
-    filter(TransitionGroupID != "Urbanisation", ScenarioID==sce_nb_vec) %>% 
+    filter(TransitionGroupID != "Urbanisation", ScenarioID==sce) %>% 
     ggplot(aes(x=Timestep, y=Amount_mean)) +
     geom_line(show.legend = F) + 
     facet_grid_paginate(TransitionGroupID~SecondaryStratumID, nrow=3, ncol=5, page = 8, scales = "free") +
     geom_line(data=targets, inherit.aes = T, linetype=2)
-  ggsave(theplot, filename = paste0("outputs/figures/sce_",sce_nb_vec,"_one_to_one_mun.png"))
+  ggsave(theplot, filename = paste0("outputs/figures/sce_",sce,"_one_to_one_mun.png"))
 }
 
 ## JOIN for general diagnoctic plot
