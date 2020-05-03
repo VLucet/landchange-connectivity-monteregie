@@ -133,7 +133,7 @@ for (sce in sce_nb_vec){
 }
 
 # Save list
-saveRDS(assembled_list, "outputs/final_raster_means.RDS")
+saveRDS(assembled_list, "outputs/final/final_raster_means.RDS")
 print("LARGE LOOP DONE")
 
 # assemble last dataset
@@ -144,7 +144,7 @@ for (df in extracted_list[2:length(extracted_list)]) {
 final_df$timestep <- as.numeric(final_df$timestep)
 
 # Save final df
-saveRDS(final_df, "outputs/final_df_current_density.RDS")
+saveRDS(final_df, "outputs/final/final_df_current_density.RDS")
 
 # FULL SUM FOR FINAL OUTPUTS
 full_stack=list()
@@ -171,7 +171,7 @@ for (sce in 1:length(assembled_list)) {
   }
 }  
 
-saveRDS(full_stack, "outputs/cur_sum_sce_per_ts.RDS")
+saveRDS(full_stack, "outputs/final/final_cur_sum_sce_per_ts.RDS")
 
 #-------------------------------------------------------------------------------
 
@@ -204,7 +204,7 @@ for (species in species_vec) {
   assembled_list_T[[species]] <- extracted_list_T
 }
 
-saveRDS(assembled_list_T, "outputs/final_raster_means_TRUE.RDS")
+saveRDS(assembled_list_T, "outputs/final/final_raster_means_TRUE.RDS")
 
 unlisted <- unlist(assembled_list_T, recursive = FALSE)
 final_df_origin <- unlisted[[1]]
@@ -213,6 +213,6 @@ for (df in unlisted[2:length(unlisted)]) {
 }
 
 final_df_origin$timestep <- as.numeric(final_df_origin$timestep)
-saveRDS(final_df_origin, "outputs/final_df_origin_current_density.RDS")
+saveRDS(final_df_origin, "outputs/final/final_df_origin_current_density.RDS")
 
 #-------------------------------------------------------------------------------

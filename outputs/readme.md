@@ -3,6 +3,7 @@
 - current_density
 - current_density_sum
 - figures
+- final
 - reclassed
 - reclassed_with_buffer
 - rf
