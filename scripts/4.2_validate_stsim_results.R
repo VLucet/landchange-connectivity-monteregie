@@ -76,7 +76,7 @@ for (sce in sce_nb_vec){
     geom_line(show.legend = F) + 
     facet_grid_paginate(TransitionGroupID~SecondaryStratumID, nrow=3, ncol=5, page = 8, scales = "free") +
     geom_line(data=targets, inherit.aes = T, linetype=2)
-  ggsave(theplot, paste0("outputs/figures/sce_",sce_nb_vec,"_one_to_one_mun.png"))
+  ggsave(theplot, filename = paste0("outputs/figures/sce_",sce_nb_vec,"_one_to_one_mun.png"))
 }
 
 ## JOIN for general diagnoctic plot
