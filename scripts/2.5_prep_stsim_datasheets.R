@@ -44,6 +44,8 @@ term <- data.frame(
 )
 write_csv(term, "config/stsim/Terminology.csv")
 
+# ADJACENCY
+
 # StateAttributeType
 atr_type <- data.frame(
   Name = c("Agriculture", "Urban")
@@ -127,7 +129,7 @@ state_y <- data.frame(
   Name = state_label_y,
   Description = state_label_y
 )
-write_csv(state_y, "config/stsim/StateLabelY")
+write_csv(state_y, "config/stsim/StateLabelY.csv")
 
 # DeterministicTransition # Location does not matter
 deter <- data.frame(
