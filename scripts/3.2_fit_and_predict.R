@@ -21,7 +21,7 @@ R_RATIO <- as.numeric(Sys.getenv("R_RATIO"))
 options(stringsAsFactors = FALSE)
 
 if (is.na(OMP_NUM_THREADS)) { 
-  OMP_NUM_THREADS <- 6 
+  OMP_NUM_THREADS <- 4 
   options(mc.cores = OMP_NUM_THREADS)
   
   R_METHOD <- "rf"
@@ -255,7 +255,7 @@ for (response in c("agex","urb")){
   }
 }
 
-write.csv(methics_df, "outputs/metrics_table.csv")
+write.csv(methics_df, "outputs/metrics/metrics_table.csv")
 write.csv(rs_metrics, "outputs/metrics/metrics_table_resample.csv")
 
 #-------------------------------------------------------------------------------
