@@ -3,3 +3,5 @@ Agriculture:Cultivated,Agriculture,Cultivated,"146, 173, 197, 57",a,1
 Forest:Deciduous,Forest,Deciduous,"37, 29, 248, 182",b,3
 Urban:Nonlinear,Urban,Nonlinear,"64, 248, 86, 251",c,2
 Roads:Linear,Roads,Linear,"120, 54, 148, 95",d,4
+Water:All,Water,All,"226, 16, 222, 57",e,5
+Wetlands:Both,Wetlands,Both,"108, 89, 113, 119",f,6
