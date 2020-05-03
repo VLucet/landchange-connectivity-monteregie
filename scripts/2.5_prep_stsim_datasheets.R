@@ -71,7 +71,7 @@ write_csv(adj_settings, "config/stsim/TransitionAdjacencySetting.csv")
 adj_mul <- data.frame(
   TransitionGroupID = c("Urbanisation", "Urbanisation",
                         "Agricultural Expansion Gr", "Agricultural Expansion Gr"),
-  AttributeValue = c(0.000, 0.899, 0.000, 0.899),
+  AttributeValue = c(0.000, 0.33, 0.000, 0.33),
   Amount = c(0,1,0,1)
 )
 write_csv(adj_mul, "config/stsim/TransitionAdjacencyMultiplier.csv")
