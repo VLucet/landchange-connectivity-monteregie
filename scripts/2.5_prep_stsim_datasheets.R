@@ -90,7 +90,7 @@ trans_to_write <- trans %>%
   select(-TransitionGroupID)
 write_csv(trans_to_write, "config/stsim/Transition.csv")
 
-unchanging_states <- c("Roads:Linear")
+unchanging_states <- c("Roads:Linear", "Water:All", "Wetlands:Both")
 
 ## AUTOMATE THE PROCESS
 
