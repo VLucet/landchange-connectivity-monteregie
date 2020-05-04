@@ -39,9 +39,9 @@ sce_nb_vec <- paste0("sce_", as.numeric(unlist(lapply(str_split(sce_dir_vec, "-"
 
 # Data prep
 # listofiles <- list.files("it1_lasterun/it1_MAAM_Current/", full.names = T)
-df_final <- readRDS("test/final_df_current_density.RDS") %>% 
+df_final <- readRDS("outputs/final/final_df_current_density.RDS") %>% 
   mutate(timestep = (timestep*10)+1990, source = "model")
-df_final_origin <- readRDS("test/final_df_origin_current_density.RDS") %>% 
+df_final_origin <- readRDS("outputs/final/final_df_origin_current_density.RDS") %>% 
   mutate(timestep = timestep*10+1980, source = "model")
 mun <- st_read("data/mun/munic_SHP_clean.shp", quiet = TRUE)
 
@@ -101,7 +101,7 @@ animated <- joined %>%
     #strip.text.y = element_blank(),
     axis.title=element_text(size=18)) +
   transition_reveal(as.integer(timestep))
-options(gganimate.dev_args = list(width = 800, height = 800))
+options(gganimate.dev_args = list(width = 1200, height = 800))
 plot_anim <- animate(animated, renderer = gifski_renderer())
 anim_save(animation = plot_anim, 
           filename = "outputs/figures/connectivity_decrease_x5species.gif")
@@ -140,28 +140,10 @@ change <- ggplot() +
                     breaks=c(-50, -40, -30, -20, -10, 0, 10))
 ggsave("outputs/figures/connectivit_change_mun.png", change)
 
-
-## FIGURE 3 (same than 2 but gif)
-mun_joined <- left_join(mun, key, by="MUS_NM_MUN")
-mun_joined$sum_cur <- (1/log(mun_joined$mean)*-1)*10
-plot <- ggplot(data=mun_joined) +
-  geom_sf(aes(fill=mean), show.legend=F) +
-  facet_grid(~sce) +
-  scale_fill_viridis_c(option = "inferno") +
-  labs(title= "Connectivity for all species - Year: {closest_state}")+
-  #transition_states(timestep) +
-  theme(plot.title = element_text(size = 35))+
-  theme(plot.caption = element_text(size=80, family="AvantGarde"))
-ggsave("outputs/figures/connectivit_change_mun.gif", plot)
-#plot_anim <- animate(plot, renderer = gifski_renderer())
-# TODO throws error
-# anim_save(plot_anim, "outputs/figures/connectivit_change_mun_gif.gif")
-
-## STOPPED HERE 
 stop()
 
-## FIGURE 4
-it_1 <- list.files("test/it/",
+## FIGURE 3
+it_1 <- list.files("outputs/", #TODO FIX
                    pattern = "sce",
                    full.names = T)
 list_lu <-  stack(lapply(mixedsort(it_1),FUN=raster))
@@ -247,3 +229,21 @@ saveGIF(expr = make_plots(list_lu_1_cropped_rat, ts_template_year),
         interval=2, movie.name="lu_animated.gif",
         ani.width=800, ani.height=800, ani.res=100)
 setwd(oldwd)
+
+#-------------------------------------------------------------------------------
+# 
+# ## FIGURE 3 (same than 2 but gif)
+# mun_joined <- left_join(mun, key, by="MUS_NM_MUN")
+# mun_joined$sum_cur <- (1/log(mun_joined$mean)*-1)*10
+# plot <- ggplot(data=mun_joined) +
+#   geom_sf(aes(fill=mean), show.legend=F) +
+#   facet_grid(~sce) +
+#   scale_fill_viridis_c(option = "inferno") +
+#   labs(title= "Connectivity for all species - Year: {closest_state}")+
+#   #transition_states(timestep) +
+#   theme(plot.title = element_text(size = 35))+
+#   theme(plot.caption = element_text(size=80, family="AvantGarde"))
+# ggsave("outputs/figures/connectivit_change_mun.gif", plot)
+# #plot_anim <- animate(plot, renderer = gifski_renderer())
+# # TODO throws error
+# # anim_save(plot_anim, "outputs/figures/connectivit_change_mun_gif.gif")

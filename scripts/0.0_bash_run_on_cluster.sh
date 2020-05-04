@@ -161,7 +161,7 @@ post_process(){
   rm -rf outputs/current_density_sum/*
   ## Run diagnostics and plots
   Rscript scripts/7.1_post_process_results.R
-  #Rscript scripts/7.2_make_plots.R
+  Rscript scripts/7.2_make_plots.R
 }
 
 ### BUNDLE FUNCTIONS
