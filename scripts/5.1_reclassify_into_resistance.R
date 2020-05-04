@@ -87,7 +87,6 @@ for (ts in 1:length(true_landuse)){
   }
 }
 print(true_landuse_reclassed)
-print("TRUE LAND USE DONE")
 
 print("MODELLED LAND USE")
 # Loop all scenarios (OBS)

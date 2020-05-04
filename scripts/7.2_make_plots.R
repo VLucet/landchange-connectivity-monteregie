@@ -32,32 +32,28 @@ suppressPackageStartupMessages({
 })
 
 #-------------------------------------------------------------------------------
+# Get result secenario directory 
+sce_dir_vec <- list.files("libraries/stsim/monteregie-conncons-scripted.ssim.output", 
+                          full.names = T)
+sce_nb_vec <- paste0("sce_", as.numeric(unlist(lapply(str_split(sce_dir_vec, "-"), FUN = last))))
+
 # Data prep
-#listofiles <- list.files("it1_lasterun/it1_MAAM_Current/", full.names = T)
+# listofiles <- list.files("it1_lasterun/it1_MAAM_Current/", full.names = T)
 df_final <- readRDS("test/final_df_current_density.RDS") %>% 
   mutate(timestep = (timestep*10)+1990, source = "model")
 df_final_origin <- readRDS("test/final_df_origin_current_density.RDS") %>% 
   mutate(timestep = timestep*10+1980, source = "model")
 mun <- st_read("data/mun/munic_SHP_clean.shp", quiet = TRUE)
 
-# df_summarised_withzone <- df_final %>%
-#   group_by(sce, timestep, species, zone) %>% 
-#   summarise(sum_cur = sum(mean)) %>% ungroup %>% 
-#   mutate(timestep = (timestep*10)+1990, source = "model")
-
+# Summarised
 df_summarised <- df_final %>%
   group_by(sce, timestep, species) %>% 
   summarise(sum_cur = sum(mean)) %>% ungroup %>%
   mutate(source = "model")
-
-# Temporary solution
 df_origin_summarised <- df_final_origin %>%
   group_by(timestep, species) %>% 
   summarise(sum_cur = sum(mean)) %>% ungroup %>% 
   mutate(sce = "sce_0", source = "observation")
-# df_origin_summarised_2 <- df_origin_summarised %>% 
-#   mutate(sce = 10)
-# df_origin_summarised <- bind_rows(df_origin_summarised, df_origin_summarised_2)
 
 joined <- full_join(df_summarised, 
                     df_origin_summarised, 
@@ -166,12 +162,12 @@ stop()
 
 ## FIGURE 4
 it_1 <- list.files("test/it/",
-                   pattern = "*MAAM*",
+                   pattern = "sce",
                    full.names = T)
 list_lu <-  stack(lapply(mixedsort(it_1),FUN=raster))
-list_lu_masked <- crop(mask(list_lu,mun),mun)
+# list_lu_masked <- crop(mask(list_lu,mun),mun)
 extent_zoom <- extent(c(621300, 621300+20000, 5023000, 5023000+20000))
-list_lu_1_cropped <- unlist(as.list(crop(list_lu_masked, extent_zoom)))
+list_lu_1_cropped <- (crop(list_lu, extent_zoom))
 
 ts_template <- c(0,seq(10, 110, 10))
 ts_template_year <- c(0, seq(10, 110, 10))+1990
