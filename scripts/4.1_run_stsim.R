@@ -270,7 +270,7 @@ if (STSIM_RUN){
   print("Running StSIM");Sys.time()
   results <- run(list(scenario_1_default, 
                       #scenario_1_corrs_default, 
-                      scenario_1_forecast, 
+                      scenario_1_forecast 
                       #scenario_1_corrs_forecast
                       ),
                  summary = TRUE, jobs = OMP_NUM_THREADS)
