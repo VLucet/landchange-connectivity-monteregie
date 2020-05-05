@@ -3,3 +3,5 @@ Agriculture:Cultivated,A1
 Forest:Deciduous,A2
 Urban:Nonlinear,A3
 Roads:Linear,A4
+Water:All,A5
+Wetlands:Both,A6

@@ -134,7 +134,7 @@ write_csv(state_y, "config/stsim/StateLabelY.csv")
 # DeterministicTransition # Location does not matter
 deter <- data.frame(
   StateClassIDSource = unique(state_classes$Name),
-  Location = paste0("A", c(1,2,3,4))
+  Location = paste0("A", c(1:length(unique(state_classes$Name))))
 )
 write_csv(deter, "config/stsim/DeterministicTransition.csv")
 
