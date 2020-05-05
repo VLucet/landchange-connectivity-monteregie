@@ -119,7 +119,7 @@ if (aggregation$ag){
 # Output options
 loadSheet("OutputOptions", NULL, run_default, 
           params = list(SummaryOutputSC = TRUE, SummaryOutputSCTimesteps = STSIM_STEP_SAVE, 
-                        SummaryOutputTR = FALSE, SummaryOutputTRTimesteps = STSIM_STEP_SAVE, 
+                        SummaryOutputTR = TRUE, SummaryOutputTRTimesteps = STSIM_STEP_SAVE, 
                         RasterOutputSC = TRUE, RasterOutputSCTimesteps = STSIM_STEP_SAVE,
                         RasterOutputTR = FALSE, RasterOutputTRTimesteps = STSIM_STEP_SAVE))
 
