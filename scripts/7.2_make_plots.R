@@ -106,7 +106,7 @@ plot_anim <- animate(animated, renderer = gifski_renderer())
 anim_save(animation = plot_anim, 
           filename = "outputs/figures/connectivity_decrease_x5species.gif")
 
-## FIGURE 2
+## FIGURE 2 => will break
 key <- read_csv("config/stsim/SecondaryStratum.csv") %>%
   mutate(ID = as.factor(ID)) %>%
   rename(zone=ID, MUS_NM_MUN=Name) %>%
@@ -119,7 +119,7 @@ df_final_fordiff_pivoted <- df_final %>%
   filter(timestep %in% c(first(unique(key$timestep)),
                          last(unique(key$timestep)))) %>% 
   pivot_wider(names_from=timestep, values_from=mean) %>%
-  rename(before=`1990`, after=last_col()) %>% 
+  rename(before=last_col(offset = 1), after=last_col()) %>% 
   left_join(key, by=c("zone", "sce", "species", "source")) %>% 
   filter(MUS_NM_MUN!="Not Monteregie") %>% 
   mutate(change=((after-before)/before)*100) %>% 
@@ -127,7 +127,7 @@ df_final_fordiff_pivoted <- df_final %>%
   st_as_sf()
 
 df_final_fordiff_pivoted <- 
-  st_transform(df_summarised_fordiff_pivoted, crs=4326)
+  st_transform(df_final_fordiff_pivoted, crs=4326)
 
 change <- ggplot() +
   geom_sf(data=df_final_fordiff_pivoted,
@@ -140,11 +140,9 @@ change <- ggplot() +
                     breaks=c(-50, -40, -30, -20, -10, 0, 10))
 ggsave("outputs/figures/connectivit_change_mun.png", change)
 
-stop()
-
 ## FIGURE 3
-it_1 <- list.files("outputs/", #TODO FIX
-                   pattern = "sce",
+it_1 <- list.files(file.path(sce_dir_vec[1],"stsim_OutputSpatialState"), #TODO FIX
+                   pattern = "it1",
                    full.names = T)
 list_lu <-  stack(lapply(mixedsort(it_1),FUN=raster))
 # list_lu_masked <- crop(mask(list_lu,mun),mun)
