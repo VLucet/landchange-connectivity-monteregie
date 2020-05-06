@@ -12,9 +12,6 @@ STSIM_ITER <- as.numeric(Sys.getenv("STSIM_ITER"))
 
 R_AGGR_FACT <- as.numeric(Sys.getenv("R_AGGR_FACT"))
 STSIM_STEP_SAVE <- as.numeric(Sys.getenv("STSIM_STEP_SAVE"))
-
-STSIM_TS_START <- as.numeric(Sys.getenv("STSIM_TS_START"))
-STSIM_TS_END <- as.numeric(Sys.getenv("STSIM_TS_END"))
 #-------------------------------------------------------------------------------
 
 # aggregation <- list(ag = TRUE,
@@ -23,9 +20,6 @@ STSIM_TS_END <- as.numeric(Sys.getenv("STSIM_TS_END"))
 # 
 # R_AGGR_FACT <- 3
 # STSIM_STEP_SAVE <- 1
-# 
-# STSIM_TS_START <- 0
-# STSIM_TS_END <- 11
 
 # Load important libraries
 suppressPackageStartupMessages({
@@ -43,12 +37,11 @@ showTmpFiles()
 ## Load inputs
 # Get result secenario directory 
 sce_dir_vec <- list.files("libraries/stsim/monteregie-conncons-scripted.ssim.output", 
-                      full.names = T)
+                          full.names = T)
 sce_nb_vec <- as.numeric(unlist(lapply(str_split(sce_dir_vec, "-"), FUN = last)))
 
 # Template
 iter_template <- paste0("it", 1:STSIM_ITER)
-ts_template <- unique(paste0("ts_", c(STSIM_TS_START,seq(STSIM_STEP_SAVE,STSIM_TS_END,STSIM_STEP_SAVE))))
 
 ## Load classification matrices
 species_list <- tools::file_path_sans_ext(list.files("config/rcl_tables/species/"))
@@ -88,10 +81,12 @@ for (ts in 1:length(true_landuse)){
 }
 print(true_landuse_reclassed)
 
+#-------------------------------------------------------------------------------
+
 print("MODELLED LAND USE")
 # Loop all scenarios (OBS)
 for (sce in 1:length(sce_dir_vec)){
-
+  
   sce_dir <- sce_dir_vec[sce]
   sce_nb <- sce_nb_vec[sce]
   
@@ -99,8 +94,29 @@ for (sce in 1:length(sce_dir_vec)){
   print(sce_nb)
   
   # Get file list and iteration memberships
-  files_iter_list <- mixedsort(list.files(paste0(sce_dir, "/stsim_OutputSpatialState"),
-                                          full.names = T))
+  files_iter_list <- 
+    mixedsort(list.files(paste0(sce_dir, "/stsim_OutputSpatialState"),
+                         full.names = T))
+  print(files_iter_list)
+  
+  # Determibe ts template for this iteration
+  ts_vec <- unique(as.numeric(unlist( # as numeric cause the whole thing
+    lapply(                           # returns a string
+      str_split(                      # also get the unique values
+        unlist(
+          lapply(
+            unlist(
+              lapply(files_iter_list,str_split,"\\."), # split after "it1.ts" 
+              recursive = F), # unlist, but only one level
+            nth, n=5)), # get number 5 (where the ts nb is)
+        "s"), nth, # split after s
+      n = 2)))) # get number 2
+  print(ts_vec)
+  
+  ts_template <- unique(paste0("ts_", seq(min(ts_vec), #from min for this sce
+                                          max(ts_vec), # to max
+                                          STSIM_STEP_SAVE))) # by whatever we save
+  print(ts_template)
   
   # First split by iterations
   iter_membreships <- lapply(X=paste0(iter_template, "\\."), FUN=grep, x=files_iter_list)
@@ -112,7 +128,6 @@ for (sce in 1:length(sce_dir_vec)){
   split_by_iter_rasters <- lapply(split_by_iter, FUN=stack) # Will take up memory
   
   print("-----")
-  print(ts_template)
   
   # Looping OBSERVATIONS
   for (it in 1:length(split_by_iter_rasters)){
@@ -120,10 +135,12 @@ for (sce in 1:length(sce_dir_vec)){
       temp <- reclassify(split_by_iter_rasters[[it]], rcls[[spe]])
       print(spe)
       # print(temp)
-      for (ts in 1:length(ts_template)){
-        writeRaster(temp[[ts]],
+      for (ts in ts_vec){
+        idx <- which(ts_vec==ts)
+        writeRaster(temp[[idx]],
                     paste0("outputs/reclassed/", 
-                           paste("sce",sce_nb,"it",it,ts_template[ts],species_list[spe],"", sep="_")), 
+                           paste("sce",sce_nb,"it",it,ts_template[idx],
+                                 species_list[spe],"", sep="_")), 
                     format="GTiff", overwrite =T)
       }
     }

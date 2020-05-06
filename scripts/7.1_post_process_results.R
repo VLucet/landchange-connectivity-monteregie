@@ -10,12 +10,12 @@ set.seed(77)
 
 #-------------------------------------------------------------------------------
 # Set parameters
-STSIM_ITER <- as.numeric(Sys.getenv("STSIM_ITER"))
-aggregation <- list(ag = as.logical(Sys.getenv("R_AGGR")), 
-                    factor = as.numeric(Sys.getenv("R_AGGR_FACT")))
-STSIM_STEP_SAVE <- as.numeric(Sys.getenv("STSIM_STEP_SAVE"))
-STSIM_TS_START <- as.numeric(Sys.getenv("STSIM_TS_START"))
-STSIM_TS_END <- as.numeric(Sys.getenv("STSIM_TS_END"))
+STSIM_ITER <- as.numeric(Sys.getenv("STSIM_ITER", unset=2))
+aggregation <- list(ag = as.logical(Sys.getenv("R_AGGR", unset = TRUE)), 
+                    factor = as.numeric(Sys.getenv("R_AGGR_FACT", unset = 3)))
+STSIM_STEP_SAVE <- as.numeric(Sys.getenv("STSIM_STEP_SAVE", unset = 1))
+# STSIM_TS_START <- as.numeric(Sys.getenv("STSIM_TS_START", unset = 0))
+# STSIM_TS_END <- as.numeric(Sys.getenv("STSIM_TS_END", unset = 6))
 #-------------------------------------------------------------------------------
 
 ##-- for shorter tests
@@ -25,7 +25,7 @@ STSIM_TS_END <- as.numeric(Sys.getenv("STSIM_TS_END"))
 # STSIM_TS_END=5
 ##--
 
-print(c(STSIM_ITER, STSIM_TS_END, aggregation, STSIM_STEP_SAVE))
+print(c(STSIM_ITER, aggregation, STSIM_STEP_SAVE))
 
 # Load important libraries
 suppressPackageStartupMessages({
@@ -81,6 +81,27 @@ full_list <- list()
 
 for (sce in sce_nb_vec){
   print(sce)
+  
+  sub_list_files <- list_files[grepl(x = list_files, pattern = sce)]
+  # print(sub_list_files)
+  
+  # Determibe ts template for this iteration
+  ts_vec <- unique(as.numeric(
+    unlist(
+      lapply(
+        unlist(
+          lapply(sub_list_files,str_split,"_"), # split after all _ 
+          recursive = F), # unlist, but only one level
+        nth, n=7))
+  ))
+  print(ts_vec)
+  
+  ts_template <- unique(paste0("ts_", seq(min(ts_vec), #from min for this sce
+                                          max(ts_vec), # to max
+                                          STSIM_STEP_SAVE), "_")) # by whatever we save
+  print(ts_template)
+  ts_steps <- ts_vec
+    
   spe_list <- list() 
   for (species in species_vec) {
     print(species)
