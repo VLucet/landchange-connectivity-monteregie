@@ -141,22 +141,26 @@ change <- ggplot() +
 ggsave("outputs/figures/connectivit_change_mun.png", change)
 
 ## FIGURE 3
-it_1 <- list.files(file.path(sce_dir_vec[1],"stsim_OutputSpatialState"), #TODO FIX
-                   pattern = "it1",
+it_1 <- list.files(file.path(sce_dir_vec[1],"stsim_OutputSpatialState"),                    pattern = "it1",
                    full.names = T)
+it_1 <- list.files("test/it/",
+                   full.names = T)
+
+it_1_CS <- 
+
 list_lu <-  stack(lapply(mixedsort(it_1),FUN=raster))
 # list_lu_masked <- crop(mask(list_lu,mun),mun)
 extent_zoom <- extent(c(621300, 621300+20000, 5023000, 5023000+20000))
 list_lu_1_cropped <- (crop(list_lu, extent_zoom))
 
-ts_template <- c(0,seq(10, 110, 10))
-ts_template_year <- c(0, seq(10, 110, 10))+1990
+ts_template <- seq(from =0, by=10, length.out = nlayers(list_lu))
+ts_template_year <- ts_template+1990
 
 df_list <- list()
-for (ts in 1:length(list_lu_1_cropped)){
+for (ts in 1:nlayers(list_lu_1_cropped)){
   df <- as.data.frame(freq(list_lu_1_cropped[[ts]])) %>%
     filter(!is.na(value)) %>%
-    filter(!(value==4))
+    filter(!(value %in% 4:6))
   df$count <- df$count/ncell(list_lu_1_cropped[[1]])
   df$timestep <- ts_template[ts]
   df_list[[ts]] <- df
@@ -181,9 +185,9 @@ plot <- ggplot(df_final)+
   geom_point(size = 2) +
   # geom_segment(aes(xend = 2060, yend = proportion, col=value),
   #              linetype = 2, colour = 'grey') +
-  geom_segment(aes(xend = 2090, yend = proportion), linetype = 2)+
-  geom_text(aes(x = 2092, label = value), hjust = 0, size=5, fontface="bold") +
-  scale_color_manual(values = c('#dfc27d', '#018571','#a6611a'))+
+  geom_segment(aes(xend = 2103, yend = proportion), linetype = 2)+
+  geom_text(aes(x = 2105, label = value), hjust = 0, size=5, fontface="bold") +
+  scale_color_manual(values = c('#dfc27d', '#339933','#a6611a'))+
   geom_point(aes(group = seq_along(timestep))) +
   coord_cartesian(clip = 'off') +
   transition_reveal(as.integer(timestep)) +
@@ -195,6 +199,7 @@ plot <- ggplot(df_final)+
         axis.title=element_text(size=20, face="bold"),
         axis.text.x =element_text(size=15),
         axis.text.y =element_text(size=15))
+options(gganimate.dev_args = list(width = 900, height = 700))
 plot_anim <- animate(plot, renderer = gifski_renderer())
 anim_save("outputs/figures/lu_change_animated.gif")
 
@@ -202,19 +207,23 @@ anim_save("outputs/figures/lu_change_animated.gif")
 list_lu_1_cropped_rat <- lapply(as.list(list_lu_1_cropped), ratify)
 
 rat <- as.data.frame(levels(list_lu_1_cropped_rat[[1]])) ; names(rat) <- "ID"
-rat$landcover <- c('Agriculture', 'Urban', 'Forest', "Roads")
-rat$class <- c('A', 'B', 'C', 'D')
+rat$landcover <- c('Agriculture', 'Urban', 'Forest', "Roads", "Water", "Wetlands")
+rat$class <- c('A', 'B', 'C', 'D',"E","F")
 for (idx in 1:length(list_lu_1_cropped_rat)){
   levels(list_lu_1_cropped_rat[[idx]]) <-rat
 }
+
+# #855C75,#D9AF6B,#AF6458,#736F4C,#526A83,#625377,
+# #68855C,#9C9C5E,#A06177,#8C785D,#467378,#7C7C7C
 
 make_plots <- function(rasters, ts){
   for (idx in c(1:length(rasters))){
     plot<- levelplot(rasters[[idx]],
                      colorkey=list(space="bottom", height=0.8,
                                    labels = list(cex=1)),
-                     col.regions=c('#dfc27d', '#a6611a',
-                                   '#018571', "#000000"),
+                     col.regions=c('#D9AF6B', '#7C7C7C',
+                                   '#68855C', '#AF6458', 
+                                   '#467378', '#625377'),
                      main=list(paste0('Year: ', ts[idx]), fontsize=25),
                      scales=list(draw=FALSE))
     print(plot)
