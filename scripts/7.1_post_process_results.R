@@ -86,22 +86,23 @@ for (sce in sce_nb_vec){
   # print(sub_list_files)
   
   # Determibe ts template for this iteration
-  ts_vec <- unique(as.numeric(
+  ts_vec <- gtools::mixedsort(unique(as.numeric(
     unlist(
       lapply(
         unlist(
           lapply(sub_list_files,str_split,"_"), # split after all _ 
           recursive = F), # unlist, but only one level
         nth, n=7))
-  ))
+  )))
   print(ts_vec)
   
-  ts_template <- unique(paste0("ts_", seq(min(ts_vec), #from min for this sce
-                                          max(ts_vec), # to max
-                                          STSIM_STEP_SAVE), "_")) # by whatever we save
+  ts_template <- 
+    gtools::mixedsort(unique(paste0("ts_", seq(min(ts_vec), #from min for this sce
+                                               max(ts_vec), # to max
+                                               STSIM_STEP_SAVE), "_"))) # by whatever we save
   print(ts_template)
   ts_steps <- ts_vec
-    
+  
   spe_list <- list() 
   for (species in species_vec) {
     print(species)
