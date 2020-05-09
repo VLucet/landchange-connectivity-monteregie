@@ -141,7 +141,7 @@ for (response in c("agex","urb")){
         rand_forest(trees = R_N_TREES, mode = "regression") %>% 
         set_engine("ranger", 
                    num.threads = OMP_NUM_THREADS)
-                   #importance = "impurity_corrected")
+      #importance = "impurity_corrected")
     } else {
       stop("Method not implemented")
     }
@@ -176,6 +176,11 @@ for (response in c("agex","urb")){
                                    method = R_METHOD,
                                    ratio = R_RATIO, 
                                    response = response))
+    
+    saveRDS(mod_fit_rs, paste0("data/temp/fit_rs_", R_METHOD, 
+                               "_", response, "_", R_RATIO))
+    saveRDS(mod_fit_rs_pred_with_outcome, paste0("data/temp/fit_rs_outcome_", R_METHOD, 
+                                                 "_", response, "_", R_RATIO))
     
     ## TEST ##
     pred <- 
