@@ -138,7 +138,8 @@ for (response in c("agex","urb")){
     ## ENGINE ##
     if (R_METHOD == "rf"){
       mod <- 
-        rand_forest(trees = R_N_TREES, mode = "regression") %>% 
+        rand_forest(trees = R_N_TREES, mode = "regression", 
+                    importance = "impurity_corrected") %>% 
         set_engine("ranger", 
                    num.threads = OMP_NUM_THREADS)
     } else {
