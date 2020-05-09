@@ -174,7 +174,7 @@ count <- 1
 for (sce in 1:length(assembled_list)) { 
   temp <- assembled_list[[sce]]
   print(sce)
-  for (timestep in 1:length(temp)) {
+  for (timestep in 1:length(temp[[1]])) {
     print(timestep)
     
     the_stack <- stack(lapply(temp, `[[`, timestep))
@@ -191,9 +191,8 @@ for (sce in 1:length(assembled_list)) {
     
     count <- count+1
   }
+  saveRDS(full_stack, paste0("outputs/final/final_cur_sum_sce_",sce,"_per_ts.RDS"))
 }  
-
-saveRDS(full_stack, "outputs/final/final_cur_sum_sce_per_ts.RDS")
 
 #-------------------------------------------------------------------------------
 

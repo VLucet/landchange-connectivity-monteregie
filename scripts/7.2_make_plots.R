@@ -141,17 +141,20 @@ change <- ggplot() +
 ggsave("outputs/figures/connectivit_change_mun.png", change)
 
 ## FIGURE 3
-it_1 <- list.files(file.path(sce_dir_vec[1],"stsim_OutputSpatialState"),                    pattern = "it1",
+it_1 <- list.files(file.path(sce_dir_vec[1],"stsim_OutputSpatialState"),                    
+                   pattern = "it1",
                    full.names = T)
 it_1 <- list.files("test/it/",
                    full.names = T)
 
-it_1_CS <- 
+it_1_CS <- stack(readRDS("test/final_cur_sum_sce_1_per_ts.RDS"))
 
 list_lu <-  stack(lapply(mixedsort(it_1),FUN=raster))
 # list_lu_masked <- crop(mask(list_lu,mun),mun)
 extent_zoom <- extent(c(621300, 621300+20000, 5023000, 5023000+20000))
 list_lu_1_cropped <- (crop(list_lu, extent_zoom))
+
+cs_cropped <- crop(it_1_CS, extent_zoom)
 
 ts_template <- seq(from =0, by=10, length.out = nlayers(list_lu))
 ts_template_year <- ts_template+1990
@@ -230,12 +233,66 @@ make_plots <- function(rasters, ts){
   }
 }
 
+make_plots_cs <- function(rasters, ts){
+  
+  the_max <- max(unlist(lapply(as.list(cs_cropped), cellStats, max)))
+  the_min <- min(unlist(lapply(as.list(cs_cropped), cellStats, min)))
+  
+  for (idx in c(1:length(rasters))){
+    plot<- rasterVis::levelplot(rasters[[idx]],
+                     main=list(paste0('Year: ', ts[idx]), fontsize=25),
+                     maxpixels= 10000000,
+                     margin=list(draw=FALSE), 
+                     at=seq(the_min, the_max, length.out=100))
+    print(plot)
+  }
+}
+
 oldwd <- getwd()
 setwd("outputs/figures/")
 saveGIF(expr = make_plots(list_lu_1_cropped_rat, ts_template_year),
         interval=2, movie.name="lu_animated.gif",
         ani.width=800, ani.height=800, ani.res=100)
+saveGIF(expr = make_plots_cs(as.list(cs_cropped), ts_template_year),
+        interval=2, movie.name="cs_animated.gif",
+        ani.width=800, ani.height=800, ani.res=100)
 setwd(oldwd)
+
+#-------------------------------------------------------------------------------
+library(tidymodels)
+library(patchwork)
+
+urb <- readRDS("test/fit/fit_rs_outcome_rf_urb_2")
+agex <- readRDS("test/fit/fit_rs_outcome_rf_agex_2")
+
+# urb_2 <- readRDS("test/fit/fit_rs_rf_urb_2")
+# roc_curve(data = urb[[1]], .pred, truth = outcome_fact) %>% 
+#   autoplot()
+# roc_curve(data = urb[[2]], .pred, truth = outcome_fact) %>% 
+#   autoplot(add=T)
+
+p1 <- bind_rows(urb, .id = "fold") %>% 
+  mutate(fold = factor(fold, levels = as.character(1:10))) %>% 
+  group_by(fold) %>% 
+  roc_curve(.pred, truth = outcome_fact) %>% 
+  autoplot(add=T) +
+  ggtitle(paste("Roc Curve for Urbanisation")) +
+  annotate(x = 0.75, y = 0.25, geom="label", 
+           label = as.character(paste("Av AUC = 0.938 +/- 0.002"))) +
+  theme(legend.position = "none") +
+  NULL
+
+p2 <- bind_rows(agex, .id = "fold") %>% 
+  mutate(fold = factor(fold, levels = as.character(1:10))) %>% 
+  group_by(fold) %>% 
+  roc_curve(.pred, truth = outcome_fact) %>% 
+  autoplot(add=T) +
+  ggtitle(paste("Roc Curve for Agricultural Expansion")) +
+  annotate(x = 0.75, y = 0.25, geom="label", 
+           label = as.character(paste("Av AUC = 0.929 +/- 0.002"))) +
+  NULL
+
+p1 + p2
 
 #-------------------------------------------------------------------------------
 # 
