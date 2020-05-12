@@ -239,7 +239,7 @@ dependency(scenario_1_default, c(run_default,
                                  transition_adjacency,
                                  trans_size_distribution))
 
-scenario_1_corrs_default <- scenario(Definitions, scenario = "Fall-scenario-corrs")
+scenario_1_corrs_default <- scenario(Definitions, scenario = "Full-scenario-corrs")
 dependency(scenario_1_corrs_default, c(run_default, 
                                        transmul_default,
                                        spatial_multiplier_corrs,
@@ -255,7 +255,7 @@ dependency(scenario_1_forecast, c(run_forecast,
                                   transition_adjacency,
                                   trans_size_distribution))
 
-scenario_1_corrs_forecast <- scenario(Definitions, scenario = "Fall-scenario-forecast-corrs")
+scenario_1_corrs_forecast <- scenario(Definitions, scenario = "Full-scenario-forecast-corrs")
 dependency(scenario_1_corrs_forecast, c(run_forecast, 
                                         transmul_default,
                                         spatial_multiplier_corrs,
