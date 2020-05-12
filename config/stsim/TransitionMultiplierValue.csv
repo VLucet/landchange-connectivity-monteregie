@@ -2,6 +2,8 @@ StratumID,TertiaryStratumID,TransitionGroupID,Amount
 Not_Monteregie,,Deforestation [Type],0
 Not_Monteregie,,Agricultural Loss [Type],0
 Not_Monteregie,,Agricultural Expansion [Type],0
+Not_Monteregie,,Reforestation [Type],0
 ,PA,Agricultural Expansion [Type],0
 ,PA,Agricultural Loss [Type],0
 ,PA,Deforestation [Type],0
+,PA,Reforestation [Type],0

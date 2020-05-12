@@ -56,7 +56,7 @@ write_csv(atr_type, "config/stsim/StateAttributeType.csv")
 atr_val <- data.frame(
   StateClassID = c("Agriculture:Cultivated", "Urban:Nonlinear", "Forest:Deciduous"),
   StateAttributeTypeID = c("Agriculture", "Urban", "Forest"),
-  Value = c(1, 1)
+  Value = c(1, 1, 1)
 )
 write_csv(atr_val, "config/stsim/StateAttributeValue.csv")
 
@@ -72,7 +72,8 @@ write_csv(adj_settings, "config/stsim/TransitionAdjacencySetting.csv")
 # TransitionAdjacencyMultiplier
 adj_mul <- data.frame(
   TransitionGroupID = c("Urbanisation", "Urbanisation",
-                        "Agricultural Expansion Gr", "Agricultural Expansion Gr"),
+                        "Agricultural Expansion Gr", "Agricultural Expansion Gr",
+                        "Reforestation", "Reforestation"),
   AttributeValue = c(0.000, 0.500, 
                      0.000, 0.750, 
                      0.000, 0.855),
@@ -86,11 +87,11 @@ write_csv(adj_mul, "config/stsim/TransitionAdjacencyMultiplier.csv")
 # FROM:
 # Transition
 trans <- data.frame(
-  StateClassIDSource = c("Agriculture:Cultivated", "Forest:Deciduous", "Forest:Deciduous"),
-  StateClassIDDest = c("Urban:Nonlinear", "Agriculture:Cultivated", "Urban:Nonlinear"),
-  TransitionTypeID = c("Agricultural Loss", "Agricultural Expansion", "Deforestation"),
-  TransitionGroupID = c("Urbanisation", "Agricultural Expansion Gr", "Urbanisation"),
-  Probability = c(1, 1, 1)
+  StateClassIDSource = c("Agriculture:Cultivated", "Forest:Deciduous", "Forest:Deciduous", "Agriculture:Cultivated"),
+  StateClassIDDest = c("Urban:Nonlinear", "Agriculture:Cultivated", "Urban:Nonlinear", "Forest:Deciduous"),
+  TransitionTypeID = c("Agricultural Loss", "Agricultural Expansion", "Deforestation", "Reforestation"),
+  TransitionGroupID = c("Urbanisation", "Agricultural Expansion Gr", "Urbanisation", "Reforestation"),
+  Probability = c(1, 1, 1, 1)
 )
 trans_to_write <- trans %>% 
   select(-TransitionGroupID)
@@ -147,7 +148,7 @@ all_trans <- trans$TransitionTypeID
 trans_type <- data.frame(
   Name = all_trans,
   ID = 1:length(all_trans), # we dont care for this
-  Color = random_rgb(3)
+  Color = random_rgb(length(all_trans))
 )
 write_csv(trans_type, "config/stsim/TransitionType.csv")
 
@@ -177,15 +178,16 @@ write_csv(trans_type_group, "config/stsim/TransitionTypeGroup.csv")
 
 # TransitionMultiplierValue
 trans_mul_val <- data.frame(
-  StratumID = c("Not_Monteregie", "Not_Monteregie", "Not_Monteregie", "", "", ""),
-  TertiaryStratumID = c("", "", "", "PA", "PA", "PA"), 
-  TransitionGroupID = c("Deforestation [Type]", "Agricultural Loss [Type]", 
-                        "Agricultural Expansion [Type]", "Agricultural Expansion [Type]", 
-                        "Agricultural Loss [Type]", "Deforestation [Type]"),
-  Amount = c(0, 0, 0, 0, 0, 0)
+  StratumID = c("Not_Monteregie", "Not_Monteregie", "Not_Monteregie", "Not_Monteregie",
+                "", "", "", ""),
+  TertiaryStratumID = c("", "", "", "",
+                        "PA", "PA", "PA", "PA"), 
+  TransitionGroupID = c("Deforestation [Type]", "Agricultural Loss [Type]", "Agricultural Expansion [Type]", "Reforestation [Type]", 
+                        "Agricultural Expansion [Type]", "Agricultural Loss [Type]", "Deforestation [Type]", "Reforestation [Type]"),
+  Amount = c(0, 0, 0, 0, 
+             0, 0, 0, 0)
 )
 write_csv(trans_mul_val, "config/stsim/TransitionMultiplierValue.csv")
-
 
 #-------------------------------------------------------------------------------
 

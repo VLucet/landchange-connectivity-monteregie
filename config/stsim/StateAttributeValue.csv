@@ -1,3 +1,4 @@
 StateClassID,StateAttributeTypeID,Value
 Agriculture:Cultivated,Agriculture,1
 Urban:Nonlinear,Urban,1
+Forest:Deciduous,Forest,1

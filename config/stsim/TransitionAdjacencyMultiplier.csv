@@ -1,5 +1,7 @@
 TransitionGroupID,AttributeValue,Amount
 Urbanisation,0,0
-Urbanisation,0.4,1
+Urbanisation,0.5,1
 Agricultural Expansion Gr,0,0
-Agricultural Expansion Gr,0.4,1
+Agricultural Expansion Gr,0.75,1
+Reforestation,0,0
+Reforestation,0.855,1
