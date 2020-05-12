@@ -48,24 +48,24 @@ write_csv(term, "config/stsim/Terminology.csv")
 
 # StateAttributeType
 atr_type <- data.frame(
-  Name = c("Agriculture", "Urban")
+  Name = c("Agriculture", "Urban", "Forest")
 )
 write_csv(atr_type, "config/stsim/StateAttributeType.csv")
 
 # StateAttributeValue
 atr_val <- data.frame(
-  StateClassID = c("Agriculture:Cultivated", "Urban:Nonlinear"),
-  StateAttributeTypeID = c("Agriculture", "Urban"),
+  StateClassID = c("Agriculture:Cultivated", "Urban:Nonlinear", "Forest:Deciduous"),
+  StateAttributeTypeID = c("Agriculture", "Urban", "Forest"),
   Value = c(1, 1)
 )
 write_csv(atr_val, "config/stsim/StateAttributeValue.csv")
 
 # TransitionAdjacencySetting
 adj_settings <- data.frame(
-  TransitionGroupID = c("Urbanisation", "Agricultural Expansion Gr") ,
-  StateAttributeTypeID = c("Urban", "Agriculture"),
-  NeighborhoodRadius = c(1500, 1500), 
-  UpdateFrequency = c(1, 1)
+  TransitionGroupID = c("Urbanisation", "Agricultural Expansion Gr", "Reforestation") ,
+  StateAttributeTypeID = c("Urban", "Agriculture", "Forest"),
+  NeighborhoodRadius = c(1500, 1500, 1500), 
+  UpdateFrequency = c(1, 1, 1)
 )
 write_csv(adj_settings, "config/stsim/TransitionAdjacencySetting.csv")
 
@@ -73,8 +73,12 @@ write_csv(adj_settings, "config/stsim/TransitionAdjacencySetting.csv")
 adj_mul <- data.frame(
   TransitionGroupID = c("Urbanisation", "Urbanisation",
                         "Agricultural Expansion Gr", "Agricultural Expansion Gr"),
-  AttributeValue = c(0.000, 0.500, 0.000, 0.750),
-  Amount = c(0,1,0,1)
+  AttributeValue = c(0.000, 0.500, 
+                     0.000, 0.750, 
+                     0.000, 0.855),
+  Amount = c(0,1,
+             0,1,
+             0,1)
 )
 write_csv(adj_mul, "config/stsim/TransitionAdjacencyMultiplier.csv")
 
