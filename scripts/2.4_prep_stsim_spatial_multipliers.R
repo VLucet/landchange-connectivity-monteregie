@@ -9,10 +9,13 @@ rm(list = ls())
 
 # reviewed 2020 
 #-------------------------------------------------------------------------------
-R_AGGR <- list(ag = as.logical(Sys.getenv("R_AGGR")), 
-               factor = as.numeric(Sys.getenv("R_AGGR_FACT")))
+R_AGGR <- list(ag = as.logical(Sys.getenv("R_AGGR", unset = TRUE)), 
+               factor = as.numeric(Sys.getenv("R_AGGR_FACT", unset = 3)))
 # R_AGGR <- list(ag = as.logical(TRUE), 
 #                factor = as.numeric(3))
+
+CORR = 0
+AREAS = 0
 #-------------------------------------------------------------------------------
 
 print(R_AGGR)
@@ -42,14 +45,13 @@ areas <- st_read("data_raw/workshop/ensembles/Key_ensembles_smoothed_RegTables.s
 
 # Spatial Mul raster
 lu <- raster("data/land_use/LandUse_mont_aafc_buffered_30by30_1990.tif")  
-
-CORR = 0
-AREAS = 0
   
 # Only forest
 lu_forest <- (lu == 3)
 lu_forest[lu_forest == 0] <- NA
 lu_forest[lu_forest == 1] <- CORR
+
+lu_forest_allone <- (lu == 3)
 
 # lu_forest_vec <- st_as_sf(lu_forest)
 
@@ -70,6 +72,9 @@ areas_rpj_buffer_rast <- fasterize(areas_rpj, raster = lu)
 corridors_rast_masked <- mask(lu_forest, corridors_rpj_buffer_rast)
 areas_rast_masked <- mask(lu_forest, areas_rpj_buffer_rast)
 
+corridors_rast_masked_allone <- mask(lu_forest_allone, corridors_rpj_buffer_rast)
+areas_rast_masked_allone <- mask(lu_forest_allone, areas_rpj_buffer_rast)
+
 # make areas less susceptible to deforestion
 areas_rast_masked[!is.na(areas_rast_masked)] <- AREAS
 
@@ -81,13 +86,26 @@ corrs_and_areas <- merge(areas_rast_masked,
                          lu_1,
                          tolerance = 0)
 
+lu_2 <- lu
+lu_2[!is.na(lu_2)] <- 0
+corrs_and_areas_allone <- merge(areas_rast_masked_allone, 
+                         corridors_rast_masked_allone, 
+                         lu_2,
+                         tolerance = 0)
+
 # Aggregate or not 
 if(R_AGGR$ag){
   corrs_and_areas <- aggregate(corrs_and_areas, fun=modal_custom_first, 
                                fact=R_AGGR$factor)
+  corrs_and_areas_allone <- aggregate(corrs_and_areas_allone, fun=modal_custom_first, 
+                                      fact=R_AGGR$factor)
 }
 
 # Write out 
 writeRaster(corrs_and_areas, 
             "data/stsim/spatial_multipliers/corrs_and_areas.tif", 
             overwrite =TRUE)
+writeRaster(corrs_and_areas_allone, 
+            "data/stsim/spatial_multipliers/corrs_and_areas_allone.tif", 
+            overwrite =TRUE)
+
