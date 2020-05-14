@@ -119,6 +119,7 @@ write.csv(SSIM_targets_selected_h_per_y, "config/stsim/TransitionTarget_1y.csv",
 write.csv(SSIM_targets_selected_h_per_10y_final, "config/stsim/TransitionTarget_10y.csv", 
           row.names=F)
 
+# reforestation
 
 SSIM_targets_selected_h_per_y <- read_csv("config/stsim/TransitionTarget_1y.csv")
 SSIM_targets_selected_h_per_10y_final <- read_csv("config/stsim/TransitionTarget_10y.csv")
