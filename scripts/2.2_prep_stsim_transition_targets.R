@@ -36,16 +36,16 @@ mun.list <- as.character(unique((mun.sub.18.clean$MUS_NM_MUN)))
 classes <- data.frame(Code=(0:6), Label=c("Other","Agriculture", "Urban", 
                                                "Forest", "Roads", "Water","Wetlands"))
 
-All.Mont <- ExtractValsAndTrans(
-  shape_vec = mun.list,
-  shape_sf = mun.sub.18.clean,
-  attribute = "MUS_NM_MUN",
-  landUse_stack = lu.18.sub,
-  classes = classes
-)
+# All.Mont <- ExtractValsAndTrans(
+#   shape_vec = mun.list,
+#   shape_sf = mun.sub.18.clean,
+#   attribute = "MUS_NM_MUN",
+#   landUse_stack = lu.18.sub,
+#   classes = classes
+# )
 
-saveRDS(All.Mont, "data/temp/vals_and_trans.RDS")
-# All.Mont <- readRDS("data/temp/vanls_and_trans.RDS")
+#saveRDS(All.Mont, "data/temp/vals_and_trans.RDS")
+All.Mont <- readRDS("data/temp/vanls_and_trans.RDS")
 
 TransTotal <- All.Mont$Transitions
 
@@ -117,6 +117,33 @@ SSIM_targets_selected_h_per_10y_final <-
 write.csv(SSIM_targets_selected_h_per_y, "config/stsim/TransitionTarget_1y.csv", 
           row.names=F)
 write.csv(SSIM_targets_selected_h_per_10y_final, "config/stsim/TransitionTarget_10y.csv", 
+          row.names=F)
+
+
+SSIM_targets_selected_h_per_y <- read_csv("config/stsim/TransitionTarget_1y.csv")
+SSIM_targets_selected_h_per_10y_final <- read_csv("config/stsim/TransitionTarget_10y.csv")
+
+SSIM_targets_selected_h_per_10y_final %>% 
+  filter(TransitionGroupID %in% c("Deforestation [Type]", "Agricultural Expansion [Type]")) %>% 
+  group_by(SecondaryStratumID, Timestep) %>% 
+  summarise(Amount = sum(Amount)) %>% ungroup %>% 
+  mutate(TransitionGroupID = "Reforestation [Type]")  %>% 
+  bind_rows(SSIM_targets_selected_h_per_10y_final) -> SSIM_targets_selected_h_per_10y_final_with_ref
+
+write.csv(SSIM_targets_selected_h_per_10y_final_with_ref, 
+          "config/stsim/TransitionTarget_10y_ref.csv", 
+          row.names=F)
+
+SSIM_targets_selected_h_per_10y_final %>% 
+  filter(TransitionGroupID %in% c("Deforestation [Type]", "Agricultural Expansion [Type]")) %>% 
+  group_by(SecondaryStratumID, Timestep) %>% 
+  summarise(Amount = sum(Amount)) %>% ungroup %>% 
+  mutate(TransitionGroupID = "Reforestation [Type]") %>% 
+  mutate(Amount = 0) %>% 
+  bind_rows(SSIM_targets_selected_h_per_10y_final) -> SSIM_targets_selected_h_per_10y_final_with_ref_0
+
+write.csv(SSIM_targets_selected_h_per_10y_final_with_ref_0, 
+          "config/stsim/TransitionTarget_10y_ref_0.csv", 
           row.names=F)
 
 # ## TEST
