@@ -64,7 +64,7 @@ write_csv(atr_val, "config/stsim/StateAttributeValue.csv")
 adj_settings <- data.frame(
   TransitionGroupID = c("Urbanisation", "Agricultural Expansion Gr", "Reforestation") ,
   StateAttributeTypeID = c("Urban", "Agriculture", "Forest"),
-  NeighborhoodRadius = c(1000, 150, 150), # 1500
+  NeighborhoodRadius = c(1000, 130, 130), # 1500
   UpdateFrequency = c(1, 1, 1)
 )
 write_csv(adj_settings, "config/stsim/TransitionAdjacencySetting.csv")
@@ -76,7 +76,7 @@ adj_mul <- data.frame(
                         "Reforestation", "Reforestation"),
   AttributeValue = c(0.000, 0.500, 
                      0.000, 0.750, 
-                     0.000, 0.855),
+                     0.000, 0.850),
   Amount = c(0,1,
              0,1,
              0,1)
