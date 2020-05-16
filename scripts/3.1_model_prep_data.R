@@ -270,14 +270,16 @@ raster_base[["urb"]] <- prepare_transition_data(lu.stack = lu.stack,
                                                 class_tr = 2, 
                                                 from = c(1,3), 
                                                 only_from = T, 
-                                                aggregation = R_AGGR)
+                                                aggregation = R_AGGR$ag,
+                                                agfactor = R_AGGR$factor)
 
 # Forest to ag
 raster_base[["agex"]] <- prepare_transition_data(lu.stack = lu.stack, 
                                                  class_tr = 1, 
                                                  from = 3, 
                                                  only_from = T, 
-                                                 aggregation = R_AGGR)
+                                                 aggregation = R_AGGR$ag,
+                                                 agfactor = R_AGGR$factor)
 
 writeRaster(raster_base[[1]][[1]],
             "data/temp/template.tif", overwrite=TRUE)
@@ -340,108 +342,108 @@ df.trans.future <- cbind(as.data.frame(stack(raster_base$urb$chg.raster.future.f
 
 full.df <- bind_rows(df.trans, df.trans.future)
 
-# Timestep 1
-df.trans.mod <- df.trans %>%
-  
-  mutate(pop_change = (pop_01-pop_90)) %>% 
-  #mutate(pop_change = pop_change-min(pop_change, na.rm = T)) %>%  
-  mutate(pop_change_norm = c(scale(pop_change))) %>% 
-  
-  mutate(in_change = (in_01-in_90)) %>% 
-  #mutate(in_change = in_change-min(in_change, na.rm = T)) %>%  
-  mutate(in_change_norm = c(scale(in_change))) %>% 
-  
-  mutate(in_norm = c(scale(in_90))) %>% 
-  
-  mutate(dis_norm = c(scale(dis_90))) %>% 
-  mutate(urb_norm = c(scale(urb_90))) %>% 
-  
-  mutate(for_norm = c(scale(for_90)))  %>% 
-  
-  mutate(elev_norm = c(scale(elev))) %>% 
-  
-  mutate(ag_neigh_norm = c(scale(ag_neigh))) %>% 
-  mutate(urb_neigh_norm = c(scale(urb_neigh))) %>% 
-  mutate(for_neigh_norm = c(scale(for_neigh))) %>% 
-  mutate(roa_neigh_norm = c(scale(roa_neigh)))
-
-
-# Timestep 2
-df.trans.mod.future <- df.trans.future %>% 
-  
-  mutate(pop_change = (pop_11-pop_01)) %>% 
-  #mutate(pop_change = pop_change-min(pop_change, na.rm = T)) %>%  
-  mutate(pop_change_norm = c(scale(pop_change))) %>% 
-  
-  mutate(in_change = (in_11-in_01)) %>% 
-  #mutate(in_change = in_change-min(in_change, na.rm = T)) %>%  
-  mutate(in_change_norm = c(scale(in_change))) %>% 
-  
-  mutate(in_norm = c(scale(in_01))) %>% 
-  
-  mutate(dis_norm = c(scale(dis_00))) %>% 
-  mutate(urb_norm = c(scale(urb_00))) %>% 
-  
-  mutate(for_norm = c(scale(for_00))) %>% 
-  
-  mutate(elev_norm = c(scale(elev))) %>% 
-  
-  mutate(ag_neigh_norm = c(scale(ag_neigh))) %>% 
-  mutate(urb_neigh_norm = c(scale(urb_neigh))) %>% 
-  mutate(for_neigh_norm = c(scale(for_neigh))) %>% 
-  mutate(roa_neigh_norm = c(scale(roa_neigh)))
-
-# Remove Nas for fittingy
-df.noNa <- df.trans.mod %>% # 589982
-  # dplyr::select(-mun) %>% 
-  drop_na()
-nonNA.loc <- as.numeric(rownames(df.noNa))
-
-# Without Mun
-# > table(df.noNa$agex)
+# # Timestep 1
+# df.trans.mod <- df.trans %>%
+#   
+#   mutate(pop_change = (pop_01-pop_90)) %>% 
+#   #mutate(pop_change = pop_change-min(pop_change, na.rm = T)) %>%  
+#   mutate(pop_change_norm = c(scale(pop_change))) %>% 
+#   
+#   mutate(in_change = (in_01-in_90)) %>% 
+#   #mutate(in_change = in_change-min(in_change, na.rm = T)) %>%  
+#   mutate(in_change_norm = c(scale(in_change))) %>% 
+#   
+#   mutate(in_norm = c(scale(in_90))) %>% 
+#   
+#   mutate(dis_norm = c(scale(dis_90))) %>% 
+#   mutate(urb_norm = c(scale(urb_90))) %>% 
+#   
+#   mutate(for_norm = c(scale(for_90)))  %>% 
+#   
+#   mutate(elev_norm = c(scale(elev))) %>% 
+#   
+#   mutate(ag_neigh_norm = c(scale(ag_neigh))) %>% 
+#   mutate(urb_neigh_norm = c(scale(urb_neigh))) %>% 
+#   mutate(for_neigh_norm = c(scale(for_neigh))) %>% 
+#   mutate(roa_neigh_norm = c(scale(roa_neigh)))
 # 
-# 0      1 
-# 545385  44597 
-# > table(df.noNa$urb)
 # 
-# 0      1 
-# 579311  10671 
-
-train.idx <- sample(1:nrow(df.noNa),R_PART*nrow(df.noNa))
-
-imbal_train <- df.noNa[train.idx,]
-imbal_test <- df.noNa[-train.idx,]
-
-data_temp <- list()
-
-for (response in c("urb", "agex")){
-  
-  bal_train <- down_sample(x=dplyr::select(imbal_train, -tidyselect::all_of(response)), 
-                           y=as.factor(imbal_train[[response]]), yname = response)
-  bal_train[[response]] <- as.numeric(as.character(bal_train[[response]]))  
-  
-  bal_test <- down_sample(x=dplyr::select(imbal_test, -tidyselect::all_of(response)), 
-                          y=as.factor(imbal_test[[response]]), yname = response)
-  bal_test[[response]] <- as.numeric(as.character(bal_test[[response]]))
-  
-  data_temp[[response]] <- list(raster_base = raster_base[[response]],
-                                bal_train = bal_train,
-                                bal_test = bal_test)
-  
-}
-
-data_temp <- list.append(data_temp,
-                         imbal_train=imbal_train,
-                         imbal_test = imbal_test,
-                         df.change = df.trans.mod, 
-                         df.change.future = df.trans.mod.future, 
-                         df.noNa = df.noNa,
-                         nonNA.loc = nonNA.loc, 
-                         frame_IDs = frame_IDs)
+# # Timestep 2
+# df.trans.mod.future <- df.trans.future %>% 
+#   
+#   mutate(pop_change = (pop_11-pop_01)) %>% 
+#   #mutate(pop_change = pop_change-min(pop_change, na.rm = T)) %>%  
+#   mutate(pop_change_norm = c(scale(pop_change))) %>% 
+#   
+#   mutate(in_change = (in_11-in_01)) %>% 
+#   #mutate(in_change = in_change-min(in_change, na.rm = T)) %>%  
+#   mutate(in_change_norm = c(scale(in_change))) %>% 
+#   
+#   mutate(in_norm = c(scale(in_01))) %>% 
+#   
+#   mutate(dis_norm = c(scale(dis_00))) %>% 
+#   mutate(urb_norm = c(scale(urb_00))) %>% 
+#   
+#   mutate(for_norm = c(scale(for_00))) %>% 
+#   
+#   mutate(elev_norm = c(scale(elev))) %>% 
+#   
+#   mutate(ag_neigh_norm = c(scale(ag_neigh))) %>% 
+#   mutate(urb_neigh_norm = c(scale(urb_neigh))) %>% 
+#   mutate(for_neigh_norm = c(scale(for_neigh))) %>% 
+#   mutate(roa_neigh_norm = c(scale(roa_neigh)))
+# 
+# # Remove Nas for fittingy
+# df.noNa <- df.trans.mod %>% # 589982
+#   # dplyr::select(-mun) %>% 
+#   drop_na()
+# nonNA.loc <- as.numeric(rownames(df.noNa))
+# 
+# # Without Mun
+# # > table(df.noNa$agex)
+# # 
+# # 0      1 
+# # 545385  44597 
+# # > table(df.noNa$urb)
+# # 
+# # 0      1 
+# # 579311  10671 
+# 
+# train.idx <- sample(1:nrow(df.noNa),R_PART*nrow(df.noNa))
+# 
+# imbal_train <- df.noNa[train.idx,]
+# imbal_test <- df.noNa[-train.idx,]
+# 
+# data_temp <- list()
+# 
+# for (response in c("urb", "agex")){
+#   
+#   bal_train <- down_sample(x=dplyr::select(imbal_train, -tidyselect::all_of(response)), 
+#                            y=as.factor(imbal_train[[response]]), yname = response)
+#   bal_train[[response]] <- as.numeric(as.character(bal_train[[response]]))  
+#   
+#   bal_test <- down_sample(x=dplyr::select(imbal_test, -tidyselect::all_of(response)), 
+#                           y=as.factor(imbal_test[[response]]), yname = response)
+#   bal_test[[response]] <- as.numeric(as.character(bal_test[[response]]))
+#   
+#   data_temp[[response]] <- list(raster_base = raster_base[[response]],
+#                                 bal_train = bal_train,
+#                                 bal_test = bal_test)
+#   
+# }
+# 
+# data_temp <- list.append(data_temp,
+#                          imbal_train=imbal_train,
+#                          imbal_test = imbal_test,
+#                          df.change = df.trans.mod, 
+#                          df.change.future = df.trans.mod.future, 
+#                          df.noNa = df.noNa,
+#                          nonNA.loc = nonNA.loc, 
+#                          frame_IDs = frame_IDs)
 
 #-------------------------------------------------------------------------------
 # Save outputs 
-saveRDS(data_temp, "data/temp/data_temp.RDS")
+# saveRDS(data_temp, "data/temp/data_temp.RDS")
 saveRDS(full.df, "data/temp/full_df.RDS")
 print("Data Preparation Done") ; Sys.time()
 

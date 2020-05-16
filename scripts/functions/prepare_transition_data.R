@@ -5,7 +5,8 @@ prepare_transition_data <- function(lu.stack, # stack of landuse data
                                     class_tr, # class of targeted change 
                                     from, # class of transition from
                                     only_from=T, # only with 'from' states
-                                    aggregation # aggregated or not?
+                                    aggregation, # aggregated or not?
+                                    agfactor = NULL
                                     ){
   
   # get the right change
