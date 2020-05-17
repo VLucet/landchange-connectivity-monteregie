@@ -96,6 +96,13 @@ loadSheet("RunControl", NULL, run_default, params = list(MinimumIteration = 1,
                                                          MaximumTimestep = STSIM_TS_END, 
                                                          IsSpatial = TRUE))
 
+run_historic <- scenario(Definitions, scenario = "Run Control: Historic")
+loadSheet("RunControl", NULL, run_historic, params = list(MinimumIteration = 1,
+                                                          MaximumIteration = STSIM_ITER, 
+                                                          MinimumTimestep = STSIM_TS_START,
+                                                          MaximumTimestep = 2, 
+                                                          IsSpatial = TRUE))
+
 run_forecast <- scenario(Definitions, scenario = "Run Control: Forecast")
 loadSheet("RunControl", NULL, run_forecast, params = list(MinimumIteration = 1,
                                                           MaximumIteration = STSIM_ITER, 
@@ -103,70 +110,61 @@ loadSheet("RunControl", NULL, run_forecast, params = list(MinimumIteration = 1,
                                                           MaximumTimestep = STSIM_TS_END, 
                                                           IsSpatial = TRUE))
 
-# Transition Pathways - DEFAULT
-loadSheet("DeterministicTransition", NULL, run_default, path = "config/stsim/")
-loadSheet("Transition", NULL, run_default, path = "config/stsim/")
-
-loadSheet("DeterministicTransition", NULL, run_forecast, path = "config/stsim/")
-loadSheet("Transition", NULL, run_forecast, path = "config/stsim/")
+# Transition Pathways
+deter_trans_default <- scenario(Definitions, scenario = "Deterministic Transition : Default")
+loadSheet("DeterministicTransition", NULL, deter_trans_default, path = "config/stsim/")
+loadSheet("Transition", NULL, deter_trans_default, path = "config/stsim/")
 
 # Initial conditions
 if (aggregation$ag){
-  loadSheet("InitialConditionsSpatial", NULL,  run_default, 
-            params = list(StratumFileName = paste0(getwd(),"/data/stsim/aggregated/primary_stratum.tif"), 
-                          StateClassFileName = paste0(getwd(),"/data/land_use/aggregated/aggregated_lu_1990.tif"),
-                          SecondaryStratumFileName = paste0(getwd(),"/data/stsim/aggregated/secondary_stratum.tif"), 
-                          TertiaryStratumFileName = paste0(getwd(),"/data/stsim/aggregated/tertiary_stratum.tif")))
-  loadSheet("InitialConditionsSpatial", NULL,  run_forecast, 
-            params = list(StratumFileName = paste0(getwd(),"/data/stsim/aggregated/primary_stratum.tif"), 
-                          StateClassFileName = paste0(getwd(),"/data/land_use/aggregated/aggregated_lu_2010.tif"),
+  init_ag <- scenario(Definitions, scenario = "Initial conditions : Aggregated")
+  loadSheet("InitialConditionsSpatial", NULL,  init_ag, 
+            params = list(StateClassFileName = paste0(getwd(),"/data/land_use/aggregated/aggregated_lu_1990.tif"),
+                          StratumFileName = paste0(getwd(),"/data/stsim/aggregated/primary_stratum.tif"), 
                           SecondaryStratumFileName = paste0(getwd(),"/data/stsim/aggregated/secondary_stratum.tif"), 
                           TertiaryStratumFileName = paste0(getwd(),"/data/stsim/aggregated/tertiary_stratum.tif")))
 } else {
-  loadSheet("InitialConditionsSpatial", NULL, run_default, 
-            params = list(StratumFileName = paste0(getwd(),"/data/stsim/primary_stratum_mont_or_not_30by30.tif"), 
-                          StateClassFileName = 
-                            paste0(getwd(),"/data/land_use/LandUse_mont_aafc_buffered_30by30_1990.tif"),
-                          SecondaryStratumFileName = paste0(getwd(),"/data/stsim/secondary_stratun_mun_30by30.tif"), 
-                          TertiaryStratumFileName = paste0(getwd(),"/data/stsim/tertiary_stratum_PA_30by30.tif")))
-  loadSheet("InitialConditionsSpatial", NULL, run_forecast, 
-            params = list(StratumFileName = paste0(getwd(),"/data/stsim/primary_stratum_mont_or_not_30by30.tif"), 
-                          StateClassFileName = 
-                            paste0(getwd(),"/data/land_use/LandUse_mont_aafc_buffered_30by30_2010.tif"),
-                          SecondaryStratumFileName = paste0(getwd(),"/data/stsim/secondary_stratun_mun_30by30.tif"), 
-                          TertiaryStratumFileName = paste0(getwd(),"/data/stsim/tertiary_stratum_PA_30by30.tif")))
+  # loadSheet("InitialConditionsSpatial", NULL, run_default, 
+  #           params = list(StratumFileName = paste0(getwd(),"/data/stsim/primary_stratum_mont_or_not_30by30.tif"), 
+  #                         StateClassFileName = 
+  #                           paste0(getwd(),"/data/land_use/LandUse_mont_aafc_buffered_30by30_1990.tif"),
+  #                         SecondaryStratumFileName = paste0(getwd(),"/data/stsim/secondary_stratun_mun_30by30.tif"), 
+  #                         TertiaryStratumFileName = paste0(getwd(),"/data/stsim/tertiary_stratum_PA_30by30.tif")))
 }
 
 # Output options
-loadSheet("OutputOptions", NULL, run_default, 
-          params = list(SummaryOutputSC = TRUE, SummaryOutputSCTimesteps = STSIM_STEP_SAVE, 
-                        SummaryOutputTR = TRUE, SummaryOutputTRTimesteps = STSIM_STEP_SAVE, 
-                        RasterOutputSC = TRUE, RasterOutputSCTimesteps = STSIM_STEP_SAVE,
-                        RasterOutputTR = FALSE, RasterOutputTRTimesteps = STSIM_STEP_SAVE))
-
-loadSheet("OutputOptions", NULL, run_forecast, 
+output_default <- scenario(Definitions, scenario = "OutputOptions : Default")
+loadSheet("OutputOptions", NULL, output_default, 
           params = list(SummaryOutputSC = TRUE, SummaryOutputSCTimesteps = STSIM_STEP_SAVE, 
                         SummaryOutputTR = TRUE, SummaryOutputTRTimesteps = STSIM_STEP_SAVE, 
                         RasterOutputSC = TRUE, RasterOutputSCTimesteps = STSIM_STEP_SAVE,
                         RasterOutputTR = FALSE, RasterOutputTRTimesteps = STSIM_STEP_SAVE))
 
 #----------------------------------------------------------------------------
-
 # Transition targets
-targets_default <- scenario(Definitions, scenario = "Transition Targets: Default")
-loadSheet("TransitionTarget", filename=paste0("TransitionTarget_", STSIM_STEP_COMPUTE, "y"), 
-          targets_default, path = "config/stsim/")
+# targets_default <- scenario(Definitions, scenario = "Transition Targets: Default")
+# loadSheet("TransitionTarget", filename=paste0("TransitionTarget_", STSIM_STEP_COMPUTE, "y"), 
+#           targets_default, path = "config/stsim/")
+
+targets_default_no_ref <- scenario(Definitions, scenario = "Transition Targets: No Reforestation")
+loadSheet("TransitionTarget", filename=paste0("TransitionTarget_", STSIM_STEP_COMPUTE, "y", "_ref_0"), 
+          targets_default_no_ref, path = "config/stsim/")
+
+targets_default_ref <- scenario(Definitions, scenario = "Transition Targets: Reforestation")
+loadSheet("TransitionTarget", filename=paste0("TransitionTarget_", STSIM_STEP_COMPUTE, "y", "_ref"), 
+          targets_default_ref, path = "config/stsim/")
+
+#----------------------------------------------------------------------------
 
 # Transition multipliers (non-Spatial) 
-# TODO follow up here
 transmul_default <- scenario(Definitions, scenario = "Transition Multipliers: Default")
 loadSheet("TransitionMultiplierValue", NULL, transmul_default, path = "config/stsim/")
+
+#----------------------------------------------------------------------------
 
 # Spatial multipliers
 spatial_multiplier_default <-
   scenario(Definitions,scenario = "Spatial Multiplier: Default")
-
-# SCE 1
 loadSheet("TransitionSpatialMultiplier", NULL, spatial_multiplier_default,
           params = list(TransitionGroupID = c("Urbanisation",
                                               "Agricultural Expansion Gr"), 
@@ -175,36 +173,36 @@ loadSheet("TransitionSpatialMultiplier", NULL, spatial_multiplier_default,
                                                paste0(getwd(), "/data/stsim/spatial_multipliers/",
                                                       R_METHOD_STSIM, "_ratio_", R_RATIO, "_agex_f_spamul.tif"))))
 
-
-# SCE 2 
+# Limited to corrs
 # first need to do the multiplication 
+# ~~~~~~
 corrs_and_areas <- raster("data/stsim/spatial_multipliers/corrs_and_areas.tif")
 
 urb <- raster(paste0("data/stsim/spatial_multipliers/",
                      R_METHOD_STSIM, "_ratio_", R_RATIO, "_urb_f_spamul.tif"))
+agex <- raster(paste0("data/stsim/spatial_multipliers/",
+                      R_METHOD_STSIM, "_ratio_", R_RATIO, "_agex_f_spamul.tif"))
+
 urb_times_corrs_and_areas <- urb*corrs_and_areas
+agex_times_corrs_and_areas <- agex*corrs_and_areas
+
 writeRaster(urb_times_corrs_and_areas, 
             "data/stsim/spatial_multipliers/urb_f_corrs_and_areas_spa_mul.tif", 
             overwrite = TRUE)
-
-agex <- raster(paste0("data/stsim/spatial_multipliers/",
-                      R_METHOD_STSIM, "_ratio_", R_RATIO, "_agex_f_spamul.tif"))
-agex_times_corrs_and_areas <- agex*corrs_and_areas
 writeRaster(agex_times_corrs_and_areas, 
             "data/stsim/spatial_multipliers/agex_f_corrs_and_areas_spa_mul.tif", 
             overwrite = TRUE)
+# ~~~~~~
 
-
+# Now scenario
 spatial_multiplier_corrs <-
   scenario(Definitions,scenario = "Spatial Multiplier: Corrs/Areas")
-
-# ASSUMES 10 YEARs TIMESTEP
 loadSheet("TransitionSpatialMultiplier", NULL, spatial_multiplier_corrs,
           params = list(TransitionGroupID = c("Urbanisation",
                                               "Agricultural Expansion Gr",
                                               "Urbanisation",
                                               "Agricultural Expansion Gr"), 
-                        Timestep = c(1,1,3,3),
+                        Timestep = c(1,1,3,3), # ASSUMES 10 YEARS TIMESTEP
                         MultiplierFileName = c(paste0(getwd(), "/data/stsim/spatial_multipliers/",
                                                       R_METHOD_STSIM, "_ratio_", R_RATIO, "_urb_f_spamul.tif"),
                                                paste0(getwd(), "/data/stsim/spatial_multipliers/",
@@ -215,6 +213,25 @@ loadSheet("TransitionSpatialMultiplier", NULL, spatial_multiplier_corrs,
                                                       "/data/stsim/spatial_multipliers/agex_f_corrs_and_areas_spa_mul.tif")
                         )))
 
+spatial_multiplier_corrs_reforestation <-
+  scenario(Definitions,scenario = "Spatial Multiplier: Corrs/Areas + Reforestation")
+loadSheet("TransitionSpatialMultiplier", NULL, spatial_multiplier_corrs_reforestation,
+          params = list(TransitionGroupID = c("Urbanisation",
+                                              "Agricultural Expansion Gr",
+                                              "Urbanisation",
+                                              "Agricultural Expansion Gr", 
+                                              "Reforestation"), 
+                        Timestep = c(1,1,3,3,3),
+                        MultiplierFileName = c(paste0(getwd(), "/data/stsim/spatial_multipliers/",
+                                                      R_METHOD_STSIM, "_ratio_", R_RATIO, "_urb_f_spamul.tif"),
+                                               paste0(getwd(), "/data/stsim/spatial_multipliers/",
+                                                      R_METHOD_STSIM, "_ratio_", R_RATIO, "_agex_f_spamul.tif"),
+                                               paste0(getwd(), 
+                                                      "/data/stsim/spatial_multipliers/urb_f_corrs_and_areas_spa_mul.tif"),
+                                               paste0(getwd(),
+                                                      "/data/stsim/spatial_multipliers/agex_f_corrs_and_areas_spa_mul.tif"),
+                                               paste0(getwd(), "/data/stsim/spatial_multipliers/corrs_and_areas_allone.tif")
+                        )))
 
 # Transition size distribution
 trans_size_distribution <- scenario(Definitions, scenario = "Transition Size Distribution: Default") 
@@ -231,37 +248,86 @@ loadSheet("TransitionAdjacencyMultiplier", NULL, transition_adjacency, path = "c
 ## Full Scenarios ##
 ####################
 
-scenario_1_default <- scenario(Definitions, scenario = "Full-scenario-default")
-dependency(scenario_1_default, c(run_default, 
-                                 transmul_default,
-                                 spatial_multiplier_default, 
-                                 targets_default,
+# Want to compare the forest everywhere with the forest only in corridors
+
+# Scenario BAU 1990-2010
+historic_run <- scenario(Definitions, scenario = "historic run")
+dependency(historic_run, c(run_historic,
+                           # Not changing
+                           deter_trans_default,
+                           init_ag,
+                           output_default,
+                           transition_adjacency,
+                           trans_size_distribution,
+                           transmul_default,
+                           # Changing
+                           spatial_multiplier_default,
+                           targets_default_no_ref))
+
+BAU_run <- scenario(Definitions, scenario = "BAU run")
+dependency(BAU_run, c(run_forecast,
+                      # Not changing
+                      deter_trans_default,
+                      init_ag,
+                      output_default,
+                      transition_adjacency,
+                      trans_size_distribution,
+                      transmul_default,
+                      # Changing 
+                      spatial_multiplier_default,
+                      targets_default_no_ref))
+
+BAU_corr_protected <- scenario(Definitions, scenario = "BAU run + corrs protection")
+dependency(BAU_corr_protected, c(run_forecast,
+                                 # Not changing
+                                 deter_trans_default,
+                                 init_ag,
+                                 output_default,
                                  transition_adjacency,
-                                 trans_size_distribution))
+                                 trans_size_distribution,
+                                 transmul_default,
+                                 # Changing 
+                                 spatial_multiplier_corrs,
+                                 targets_default_no_ref))
 
-scenario_1_corrs_default <- scenario(Definitions, scenario = "Full-scenario-corrs")
-dependency(scenario_1_corrs_default, c(run_default, 
-                                       transmul_default,
-                                       spatial_multiplier_corrs,
-                                       targets_default,
-                                       transition_adjacency,
-                                       trans_size_distribution))
+BAU_run_ref <- scenario(Definitions, scenario = "BAU run + ref")
+dependency(BAU_run_ref, c(run_forecast,
+                          # Not changing
+                          deter_trans_default,
+                          init_ag,
+                          output_default,
+                          transition_adjacency,
+                          trans_size_distribution,
+                          transmul_default,
+                          # Changing 
+                          spatial_multiplier_default,
+                          targets_default_ref))
 
-scenario_1_forecast <- scenario(Definitions, scenario = "Full-scenario-forecast")
-dependency(scenario_1_forecast, c(run_forecast, 
-                                  transmul_default,
-                                  spatial_multiplier_default, 
-                                  targets_default,
-                                  transition_adjacency,
-                                  trans_size_distribution))
+REF_corr_protected_ref <- scenario(Definitions, scenario = "BAU run + corrs protection + ref")
+dependency(REF_corr_protected_ref, c(run_forecast,
+                                     # Not changing
+                                     deter_trans_default,
+                                     init_ag,
+                                     output_default,
+                                     transition_adjacency,
+                                     trans_size_distribution,
+                                     transmul_default,
+                                     # Changing 
+                                     spatial_multiplier_corrs,
+                                     targets_default_ref))
 
-scenario_1_corrs_forecast <- scenario(Definitions, scenario = "Full-scenario-forecast-corrs")
-dependency(scenario_1_corrs_forecast, c(run_forecast, 
-                                        transmul_default,
-                                        spatial_multiplier_corrs,
-                                        targets_default,
-                                        transition_adjacency,
-                                        trans_size_distribution))
+REF_corr_protected_ref_targeted <- scenario(Definitions, scenario = "BAU run + corrs protection + ref TARGETED")
+dependency(REF_corr_protected_ref_targeted, c(run_forecast,
+                                              # Not changing
+                                              deter_trans_default,
+                                              init_ag,
+                                              output_default,
+                                              transition_adjacency,
+                                              trans_size_distribution,
+                                              transmul_default,
+                                              # Changing 
+                                              spatial_multiplier_corrs_reforestation,
+                                              targets_default_ref))
 
 #########
 ## RUN ##
@@ -269,12 +335,14 @@ dependency(scenario_1_corrs_forecast, c(run_forecast,
 
 if (STSIM_RUN){
   print("Running StSIM");Sys.time()
-  results <- run(list(scenario_1_default, 
-                      scenario_1_corrs_default, 
-                      scenario_1_forecast, 
-                      scenario_1_corrs_forecast
-                      ),
-                 summary = TRUE, jobs = OMP_NUM_THREADS)
+  results <- run(list(historic_run,
+                      BAU_run,
+                      BAU_corr_protected,
+                      BAU_run_ref,
+                      REF_corr_protected_ref,
+                      REF_corr_protected_ref_targeted
+  ),
+  summary = TRUE, jobs = OMP_NUM_THREADS)
   print(results)
   saveRDS(results, "data/temp/stsim_run_results.RDS")
 }
