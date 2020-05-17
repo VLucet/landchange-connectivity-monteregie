@@ -117,12 +117,19 @@ loadSheet("Transition", NULL, deter_trans_default, path = "config/stsim/")
 
 # Initial conditions
 if (aggregation$ag){
-  init_ag <- scenario(Definitions, scenario = "Initial conditions : Aggregated")
-  loadSheet("InitialConditionsSpatial", NULL,  init_ag, 
+  init_ag_1990 <- scenario(Definitions, scenario = "Initial conditions : Aggregated")
+  loadSheet("InitialConditionsSpatial", NULL,  init_ag_1990, 
             params = list(StateClassFileName = paste0(getwd(),"/data/land_use/aggregated/aggregated_lu_1990.tif"),
                           StratumFileName = paste0(getwd(),"/data/stsim/aggregated/primary_stratum.tif"), 
                           SecondaryStratumFileName = paste0(getwd(),"/data/stsim/aggregated/secondary_stratum.tif"), 
                           TertiaryStratumFileName = paste0(getwd(),"/data/stsim/aggregated/tertiary_stratum.tif")))
+  init_ag_2010 <- scenario(Definitions, scenario = "Initial conditions : Aggregated")
+  loadSheet("InitialConditionsSpatial", NULL,  init_ag_2010, 
+            params = list(StateClassFileName = paste0(getwd(),"/data/land_use/aggregated/aggregated_lu_2010.tif"),
+                          StratumFileName = paste0(getwd(),"/data/stsim/aggregated/primary_stratum.tif"), 
+                          SecondaryStratumFileName = paste0(getwd(),"/data/stsim/aggregated/secondary_stratum.tif"), 
+                          TertiaryStratumFileName = paste0(getwd(),"/data/stsim/aggregated/tertiary_stratum.tif")))
+  
 } else {
   # loadSheet("InitialConditionsSpatial", NULL, run_default, 
   #           params = list(StratumFileName = paste0(getwd(),"/data/stsim/primary_stratum_mont_or_not_30by30.tif"), 
@@ -253,9 +260,9 @@ loadSheet("TransitionAdjacencyMultiplier", NULL, transition_adjacency, path = "c
 # Scenario BAU 1990-2010
 historic_run <- scenario(Definitions, scenario = "historic run")
 dependency(historic_run, c(run_historic,
+                           init_ag_1990,
                            # Not changing
                            deter_trans_default,
-                           init_ag,
                            output_default,
                            transition_adjacency,
                            trans_size_distribution,
@@ -266,9 +273,9 @@ dependency(historic_run, c(run_historic,
 
 BAU_run <- scenario(Definitions, scenario = "BAU run")
 dependency(BAU_run, c(run_forecast,
+                      init_ag_2010,
                       # Not changing
                       deter_trans_default,
-                      init_ag,
                       output_default,
                       transition_adjacency,
                       trans_size_distribution,
@@ -279,9 +286,9 @@ dependency(BAU_run, c(run_forecast,
 
 BAU_corr_protected <- scenario(Definitions, scenario = "BAU run + corrs protection")
 dependency(BAU_corr_protected, c(run_forecast,
+                                 init_ag_2010,
                                  # Not changing
                                  deter_trans_default,
-                                 init_ag,
                                  output_default,
                                  transition_adjacency,
                                  trans_size_distribution,
@@ -292,9 +299,9 @@ dependency(BAU_corr_protected, c(run_forecast,
 
 BAU_run_ref <- scenario(Definitions, scenario = "BAU run + ref")
 dependency(BAU_run_ref, c(run_forecast,
+                          init_ag_2010,
                           # Not changing
                           deter_trans_default,
-                          init_ag,
                           output_default,
                           transition_adjacency,
                           trans_size_distribution,
@@ -305,9 +312,9 @@ dependency(BAU_run_ref, c(run_forecast,
 
 REF_corr_protected_ref <- scenario(Definitions, scenario = "BAU run + corrs protection + ref")
 dependency(REF_corr_protected_ref, c(run_forecast,
+                                     init_ag_2010,
                                      # Not changing
                                      deter_trans_default,
-                                     init_ag,
                                      output_default,
                                      transition_adjacency,
                                      trans_size_distribution,
@@ -318,9 +325,9 @@ dependency(REF_corr_protected_ref, c(run_forecast,
 
 REF_corr_protected_ref_targeted <- scenario(Definitions, scenario = "BAU run + corrs protection + ref TARGETED")
 dependency(REF_corr_protected_ref_targeted, c(run_forecast,
+                                              init_ag_2010,
                                               # Not changing
                                               deter_trans_default,
-                                              init_ag,
                                               output_default,
                                               transition_adjacency,
                                               trans_size_distribution,
