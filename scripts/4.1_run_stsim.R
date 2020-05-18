@@ -117,13 +117,13 @@ loadSheet("Transition", NULL, deter_trans_default, path = "config/stsim/")
 
 # Initial conditions
 if (aggregation$ag){
-  init_ag_1990 <- scenario(Definitions, scenario = "Initial conditions : Aggregated")
+  init_ag_1990 <- scenario(Definitions, scenario = "Initial conditions : Aggregated 1990")
   loadSheet("InitialConditionsSpatial", NULL,  init_ag_1990, 
             params = list(StateClassFileName = paste0(getwd(),"/data/land_use/aggregated/aggregated_lu_1990.tif"),
                           StratumFileName = paste0(getwd(),"/data/stsim/aggregated/primary_stratum.tif"), 
                           SecondaryStratumFileName = paste0(getwd(),"/data/stsim/aggregated/secondary_stratum.tif"), 
                           TertiaryStratumFileName = paste0(getwd(),"/data/stsim/aggregated/tertiary_stratum.tif")))
-  init_ag_2010 <- scenario(Definitions, scenario = "Initial conditions : Aggregated")
+  init_ag_2010 <- scenario(Definitions, scenario = "Initial conditions : Aggregated 2010")
   loadSheet("InitialConditionsSpatial", NULL,  init_ag_2010, 
             params = list(StateClassFileName = paste0(getwd(),"/data/land_use/aggregated/aggregated_lu_2010.tif"),
                           StratumFileName = paste0(getwd(),"/data/stsim/aggregated/primary_stratum.tif"), 
