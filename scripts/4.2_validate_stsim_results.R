@@ -74,7 +74,7 @@ for (sce in sce_nb_vec){
     filter(TransitionGroupID != "Urbanisation", ScenarioID==sce) %>% 
     ggplot(aes(x=Timestep, y=Amount_mean)) +
     geom_line(show.legend = F) + 
-    facet_grid_paginate(TransitionGroupID~SecondaryStratumID, nrow=3, ncol=5, page = 8, scales = "free") +
+    facet_grid_paginate(TransitionGroupID~SecondaryStratumID, nrow=3, ncol=5, page = 12, scales = "free") +
     geom_line(data=targets, inherit.aes = T, linetype=2)
   ggsave(theplot, filename = paste0("outputs/figures/sce_",sce,"_one_to_one_mun.png"))
 }
