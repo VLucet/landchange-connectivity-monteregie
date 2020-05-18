@@ -153,6 +153,10 @@ loadSheet("OutputOptions", NULL, output_default,
 # loadSheet("TransitionTarget", filename=paste0("TransitionTarget_", STSIM_STEP_COMPUTE, "y"), 
 #           targets_default, path = "config/stsim/")
 
+targets_default_no_ref_hist <- scenario(Definitions, scenario = "Transition Targets: No Reforestation + historic")
+loadSheet("TransitionTarget", filename=paste0("TransitionTarget_", STSIM_STEP_COMPUTE, "y", "_ref_0_historic"), 
+          targets_default_no_ref_hist, path = "config/stsim/")
+
 targets_default_no_ref <- scenario(Definitions, scenario = "Transition Targets: No Reforestation")
 loadSheet("TransitionTarget", filename=paste0("TransitionTarget_", STSIM_STEP_COMPUTE, "y", "_ref_0"), 
           targets_default_no_ref, path = "config/stsim/")
@@ -269,7 +273,7 @@ dependency(historic_run, c(run_historic,
                            transmul_default,
                            # Changing
                            spatial_multiplier_default,
-                           targets_default_no_ref))
+                           targets_default_no_ref_hist))
 
 BAU_run <- scenario(Definitions, scenario = "BAU run")
 dependency(BAU_run, c(run_forecast,

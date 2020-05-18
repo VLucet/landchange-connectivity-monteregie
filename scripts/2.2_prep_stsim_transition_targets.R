@@ -178,6 +178,17 @@ write.csv(SSIM_targets_selected_h_per_10y_final_with_ref_0,
           "config/stsim/TransitionTarget_10y_ref_0.csv", 
           row.names=F)
 
+SSIM_targets_selected_h_per_10y_final %>% 
+  add_row(SecondaryStratumID = NA, 
+          TransitionGroupID = "Reforestation [Type]", 
+          Timestep = 0,
+          Amount = 0) %>% 
+  mutate(StratumID = "Monteregie") -> SSIM_targets_selected_h_per_10y_final_with_ref_0
+
+write.csv(SSIM_targets_selected_h_per_10y_final_with_ref_0, 
+          "config/stsim/TransitionTarget_10y_ref_0_historic.csv", 
+          row.names=F)
+
 # ## TEST
 # non_equal <- data.frame()
 # for(mun in unique(mun.sub.18.clean$MUS_NM_MUN)){
