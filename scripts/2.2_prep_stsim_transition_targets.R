@@ -45,7 +45,7 @@ classes <- data.frame(Code=(0:6), Label=c("Other","Agriculture", "Urban",
 # )
 
 #saveRDS(All.Mont, "data/temp/vals_and_trans.RDS")
-All.Mont <- readRDS("data/temp/vanls_and_trans.RDS")
+All.Mont <- readRDS("data/temp/vals_and_trans.RDS")
 
 TransTotal <- All.Mont$Transitions
 
