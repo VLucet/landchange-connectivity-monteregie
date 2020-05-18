@@ -124,6 +124,8 @@ write.csv(SSIM_targets_selected_h_per_10y_final, "config/stsim/TransitionTarget_
 SSIM_targets_selected_h_per_y <- read_csv("config/stsim/TransitionTarget_1y.csv")
 SSIM_targets_selected_h_per_10y_final <- read_csv("config/stsim/TransitionTarget_10y.csv")
 
+## MUN LEVEL
+
 SSIM_targets_selected_h_per_10y_final %>% 
   filter(TransitionGroupID %in% c("Deforestation [Type]", "Agricultural Expansion [Type]")) %>% 
   group_by(SecondaryStratumID, Timestep) %>% 
@@ -143,6 +145,35 @@ SSIM_targets_selected_h_per_10y_final %>%
   mutate(Amount = 0) %>% 
   bind_rows(SSIM_targets_selected_h_per_10y_final) -> SSIM_targets_selected_h_per_10y_final_with_ref_0
 
+write.csv(SSIM_targets_selected_h_per_10y_final_with_ref_0, 
+          "config/stsim/TransitionTarget_10y_ref_0.csv", 
+          row.names=F)
+
+# MONT LEVEL
+
+urb_total <-  SSIM_targets_selected_h_per_10y_final %>% 
+  filter(TransitionGroupID != "Agricultural Loss [Type]", Timestep == 3) %>% 
+  group_by(Timestep) %>% 
+  summarise(Amount = sum(Amount)) %>% pull(Amount)
+
+SSIM_targets_selected_h_per_10y_final %>% 
+  add_row(SecondaryStratumID = NA, 
+          TransitionGroupID = "Reforestation [Type]", 
+          Timestep = 3,
+          Amount = urb_total) %>% 
+  mutate(StratumID = "Monteregie") -> SSIM_targets_selected_h_per_10y_final_with_ref
+
+write.csv(SSIM_targets_selected_h_per_10y_final_with_ref, 
+          "config/stsim/TransitionTarget_10y_ref.csv", 
+          row.names=F)
+
+SSIM_targets_selected_h_per_10y_final %>% 
+  add_row(SecondaryStratumID = NA, 
+          TransitionGroupID = "Reforestation [Type]", 
+          Timestep = 3,
+          Amount = 0) %>% 
+  mutate(StratumID = "Monteregie") -> SSIM_targets_selected_h_per_10y_final_with_ref_0
+  
 write.csv(SSIM_targets_selected_h_per_10y_final_with_ref_0, 
           "config/stsim/TransitionTarget_10y_ref_0.csv", 
           row.names=F)
