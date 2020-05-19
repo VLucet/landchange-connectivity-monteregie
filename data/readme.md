@@ -13,6 +13,9 @@
   - aggregated
   - roads
   - urban
+- landis
+  - spatial
+  - config
 - mun
 - neighbors
 - RMN
