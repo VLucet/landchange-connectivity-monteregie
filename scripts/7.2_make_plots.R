@@ -35,8 +35,8 @@ suppressPackageStartupMessages({
 # Get result secenario directory 
 sce_dir_vec <- list.files("libraries/stsim/monteregie-conncons-scripted.ssim.output", 
                           full.names = T)
-sce_nb_vec <- paste0("sce_", as.numeric(unlist(lapply(str_split(sce_dir_vec, "-"), FUN = last))))
-
+sce_nb_vec <- paste0("sce_", as.numeric(unlist(lapply(str_split(sce_dir_vec, "-"), 
+                                                      FUN = last))))
 #-------------------------------------------------------------------------------
 
 # Data prep
@@ -47,10 +47,10 @@ df_final_origin <- readRDS("outputs/final/final_df_origin_current_density.RDS") 
   mutate(timestep = timestep*10+1980, source = "model")
 mun <- st_read("data/mun/munic_SHP_clean.shp", quiet = TRUE)
 
-# df_final <- readRDS("test/final_df_current_density.RDS") %>%
-#   mutate(timestep = (timestep*10)+1990, source = "model")
-# df_final_origin <- readRDS("test/final_df_origin_current_density.RDS") %>%
-#   mutate(timestep = timestep*10+1980, source = "model")
+df_final <- readRDS("test/final_df_current_density.RDS") %>%
+  mutate(timestep = (timestep*10)+1990, source = "model")
+df_final_origin <- readRDS("test/final_df_origin_current_density.RDS") %>%
+  mutate(timestep = timestep*10+1980, source = "model")
 
 # Summarised
 df_summarised <- df_final %>%
@@ -107,13 +107,19 @@ fig_1_static <- joined %>%
   scale_color_manual(values=c('#d8b365','#5ab4ac'), 
                      labels = c("Model", "Observation")) +
   scale_linetype_manual(values = c(1:7), 
-                        #labels = c("none (observations)", "BAU", "Conservation")
+                        labels = c("none (observations)", 
+                                   "Historic", 
+                                   "Forecast BAU", 
+                                   "Forecast BAU + protection", 
+                                   "Forecast BAU + reforestation", 
+                                   "Forecast BAU + reforestation + protection", 
+                                   "Forecast BAU + reforestation (targeted) + protection")
   )+
   geom_point(aes(group = seq_along(timestep), pch = sce), show.legend = FALSE) +
   #add_phylopic(bear, alpha = 1, x=2010, y =0.11, ysize = 10) +
   facet_grid(~species, scales = "fixed") +
   #facet_grid(sce~species, scales = "fixed") +
-  labs(title = "Cumulative Connectivity change for two species through time",
+  labs(title = "Cumulative Connectivity change for species through time",
        subtitle = "1990-2100",
        #subtitle = "Year:{frame_along}",
        y = "Cummulative Connectivity",
@@ -121,7 +127,7 @@ fig_1_static <- joined %>%
        col = "Source", 
        #pch = "Scenario",
        linetype = "Scenario") +
-  theme(legend.position = c(0.10, 0.27),
+  theme(legend.position = c(0.15, 0.27),
         #legend.justification = c(1, -0.2),
         legend.box = "vertical",
         legend.background = element_blank(),
@@ -185,7 +191,6 @@ anim_save(animation = fig_1_animated_plot,
           filename = "outputs/figures/connectivity_decrease_x5species.gif")
 
 #-------------------------------------------------------------------------------
-stop("Reviewed so far")
 
 ## FIGURE 2 => will break
 key <- read_csv("config/stsim/SecondaryStratum.csv") %>%
@@ -197,9 +202,9 @@ key <- read_csv("config/stsim/SecondaryStratum.csv") %>%
 #mun_joined <- left_join(mun, key, by="MUS_NM_MUN")
 
 df_final_fordiff_pivoted <- df_final %>% 
-  filter(timestep %in% c(first(unique(key$timestep)),
+  filter(timestep %in% c(2010,
                          last(unique(key$timestep)))) %>% 
-  pivot_wider(names_from=timestep, values_from=mean) %>%
+  pivot_wider(names_from=timestep, values_from=mean) %>% drop_na() %>% 
   rename(before=last_col(offset = 1), after=last_col()) %>% 
   left_join(key, by=c("zone", "sce", "species", "source")) %>% 
   filter(MUS_NM_MUN!="Not Monteregie") %>% 
@@ -214,14 +219,15 @@ change <- ggplot() +
   geom_sf(data=df_final_fordiff_pivoted,
           aes(fill=change),
           show.legend=T, lwd = 0)  + 
-  facet_grid(~sce) + 
+  facet_wrap(~sce) + 
   ggtitle("Connectivity change in %", 
-          subtitle = "1990-2100") +
+          subtitle = "2010-2100") +
   scale_fill_binned(low='#d13e11', high='#fff7bc', 
                     breaks=c(-50, -40, -30, -20, -10, 0, 10))
 ggsave("outputs/figures/connectivit_change_mun.png", change)
 
 #-------------------------------------------------------------------------------
+stop("Reviewed so far")
 
 ## FIGURE 3
 it_1 <- lapply(X = file.path(sce_dir_vec, "stsim_OutputSpatialState"), 
@@ -230,70 +236,82 @@ it_1 <- lapply(X = it_1, FUN = mixedsort)
 
 # it_1 <- list.files("test/it/",
 #                    full.names = T)
-# it_1_CS <- stack(readRDS("test/final_cur_sum_sce_1_per_ts.RDS"))
 
 list_lu <-  map(.x = map_depth(.x = it_1, .f = raster, .depth = 2), .f = stack)
+list_lu <- list_lu[2:6]
 
 # for (x in 2:6) {print(freq((list_lu[[x]]$sc.it1.ts11==3) - (list_lu[[x]]$sc.it1.ts2==3)))}
-
 # list_lu_masked <- crop(mask(list_lu,mun),mun)
-extent_zoom <- extent(c(621300, 621300+50000, 5023000, 5023000+50000))
+#extent_zoom <- extent(c(621300, 621300+50000, 5023000, 5023000+50000))
 #extent_zoom <- drawExtent()
-list_lu_1_cropped <- (crop(list_lu, extent_zoom))
+#list_lu_1_cropped <- (crop(list_lu, extent_zoom))
 
 # cs_cropped <- crop(it_1_CS, extent_zoom)
 
-ts_template <- seq(from =0, by=10, length.out = nlayers(list_lu))
-ts_template_year <- ts_template+1990
+ts_template <- seq(from =0, by=10, length.out = nlayers(list_lu[[1]]))
+ts_template_year <- ts_template+2010
 
-df_list <- list()
-for (ts in 1:nlayers(list_lu_1_cropped)){
-  df <- as.data.frame(freq(list_lu_1_cropped[[ts]])) %>%
-    filter(!is.na(value)) %>%
-    filter(!(value %in% 4:6))
-  df$count <- df$count/ncell(list_lu_1_cropped[[1]])
-  df$timestep <- ts_template[ts]
-  df_list[[ts]] <- df
+for (sce in seq_len(length(list_lu))){
+  
+  the_stack <- list_lu[[sce]]
+  
+  df_list <- list()
+  for (ts in 1:nlayers(the_stack)){
+    df <- as.data.frame(freq(the_stack[[ts]])) %>%
+      filter(!is.na(value)) %>%
+      filter(!(value %in% 4:6))
+    df$count <- df$count/(ncell(the_stack[[1]])-2111516) # number of NA 
+    df$timestep <- ts_template[ts]
+    df_list[[ts]] <- df
+  }
+  
+  df_final <- df_list[[1]]
+  for (df in df_list[2:length(df_list)]){
+    df_final <- full_join(df_final, df,
+                          by = c("value", "count", "timestep"))
+  }
+  
+  names(df_final)[2] <- "proportion"
+  df_final$timestep <- df_final$timestep+1990
+  df_final$value <- as.character(df_final$value)
+  df_final$value[df_final$value==1] <- "Agriculture"
+  df_final$value[df_final$value==2] <- "Urban"
+  df_final$value[df_final$value==3] <- "Forest"
+  
+  plot <- ggplot(df_final)+
+    aes(x=timestep, y=proportion, col=value, show.legend=F) +
+    geom_line() +
+    geom_point(size = 2) +
+    # geom_segment(aes(xend = 2060, yend = proportion, col=value),
+    #              linetype = 2, colour = 'grey') +
+    #geom_segment(aes(xend = 2103, yend = proportion), linetype = 2)+
+    geom_text(aes(x = 2105, label = value), hjust = 0, size=5, fontface="bold") +
+    scale_color_manual(values = c('#dfc27d', '#339933','#a6611a'))+
+    geom_point(aes(group = seq_along(timestep))) +
+    coord_cartesian(clip = 'off') +
+    #transition_reveal(as.integer(timestep)) +
+    labs(y="Proportion",
+         x = "Year")+
+    theme_minimal()+
+    theme(legend.position = "none") +
+    theme(plot.margin = margin(5.5, 60, 5.5, 5.5),
+          axis.title=element_text(size=20, face="bold"),
+          axis.text.x =element_text(size=15),
+          axis.text.y =element_text(size=15))+
+    NULL
+  ggsave(paste0("outputs/figures/sce_",sce_nb_vec[sce],"_lu_change_animated.png"))
+  #options(gganimate.dev_args = list(width = 900, height = 700))
+  #plot_anim <- animate(plot, renderer = gifski_renderer())
+  #anim_save(paste0("outputs/figures/sce_",sce_nb_vec[sce],"_lu_change_animated.gif"))
 }
 
-df_final <- df_list[[1]]
-for (df in df_list[2:length(df_list)]){
-  df_final <- full_join(df_final, df,
-                        by = c("value", "count", "timestep"))
-}
+#-------------------------------------------------------------------------------
 
-names(df_final)[2] <- "proportion"
-df_final$timestep <- df_final$timestep+1990
-df_final$value <- as.character(df_final$value)
-df_final$value[df_final$value==1] <- "Agriculture"
-df_final$value[df_final$value==2] <- "Urban"
-df_final$value[df_final$value==3] <- "Forest"
-
-plot <- ggplot(df_final)+
-  aes(x=timestep, y=proportion, col=value, show.legend=F) +
-  geom_line() +
-  geom_point(size = 2) +
-  # geom_segment(aes(xend = 2060, yend = proportion, col=value),
-  #              linetype = 2, colour = 'grey') +
-  geom_segment(aes(xend = 2103, yend = proportion), linetype = 2)+
-  geom_text(aes(x = 2105, label = value), hjust = 0, size=5, fontface="bold") +
-  scale_color_manual(values = c('#dfc27d', '#339933','#a6611a'))+
-  geom_point(aes(group = seq_along(timestep))) +
-  coord_cartesian(clip = 'off') +
-  transition_reveal(as.integer(timestep)) +
-  labs(y="Proportion",
-       x = "Year")+
-  theme_minimal()+
-  theme(legend.position = "none") +
-  theme(plot.margin = margin(5.5, 60, 5.5, 5.5),
-        axis.title=element_text(size=20, face="bold"),
-        axis.text.x =element_text(size=15),
-        axis.text.y =element_text(size=15))
-options(gganimate.dev_args = list(width = 900, height = 700))
-plot_anim <- animate(plot, renderer = gifski_renderer())
-anim_save("outputs/figures/lu_change_animated.gif")
-
+## Figure 4
 # Raster gifs
+
+# it_1_CS <- stack(readRDS("test/final_cur_sum_sce_1_per_ts.RDS"))
+
 list_lu_1_cropped_rat <- lapply(as.list(list_lu_1_cropped), ratify)
 
 rat <- as.data.frame(levels(list_lu_1_cropped_rat[[1]])) ; names(rat) <- "ID"
@@ -345,6 +363,7 @@ saveGIF(expr = make_plots_cs(as.list(cs_cropped), ts_template_year),
         ani.width=800, ani.height=800, ani.res=100)
 setwd(oldwd)
 
+#-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
 library(tidymodels)
 library(patchwork)

@@ -162,9 +162,12 @@ post_process(){
   rm -rf outputs/current_density_sum/*
   ## Run diagnostics and plots
   Rscript scripts/7.1_post_process_results.R
-  Rscript scripts/7.2_make_plots.R
 }
 
+
+make_figures(){
+  Rscript scripts/7.2_make_plots.R
+}
 ### BUNDLE FUNCTIONS
 
 run_all(){
@@ -179,6 +182,7 @@ run_all(){
   reclassify
   run_circuitscape
   post_process
+  make_figures
 }
 
 run_model_no_prep(){
@@ -190,6 +194,7 @@ run_model_no_prep(){
   reclassify
   run_circuitscape
   post_process
+  make_figures
 }
 
 run_prep(){
@@ -236,9 +241,12 @@ while getopts ":pmafsrcd" opt; do
     d )
       post_process 
       ;;
+    f )
+      make_figures 
+      ;;
     * )
       echo "Usage: [-p prep] [-m model no prep] [-a run all] [-f fit & predict]"
-      echo "       [-s stsim] [-r reclassify] [-c circuitscape] [-d post process]"
+      echo "       [-s stsim] [-r reclassify] [-c circuitscape] [-d post process] [-f make figures]"
       echo "" 1>&2
       exit 1
       ;;
