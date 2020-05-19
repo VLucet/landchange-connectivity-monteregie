@@ -241,12 +241,12 @@ while getopts ":pmafsrcd" opt; do
     d )
       post_process 
       ;;
-    f )
+    g )
       make_figures 
       ;;
     * )
       echo "Usage: [-p prep] [-m model no prep] [-a run all] [-f fit & predict]"
-      echo "       [-s stsim] [-r reclassify] [-c circuitscape] [-d post process] [-f make figures]"
+      echo "       [-s stsim] [-r reclassify] [-c circuitscape] [-d post process] [-g make figures]"
       echo "" 1>&2
       exit 1
       ;;
