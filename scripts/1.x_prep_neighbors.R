@@ -1,5 +1,5 @@
 #-------------------------------------------------------------------------------
-## 1.5 Prep Neighbors
+## 1.x Prep Neighbors
 ## 2020
 ## Inputs: Land use data
 ## Outputs: Reclassified land use data
