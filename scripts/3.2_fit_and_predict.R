@@ -10,28 +10,15 @@ set.seed(77)
 
 #-------------------------------------------------------------------------------
 # Set parameters 
-OMP_NUM_THREADS <- as.numeric(Sys.getenv("OMP_NUM_THREADS"))-1
+OMP_NUM_THREADS <- as.numeric(Sys.getenv("OMP_NUM_THREADS", unset = 4))-1
 options(mc.cores=OMP_NUM_THREADS)
 
-R_METHOD <- Sys.getenv("R_METHOD")
-R_N_TREES <- as.numeric(Sys.getenv("R_N_TREES"))
-R_PART <- as.numeric(Sys.getenv("R_PART"))
-R_RATIO <- as.numeric(Sys.getenv("R_RATIO"))
+R_METHOD <- Sys.getenv("R_METHOD", unset = "rf")
+R_N_TREES <- as.numeric(Sys.getenv("R_N_TREES", unset = 500))
+R_PART <- as.numeric(Sys.getenv("R_PART", unset = 0.7))
+R_RATIO <- as.numeric(Sys.getenv("R_RATIO", unset = 2))
 
 options(stringsAsFactors = FALSE)
-
-if (is.na(OMP_NUM_THREADS)) { 
-  OMP_NUM_THREADS <- 4 
-  options(mc.cores = OMP_NUM_THREADS)
-  
-  R_METHOD <- "rf"
-  R_N_TREES <- 500
-  R_PART <- 0.7
-  R_RATIO <- 2
-  
-  print("Running on 6 cores only and using default input parameters") 
-  setwd("~/Documents/Master/Thesis/land_con_monteregie/")
-}
 #-------------------------------------------------------------------------------
 
 # Set Working directory
