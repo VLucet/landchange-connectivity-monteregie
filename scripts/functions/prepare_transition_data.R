@@ -22,15 +22,15 @@ prepare_transition_data <- function(lu.stack, # stack of landuse data
                                              class = class_tr, 
                                              from=from, only_from=only_from)
   
-  if (aggregation$ag){
+  if (aggregation){
     
     print(paste("Aggregating model rasters for class", class_tr)) ; Sys.time()
     
     # For model
     chg.raster.final <- aggregate(chg.raster, fun=modal_custom_highest,
-                                      fact=aggregation$factor)
+                                      fact=agfactor)
     chg.raster.future.final <- aggregate(chg.raster.future, fun=modal_custom_highest,
-                                             fact=aggregation$factor)
+                                             fact=agfactor)
     
   } else {
     
