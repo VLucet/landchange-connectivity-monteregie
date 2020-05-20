@@ -21,6 +21,13 @@ suppressPackageStartupMessages({
 # Reset Raster tmp files
 removeTmpFiles(0)
 showTmpFiles()
+#-------------------------------------------------------------------------------
+# Set parameters 
+
+R_AGGR <- list(ag = as.logical(Sys.getenv("R_AGGR", unset = TRUE)), 
+               factor = as.numeric(Sys.getenv("R_AGGR_FACT", unset = 3)))
+
+source("scripts/functions/aggregation_helpr.R")
 
 #-------------------------------------------------------------------------------
 # Import data
@@ -30,14 +37,43 @@ lu.stack <- stack(raster("data/land_use/LandUse_mont_aafc_30by30_1990.tif"),
 lu.stack.buf <- stack(raster("data/land_use/LandUse_mont_aafc_buffered_30by30_1990.tif"), 
                       raster("data/land_use/LandUse_mont_aafc_buffered_30by30_2000.tif"),
                       raster("data/land_use/LandUse_mont_aafc_buffered_30by30_2010.tif"))
+lu.stack.buf.ag <- stack(raster("data/land_use/aggregated/aggregated_lu_buffered_1990.tif"), 
+                         raster("data/land_use/aggregated/aggregated_lu_buffered_2000.tif"),
+                         raster("data/land_use/aggregated/aggregated_lu_buffered_2010.tif"))
 names(lu.stack) <- c("lu_1990", "lu_2000", "lu_2010")
 names(lu.stack.buf) <- c("lu_1990", "lu_2000", "lu_2010")
 
 #-------------------------------------------------------------------------------
-# PRIMARY STRATUM => MONT or not
+# Alternative starter LAND USE
+
+lu_2010 <- lu.stack.buf.ag$aggregated_lu_buffered_2010
+baseline <- raster("data/landis/spatial/mont_baseline.tif")
+
+mun <- st_read("data/mun/munic_SHP_clean.shp", quiet = TRUE)
+#mont_ones <- fasterize(mun, lu_2010)
+
+baseline_buf_raw <- raster("data/landis/spatial/buf_mont_baseline.tif")
+baseline_buf <- baseline_buf_raw 
+baseline_buf[baseline_buf == 0] <- NA
+baseline_buf <- baseline_buf+30
+
+lu_2010_mod <- lu_2010
+lu_2010_mod_forest <- (lu_2010==3)
+lu_2010_mod_forest[lu_2010_mod_forest==1] <- 3
+lu_2010_mod[lu_2010==3] <- NA
+
+merged <- merge(lu_2010_mod, baseline_buf, lu_2010_mod_forest)
+merged[merged == 3] <- 31 
+
+writeRaster(merged, "data/land_use/aggregated/landis_aggregated_lu_2010.tif", 
+            overwrite=TRUE)
+
+#-------------------------------------------------------------------------------
+# PRIMARY STRATUM => MONT, NOT MONT, PA
+
 # datasheet
-stratum_df <- data.frame(Name= c("Monteregie", "Not_Monteregie"), 
-                         ID = c(1,0))
+stratum_df <- data.frame(Name= c("Not_Monteregie", "Monteregie", "PA"),
+                         ID = c(0, 1, 2))
 write.csv(stratum_df, "config/stsim/Stratum.csv", row.names=F)
 
 # raster
@@ -51,21 +87,34 @@ mont_all_ones[!is.na(mont_all_ones)] <- 1
 allextent_all_ones <- lu.stack$lu_1990
 values(allextent_all_ones) <- 1
 
-buffer_mont_with_ones <- mosaic(buffer_all_empty, mont_all_ones, fun = max, na.rm=T, 
+buffer_mont_with_ones <- mosaic(buffer_all_empty, mont_all_ones, fun = max, na.rm=T,
                                 tolerance=0)
-buffer_allextent_with_ones <- mosaic(buffer_all_empty, allextent_all_ones, fun = max, na.rm=T, 
+buffer_allextent_with_ones <- mosaic(buffer_all_empty, allextent_all_ones, fun = max, na.rm=T,
                                      tolerance=0)
-
-# Write out 1st stratum
 stratum <- buffer_mont_with_ones
 stratum[is.na(stratum)] <- 0 
-writeRaster(stratum, "data/stsim/primary_stratum_mont_or_not_30by30", 
+
+# raster
+RMN_data <- st_read("data/rmn/MCTPQ/MCTPQ_extraitQC20190527.shp", quiet = TRUE) %>% 
+  st_transform(crs=crs(lu.stack$lu_1990))
+RMN_data_cropped <- st_crop(sf::st_make_valid(RMN_data), lu.stack$lu_1990)
+RMN_data_cropped$stratum <- 1
+
+RMN_data_cropped_rast <- 
+  fasterize(sf = st_collection_extract(RMN_data_cropped, "POLYGON"), 
+            raster = lu.stack$lu_1990, field="stratum") %>% 
+  mask(lu.stack$lu_1990)
+RMN_data_cropped_rast[RMN_data_cropped_rast==1] <- 2
+
+primary_stratum <- merge(RMN_data_cropped_rast, stratum)
+
+writeRaster(primary_stratum, "data/stsim/primary_stratum_mont_or_not_or_PA_30by30", 
             format="GTiff", overwrite=T)
 # sum(values(stratum == 1))  => 12543056
 
 #-------------------------------------------------------------------------------
 
-# SECONDARY STRATUM => MUNICIPALITIES
+# SECONDARY STRATUM => MUNICIPALITIES (still needed for targets)
 mun.sub.18.clean <- st_read("data/mun/munic_SHP_clean.shp", quiet = TRUE)
 
 # datasheet
@@ -94,11 +143,11 @@ mun.sub.18.clean.rast.30by30 <-
   fasterize(sf = aggregated, raster = lu.stack$lu_1990, field="ID")
 mun.sub.18.clean.rast.30by30[!is.na(mun.sub.18.clean.rast.30by30) & 
                                is.na(lu.stack$lu_1990)] <- NA
-mun.sub.18.clean.rast.30by30.with.buf <- 
+secondary_stratum <- 
   mosaic(mun.sub.18.clean.rast.30by30, buffer_all_empty, fun = max, na.rm=T, 
          toleraOMP_NUM_THREADSe=0)
 
-writeRaster(mun.sub.18.clean.rast.30by30.with.buf, 
+writeRaster(secondary_stratum, 
             "data/stsim/secondary_stratun_mun_30by30",
             format="GTiff",
             overwrite=TRUE)
@@ -106,28 +155,34 @@ writeRaster(mun.sub.18.clean.rast.30by30.with.buf,
 # secondarystratum.ag[is.na(secondarystratum.ag)] <- 0
 
 #-------------------------------------------------------------------------------
-## TERTIARY STRATUM => RMN DATA
+## TERTIARY STRATUM => LAND TYPES
 # datasheet
-stratum_df <- data.frame(Name= c("PA", "Not PA"), 
-                         ID = c(1,0))
-write.csv(stratum_df, "config/stsim/TertiaryStratum.csv", row.names=F)
 
-# raster
-RMN_data <- st_read("data/rmn/MCTPQ/MCTPQ_extraitQC20190527.shp", quiet = TRUE) %>% 
-  st_transform(crs=crs(lu.stack$lu_1990))
-RMN_data_cropped <- st_crop(sf::st_make_valid(RMN_data), lu.stack$lu_1990)
-RMN_data_cropped$stratum <- 1
+# Write out 1st stratum
+tertiary_stratum_ag <- raster("data/landis/spatial/mont_land_types.tif")
 
-RMN_data_cropped_rast <- 
-  fasterize(sf = st_collection_extract(RMN_data_cropped, "POLYGON"), 
-            raster = lu.stack$lu_1990, field="stratum") %>% 
-  mask(lu.stack$lu_1990)
-RMN_data_cropped_rast[!is.na(lu.stack$lu_1990) & is.na(RMN_data_cropped_rast)] <- 0
-RMN_data_cropped_rast_with_buf <- 
-  mosaic(RMN_data_cropped_rast, buffer_all_empty, fun = max, na.rm=T, 
-         tolerance=0)
-writeRaster(RMN_data_cropped_rast_with_buf, 
-            "data/stsim/tertiary_stratum_PA_30by30", 
+#land_types_buf <- raster("data/landis/spatial/buf_mont_land_types.tif")
+#land_types_buf_no_mont <- land_types_buf
+#land_types_buf_no_mont[land_types != 99] <- NA
+#land_types_freq <- freq(land_types)
+#land_types_buf_no_mont_freq <- freq(land_types_buf_no_mont)
+
+writeRaster(tertiary_stratum_ag, 
+            "data/stsim/aggregated/tertiary_stratum_land_types.tif", 
             format="GTiff",
             overwrite = TRUE)
+# sum(values(stratum == 1))  => 12543056
 #-------------------------------------------------------------------------------
+
+## AGGREGATION
+# Primary
+primary_stratum_ag <- aggregate(primary_stratum, fun=modal_custom_first, 
+                                fact=R_AGGR$factor)
+writeRaster(primary_stratum_ag, "data/stsim/aggregated/primary_stratum_mont_or_not_or_PA", 
+            format="GTiff", overwrite=T)
+
+# Secondary 
+secondary_stratum_ag <- aggregate(secondary_stratum, fun=modal_custom_first, 
+                                  fact=R_AGGR$factor)
+writeRaster(secondary_stratum_ag, "data/stsim/aggregated/secondary_stratun_mun", 
+            format="GTiff", overwrite=T)
