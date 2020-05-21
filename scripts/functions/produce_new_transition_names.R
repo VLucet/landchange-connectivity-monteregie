@@ -1,4 +1,6 @@
-produce_new_transition_names <- function(trans)
+produce_new_transition_names <- function(trans){
+  
+  full <- NULL
   
   for (id in 1:length(trans)){
     
@@ -104,3 +106,4 @@ produce_new_transition_names <- function(trans)
     
     return(full)
   }
+}
