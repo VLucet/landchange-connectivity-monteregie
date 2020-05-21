@@ -34,7 +34,7 @@ names(lu.18.sub) <- c("lu.1990.18", "lu.2000.18", "lu.2010.18")
 mun.sub.18.clean <- st_read("data/mun//munic_SHP_clean.shp", quiet = TRUE)
 mun.list <- as.character(unique((mun.sub.18.clean$MUS_NM_MUN)))
 classes <- data.frame(Code=(0:6), Label=c("Other","Agriculture", "Urban", 
-                                               "Forest", "Roads", "Water","Wetlands"))
+                                          "Forest", "Roads", "Water","Wetlands"))
 
 # All.Mont <- ExtractValsAndTrans(
 #   shape_vec = mun.list,
@@ -119,6 +119,8 @@ write.csv(SSIM_targets_selected_h_per_y, "config/stsim/TransitionTarget_1y.csv",
 write.csv(SSIM_targets_selected_h_per_10y_final, "config/stsim/TransitionTarget_10y.csv", 
           row.names=F)
 
+#-------------------------------------------------------------------------------
+
 # reforestation
 
 SSIM_targets_selected_h_per_y <- read_csv("config/stsim/TransitionTarget_1y.csv")
@@ -126,28 +128,28 @@ SSIM_targets_selected_h_per_10y_final <- read_csv("config/stsim/TransitionTarget
 
 ## MUN LEVEL
 
-SSIM_targets_selected_h_per_10y_final %>% 
-  filter(TransitionGroupID %in% c("Deforestation [Type]", "Agricultural Expansion [Type]")) %>% 
-  group_by(SecondaryStratumID, Timestep) %>% 
-  summarise(Amount = sum(Amount)) %>% ungroup %>% 
-  mutate(TransitionGroupID = "Reforestation [Type]")  %>% 
-  bind_rows(SSIM_targets_selected_h_per_10y_final) -> SSIM_targets_selected_h_per_10y_final_with_ref
-
-write.csv(SSIM_targets_selected_h_per_10y_final_with_ref, 
-          "config/stsim/TransitionTarget_10y_ref.csv", 
-          row.names=F)
-
-SSIM_targets_selected_h_per_10y_final %>% 
-  filter(TransitionGroupID %in% c("Deforestation [Type]", "Agricultural Expansion [Type]")) %>% 
-  group_by(SecondaryStratumID, Timestep) %>% 
-  summarise(Amount = sum(Amount)) %>% ungroup %>% 
-  mutate(TransitionGroupID = "Reforestation [Type]") %>% 
-  mutate(Amount = 0) %>% 
-  bind_rows(SSIM_targets_selected_h_per_10y_final) -> SSIM_targets_selected_h_per_10y_final_with_ref_0
-
-write.csv(SSIM_targets_selected_h_per_10y_final_with_ref_0, 
-          "config/stsim/TransitionTarget_10y_ref_0.csv", 
-          row.names=F)
+# SSIM_targets_selected_h_per_10y_final %>% 
+#   filter(TransitionGroupID %in% c("Deforestation [Type]", "Agricultural Expansion [Type]")) %>% 
+#   group_by(SecondaryStratumID, Timestep) %>% 
+#   summarise(Amount = sum(Amount)) %>% ungroup %>% 
+#   mutate(TransitionGroupID = "Reforestation [Type]")  %>% 
+#   bind_rows(SSIM_targets_selected_h_per_10y_final) -> SSIM_targets_selected_h_per_10y_final_with_ref
+# 
+# write.csv(SSIM_targets_selected_h_per_10y_final_with_ref, 
+#           "config/stsim/TransitionTarget_10y_ref.csv", 
+#           row.names=F)
+# 
+# SSIM_targets_selected_h_per_10y_final %>% 
+#   filter(TransitionGroupID %in% c("Deforestation [Type]", "Agricultural Expansion [Type]")) %>% 
+#   group_by(SecondaryStratumID, Timestep) %>% 
+#   summarise(Amount = sum(Amount)) %>% ungroup %>% 
+#   mutate(TransitionGroupID = "Reforestation [Type]") %>% 
+#   mutate(Amount = 0) %>% 
+#   bind_rows(SSIM_targets_selected_h_per_10y_final) -> SSIM_targets_selected_h_per_10y_final_with_ref_0
+# 
+# write.csv(SSIM_targets_selected_h_per_10y_final_with_ref_0, 
+#           "config/stsim/TransitionTarget_10y_ref_0.csv", 
+#           row.names=F)
 
 # MONT LEVEL
 
@@ -173,7 +175,7 @@ SSIM_targets_selected_h_per_10y_final %>%
           Timestep = 3,
           Amount = 0) %>% 
   mutate(StratumID = "Monteregie") -> SSIM_targets_selected_h_per_10y_final_with_ref_0
-  
+
 write.csv(SSIM_targets_selected_h_per_10y_final_with_ref_0, 
           "config/stsim/TransitionTarget_10y_ref_0.csv", 
           row.names=F)
@@ -230,34 +232,36 @@ write.csv(SSIM_targets_selected_h_per_10y_final_with_ref_0,
 #freq(test$lu.2010.18)
 
 #-------------------------------------------------------------------------------
-#-------------------------------------------------------------------------------
-# 
 # ## PROCESSING OF BRONWYN'S TARGETS
-# mun.sub.18.clean <- st_read(paste0(dataDir,"munic_SHP_clean/munic_SHP_clean.shp"))
-# BTSL_stc_targets <- read_csv("../landuse_model_full/BTSL_StConnect/BTSL_targets_swap/TransitionTargetsSTconnectBTSL.csv")
-# old_targets <- read_csv("Part_B_landuseModel/StSim_rsyncrosim/config_files/TransitionTarget_10y.csv") %>% 
+# mun.sub.18.clean <- st_read("data/mun/munic_SHP_clean.shp", quiet=TRUE)
+# BTSL_stc_targets <- read_csv("data/landis/config/TransitionTargetsSTconnectBTSL.csv")
+# old_targets <- read_csv("config/stsim/TransitionTarget_10y.csv") %>%
 #   pull(TransitionGroupID) %>% unique()
 # head(BTSL_stc_targets)
 # 
 # # simple function to assess overlap between two vectors
-# source("Part_B_landuseModel/Scripts/functions/get_overlap.R")
+# source("scripts/functions/get_overlap.R")
 # 
-# overlap <- get_overlap(x = mun.sub.18.clean$MUS_NM_MRC, 
+# overlap <- get_overlap(x = mun.sub.18.clean$MUS_NM_MRC,
 #                        y = BTSL_stc_targets$SecondaryStratumID, TRUE, "fuzzy")
 # 
-# get_overlap(mun.sub.18.clean$MUS_NM_MRC, 
+# get_overlap(mun.sub.18.clean$MUS_NM_MRC,
 #             BTSL_stc_targets[overlap$match_ind$y,]$SecondaryStratumID, TRUE, "fuzzy")
 # 
-# # write out only monteregie 
-# BTSL_stc_targets_mont <- BTSL_stc_targets[overlap$match_ind$y,] %>% 
+# # write out only monteregie
+# BTSL_stc_targets_mont <- BTSL_stc_targets[overlap$match_ind$y,] %>%
 #   rename(old_TransitionGroupID = TransitionGroupID)
 # 
 # # Make looup table
-# new_TransitionGroupID = c("Agricultural Loss [Type]", "Agricultural Expansion [Type]", 
-#                           "Deforestation [Type]", "Treed Wetland Loss to Ag [Type]", 
+# new_TransitionGroupID = c("Agricultural Loss [Type]", "Agricultural Expansion [Type]",
+#                           "Deforestation [Type]", "Treed Wetland Loss to Ag [Type]",
 #                           "Treed Wetland Loss to Urb [Type]","Open Wetland Loss to Ag [Type]",
 #                           "Open Wetland Loss to Urb [Type]")
 # lookup <- tibble(old_TransitionGroupID = sort(unique(BTSL_stc_targets_mont$old_TransitionGroupID)),
 #                  TransitionGroupID = new_TransitionGroupID)
-# BTSL_stc_targets_mont_mod <- BTSL_stc_targets_mont %>% 
-#   left_join(lookup, by = "old_TransitionGroupID")
+# BTSL_stc_targets_mont_mod <- BTSL_stc_targets_mont %>%
+#   left_join(lookup, by = "old_TransitionGroupID") %>% 
+#   select(-old_TransitionGroupID)
+
+#-------------------------------------------------------------------------------
+  
