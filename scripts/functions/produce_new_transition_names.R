@@ -86,11 +86,11 @@ produce_new_transition_names <- function(trans){
     } else if (grepl(splitted[2], pattern = "Mixte")){
       right_bit[1] <- "mixt"
       
-      if (grepl(splitted[1], pattern = "Jeune")){
+      if (grepl(splitted[2], pattern = "Jeune")){
         right_bit[2] <- "1"
-      } else if (grepl(splitted[1], pattern = "Moyenne")){
+      } else if (grepl(splitted[2], pattern = "Moyenne")){
         right_bit[2] <- "2"
-      } else if (grepl(splitted[1], pattern = "Vieille")){
+      } else if (grepl(splitted[2], pattern = "Vieille")){
         right_bit[2] <- "3"
       } else{
         stop("Step2")
@@ -104,6 +104,6 @@ produce_new_transition_names <- function(trans){
                        "_to_",
                        paste(right_bit, collapse = "_"))
     
-    return(full)
   }
+  return(full)
 }
