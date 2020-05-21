@@ -44,45 +44,6 @@ term <- data.frame(
 )
 write_csv(term, "config/stsim/Terminology.csv")
 
-# ADJACENCY
-
-# StateAttributeType
-atr_type <- data.frame(
-  Name = c("Agriculture", "Urban", "Forest")
-)
-write_csv(atr_type, "config/stsim/StateAttributeType.csv")
-
-# StateAttributeValue
-atr_val <- data.frame(
-  StateClassID = c("Agriculture:Cultivated", "Urban:Nonlinear", "Forest:Deciduous"),
-  StateAttributeTypeID = c("Agriculture", "Urban", "Forest"),
-  Value = c(1, 1, 1)
-)
-write_csv(atr_val, "config/stsim/StateAttributeValue.csv")
-
-# TransitionAdjacencySetting
-adj_settings <- data.frame(
-  TransitionGroupID = c("Urbanisation", "Agricultural Expansion Gr", "Reforestation") ,
-  StateAttributeTypeID = c("Urban", "Agriculture", "Forest"),
-  NeighborhoodRadius = c(1000, 130, 130), # 1500
-  UpdateFrequency = c(1, 1, 1)
-)
-write_csv(adj_settings, "config/stsim/TransitionAdjacencySetting.csv")
-
-# TransitionAdjacencyMultiplier
-adj_mul <- data.frame(
-  TransitionGroupID = c("Urbanisation", "Urbanisation",
-                        "Agricultural Expansion Gr", "Agricultural Expansion Gr",
-                        "Reforestation", "Reforestation"),
-  AttributeValue = c(0.000, 0.500, 
-                     0.000, 0.750, 
-                     0.000, 0.850),
-  Amount = c(0,1,
-             0,1,
-             0,1)
-)
-write_csv(adj_mul, "config/stsim/TransitionAdjacencyMultiplier.csv")
-
 #-------------------------------------------------------------------------------
 # FROM:
 # Transition
@@ -175,6 +136,7 @@ write_csv(trans_type_group, "config/stsim/TransitionTypeGroup.csv")
 
 #-------------------------------------------------------------------------------
 # CANT BE AUTOMATIZED but downstream
+#-------------------------------------------------------------------------------
 
 # TransitionMultiplierValue
 trans_mul_val <- data.frame(
@@ -188,6 +150,107 @@ trans_mul_val <- data.frame(
              0, 0, 0, 0)
 )
 write_csv(trans_mul_val, "config/stsim/TransitionMultiplierValue.csv")
+
+#-------------------------------------------------------------------------------
+# ADJACENCY
+
+# StateAttributeType
+atr_type <- data.frame(
+  Name = c("Agriculture", "Urban", "Forest")
+)
+write_csv(atr_type, "config/stsim/StateAttributeType.csv")
+
+# StateAttributeValue
+atr_val <- data.frame(
+  StateClassID = c("Agriculture:Cultivated", "Urban:Nonlinear", "Forest:Deciduous"),
+  StateAttributeTypeID = c("Agriculture", "Urban", "Forest"),
+  Value = c(1, 1, 1)
+)
+write_csv(atr_val, "config/stsim/StateAttributeValue.csv")
+
+# TransitionAdjacencySetting
+adj_settings <- data.frame(
+  TransitionGroupID = c("Urbanisation", "Agricultural Expansion Gr", "Reforestation") ,
+  StateAttributeTypeID = c("Urban", "Agriculture", "Forest"),
+  NeighborhoodRadius = c(1000, 130, 130), # 1500
+  UpdateFrequency = c(1, 1, 1)
+)
+write_csv(adj_settings, "config/stsim/TransitionAdjacencySetting.csv")
+
+# TransitionAdjacencyMultiplier
+adj_mul <- data.frame(
+  TransitionGroupID = c("Urbanisation", "Urbanisation",
+                        "Agricultural Expansion Gr", "Agricultural Expansion Gr",
+                        "Reforestation", "Reforestation"),
+  AttributeValue = c(0.000, 0.500, 
+                     0.000, 0.750, 
+                     0.000, 0.850),
+  Amount = c(0,1,
+             0,1,
+             0,1)
+)
+write_csv(adj_mul, "config/stsim/TransitionAdjacencyMultiplier.csv")
+
+#-------------------------------------------------------------------------------
+
+source("scripts/functions/produce_new_transition_names.R")
+
+# Load scenarios
+baseline <- read_csv("data/landis/config/TransitionMultiplierValueBaseline.csv")
+cc4.5 <- read_csv("data/landis/config/TransitionMultiplierValue45.csv") %>% 
+  select(-c(DistributionType, DistributionFrequencyID, DistributionSD, 
+            DistributionMin, DistributionMax, TransitionMultiplierTypeID, 
+            StateClassID, SecondaryStratumID, StratumID, Iteration))
+cc8.5 <- read_csv("data/landis/config/TransitionMultiplierValue85.csv") %>% 
+  select(-c(DistributionType, DistributionFrequencyID, DistributionSD, 
+            DistributionMin, DistributionMax, TransitionMultiplierTypeID, 
+            StateClassID, SecondaryStratumID, StratumID, Iteration))
+
+# Analyse land types
+landtypes <- raster("data/stsim/aggregated/tertiary_stratum_land_types.tif")
+mont_landtypes <- as.data.frame(freq(landtypes))
+mont_landtypes <- subset(mont_landtypes, !(value %in% c(0,99,NA)))
+unique_mont_landtypes <- unique(mont_landtypes$value)
+
+# Subset to mont
+# baseline
+mont_baseline <- baseline %>% 
+  filter(TertiaryStratumID %in% unique_mont_landtypes) %>% 
+  filter(TertiaryStratumID != "Non-foret")
+#filter(Timestep == 2010)
+trans <- unique(mont_baseline$TransitionGroupID)
+lookup <- tibble(TransitionGroupID=trans, 
+                 new=produce_new_transition_names(trans))
+mew_mont_baseline <- mont_baseline %>% 
+  left_join(lookup, by = "TransitionGroupID") %>% 
+  select(-TransitionGroupID) %>% 
+  rename(TransitionGroupID=new)
+
+# 4.5
+mont_cc4.5 <- baseline %>% 
+  filter(TertiaryStratumID %in% unique_mont_landtypes) %>% 
+  filter(TertiaryStratumID != "Non-foret")
+#filter(Timestep == 2010)
+trans <- unique(mont_cc4.5$TransitionGroupID)
+lookup <- tibble(TransitionGroupID=trans, 
+                 new=produce_new_transition_names(trans))
+mew_mont_cc4.5 <- mont_cc4.5 %>% 
+  left_join(lookup, by = "TransitionGroupID") %>% 
+  select(-TransitionGroupID) %>% 
+  rename(TransitionGroupID=new)
+
+#8.5
+mont_cc8.5 <- baseline %>% 
+  filter(TertiaryStratumID %in% unique_mont_landtypes) %>% 
+  filter(TertiaryStratumID != "Non-foret")
+#filter(Timestep == 2010)
+trans <- unique(mont_cc8.5$TransitionGroupID)
+lookup <- tibble(TransitionGroupID=trans, 
+                 new=produce_new_transition_names(trans))
+mew_mont_cc8.5 <- mont_cc8.5 %>% 
+  left_join(lookup, by = "TransitionGroupID") %>% 
+  select(-TransitionGroupID) %>% 
+  rename(TransitionGroupID=new)
 
 #-------------------------------------------------------------------------------
 
