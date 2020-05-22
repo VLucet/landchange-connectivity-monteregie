@@ -161,7 +161,7 @@ for (method in methodlist){
       for(step in names(perf_list)){
         for (measure in measureslist){
           
-          # TODO plot_roc function
+          # to do plot_roc function
           # # Plots 
           # png(file.path(outdir, paste(response,samplingmethod,step,"roc.png", sep="_")))
           # plot(perf.out[[step]]$rch, col=2)
