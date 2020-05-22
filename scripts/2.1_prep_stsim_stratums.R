@@ -37,32 +37,8 @@ lu.stack <- stack(raster("data/land_use/LandUse_mont_aafc_30by30_1990.tif"),
 lu.stack.buf <- stack(raster("data/land_use/LandUse_mont_aafc_buffered_30by30_1990.tif"), 
                       raster("data/land_use/LandUse_mont_aafc_buffered_30by30_2000.tif"),
                       raster("data/land_use/LandUse_mont_aafc_buffered_30by30_2010.tif"))
-lu.stack.buf.ag <- stack(raster("data/land_use/aggregated/aggregated_lu_buffered_1990.tif"), 
-                         raster("data/land_use/aggregated/aggregated_lu_buffered_2000.tif"),
-                         raster("data/land_use/aggregated/aggregated_lu_buffered_2010.tif"))
 names(lu.stack) <- c("lu_1990", "lu_2000", "lu_2010")
 names(lu.stack.buf) <- c("lu_1990", "lu_2000", "lu_2010")
-
-#-------------------------------------------------------------------------------
-# Alternative starter LAND USE
-
-lu_2010 <- lu.stack.buf.ag$aggregated_lu_buffered_2010
-mun <- st_read("data/mun/munic_SHP_clean.shp", quiet = TRUE)
-#mont_ones <- fasterize(mun, lu_2010)
-baseline_buf_raw <- raster("data/landis/spatial/buf_mont_baseline_cb.tif")
-
-baseline_buf <- baseline_buf_raw 
-
-lu_2010_mod <- lu_2010
-lu_2010_mod_forest <- (lu_2010==3)
-lu_2010_mod_forest[lu_2010_mod_forest==1] <- 3
-lu_2010_mod[lu_2010==3] <- NA
-
-merged <- merge(lu_2010_mod, baseline_buf, lu_2010_mod_forest)
-merged[merged == 3] <- 12 
-
-writeRaster(merged, "data/land_use/aggregated/landis_aggregated_lu_2010.tif", 
-            overwrite=TRUE)
 
 #-------------------------------------------------------------------------------
 # PRIMARY STRATUM => MONT, NOT MONT, PA
@@ -152,10 +128,19 @@ writeRaster(secondary_stratum,
 
 #-------------------------------------------------------------------------------
 ## TERTIARY STRATUM => LAND TYPES
-# datasheet
-
-# Write out 1st stratum
 tertiary_stratum_ag <- raster("data/landis/spatial/mont_land_types.tif")
+
+# datasheet
+# TODO add datsheet
+tertiary_stratum_df <- as.data.frame(freq(tertiary_stratum_ag))
+tertiary_stratum_df_final <- tertiary_stratum_df %>% 
+  dplyr::select(ID=value, -count) %>% 
+  filter(!is.na(ID)) %>% 
+  mutate(Name=paste0("lty_", ID))
+tertiary_stratum_df_final[tertiary_stratum_df_final$ID==0,2] <- "Not Forest"
+tertiary_stratum_df_final[tertiary_stratum_df_final$ID==99,2] <- "Not Monteregie"
+
+write_csv(tertiary_stratum_df_final, "config/stsim/TertiaryStratum.csv")
 
 #land_types_buf <- raster("data/landis/spatial/buf_mont_land_types.tif")
 #land_types_buf_no_mont <- land_types_buf
@@ -182,3 +167,6 @@ secondary_stratum_ag <- aggregate(secondary_stratum, fun=modal_custom_first,
                                   fact=R_AGGR$factor)
 writeRaster(secondary_stratum_ag, "data/stsim/aggregated/secondary_stratun_mun", 
             format="GTiff", overwrite=T)
+
+# Tertiary 
+# ==> ALREADY AGGREGATED
