@@ -47,15 +47,11 @@ names(lu.stack.buf) <- c("lu_1990", "lu_2000", "lu_2010")
 # Alternative starter LAND USE
 
 lu_2010 <- lu.stack.buf.ag$aggregated_lu_buffered_2010
-baseline <- raster("data/landis/spatial/mont_baseline.tif")
-
 mun <- st_read("data/mun/munic_SHP_clean.shp", quiet = TRUE)
 #mont_ones <- fasterize(mun, lu_2010)
+baseline_buf_raw <- raster("data/landis/spatial/buf_mont_baseline_cb.tif")
 
-baseline_buf_raw <- raster("data/landis/spatial/buf_mont_baseline.tif")
 baseline_buf <- baseline_buf_raw 
-baseline_buf[baseline_buf == 0] <- NA
-baseline_buf <- baseline_buf+30
 
 lu_2010_mod <- lu_2010
 lu_2010_mod_forest <- (lu_2010==3)
@@ -63,7 +59,7 @@ lu_2010_mod_forest[lu_2010_mod_forest==1] <- 3
 lu_2010_mod[lu_2010==3] <- NA
 
 merged <- merge(lu_2010_mod, baseline_buf, lu_2010_mod_forest)
-merged[merged == 3] <- 31 
+merged[merged == 3] <- 12 
 
 writeRaster(merged, "data/land_use/aggregated/landis_aggregated_lu_2010.tif", 
             overwrite=TRUE)
