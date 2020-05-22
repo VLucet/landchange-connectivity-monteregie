@@ -1,5 +1,5 @@
 #-------------------------------------------------------------------------------
-## 1.x Prep Landis
+## 1.5 Prep Landis
 ## 2020
 ## Inputs: Land use data
 ## Outputs: Reclassified land use data
@@ -16,6 +16,7 @@ suppressPackageStartupMessages({
   library(sf)
   library(tidyverse)
   library(fasterize)
+  library(rgrass7)
 })
 
 # Reset Raster tmp files
