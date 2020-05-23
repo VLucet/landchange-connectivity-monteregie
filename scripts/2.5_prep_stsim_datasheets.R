@@ -49,75 +49,26 @@ term <- data.frame(
 write_csv(term, "config/stsim/Terminology.csv")
 
 #-------------------------------------------------------------------------------
-
 ### THEN PROCESS BR's INTERNAL FOREST DYNAMICS
-#==> need to remake these with proper timestep
-
-source("scripts/functions/produce_new_transition_names.R")
-
-# Load scenarios
-baseline <- read_csv("data/landis/config/TransitionMultiplierValueBaseline.csv")
-cc4.5 <- read_csv("data/landis/config/TransitionMultiplierValue45.csv") %>% 
-  dplyr::select(-c(DistributionType, DistributionFrequencyID, DistributionSD, 
-            DistributionMin, DistributionMax, TransitionMultiplierTypeID, 
-            StateClassID, SecondaryStratumID, StratumID, Iteration))
-cc8.5 <- read_csv("data/landis/config/TransitionMultiplierValue85.csv") %>% 
-  dplyr::select(-c(DistributionType, DistributionFrequencyID, DistributionSD, 
-            DistributionMin, DistributionMax, TransitionMultiplierTypeID, 
-            StateClassID, SecondaryStratumID, StratumID, Iteration))
-
 # Analyse land types
 landtypes <- raster("data/stsim/aggregated/tertiary_stratum_land_types.tif")
 mont_landtypes <- as.data.frame(freq(landtypes))
 mont_landtypes <- subset(mont_landtypes, !(value %in% c(0,99,NA)))
 unique_mont_landtypes <- unique(mont_landtypes$value)
 
-# Subset to mont
-
-# baseline
-mont_baseline <- baseline %>% 
+# Load prepocessed scenarios
+temp_baseline <- read_csv("config/stsim/temp_TransitionMultiplierValue_baseline.csv") %>% 
   filter(TertiaryStratumID %in% unique_mont_landtypes) %>% 
-  filter(TertiaryStratumID != "Non-foret")
-#filter(Timestep == 2010)
-trans_unique <- unique(mont_baseline$TransitionGroupID)
-lookup <- tibble(TransitionGroupID=trans_unique,
-                 new=produce_new_transition_names(trans_unique))
-new_mont_baseline <- mont_baseline %>% 
-  left_join(lookup, by = "TransitionGroupID") %>% 
-  dplyr::select(-TransitionGroupID) %>% 
-  rename(TransitionGroupID=new) %>% 
-  mutate(TransitionGroupID=paste0(TransitionGroupID, " [Type]"))
-assert_that(length(unique(lookup$TransitionGroupID)) == 72)
-
-# 4.5
-mont_cc4.5 <- baseline %>% 
-  filter(TertiaryStratumID %in% unique_mont_landtypes) %>% 
-  filter(TertiaryStratumID != "Non-foret")
-#filter(Timestep == 2010)
-trans_unique <- unique(mont_cc4.5$TransitionGroupID)
-lookup <- tibble(TransitionGroupID=trans_unique, 
-                 new=produce_new_transition_names(trans_unique))
-new_mont_cc4.5 <- mont_cc4.5 %>% 
-  left_join(lookup, by = "TransitionGroupID") %>% 
-  dplyr::select(-TransitionGroupID) %>% 
-  rename(TransitionGroupID=new) %>% 
-  mutate(TransitionGroupID=paste0(TransitionGroupID, " [Type]"))
-assert_that(length(unique(lookup$TransitionGroupID)) == 72)
-
-#8.5
-mont_cc8.5 <- baseline %>% 
-  filter(TertiaryStratumID %in% unique_mont_landtypes) %>% 
-  filter(TertiaryStratumID != "Non-foret")
-#filter(Timestep == 2010)
-trans_unique <- unique(mont_cc8.5$TransitionGroupID)
-lookup <- tibble(TransitionGroupID=trans_unique, 
-                 new=produce_new_transition_names(trans_unique))
-new_mont_cc8.5 <- mont_cc8.5 %>% 
-  left_join(lookup, by = "TransitionGroupID") %>% 
-  dplyr::select(-TransitionGroupID) %>% 
-  rename(TransitionGroupID=new) %>% 
-  mutate(TransitionGroupID=paste0(TransitionGroupID, " [Type]"))
-assert_that(length(unique(lookup$TransitionGroupID)) == 72)
+  dplyr::select(-c(srcClassID, destClassID))
+assert_that(length(unique(temp_baseline$TransitionGroupID)) == 72)
+temp_4.5 <- read_csv("config/stsim/temp_TransitionMultiplierValue_4.5.csv") %>% 
+  filter(TertiaryStratumID %in% unique_mont_landtypes)%>% 
+  dplyr::select(-c(srcClassID, destClassID))
+assert_that(length(unique(temp_4.5$TransitionGroupID)) == 72)
+temp_8.5 <- read_csv("config/stsim/temp_TransitionMultiplierValue_8.5.csv") %>% 
+  filter(TertiaryStratumID %in% unique_mont_landtypes)%>% 
+  dplyr::select(-c(srcClassID, destClassID))
+assert_that(length(unique(temp_8.5$TransitionGroupID)) == 72)
 
 #-------------------------------------------------------------------------------
 
@@ -131,15 +82,16 @@ trans_mul_val <- data.frame(
              0, 0, 0, 0)
 ) 
 
-trans_mul_val_baseline <- bind_rows(trans_mul_val, new_mont_baseline)
-trans_mul_val_4.5 <- bind_rows(trans_mul_val, new_mont_cc4.5)
-trans_mul_val_8.5 <- bind_rows(trans_mul_val, new_mont_cc8.5)
+trans_mul_val_baseline <- bind_rows(trans_mul_val, temp_baseline)
+trans_mul_val_4.5 <- bind_rows(trans_mul_val, temp_4.5)
+trans_mul_val_8.5 <- bind_rows(trans_mul_val, temp_8.5)
 
 # TODO problems:
 # Does not prevent forest change outside of the monteregie (should only allow aging?)
-# Timestep in wrong 2000,2010 format instead of 2,3..
 
-write_csv(trans_mul_val, "config/stsim/TransitionMultiplierValue.csv")
+write_csv(trans_mul_val_baseline, "config/stsim/TransitionMultiplierValue_baseline.csv")
+write_csv(trans_mul_val_4.5, "config/stsim/TransitionMultiplierValue_4.5.csv")
+write_csv(trans_mul_val_8.5, "config/stsim/TransitionMultiplierValue_8.5.csv")
 
 #-------------------------------------------------------------------------------
 # FROM
@@ -147,16 +99,16 @@ write_csv(trans_mul_val, "config/stsim/TransitionMultiplierValue.csv")
 # Transition
 
 # Internal transitions reductions
-trans_unique <- unique(new_mont_baseline$TransitionGroupID)
+trans_unique <- unique(temp_baseline$TransitionGroupID)
 trans_unique_no_type <- gsub(trans_unique, pattern = " \\[Type\\]", replacement = "")
 internal_states_unique <- unique(forest_classes$Name)
 
 # Assembling all transitions
 trans <- data.frame(
   StateClassIDSource = c("Agriculture:Cultivated", "Agriculture:Cultivated"),
-  StateClassIDDest = c("Urban:Nonlinear", "Forest:decid_1"),
+  StateClassIDDest = c("Urban:Nonlinear", "Forest:decid_2"),
   TransitionTypeID = c("Agricultural Loss", "Reforestation"),
-  TransitionGroupID = c("Urbanisation", "Reforestation"),
+  TransitionGroupID = c("Urbanisation", "Reforestation Gr"),
   Probability = c(1, 1)
 ) %>% bind_rows(
   
