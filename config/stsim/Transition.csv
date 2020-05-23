@@ -1,6 +1,6 @@
 StateClassIDSource,StateClassIDDest,TransitionTypeID,Probability
 Agriculture:Cultivated,Urban:Nonlinear,Agricultural Loss,1
-Agriculture:Cultivated,Forest:decid_1,Reforestation,1
+Agriculture:Cultivated,Forest:decid_2,Reforestation,1
 Forest:decid_1,Agriculture:Cultivated,Agricultural Expansion,1
 Forest:decid_2,Agriculture:Cultivated,Agricultural Expansion,1
 Forest:decid_3,Agriculture:Cultivated,Agricultural Expansion,1
