@@ -61,13 +61,25 @@ temp_baseline <- read_csv("config/stsim/temp_TransitionMultiplierValue_baseline.
   filter(TertiaryStratumID %in% unique_mont_landtypes) %>% 
   dplyr::select(-c(srcClassID, destClassID))
 assert_that(length(unique(temp_baseline$TransitionGroupID)) == 72)
+
+new_levels_df <- temp_baseline %>% 
+  mutate(TertiaryStratumID=factor(TertiaryStratumID)) %>% 
+  mutate(TertiaryStratumID=factor(TertiaryStratumID, levels = c(levels(TertiaryStratumID), "0", "99"))) %>% 
+  expand(TransitionGroupID,Timestep,TertiaryStratumID) %>% filter( TertiaryStratumID %in% c("0", "99")) %>% 
+  mutate(Amount=0) %>% 
+  mutate(TertiaryStratumID=as.numeric(as.character(TertiaryStratumID)))
+
+temp_baseline <- bind_rows(temp_baseline, new_levels_df)
+
 temp_4.5 <- read_csv("config/stsim/temp_TransitionMultiplierValue_4.5.csv") %>% 
   filter(TertiaryStratumID %in% unique_mont_landtypes)%>% 
-  dplyr::select(-c(srcClassID, destClassID))
+  dplyr::select(-c(srcClassID, destClassID)) %>% 
+  bind_rows(new_levels_df)
 assert_that(length(unique(temp_4.5$TransitionGroupID)) == 72)
 temp_8.5 <- read_csv("config/stsim/temp_TransitionMultiplierValue_8.5.csv") %>% 
   filter(TertiaryStratumID %in% unique_mont_landtypes)%>% 
-  dplyr::select(-c(srcClassID, destClassID))
+  dplyr::select(-c(srcClassID, destClassID)) %>% 
+  bind_rows(new_levels_df)
 assert_that(length(unique(temp_8.5$TransitionGroupID)) == 72)
 
 #-------------------------------------------------------------------------------
@@ -86,12 +98,16 @@ trans_mul_val_baseline <- bind_rows(trans_mul_val, temp_baseline)
 trans_mul_val_4.5 <- bind_rows(trans_mul_val, temp_4.5)
 trans_mul_val_8.5 <- bind_rows(trans_mul_val, temp_8.5)
 
+trans_mul_val_historic <- trans_mul_val_baseline
+trans_mul_val_historic$Amount <- 0 
+
 # TODO problems:
 # Does not prevent forest change outside of the monteregie (should only allow aging?)
 
 write_csv(trans_mul_val_baseline, "config/stsim/TransitionMultiplierValue_baseline.csv")
 write_csv(trans_mul_val_4.5, "config/stsim/TransitionMultiplierValue_4.5.csv")
 write_csv(trans_mul_val_8.5, "config/stsim/TransitionMultiplierValue_8.5.csv")
+write_csv(trans_mul_val_historic, "config/stsim/TransitionMultiplierValue_historic.csv")
 
 #-------------------------------------------------------------------------------
 # FROM
