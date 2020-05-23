@@ -59,25 +59,27 @@ unique_mont_landtypes <- unique(mont_landtypes$value)
 # Load prepocessed scenarios
 temp_baseline <- read_csv("config/stsim/temp_TransitionMultiplierValue_baseline.csv") %>% 
   filter(TertiaryStratumID %in% unique_mont_landtypes) %>% 
+  mutate(TertiaryStratumID = paste0("lty_",TertiaryStratumID)) %>% 
   dplyr::select(-c(srcClassID, destClassID))
 assert_that(length(unique(temp_baseline$TransitionGroupID)) == 72)
 
 new_levels_df <- temp_baseline %>% 
   mutate(TertiaryStratumID=factor(TertiaryStratumID)) %>% 
-  mutate(TertiaryStratumID=factor(TertiaryStratumID, levels = c(levels(TertiaryStratumID), "0", "99"))) %>% 
-  expand(TransitionGroupID,Timestep,TertiaryStratumID) %>% filter( TertiaryStratumID %in% c("0", "99")) %>% 
-  mutate(Amount=0) %>% 
-  mutate(TertiaryStratumID=as.numeric(as.character(TertiaryStratumID)))
+  mutate(TertiaryStratumID=factor(TertiaryStratumID, levels = c(levels(TertiaryStratumID), "Not_Forest", "Not_Monteregie"))) %>% 
+  expand(TransitionGroupID,Timestep,TertiaryStratumID) %>% filter( TertiaryStratumID %in% c("Not_Forest", "Not_Monteregie")) %>% 
+  mutate(Amount=0)
 
 temp_baseline <- bind_rows(temp_baseline, new_levels_df)
 
 temp_4.5 <- read_csv("config/stsim/temp_TransitionMultiplierValue_4.5.csv") %>% 
   filter(TertiaryStratumID %in% unique_mont_landtypes)%>% 
+  mutate(TertiaryStratumID = paste0("lty_",TertiaryStratumID)) %>% 
   dplyr::select(-c(srcClassID, destClassID)) %>% 
   bind_rows(new_levels_df)
 assert_that(length(unique(temp_4.5$TransitionGroupID)) == 72)
 temp_8.5 <- read_csv("config/stsim/temp_TransitionMultiplierValue_8.5.csv") %>% 
   filter(TertiaryStratumID %in% unique_mont_landtypes)%>% 
+  mutate(TertiaryStratumID = paste0("lty_",TertiaryStratumID)) %>% 
   dplyr::select(-c(srcClassID, destClassID)) %>% 
   bind_rows(new_levels_df)
 assert_that(length(unique(temp_8.5$TransitionGroupID)) == 72)

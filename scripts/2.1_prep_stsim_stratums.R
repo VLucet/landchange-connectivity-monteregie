@@ -137,8 +137,8 @@ tertiary_stratum_df_final <- tertiary_stratum_df %>%
   dplyr::select(ID=value, -count) %>% 
   filter(!is.na(ID)) %>% 
   mutate(Name=paste0("lty_", ID))
-tertiary_stratum_df_final[tertiary_stratum_df_final$ID==0,2] <- "Not Forest"
-tertiary_stratum_df_final[tertiary_stratum_df_final$ID==99,2] <- "Not Monteregie"
+tertiary_stratum_df_final[tertiary_stratum_df_final$ID==0,2] <- "Not_Forest"
+tertiary_stratum_df_final[tertiary_stratum_df_final$ID==99,2] <- "Not_Monteregie"
 
 write_csv(tertiary_stratum_df_final, "config/stsim/TertiaryStratum.csv")
 
