@@ -10,28 +10,23 @@ set.seed(77)
 
 #-------------------------------------------------------------------------------
 # Set parameters 
-OMP_NUM_THREADS <- as.numeric(Sys.getenv("OMP_NUM_THREADS"))
-aggregation <- list(ag = as.logical(Sys.getenv("R_AGGR")), 
-                    factor = as.numeric(Sys.getenv("R_AGGR_FACT")))
-STSIM_ITER <- as.numeric(Sys.getenv("STSIM_ITER"))
-STSIM_TS_START <- as.numeric(Sys.getenv("STSIM_TS_START"))
-STSIM_TS_END <- as.numeric(Sys.getenv("STSIM_TS_END"))
+OMP_NUM_THREADS <- as.numeric(Sys.getenv("OMP_NUM_THREADS", unset = 4))
+aggregation <- list(ag = as.logical(Sys.getenv("R_AGGR", unset = TRUE)), 
+                    factor = as.numeric(Sys.getenv("R_AGGR_FACT", unset = 3)))
+STSIM_ITER <- as.numeric(Sys.getenv("STSIM_ITER", unset = 2))
+STSIM_TS_START <- as.numeric(Sys.getenv("STSIM_TS_START", unset = 0))
+STSIM_TS_END <- as.numeric(Sys.getenv("STSIM_TS_END", unset = 6))
 
 
-STSIM_STEP_SAVE <- as.numeric(Sys.getenv("STSIM_STEP_SAVE"))
-STSIM_STEP_COMPUTE <- as.numeric(Sys.getenv("STSIM_STEP_COMPUTE"))
+STSIM_STEP_SAVE <- as.numeric(Sys.getenv("STSIM_STEP_SAVE", unset = 1))
+STSIM_STEP_COMPUTE <- as.numeric(Sys.getenv("STSIM_STEP_COMPUTE", unset = 10))
 ST_SIM_DIR <- "../../syncrosim_2_10/"
 
-STSIM_RUN  <- as.logical(Sys.getenv("STSIM_RUN"))
+STSIM_RUN  <- as.logical(Sys.getenv("STSIM_RUN", unset = TRUE))
 
-R_METHOD_STSIM <- Sys.getenv("R_METHOD_STSIM")
+R_METHOD_STSIM <- Sys.getenv("R_METHOD_STSIM", unset = "rf")
 # R_SAMPLING_METHOD <- Sys.getenv("R_SAMPLING_METHOD")
-R_RATIO <- as.numeric(Sys.getenv("R_RATIO"))
-
-if (is.na(OMP_NUM_THREADS)) { 
-  OMP_NUM_THREADS <- 2 ; print("Running on 2 cores only")
-  ST_SIM_DIR <- "/home/vlucet/Documents/Apex/syncrosim_2_10"
-}
+R_RATIO <- as.numeric(Sys.getenv("R_RATIO", unset = 2))
 
 # !!! To be commented out
 #ST_SIM_DIR <- "/home/vlucet/Documents/Apex/syncrosim_2_10"
