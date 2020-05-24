@@ -114,16 +114,16 @@ loadSheet("Transition", NULL, deter_trans_default, path = "config/stsim/")
 if (aggregation$ag){
   init_ag_1990 <- scenario(Definitions, scenario = "Initial conditions : Aggregated 1990")
   loadSheet("InitialConditionsSpatial", NULL,  init_ag_1990, 
-            params = list(StateClassFileName = paste0(getwd(),"/data/land_use/aggregated/aggregated_lu_1990.tif"),
-                          StratumFileName = paste0(getwd(),"/data/stsim/aggregated/primary_stratum.tif"), 
-                          SecondaryStratumFileName = paste0(getwd(),"/data/stsim/aggregated/secondary_stratum.tif"), 
-                          TertiaryStratumFileName = paste0(getwd(),"/data/stsim/aggregated/tertiary_stratum.tif")))
+            params = list(StateClassFileName = paste0(getwd(),"/data/land_use/aggregated/aggregated_lu_buffered_1990_patched.tif"),
+                          StratumFileName = paste0(getwd(),"/data/stsim/aggregated/primary_stratum_mont_or_not_or_PA.tif"), 
+                          SecondaryStratumFileName = paste0(getwd(),"/data/stsim/aggregated/secondary_stratun_mun.tif"), 
+                          TertiaryStratumFileName = paste0(getwd(),"/data/stsim/aggregated/tertiary_stratum_land_types.tif")))
   init_ag_2010 <- scenario(Definitions, scenario = "Initial conditions : Aggregated 2010")
   loadSheet("InitialConditionsSpatial", NULL,  init_ag_2010, 
-            params = list(StateClassFileName = paste0(getwd(),"/data/land_use/aggregated/aggregated_lu_2010.tif"),
-                          StratumFileName = paste0(getwd(),"/data/stsim/aggregated/primary_stratum.tif"), 
-                          SecondaryStratumFileName = paste0(getwd(),"/data/stsim/aggregated/secondary_stratum.tif"), 
-                          TertiaryStratumFileName = paste0(getwd(),"/data/stsim/aggregated/tertiary_stratum.tif")))
+            params = list(StateClassFileName = paste0(getwd(),"/data/land_use/aggregated/aggregated_lu_buffered_2010_patched.tif"),
+                          StratumFileName = paste0(getwd(),"/data/stsim/aggregated/primary_stratum_mont_or_not_or_PA.tif"), 
+                          SecondaryStratumFileName = paste0(getwd(),"/data/stsim/aggregated/secondary_stratun_mun.tif"), 
+                          TertiaryStratumFileName = paste0(getwd(),"/data/stsim/aggregated/tertiary_stratum_land_types.tif")))
   
 } else {
   # loadSheet("InitialConditionsSpatial", NULL, run_default, 
@@ -163,8 +163,21 @@ loadSheet("TransitionTarget", filename=paste0("TransitionTarget_", STSIM_STEP_CO
 #----------------------------------------------------------------------------
 
 # Transition multipliers (non-Spatial) 
-transmul_default <- scenario(Definitions, scenario = "Transition Multipliers: Default")
-loadSheet("TransitionMultiplierValue", NULL, transmul_default, path = "config/stsim/")
+transmul_historic <- scenario(Definitions, scenario = "Transition Multipliers: Historic")
+loadSheet("TransitionMultiplierValue", filename = "TransitionMultiplierValue_historic", 
+          proj_or_sce=transmul_historic, path = "config/stsim/")
+
+transmul_baseline <- scenario(Definitions, scenario = "Transition Multipliers: Baseline")
+loadSheet("TransitionMultiplierValue", filename = "TransitionMultiplierValue_baseline", 
+          proj_or_sce=transmul_baseline, path = "config/stsim/")
+
+transmul_4.5 <- scenario(Definitions, scenario = "Transition Multipliers: RCP 4.5")
+loadSheet("TransitionMultiplierValue", filename = "TransitionMultiplierValue_4.5", 
+          proj_or_sce=transmul_4.5, path = "config/stsim/")
+
+transmul_8.5 <- scenario(Definitions, scenario = "Transition Multipliers: RCP 8.5")
+loadSheet("TransitionMultiplierValue", filename = "TransitionMultiplierValue_8.5", 
+          proj_or_sce=transmul_8.5, path = "config/stsim/")
 
 #----------------------------------------------------------------------------
 
@@ -226,7 +239,7 @@ loadSheet("TransitionSpatialMultiplier", NULL, spatial_multiplier_corrs_reforest
                                               "Agricultural Expansion Gr",
                                               "Urbanisation",
                                               "Agricultural Expansion Gr", 
-                                              "Reforestation"), 
+                                              "Reforestation Gr"), 
                         Timestep = c(1,1,3,3,3),
                         MultiplierFileName = c(paste0(getwd(), "/data/stsim/spatial_multipliers/",
                                                       R_METHOD_STSIM, "_ratio_", R_RATIO, "_urb_f_spamul.tif"),
@@ -260,80 +273,130 @@ loadSheet("TransitionAdjacencyMultiplier", NULL, transition_adjacency, path = "c
 historic_run <- scenario(Definitions, scenario = "historic run")
 dependency(historic_run, c(run_historic,
                            init_ag_1990,
+                           transmul_historic,
                            # Not changing
                            deter_trans_default,
                            output_default,
                            transition_adjacency,
                            trans_size_distribution,
-                           transmul_default,
                            # Changing
                            spatial_multiplier_default,
                            targets_default_no_ref_hist))
 
-BAU_run <- scenario(Definitions, scenario = "BAU run")
-dependency(BAU_run, c(run_forecast,
-                      init_ag_2010,
-                      # Not changing
-                      deter_trans_default,
-                      output_default,
-                      transition_adjacency,
-                      trans_size_distribution,
-                      transmul_default,
-                      # Changing 
-                      spatial_multiplier_default,
-                      targets_default_no_ref))
-
-BAU_corr_protected <- scenario(Definitions, scenario = "BAU run + corrs protection")
-dependency(BAU_corr_protected, c(run_forecast,
-                                 init_ag_2010,
-                                 # Not changing
-                                 deter_trans_default,
-                                 output_default,
-                                 transition_adjacency,
-                                 trans_size_distribution,
-                                 transmul_default,
-                                 # Changing 
-                                 spatial_multiplier_corrs,
-                                 targets_default_no_ref))
-
-BAU_run_ref <- scenario(Definitions, scenario = "BAU run + ref")
-dependency(BAU_run_ref, c(run_forecast,
+BAU_run_baseline <- scenario(Definitions, scenario = "BAU run | baseline")
+dependency(BAU_run_baseline, c(run_forecast,
+                               init_ag_2010,
+                               transmul_baseline,
+                               # Not changing
+                               deter_trans_default,
+                               output_default,
+                               transition_adjacency,
+                               trans_size_distribution,
+                               # Changing
+                               spatial_multiplier_default,
+                               targets_default_no_ref))
+BAU_run_8.5 <- scenario(Definitions, scenario = "BAU run | RCP 8.5")
+dependency(BAU_run_8.5, c(run_forecast,
                           init_ag_2010,
+                          transmul_8.5,
                           # Not changing
                           deter_trans_default,
                           output_default,
                           transition_adjacency,
                           trans_size_distribution,
-                          transmul_default,
-                          # Changing 
+                          # Changing
                           spatial_multiplier_default,
-                          targets_default_ref))
+                          targets_default_no_ref))
 
-REF_corr_protected_ref <- scenario(Definitions, scenario = "BAU run + corrs protection + ref")
-dependency(REF_corr_protected_ref, c(run_forecast,
-                                     init_ag_2010,
-                                     # Not changing
-                                     deter_trans_default,
-                                     output_default,
-                                     transition_adjacency,
-                                     trans_size_distribution,
-                                     transmul_default,
-                                     # Changing 
-                                     spatial_multiplier_corrs,
-                                     targets_default_ref))
+BAU_run_ref_baseline <- scenario(Definitions, scenario = "BAU run + ref | baseline")
+dependency(BAU_run_ref_baseline, c(run_forecast,
+                                   init_ag_2010,
+                                   transmul_baseline,
+                                   # Not changing
+                                   deter_trans_default,
+                                   output_default,
+                                   transition_adjacency,
+                                   trans_size_distribution,
+                                   # Changing
+                                   spatial_multiplier_default,
+                                   targets_default_ref))
+BAU_run_ref_8.5 <- scenario(Definitions, scenario = "BAU run + ref | RCP 8.5")
+dependency(BAU_run_ref_8.5, c(run_forecast,
+                              init_ag_2010,
+                              transmul_8.5,
+                              # Not changing
+                              deter_trans_default,
+                              output_default,
+                              transition_adjacency,
+                              trans_size_distribution,
+                              # Changing
+                              spatial_multiplier_default,
+                              targets_default_ref))
 
-REF_corr_protected_ref_targeted <- scenario(Definitions, scenario = "BAU run + corrs protection + ref TARGETED")
-dependency(REF_corr_protected_ref_targeted, c(run_forecast,
-                                              init_ag_2010,
-                                              # Not changing
-                                              deter_trans_default,
-                                              output_default,
-                                              transition_adjacency,
-                                              trans_size_distribution,
-                                              transmul_default,
-                                              # Changing 
-                                              spatial_multiplier_corrs_reforestation,
-                                              targets_default_ref))
+# BAU_run <- scenario(Definitions, scenario = "BAU run")
+# dependency(BAU_run, c(run_forecast,
+#                       init_ag_2010,
+#                       # Not changing
+#                       deter_trans_default,
+#                       output_default,
+#                       transition_adjacency,
+#                       trans_size_distribution,
+#                       transmul_default,
+#                       # Changing 
+#                       spatial_multiplier_default,
+#                       targets_default_no_ref))
+# 
+# BAU_corr_protected <- scenario(Definitions, scenario = "BAU run + corrs protection")
+# dependency(BAU_corr_protected, c(run_forecast,
+#                                  init_ag_2010,
+#                                  # Not changing
+#                                  deter_trans_default,
+#                                  output_default,
+#                                  transition_adjacency,
+#                                  trans_size_distribution,
+#                                  transmul_default,
+#                                  # Changing 
+#                                  spatial_multiplier_corrs,
+#                                  targets_default_no_ref))
+# 
+# BAU_run_ref <- scenario(Definitions, scenario = "BAU run + ref")
+# dependency(BAU_run_ref, c(run_forecast,
+#                           init_ag_2010,
+#                           # Not changing
+#                           deter_trans_default,
+#                           output_default,
+#                           transition_adjacency,
+#                           trans_size_distribution,
+#                           transmul_default,
+#                           # Changing 
+#                           spatial_multiplier_default,
+#                           targets_default_ref))
+# 
+# REF_corr_protected_ref <- scenario(Definitions, scenario = "BAU run + corrs protection + ref")
+# dependency(REF_corr_protected_ref, c(run_forecast,
+#                                      init_ag_2010,
+#                                      # Not changing
+#                                      deter_trans_default,
+#                                      output_default,
+#                                      transition_adjacency,
+#                                      trans_size_distribution,
+#                                      transmul_default,
+#                                      # Changing 
+#                                      spatial_multiplier_corrs,
+#                                      targets_default_ref))
+# 
+# REF_corr_protected_ref_targeted <- scenario(Definitions, scenario = "BAU run + corrs protection + ref TARGETED")
+# dependency(REF_corr_protected_ref_targeted, c(run_forecast,
+#                                               init_ag_2010,
+#                                               # Not changing
+#                                               deter_trans_default,
+#                                               output_default,
+#                                               transition_adjacency,
+#                                               trans_size_distribution,
+#                                               transmul_default,
+#                                               # Changing 
+#                                               spatial_multiplier_corrs_reforestation,
+#                                               targets_default_ref))
 
 #########
 ## RUN ##
@@ -342,11 +405,13 @@ dependency(REF_corr_protected_ref_targeted, c(run_forecast,
 if (STSIM_RUN){
   print("Running StSIM");Sys.time()
   results <- run(list(historic_run,
-                      BAU_run,
-                      BAU_corr_protected,
-                      BAU_run_ref,
-                      REF_corr_protected_ref,
-                      REF_corr_protected_ref_targeted
+                      BAU_run_baseline,
+                      BAU_run_8.5,
+                      #BAU_corr_protected,
+                      BAU_run_ref_baseline,
+                      BAU_run_ref_8.5
+                      #REF_corr_protected_ref,
+                      #REF_corr_protected_ref_targeted
   ),
   summary = TRUE, jobs = OMP_NUM_THREADS)
   print(results)
