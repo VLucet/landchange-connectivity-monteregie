@@ -59,6 +59,7 @@ writeRaster(baseline_combined_reproj, "data/landis/spatial/temp_baseline.tif",
             overwrite=T)
 
 # Calculate distance => in GRASS Start Grass session
+unlink("libraries/grass/landusechangemodel/", recursive = T)
 initGRASS(gisBase = "/usr/lib/grass76/", gisDbase = "libraries/grass/", 
           location = "landusechangemodel", mapset = "landis", 
           override = TRUE)
@@ -125,7 +126,7 @@ baseline_combined <-
              lu.2010 = raster('data/land_use/aggregated/aggregated_lu_buffered_2010_patched.tif')))
 
 baseline_combined[is.na(baseline_combined) & 
-                    !is.na(lu.stack.buf.ag$aggregated_lu_buffered_2010)] <- 12
+                    !is.na(lu.stack.buf.ag$aggregated_lu_buffered_2010)] <- 22 # misisng value replaced
 
 # reproj and crop
 landis_stack <- stack(baseline_combined, landtypes_reproj)
