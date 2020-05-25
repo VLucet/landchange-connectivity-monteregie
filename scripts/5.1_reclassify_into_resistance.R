@@ -6,12 +6,12 @@
 #-------------------------------------------------------------------------------
 rm(list=ls())
 # Set parameters 
-aggregation <- list(ag = as.logical(Sys.getenv("R_AGGR")), 
-                    factor = as.numeric(Sys.getenv("R_AGGR_FACT")))
-STSIM_ITER <- as.numeric(Sys.getenv("STSIM_ITER"))
+aggregation <- list(ag = as.logical(Sys.getenv("R_AGGR", unset = TRUE)), 
+                    factor = as.numeric(Sys.getenv("R_AGGR_FACT", unset = 3)))
+STSIM_ITER <- as.numeric(Sys.getenv("STSIM_ITER", unset = 2))
 
-R_AGGR_FACT <- as.numeric(Sys.getenv("R_AGGR_FACT"))
-STSIM_STEP_SAVE <- as.numeric(Sys.getenv("STSIM_STEP_SAVE"))
+R_AGGR_FACT <- as.numeric(Sys.getenv("R_AGGR_FACT", unset = 3))
+STSIM_STEP_SAVE <- as.numeric(Sys.getenv("STSIM_STEP_SAVE", unset = 1))
 #-------------------------------------------------------------------------------
 
 # aggregation <- list(ag = TRUE,
@@ -26,6 +26,7 @@ suppressPackageStartupMessages({
   library(tidyverse)
   library(raster)
   library(gtools)
+  library(assertthat)
 })
 
 # Reset Raster tmp files
@@ -53,9 +54,11 @@ names(rcls) <- species_list
 
 # TRUE LAND USE ONLY NEEDED ONCE
 if (aggregation$ag){
-  true_landuse_list <- list.files("data/land_use/aggregated/", full.names=T)
+  true_landuse_list <- list.files("data/land_use/aggregated/", full.names=T, pattern = "patched")
+  assert_that(length(true_landuse_list)==3)
 } else{
-  true_landuse_list <- list.files("data/land_use/", full.names=T)
+  #true_landuse_list <- list.files("data/land_use/", full.names=T)
+  stop()
 }
 
 true_landuse <- lapply(true_landuse_list, FUN = raster)
