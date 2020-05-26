@@ -72,6 +72,8 @@ prep_raw_data(){
   Rscript scripts/1.2_prep_census_data.R
   Rscript scripts/1.3_prep_env_vars.R
   Rscript scripts/1.4_reclass_land_use.R
+  Rscript scripts/1.5_prep_landis.R
+  # Rscript scripts/1.6_prep_neighbors.R
 }
 
 prep_stsim_data(){
