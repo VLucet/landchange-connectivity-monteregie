@@ -73,7 +73,7 @@ new_levels_df <- temp_baseline %>%
 temp_baseline <- bind_rows(temp_baseline, new_levels_df)
 
 temp_4.5 <- read_csv("config/stsim/temp_TransitionMultiplierValue_4.5.csv") %>% 
-  filter(TertiaryStratumID %in% unique_mont_landtypes)%>% 
+  filter(TertiaryStratumID %in% unique_mont_landtypes) %>% 
   mutate(TertiaryStratumID = paste0("lty_",TertiaryStratumID)) %>% 
   dplyr::select(-c(srcClassID, destClassID)) %>% 
   mutate(Timestep = Timestep+2) %>% 
@@ -105,6 +105,9 @@ trans_mul_val_8.5 <- bind_rows(trans_mul_val, temp_8.5)
 
 trans_mul_val_historic <- trans_mul_val_baseline
 trans_mul_val_historic$Amount <- 0 
+trans_mul_val_historic_sub <- subset(trans_mul_val_historic, Timestep==2)
+trans_mul_val_historic_sub$Timestep <- 0
+trans_mul_val_historic <- bind_rows(trans_mul_val_historic, trans_mul_val_historic_sub)
 
 # TODO problems:
 # Does not prevent forest change outside of the monteregie (should only allow aging?)
