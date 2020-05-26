@@ -35,7 +35,7 @@ lu.stack.buf.ag <- stack(raster("data/land_use/aggregated/aggregated_lu_buffered
                          raster("data/land_use/aggregated/aggregated_lu_buffered_2010.tif"))
 
 # Inport and crop spatial files
-age <- raster("data/landis/spatial/age_avg_0.tif") # 0 to 200
+age <- raster("data/landis/spatial/AGE-AVG-0.tif") # 0 to 200
 baseline <- raster("data/landis/spatial/baseline_even_more_harvest_1_cover_types_0.tif")
 landtypes <- raster("data/landis/spatial/lowLands_landTypes_v2_QL.tif")
 
