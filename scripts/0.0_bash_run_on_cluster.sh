@@ -208,7 +208,7 @@ run_prep(){
 
 ### Arguments matching
 
-while getopts ":pmafsrcd" opt; do
+while getopts ":pmafsrcdg" opt; do
   case ${opt} in
     p )
       run_prep
