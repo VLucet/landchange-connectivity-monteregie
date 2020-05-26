@@ -14,8 +14,6 @@ STSIM_ITER <- as.numeric(Sys.getenv("STSIM_ITER", unset=2))
 aggregation <- list(ag = as.logical(Sys.getenv("R_AGGR", unset = TRUE)), 
                     factor = as.numeric(Sys.getenv("R_AGGR_FACT", unset = 3)))
 STSIM_STEP_SAVE <- as.numeric(Sys.getenv("STSIM_STEP_SAVE", unset = 1))
-# STSIM_TS_START <- as.numeric(Sys.getenv("STSIM_TS_START", unset = 0))
-# STSIM_TS_END <- as.numeric(Sys.getenv("STSIM_TS_END", unset = 6))
 #-------------------------------------------------------------------------------
 
 ##-- for shorter tests
@@ -47,9 +45,9 @@ showTmpFiles()
 
 # For zonal statistics
 if (aggregation$ag) {
-  mun_zonal <- raster("data/stsim/aggregated/secondary_stratum.tif")
+  mun_zonal <- raster("data/stsim/aggregated/secondary_stratun_mun.tif")
 } else {
-  mun_zonal <- raster("data/stsim/secondary_stratun_mun_30by30.tif")
+  stop()
 }
 key <- read.csv("config/stsim/SecondaryStratum.csv")
 
@@ -205,7 +203,7 @@ extracted_list_T <- list()
 for (species in species_vec) {
   extracted_list_T=list()
   print(species)
-  for (timestep in 1:3){
+  for (timestep in 0:2){
     print(timestep)
     stack_files <- list_files_origin[grepl(x = list_files_origin, pattern = species) & 
                                        grepl(x = list_files_origin, 
@@ -220,7 +218,7 @@ for (species in species_vec) {
     df$species <- species
     df$timestep <- timestep
     
-    extracted_list_T[[timestep]] <- df
+    extracted_list_T[[timestep+1]] <- df
   }
   assembled_list_T[[species]] <- extracted_list_T
 }
