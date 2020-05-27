@@ -267,9 +267,11 @@ atr_val <- data.frame(
   StateAttributeTypeID = c("Agriculture", "Urban"),
   Value = c(1, 1)
 ) %>% bind_rows(
+  
   data.frame(StateClassID=rep(paste0("Forest:", internal_states_unique),2), 
              StateAttributeTypeID=c(rep("Forest", length(internal_states_unique)), internal_states_unique), 
              Value=1)
+  
 )
 write_csv(atr_val, "config/stsim/StateAttributeValue.csv")
 
@@ -317,6 +319,28 @@ write_csv(adj_mul, "config/stsim/TransitionAdjacencyMultiplier.csv")
 
 #-------------------------------------------------------------------------------
 
+## Time since Transition
+TST_group <- data.frame(
+  TransitionTypeID = trans_unique,
+  TransitionGroupID = "Forest Internals Gr"
+)
+write_csv(TST_group, "config/stsim/TimeSinceTransitionGroup.csv")
+
+TST_random <- data.frame(
+  TransitionGroupID = "Forest Internals Gr",
+  MinInitialTST = 20 
+)
+write_csv(TST_random, "config/stsim/TimeSinceTransitionRandomize.csv")
+
+TPA <- data.frame(
+  TransitionGroupID = "Forest Internals Gr",
+  AutoCorrelation ="Yes", 
+  SpreadTo = "Same Tertiary Stratum"
+)
+write_csv(TPA, "config/stsim/TransitionPathwaysAutocorelation.csv")
+
+#-------------------------------------------------------------------------------
+
 # trans <- data.frame(
 #   StateClassIDSource = c("Agriculture:Cultivated", "Forest:Deciduous", "Forest:Deciduous", "Agriculture:Cultivated"),
 #   StateClassIDDest = c("Urban:Nonlinear", "Agriculture:Cultivated", "Urban:Nonlinear", "Forest:Deciduous"),
@@ -324,7 +348,6 @@ write_csv(adj_mul, "config/stsim/TransitionAdjacencyMultiplier.csv")
 #   TransitionGroupID = c("Urbanisation", "Agricultural Expansion Gr", "Urbanisation", "Reforestation"),
 #   Probability = c(1, 1, 1, 1)
 # )
-
 # state_classes <- data.frame(
 #   Name = c("Agriculture:Cultivated", "Forest:Deciduous", 
 #            "Urban:Nonlinear", "Roads:Linear"),
@@ -334,28 +357,23 @@ write_csv(adj_mul, "config/stsim/TransitionAdjacencyMultiplier.csv")
 #   Color = c("255,255,255,0", "255,0,255,0", "255,255,0,0", "0,255,255,0"),
 #   Legend = c("a", "b", "c", "d")
 # )
-
 # state_x <- data.frame(
 #   Name = c("Forest", "Urban", "Agriculture", "Roads"),
 #   Description = c("Forest", "Urban", "Agriculture", "Roads")
 # )
-
 # state_y <- data_frame(
 #   Name = c("Deciduous", "Cultivated", "Nonlinear", "Linear"),
 #   Description = c("Deciduous", "Cultivated", "Nonlinear", "Linear")
 # )
-
 # trans_type <- data.frame(
 #   Name = c("Deforestation", "Agricultural Loss", "Agricultural Expansion"),
 #   ID = c(1, 2, 3),
 #   Color = c("255,255,255,0", "255,0,255,0", "255,255,0,0")
 # )
-
 # trans_type_group <- data.frame(
 #   TransitionTypeID = c("Agricultural Expansion", "Agricultural Loss", 
 #                        "Agricultural Loss", "Deforestation", "Deforestation"),
 #   TransitionGroupID = c("Agricultural Expansion [Type]", "Agricultural Loss [Type]", 
 #                         "Urbanisation", "Deforestation [Type]", "Urbanisation"),
 #   IsAuto = c(TRUE, TRUE, NA, TRUE, NA)
-#   
 # )

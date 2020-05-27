@@ -263,140 +263,162 @@ loadSheet("StateAttributeValue", NULL, transition_adjacency, path = "config/stsi
 loadSheet("TransitionAdjacencySetting", NULL, transition_adjacency, path = "config/stsim/")
 loadSheet("TransitionAdjacencyMultiplier", NULL, transition_adjacency, path = "config/stsim/")
 
+# TST
+TST_default <- scenario(Definitions, scenario = "TST: Default")
+loadSheet("TimeSinceTransitionGroup", NULL, TST_default, path = "config/stsim/")
+loadSheet("TimeSinceTransitionRandomize", NULL, TST_default, path = "config/stsim/")
+
+# TPA
+TPA_default <- scenario(Definitions, scenario = "TPA: default")
+loadSheet("TransitionPathwayAutoCorrelation", NULL, TPA_default, path = "config/stsim")
+
 ####################
 ## Full Scenarios ##
 ####################
 
 # Want to compare the forest everywhere with the forest only in corridors
 
+unchanging_sub_scenarios <- 
+  c(deter_trans_default,
+    output_default,
+    transition_adjacency,
+    trans_size_distribution,
+    TST_default,
+    TPA_default)
+
 # Scenario BAU 1990-2010
 historic_run <- scenario(Definitions, scenario = "historic run")
 dependency(historic_run, c(run_historic,
                            init_ag_1990,
                            transmul_historic,
-                           # Not changing
-                           deter_trans_default,
-                           output_default,
-                           transition_adjacency,
-                           trans_size_distribution,
-                           # Changing
                            spatial_multiplier_default,
-                           targets_default_no_ref_hist))
+                           targets_default_no_ref_hist, 
+                           unchanging_sub_scenarios))
+
+# BAU 2010-2100
+BAU_run_historic <- scenario(Definitions, scenario = "BAU run | historic")
+dependency(BAU_run_historic, c(run_forecast,
+                               init_ag_2010,
+                               transmul_historic,
+                               spatial_multiplier_default,
+                               targets_default_no_ref,
+                               unchanging_sub_scenarios))
 
 BAU_run_baseline <- scenario(Definitions, scenario = "BAU run | baseline")
 dependency(BAU_run_baseline, c(run_forecast,
                                init_ag_2010,
                                transmul_baseline,
-                               # Not changing
-                               deter_trans_default,
-                               output_default,
-                               transition_adjacency,
-                               trans_size_distribution,
-                               # Changing
                                spatial_multiplier_default,
-                               targets_default_no_ref))
+                               targets_default_no_ref, 
+                               unchanging_sub_scenarios))
+
 BAU_run_8.5 <- scenario(Definitions, scenario = "BAU run | RCP 8.5")
 dependency(BAU_run_8.5, c(run_forecast,
                           init_ag_2010,
                           transmul_8.5,
-                          # Not changing
-                          deter_trans_default,
-                          output_default,
-                          transition_adjacency,
-                          trans_size_distribution,
-                          # Changing
                           spatial_multiplier_default,
-                          targets_default_no_ref))
+                          targets_default_no_ref, 
+                          unchanging_sub_scenarios))
+
+# BAU + ref
+BAU_run_ref_historic <- scenario(Definitions, scenario = "BAU run + ref | historic")
+dependency(BAU_run_ref_historic, c(run_forecast,
+                                   init_ag_2010,
+                                   transmul_historic,
+                                   spatial_multiplier_default,
+                                   targets_default_ref, 
+                                   unchanging_sub_scenarios))
 
 BAU_run_ref_baseline <- scenario(Definitions, scenario = "BAU run + ref | baseline")
 dependency(BAU_run_ref_baseline, c(run_forecast,
                                    init_ag_2010,
                                    transmul_baseline,
-                                   # Not changing
-                                   deter_trans_default,
-                                   output_default,
-                                   transition_adjacency,
-                                   trans_size_distribution,
-                                   # Changing
                                    spatial_multiplier_default,
-                                   targets_default_ref))
+                                   targets_default_ref, 
+                                   unchanging_sub_scenarios))
+
 BAU_run_ref_8.5 <- scenario(Definitions, scenario = "BAU run + ref | RCP 8.5")
 dependency(BAU_run_ref_8.5, c(run_forecast,
                               init_ag_2010,
                               transmul_8.5,
-                              # Not changing
-                              deter_trans_default,
-                              output_default,
-                              transition_adjacency,
-                              trans_size_distribution,
-                              # Changing
                               spatial_multiplier_default,
-                              targets_default_ref))
+                              targets_default_ref, 
+                              unchanging_sub_scenarios))
 
-# BAU_run <- scenario(Definitions, scenario = "BAU run")
-# dependency(BAU_run, c(run_forecast,
-#                       init_ag_2010,
-#                       # Not changing
-#                       deter_trans_default,
-#                       output_default,
-#                       transition_adjacency,
-#                       trans_size_distribution,
-#                       transmul_default,
-#                       # Changing 
-#                       spatial_multiplier_default,
-#                       targets_default_no_ref))
-# 
-# BAU_corr_protected <- scenario(Definitions, scenario = "BAU run + corrs protection")
-# dependency(BAU_corr_protected, c(run_forecast,
-#                                  init_ag_2010,
-#                                  # Not changing
-#                                  deter_trans_default,
-#                                  output_default,
-#                                  transition_adjacency,
-#                                  trans_size_distribution,
-#                                  transmul_default,
-#                                  # Changing 
-#                                  spatial_multiplier_corrs,
-#                                  targets_default_no_ref))
-# 
-# BAU_run_ref <- scenario(Definitions, scenario = "BAU run + ref")
-# dependency(BAU_run_ref, c(run_forecast,
-#                           init_ag_2010,
-#                           # Not changing
-#                           deter_trans_default,
-#                           output_default,
-#                           transition_adjacency,
-#                           trans_size_distribution,
-#                           transmul_default,
-#                           # Changing 
-#                           spatial_multiplier_default,
-#                           targets_default_ref))
-# 
-# REF_corr_protected_ref <- scenario(Definitions, scenario = "BAU run + corrs protection + ref")
-# dependency(REF_corr_protected_ref, c(run_forecast,
-#                                      init_ag_2010,
-#                                      # Not changing
-#                                      deter_trans_default,
-#                                      output_default,
-#                                      transition_adjacency,
-#                                      trans_size_distribution,
-#                                      transmul_default,
-#                                      # Changing 
-#                                      spatial_multiplier_corrs,
-#                                      targets_default_ref))
-# 
-# REF_corr_protected_ref_targeted <- scenario(Definitions, scenario = "BAU run + corrs protection + ref TARGETED")
-# dependency(REF_corr_protected_ref_targeted, c(run_forecast,
-#                                               init_ag_2010,
-#                                               # Not changing
-#                                               deter_trans_default,
-#                                               output_default,
-#                                               transition_adjacency,
-#                                               trans_size_distribution,
-#                                               transmul_default,
-#                                               # Changing 
-#                                               spatial_multiplier_corrs_reforestation,
-#                                               targets_default_ref))
+# BAU + protec
+BAU_corr_protected_historic <- scenario(Definitions, scenario = "BAU run + corrs protection | historic")
+dependency(BAU_corr_protected_historic, c(run_forecast,
+                                          init_ag_2010,
+                                          transmul_historic,
+                                          spatial_multiplier_corrs,
+                                          targets_default_no_ref, 
+                                          unchanging_sub_scenarios))
+
+BAU_corr_protected_baseline <- scenario(Definitions, scenario = "BAU run + corrs protection | baseline")
+dependency(BAU_corr_protected_baseline, c(run_forecast,
+                                          init_ag_2010,
+                                          transmul_baseline,
+                                          spatial_multiplier_corrs,
+                                          targets_default_no_ref, 
+                                          unchanging_sub_scenarios))
+
+BAU_corr_protected_8.5 <- scenario(Definitions, scenario = "BAU run + corrs protection | RCP 8.5")
+dependency(BAU_corr_protected_8.5, c(run_forecast,
+                                     init_ag_2010,
+                                     transmul_8.5,
+                                     spatial_multiplier_corrs,
+                                     targets_default_no_ref, 
+                                     unchanging_sub_scenarios))
+# BAU + protec + random ref 
+REF_corr_protected_ref_historic <- scenario(Definitions, scenario = "BAU run + corrs protection + ref | historic")
+dependency(REF_corr_protected_ref_historic, c(run_forecast,
+                                              init_ag_2010,
+                                              transmul_historic,
+                                              spatial_multiplier_corrs,
+                                              targets_default_ref, 
+                                              unchanging_sub_scenarios))
+
+REF_corr_protected_ref_baseline <- scenario(Definitions, scenario = "BAU run + corrs protection + ref | baseline")
+dependency(REF_corr_protected_ref_baseline, c(run_forecast,
+                                              init_ag_2010,
+                                              transmul_baseline,
+                                              spatial_multiplier_corrs,
+                                              targets_default_ref, 
+                                              unchanging_sub_scenarios))
+
+REF_corr_protected_ref_8.5 <- scenario(Definitions, scenario = "BAU run + corrs protection + ref | RCP 8.5")
+dependency(REF_corr_protected_ref_8.5, c(run_forecast,
+                                         init_ag_2010,
+                                         transmul_8.5,
+                                         spatial_multiplier_corrs,
+                                         targets_default_ref,
+                                         unchanging_sub_scenarios))
+
+# BAU + protec + targeted ref
+
+REF_corr_protected_ref_targeted_historic <- scenario(Definitions, scenario = "BAU run + corrs protection + ref TARGETED | historic")
+dependency(REF_corr_protected_ref_targeted_historic, c(run_forecast,
+                                                       init_ag_2010,
+                                                       transmul_historic,
+                                                       spatial_multiplier_corrs_reforestation,
+                                                       targets_default_ref, 
+                                                       unchanging_sub_scenarios))
+
+REF_corr_protected_ref_targeted_baseline <- scenario(Definitions, scenario = "BAU run + corrs protection + ref TARGETED | baseline")
+dependency(REF_corr_protected_ref_targeted_baseline, c(run_forecast,
+                                                       init_ag_2010,
+                                                       transmul_baseline,
+                                                       spatial_multiplier_corrs_reforestation,
+                                                       targets_default_ref, 
+                                                       unchanging_sub_scenarios))
+
+REF_corr_protected_ref_targeted_8.5 <- scenario(Definitions, scenario = "BAU run + corrs protection + ref TARGETED | RCP 8.5")
+dependency(REF_corr_protected_ref_targeted_8.5, c(run_forecast,
+                                                  init_ag_2010,
+                                                  transmul_8.5,
+                                                  spatial_multiplier_corrs_reforestation,
+                                                  targets_default_ref, 
+                                                  unchanging_sub_scenarios))
 
 #########
 ## RUN ##
@@ -404,16 +426,33 @@ dependency(BAU_run_ref_8.5, c(run_forecast,
 
 if (STSIM_RUN){
   print("Running StSIM");Sys.time()
-  results <- run(list(historic_run,
-                      BAU_run_baseline,
-                      BAU_run_8.5,
-                      #BAU_corr_protected,
-                      BAU_run_ref_baseline,
-                      BAU_run_ref_8.5
-                      #REF_corr_protected_ref,
-                      #REF_corr_protected_ref_targeted
-  ),
-  summary = TRUE, jobs = OMP_NUM_THREADS)
+  
+  results <- run(
+    list(
+      historic_run, 
+      
+      BAU_run_historic, 
+      BAU_run_baseline, 
+      BAU_run_8.5, 
+      
+      BAU_run_ref_historic, 
+      BAU_run_ref_baseline, 
+      BAU_run_ref_8.5, 
+      
+      BAU_corr_protected_historic, 
+      BAU_corr_protected_baseline, 
+      BAU_corr_protected_8.5, 
+      
+      REF_corr_protected_ref_historic, 
+      REF_corr_protected_ref_baseline, 
+      REF_corr_protected_ref_8.5, 
+      
+      REF_corr_protected_ref_targeted_historic, 
+      REF_corr_protected_ref_targeted_baseline, 
+      REF_corr_protected_ref_targeted_8.5
+    ),
+    summary = TRUE, jobs = OMP_NUM_THREADS)
+  
   print(results)
   saveRDS(results, "data/temp/stsim_run_results.RDS")
 }
