@@ -257,7 +257,7 @@ write_csv(trans_type_group, "config/stsim/TransitionTypeGroup.csv")
 
 # StateAttributeType
 atr_type <- data.frame(
-  Name = c("Agriculture", "Urban", "Forest")
+  Name = c("Agriculture", "Urban", "Forest", internal_states_unique)
 )
 write_csv(atr_type, "config/stsim/StateAttributeType.csv")
 
@@ -267,32 +267,51 @@ atr_val <- data.frame(
   StateAttributeTypeID = c("Agriculture", "Urban"),
   Value = c(1, 1)
 ) %>% bind_rows(
-  data.frame(StateClassID=paste0("Forest:", forest_classes$Name), 
-             StateAttributeTypeID="Forest", 
+  data.frame(StateClassID=rep(paste0("Forest:", internal_states_unique),2), 
+             StateAttributeTypeID=c(rep("Forest", length(internal_states_unique)), internal_states_unique), 
              Value=1)
 )
 write_csv(atr_val, "config/stsim/StateAttributeValue.csv")
 
 # TransitionAdjacencySetting
+
+left_side <- sapply(strsplit(trans_unique_no_type, "_to_"), `[[`, 1)
+
 adj_settings <- data.frame(
   TransitionGroupID = c("Urbanisation", "Agricultural Expansion Gr", "Reforestation Gr") ,
   StateAttributeTypeID = c("Urban", "Agriculture", "Forest"),
   NeighborhoodRadius = c(1000, 130, 130), # 1500
-  UpdateFrequency = c(1, 1, 1)
+  UpdateFrequency = c(1)
+  
+) %>% bind_rows(
+  
+  data.frame(TransitionGroupID = trans_unique,
+             StateAttributeTypeID = left_side,
+             NeighborhoodRadius = 130, # 1500
+             UpdateFrequency = c(1))
+  
 )
 write_csv(adj_settings, "config/stsim/TransitionAdjacencySetting.csv")
 
 # TransitionAdjacencyMultiplier
 adj_mul <- data.frame(
+  
   TransitionGroupID = c("Urbanisation", "Urbanisation",
                         "Agricultural Expansion Gr", "Agricultural Expansion Gr",
                         "Reforestation Gr", "Reforestation Gr"),
   AttributeValue = c(0.000, 0.500, 
                      0.000, 0.750, 
-                     0.000, 0.850),
+                     0.000, 0.889),
   Amount = c(0,1,
              0,1,
              0,1)
+  
+) %>% bind_rows(
+  
+  data.frame(TransitionGroupID = rep(trans_unique, each=2), 
+             AttributeValue = c(0.000,0.889), 
+             Amount = c(0,1))
+  
 )
 write_csv(adj_mul, "config/stsim/TransitionAdjacencyMultiplier.csv")
 
