@@ -202,8 +202,7 @@ key <- read_csv("config/stsim/SecondaryStratum.csv") %>%
 #mun_joined <- left_join(mun, key, by="MUS_NM_MUN")
 
 df_final_fordiff_pivoted <- df_final %>% 
-  filter(timestep %in% c(2010,
-                         last(unique(key$timestep)))) %>% 
+  filter(timestep %in% c(2010, last(unique(key$timestep)))) %>% 
   pivot_wider(names_from=timestep, values_from=mean) %>% drop_na() %>% 
   rename(before=last_col(offset = 1), after=last_col()) %>% 
   left_join(key, by=c("zone", "sce", "species", "source")) %>% 
@@ -241,7 +240,7 @@ list_lu <- list_lu[2:length(list_lu)]
 
 # for (x in 2:6) {print(freq((list_lu[[x]]$sc.it1.ts11==3) - (list_lu[[x]]$sc.it1.ts2==3)))}
 list_lu_1_cropped <- map(map(list_lu, crop, mun), mask, mun)
-extent_zoom <- extent(c(621300, 621300+50000, 5023000, 5023000+50000))
+extent_zoom <- extent(c(621300, 621300+10000, 5023000, 5023000+10000))
 #extent_zoom <- drawExtent()
 #list_lu_1_cropped <- map(list_lu, crop, extent_zoom)
 
