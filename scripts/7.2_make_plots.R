@@ -45,7 +45,7 @@ mun <- st_read("data/mun/munic_SHP_clean.shp", quiet = TRUE)
 df_final <- readRDS("outputs/final/final_df_current_density.RDS") %>%
   mutate(timestep = (timestep*10)+1990, source = "model")
 df_final_origin <- readRDS("outputs/final/final_df_origin_current_density.RDS") %>%
-  mutate(timestep = timestep*10+1980, source = "model")
+  mutate(timestep = timestep*10+1990, source = "model")
 
 # df_final <- readRDS("test/final_df_current_density.RDS") %>%
 #   mutate(timestep = (timestep*10)+1990, source = "model")
