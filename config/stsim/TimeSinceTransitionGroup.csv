@@ -1,73 +1,73 @@
 TransitionTypeID,TransitionGroupID
-decid_2_to_decid_1 [Type],Forest Internals Gr
-decid_3_to_decid_1 [Type],Forest Internals Gr
-mixt_1_to_decid_1 [Type],Forest Internals Gr
-mixt_2_to_decid_1 [Type],Forest Internals Gr
-mixt_3_to_decid_1 [Type],Forest Internals Gr
-conif_1_to_decid_1 [Type],Forest Internals Gr
-conif_2_to_decid_1 [Type],Forest Internals Gr
-conif_3_to_decid_1 [Type],Forest Internals Gr
-decid_1_to_decid_2 [Type],Forest Internals Gr
-decid_3_to_decid_2 [Type],Forest Internals Gr
-mixt_1_to_decid_2 [Type],Forest Internals Gr
-mixt_2_to_decid_2 [Type],Forest Internals Gr
-mixt_3_to_decid_2 [Type],Forest Internals Gr
-conif_1_to_decid_2 [Type],Forest Internals Gr
-conif_2_to_decid_2 [Type],Forest Internals Gr
-conif_3_to_decid_2 [Type],Forest Internals Gr
-decid_1_to_decid_3 [Type],Forest Internals Gr
-decid_2_to_decid_3 [Type],Forest Internals Gr
-mixt_1_to_decid_3 [Type],Forest Internals Gr
-mixt_2_to_decid_3 [Type],Forest Internals Gr
-mixt_3_to_decid_3 [Type],Forest Internals Gr
-conif_1_to_decid_3 [Type],Forest Internals Gr
-conif_2_to_decid_3 [Type],Forest Internals Gr
-conif_3_to_decid_3 [Type],Forest Internals Gr
-decid_1_to_mixt_1 [Type],Forest Internals Gr
-decid_2_to_mixt_1 [Type],Forest Internals Gr
-decid_3_to_mixt_1 [Type],Forest Internals Gr
-mixt_2_to_mixt_1 [Type],Forest Internals Gr
-mixt_3_to_mixt_1 [Type],Forest Internals Gr
-conif_1_to_mixt_1 [Type],Forest Internals Gr
-conif_2_to_mixt_1 [Type],Forest Internals Gr
-conif_3_to_mixt_1 [Type],Forest Internals Gr
-decid_1_to_mixt_2 [Type],Forest Internals Gr
-decid_2_to_mixt_2 [Type],Forest Internals Gr
-decid_3_to_mixt_2 [Type],Forest Internals Gr
-mixt_1_to_mixt_2 [Type],Forest Internals Gr
-mixt_3_to_mixt_2 [Type],Forest Internals Gr
-conif_1_to_mixt_2 [Type],Forest Internals Gr
-conif_2_to_mixt_2 [Type],Forest Internals Gr
-conif_3_to_mixt_2 [Type],Forest Internals Gr
-decid_1_to_mixt_3 [Type],Forest Internals Gr
-decid_2_to_mixt_3 [Type],Forest Internals Gr
-decid_3_to_mixt_3 [Type],Forest Internals Gr
-mixt_1_to_mixt_3 [Type],Forest Internals Gr
-mixt_2_to_mixt_3 [Type],Forest Internals Gr
-conif_1_to_mixt_3 [Type],Forest Internals Gr
-conif_2_to_mixt_3 [Type],Forest Internals Gr
-conif_3_to_mixt_3 [Type],Forest Internals Gr
-decid_1_to_conif_1 [Type],Forest Internals Gr
-decid_2_to_conif_1 [Type],Forest Internals Gr
-decid_3_to_conif_1 [Type],Forest Internals Gr
-mixt_1_to_conif_1 [Type],Forest Internals Gr
-mixt_2_to_conif_1 [Type],Forest Internals Gr
-mixt_3_to_conif_1 [Type],Forest Internals Gr
-conif_2_to_conif_1 [Type],Forest Internals Gr
-conif_3_to_conif_1 [Type],Forest Internals Gr
-decid_1_to_conif_2 [Type],Forest Internals Gr
-decid_2_to_conif_2 [Type],Forest Internals Gr
-decid_3_to_conif_2 [Type],Forest Internals Gr
-mixt_1_to_conif_2 [Type],Forest Internals Gr
-mixt_2_to_conif_2 [Type],Forest Internals Gr
-mixt_3_to_conif_2 [Type],Forest Internals Gr
-conif_1_to_conif_2 [Type],Forest Internals Gr
-conif_3_to_conif_2 [Type],Forest Internals Gr
-decid_1_to_conif_3 [Type],Forest Internals Gr
-decid_2_to_conif_3 [Type],Forest Internals Gr
-decid_3_to_conif_3 [Type],Forest Internals Gr
-mixt_1_to_conif_3 [Type],Forest Internals Gr
-mixt_2_to_conif_3 [Type],Forest Internals Gr
-mixt_3_to_conif_3 [Type],Forest Internals Gr
-conif_1_to_conif_3 [Type],Forest Internals Gr
-conif_2_to_conif_3 [Type],Forest Internals Gr
+decid_2_to_decid_1,Forest Internals Gr
+decid_3_to_decid_1,Forest Internals Gr
+mixt_1_to_decid_1,Forest Internals Gr
+mixt_2_to_decid_1,Forest Internals Gr
+mixt_3_to_decid_1,Forest Internals Gr
+conif_1_to_decid_1,Forest Internals Gr
+conif_2_to_decid_1,Forest Internals Gr
+conif_3_to_decid_1,Forest Internals Gr
+decid_1_to_decid_2,Forest Internals Gr
+decid_3_to_decid_2,Forest Internals Gr
+mixt_1_to_decid_2,Forest Internals Gr
+mixt_2_to_decid_2,Forest Internals Gr
+mixt_3_to_decid_2,Forest Internals Gr
+conif_1_to_decid_2,Forest Internals Gr
+conif_2_to_decid_2,Forest Internals Gr
+conif_3_to_decid_2,Forest Internals Gr
+decid_1_to_decid_3,Forest Internals Gr
+decid_2_to_decid_3,Forest Internals Gr
+mixt_1_to_decid_3,Forest Internals Gr
+mixt_2_to_decid_3,Forest Internals Gr
+mixt_3_to_decid_3,Forest Internals Gr
+conif_1_to_decid_3,Forest Internals Gr
+conif_2_to_decid_3,Forest Internals Gr
+conif_3_to_decid_3,Forest Internals Gr
+decid_1_to_mixt_1,Forest Internals Gr
+decid_2_to_mixt_1,Forest Internals Gr
+decid_3_to_mixt_1,Forest Internals Gr
+mixt_2_to_mixt_1,Forest Internals Gr
+mixt_3_to_mixt_1,Forest Internals Gr
+conif_1_to_mixt_1,Forest Internals Gr
+conif_2_to_mixt_1,Forest Internals Gr
+conif_3_to_mixt_1,Forest Internals Gr
+decid_1_to_mixt_2,Forest Internals Gr
+decid_2_to_mixt_2,Forest Internals Gr
+decid_3_to_mixt_2,Forest Internals Gr
+mixt_1_to_mixt_2,Forest Internals Gr
+mixt_3_to_mixt_2,Forest Internals Gr
+conif_1_to_mixt_2,Forest Internals Gr
+conif_2_to_mixt_2,Forest Internals Gr
+conif_3_to_mixt_2,Forest Internals Gr
+decid_1_to_mixt_3,Forest Internals Gr
+decid_2_to_mixt_3,Forest Internals Gr
+decid_3_to_mixt_3,Forest Internals Gr
+mixt_1_to_mixt_3,Forest Internals Gr
+mixt_2_to_mixt_3,Forest Internals Gr
+conif_1_to_mixt_3,Forest Internals Gr
+conif_2_to_mixt_3,Forest Internals Gr
+conif_3_to_mixt_3,Forest Internals Gr
+decid_1_to_conif_1,Forest Internals Gr
+decid_2_to_conif_1,Forest Internals Gr
+decid_3_to_conif_1,Forest Internals Gr
+mixt_1_to_conif_1,Forest Internals Gr
+mixt_2_to_conif_1,Forest Internals Gr
+mixt_3_to_conif_1,Forest Internals Gr
+conif_2_to_conif_1,Forest Internals Gr
+conif_3_to_conif_1,Forest Internals Gr
+decid_1_to_conif_2,Forest Internals Gr
+decid_2_to_conif_2,Forest Internals Gr
+decid_3_to_conif_2,Forest Internals Gr
+mixt_1_to_conif_2,Forest Internals Gr
+mixt_2_to_conif_2,Forest Internals Gr
+mixt_3_to_conif_2,Forest Internals Gr
+conif_1_to_conif_2,Forest Internals Gr
+conif_3_to_conif_2,Forest Internals Gr
+decid_1_to_conif_3,Forest Internals Gr
+decid_2_to_conif_3,Forest Internals Gr
+decid_3_to_conif_3,Forest Internals Gr
+mixt_1_to_conif_3,Forest Internals Gr
+mixt_2_to_conif_3,Forest Internals Gr
+mixt_3_to_conif_3,Forest Internals Gr
+conif_1_to_conif_3,Forest Internals Gr
+conif_2_to_conif_3,Forest Internals Gr

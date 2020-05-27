@@ -321,7 +321,7 @@ write_csv(adj_mul, "config/stsim/TransitionAdjacencyMultiplier.csv")
 
 ## Time since Transition
 TST_group <- data.frame(
-  TransitionTypeID = trans_unique,
+  TransitionTypeID = trans_unique_no_type,
   TransitionGroupID = "Forest Internals Gr"
 )
 write_csv(TST_group, "config/stsim/TimeSinceTransitionGroup.csv")
@@ -332,6 +332,7 @@ TST_random <- data.frame(
 )
 write_csv(TST_random, "config/stsim/TimeSinceTransitionRandomize.csv")
 
+## Pathway autocorelation
 TPA <- data.frame(
   TransitionGroupID = "Forest Internals Gr",
   AutoCorrelation ="Yes", 
