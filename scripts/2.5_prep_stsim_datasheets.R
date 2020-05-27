@@ -338,7 +338,7 @@ TPA <- data.frame(
   AutoCorrelation ="Yes", 
   SpreadTo = "Same Tertiary Stratum"
 )
-write_csv(TPA, "config/stsim/TransitionPathwaysAutocorelation.csv")
+write_csv(TPA, "config/stsim/TransitionPathwaysAutoCorelation.csv")
 
 #-------------------------------------------------------------------------------
 

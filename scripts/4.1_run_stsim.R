@@ -270,7 +270,7 @@ loadSheet("TimeSinceTransitionRandomize", NULL, TST_default, path = "config/stsi
 
 # TPA
 TPA_default <- scenario(Definitions, scenario = "TPA: default")
-loadSheet("TransitionPathwayAutoCorrelation", NULL, TPA_default, path = "config/stsim")
+loadSheet("TransitionPathwaysAutoCorrelation", NULL, TPA_default, path = "config/stsim/")
 
 ####################
 ## Full Scenarios ##
