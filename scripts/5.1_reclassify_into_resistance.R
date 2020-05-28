@@ -62,7 +62,7 @@ plot_temp <- function(name){
 }
 
 unlink("libraries/grass/habsuit/", recursive = T)
-initGRASS(gisBase = "/usr/lib/grass76/", gisDbase = "libraries/grass/", 
+initGRASS(gisBase = "/usr/lib/grass78/", gisDbase = "libraries/grass/", 
           location = "habsuit", mapset = "PERMANENT", 
           override = TRUE)
 execGRASS("g.proj", flags = c("c"), proj4 = projection(raster(true_landuse_list[1])))

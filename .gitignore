@@ -24,3 +24,5 @@ outputs/*
 # test folder
 test/
 temp.tif
+
+*.xz
