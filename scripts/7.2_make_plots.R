@@ -99,6 +99,7 @@ ggsave("outputs/figures/final_graph.png", all_facetted)
 options(gganimate.dev_args = list(width = 1200, height = 800))
 
 fig_1_static <- joined %>% 
+  #mutate(sum_cur = log(sum_cur)) %>% 
   #filter(species %in% c("BLBR","URAM")) %>% 
   #filter(sce %in% c("sce_15", "sce_16", "sce_0")) %>% 
   mutate(sce = as.factor(sce)) %>% 
@@ -106,27 +107,28 @@ fig_1_static <- joined %>%
   geom_line(aes(linetype = sce)) +
   scale_color_manual(values=c('#d8b365','#5ab4ac'), 
                      labels = c("Model", "Observation")) +
-  scale_linetype_manual(values = c(1:7), 
-                        labels = c("none (observations)", 
-                                   "Historic", 
-                                   "Forecast BAU", 
-                                   "Forecast BAU + protection", 
-                                   "Forecast BAU + reforestation", 
-                                   "Forecast BAU + reforestation + protection", 
-                                   "Forecast BAU + reforestation (targeted) + protection")
-  )+
-  geom_point(aes(group = seq_along(timestep), pch = sce), show.legend = FALSE) +
+  # scale_linetype_manual(values = c(1:17), 
+  #                       labels = c("none (observations)", 
+  #                                  "Historic", 
+  #                                  "Forecast BAU", 
+  #                                  "Forecast BAU + protection", 
+  #                                  "Forecast BAU + reforestation", 
+  #                                  "Forecast BAU + reforestation + protection", 
+  #                                  "Forecast BAU + reforestation (targeted) + protection")
+  # )+
+  #geom_point(aes(group = seq_along(timestep), pch = sce), show.legend = FALSE) +
   #add_phylopic(bear, alpha = 1, x=2010, y =0.11, ysize = 10) +
-  facet_grid(~species, scales = "fixed") +
+  facet_wrap(~species, scales = "free") +
   #facet_grid(sce~species, scales = "fixed") +
   labs(title = "Cumulative Connectivity change for species through time",
-       subtitle = "1990-2100",
+       #subtitle = "1990-2100",
        #subtitle = "Year:{frame_along}",
        y = "Cummulative Connectivity",
        x = "Year",
        col = "Source", 
        #pch = "Scenario",
        linetype = "Scenario") +
+  scale_y_continuous(trans = "log10") +
   theme(#legend.position = c(0.15, 0.27),
         #legend.justification = c(1, -0.2),
         legend.box = "vertical",
@@ -143,6 +145,7 @@ fig_1_static <- joined %>%
         #strip.text.y = element_blank(),
         axis.title=element_text(size=18)) +
   NULL
+fig_1_static
 ggsave(fig_1_static, 
        filename = "outputs/figures/connectivity_decrease_x5species.png")
 
@@ -237,6 +240,7 @@ it_1 <- lapply(X = it_1, FUN = mixedsort)
 
 list_lu <-  map(.x = map_depth(.x = it_1, .f = raster, .depth = 2), .f = stack)
 list_lu <- list_lu[2:length(list_lu)]
+names(list_lu) <- sce_nb_vec[2:length(sce_nb_vec)]
 
 # for (x in 2:6) {print(freq((list_lu[[x]]$sc.it1.ts11==3) - (list_lu[[x]]$sc.it1.ts2==3)))}
 list_lu_1_cropped <- map(map(list_lu, crop, mun), mask, mun)

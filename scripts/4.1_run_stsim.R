@@ -427,7 +427,9 @@ dependency(REF_corr_protected_ref_targeted_8.5, c(run_forecast,
 if (STSIM_RUN){
   print("Running StSIM");Sys.time()
   
-  results <- run(
+  results <- data.frame()
+  
+  all_sce <- 
     list(
       historic_run, 
       
@@ -450,8 +452,15 @@ if (STSIM_RUN){
       REF_corr_protected_ref_targeted_historic, 
       REF_corr_protected_ref_targeted_baseline, 
       REF_corr_protected_ref_targeted_8.5
-    ),
-    summary = TRUE, jobs = OMP_NUM_THREADS)
+    )
+  
+  for(sce in all_sce){
+    
+    temp_res <- run(sce,
+        summary = TRUE, jobs = OMP_NUM_THREADS)
+    results <- bind_rows(results, temp_res)
+    
+  }
   
   print(results)
   saveRDS(results, "data/temp/stsim_run_results.RDS")
