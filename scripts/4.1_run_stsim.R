@@ -431,7 +431,7 @@ if (STSIM_RUN){
   
   all_sce <- 
     list(
-      #historic_run, #38
+      historic_run, #38
       
       BAU_run_historic, #39 
       BAU_run_baseline, #40
