@@ -32,12 +32,23 @@ suppressPackageStartupMessages({
 })
 
 #-------------------------------------------------------------------------------
-# Get result secenario directory 
+# Get result scenario directory 
 sce_dir_vec <- list.files("libraries/stsim/monteregie-conncons-scripted.ssim.output", 
                           full.names = T)
 sce_nb_vec <- paste0("sce_", as.numeric(unlist(lapply(str_split(sce_dir_vec, "-"), 
                                                       FUN = last))))
 mun <- st_read("data/mun/munic_SHP_clean.shp", quiet = TRUE)
+
+results <- read_rds("data/temp/stsim_run_results.RDS") %>% 
+  select(scenarioId, name)
+results$name <- gsub(results$name, pattern = " \\(.+\\)", replacement = "")
+results$sce <- paste0("sce_",results$scenarioId)
+
+results_clean <- results %>% tibble() %>% 
+  mutate(splitted = str_split(name, " \\| ")) %>% 
+  mutate(climate = unlist(map(splitted, ~unlist(.x[2]))), 
+         run = unlist(map(splitted, ~unlist(.x[1])))) %>% 
+  select(-splitted) 
 #-------------------------------------------------------------------------------
 
 # Data prep
@@ -65,21 +76,22 @@ df_origin_summarised <- df_final_origin %>%
 joined <- full_join(df_summarised, 
                     df_origin_summarised, 
                     by=c("sce","source", "species", 
-                         "timestep", "sum_cur"))
-
+                         "timestep", "sum_cur")) %>% 
+  left_join(results_clean, by = "sce") %>% 
+  replace_na(list(climate = "none", run = "historic run"))
 # Set theme
 theme_set(theme_minimal())
 
 #-------------------------------------------------------------------------------
 
 # FIGURE 0 
-all_facetted <- ggplot(df_final) + 
-  aes(x = timestep, y = mean, group = zone, color=zone) + 
-  geom_line(show.legend = FALSE, alpha=0.2) + 
-  scale_color_viridis_d(option = "plasma") + 
-  facet_grid(sce ~ species)+
-  theme(legend.position = "none") 
-ggsave("outputs/figures/final_graph.png", all_facetted)
+# all_facetted <- ggplot(df_final) + 
+#   aes(x = timestep, y = mean, group = zone, color=zone) + 
+#   geom_line(show.legend = FALSE, alpha=0.2) + 
+#   scale_color_viridis_d(option = "plasma") + 
+#   facet_grid(sce ~ species)+
+#   theme(legend.position = "none") 
+# ggsave("outputs/figures/final_graph.png", all_facetted)
 
 ### CALCULATION
 # joined %>%
@@ -98,53 +110,57 @@ ggsave("outputs/figures/final_graph.png", all_facetted)
 ## FIGURE 1
 options(gganimate.dev_args = list(width = 1200, height = 800))
 
-fig_1_static <- joined %>% 
+#fig_1_static <- 
+joined %>% 
+  
   #mutate(sum_cur = log(sum_cur)) %>% 
   #filter(species %in% c("BLBR","URAM")) %>% 
-  #filter(sce %in% c("sce_15", "sce_16", "sce_0")) %>% 
-  mutate(sce = as.factor(sce)) %>% 
+  #filter(sce %in% c("sce_15", "sce_16", "sce_0")) %>%
+  
+  mutate(sce = as.factor(sce), 
+         run = as.factor(run), 
+         climate = factor(climate, levels = c("none", "historic","baseline", "RCP 8.5"))) %>% 
   ggplot(aes(x=timestep, y=sum_cur, col=source)) +
-  geom_line(aes(linetype = sce)) +
   scale_color_manual(values=c('#d8b365','#5ab4ac'), 
                      labels = c("Model", "Observation")) +
-  # scale_linetype_manual(values = c(1:17), 
-  #                       labels = c("none (observations)", 
-  #                                  "Historic", 
-  #                                  "Forecast BAU", 
-  #                                  "Forecast BAU + protection", 
-  #                                  "Forecast BAU + reforestation", 
-  #                                  "Forecast BAU + reforestation + protection", 
-  #                                  "Forecast BAU + reforestation (targeted) + protection")
-  # )+
-  #geom_point(aes(group = seq_along(timestep), pch = sce), show.legend = FALSE) +
+  
+  geom_line(aes(group = sce, linetype=climate)) +
+  scale_linetype_manual(values = c(1,3,2,5))+
+  
+  geom_point(aes(group = sce, pch = run)) +
   #add_phylopic(bear, alpha = 1, x=2010, y =0.11, ysize = 10) +
+  
   facet_wrap(~species, scales = "free") +
   #facet_grid(sce~species, scales = "fixed") +
+  
   labs(title = "Cumulative Connectivity change for species through time",
        #subtitle = "1990-2100",
        #subtitle = "Year:{frame_along}",
        y = "Cummulative Connectivity",
        x = "Year",
        col = "Source", 
-       #pch = "Scenario",
-       linetype = "Scenario") +
-  scale_y_continuous(trans = "log10") +
-  theme(#legend.position = c(0.15, 0.27),
-        #legend.justification = c(1, -0.2),
-        legend.box = "vertical",
-        legend.background = element_blank(),
-        legend.box.background = element_rect(colour = "black"),
-        panel.border = element_rect(fill = NA),
-        legend.title = element_text(size = 15),
-        legend.text = element_text(size = 12),
-        plot.title = element_text(size=22),
-        plot.subtitle = element_text(size=22),
-        axis.text.x = element_text(angle=65, vjust=0.6, size =15),
-        axis.text.y = element_text(size =15),
-        #strip.text.x = element_blank(),
-        #strip.text.y = element_blank(),
-        axis.title=element_text(size=18)) +
+       pch = "Run Type",
+       linetype = "Climate") +
+  
+  scale_y_log10()+
+  
+  theme(legend.position = c(0.77, 0.22),
+    #legend.justification = c(1, -0.2), # for inside plot
+    legend.box = "vertical",
+    legend.background = element_blank(),
+    legend.box.background = element_rect(colour = "black"),
+    panel.border = element_rect(fill = NA),
+    legend.title = element_text(size = 15),
+    legend.text = element_text(size = 12),
+    plot.title = element_text(size=22),
+    plot.subtitle = element_text(size=22),
+    axis.text.x = element_text(angle=65, vjust=0.6, size =15),
+    axis.text.y = element_text(size =15),
+    strip.text.x = element_text(size = 15),
+    strip.text.y = element_text(size = 15),
+    axis.title=element_text(size=18)) +
   NULL
+
 fig_1_static
 ggsave(fig_1_static, 
        filename = "outputs/figures/connectivity_decrease_x5species.png")

@@ -431,17 +431,17 @@ if (STSIM_RUN){
   
   all_sce <- 
     list(
-      historic_run, 
+      #historic_run, #38
       
-      BAU_run_historic, 
-      BAU_run_baseline, 
-      BAU_run_8.5, 
+      #BAU_run_historic, #39 
+      #BAU_run_baseline, #40
+      #BAU_run_8.5, #41
       
-      BAU_run_ref_historic, 
-      BAU_run_ref_baseline, 
-      BAU_run_ref_8.5, 
+      #BAU_run_ref_historic, #42 
+      #BAU_run_ref_baseline, #43
+      #BAU_run_ref_8.5, #44
       
-      BAU_corr_protected_historic, 
+      #BAU_corr_protected_historic, #45 
       BAU_corr_protected_baseline, 
       BAU_corr_protected_8.5, 
       
