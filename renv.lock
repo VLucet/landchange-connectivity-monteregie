@@ -16,13 +16,6 @@
       "Repository": "CRAN",
       "Hash": "8f9ce74c6417d61f0782cbae5fd2b7b0"
     },
-    "Brobdingnag": {
-      "Package": "Brobdingnag",
-      "Version": "1.2-6",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "365629a3ac7243df8ed6ac88a606d9fe"
-    },
     "DBI": {
       "Package": "DBI",
       "Version": "1.1.0",
@@ -219,13 +212,6 @@
       "Repository": "CRAN",
       "Hash": "c1616606f097075542c12fb8a10a071e"
     },
-    "abind": {
-      "Package": "abind",
-      "Version": "1.4-5",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "4f57884290cc75ab22f4af9e9d4ca862"
-    },
     "animation": {
       "Package": "animation",
       "Version": "2.6",
@@ -322,20 +308,6 @@
       "Repository": "CRAN",
       "Hash": "f7c819deb39929db5af6c6299f7eb0b5"
     },
-    "bridgesampling": {
-      "Package": "bridgesampling",
-      "Version": "1.0-0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "5d4e99b6aae5e4e90edde77e0cf28fdc"
-    },
-    "brms": {
-      "Package": "brms",
-      "Version": "2.12.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "05b97a7ca3fb9865c2f98b25742064a6"
-    },
     "broom": {
       "Package": "broom",
       "Version": "0.5.5",
@@ -406,13 +378,6 @@
       "Repository": "CRAN",
       "Hash": "08cf4045c149a0f0eaf405324c7495bd"
     },
-    "coda": {
-      "Package": "coda",
-      "Version": "0.19-3",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "b177892d05d94358d282fcc303799593"
-    },
     "codetools": {
       "Package": "codetools",
       "Version": "0.2-16",
@@ -433,13 +398,6 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "98ca919385a634e5d558e6938755e0bf"
-    },
-    "config": {
-      "Package": "config",
-      "Version": "0.3",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "76268942467fa8ba171e9aa34203ee2a"
     },
     "crayon": {
       "Package": "crayon",
@@ -868,13 +826,6 @@
       "Repository": "CRAN",
       "Hash": "84b0ee361e2f78d6b7d670db9471c0c5"
     },
-    "keras": {
-      "Package": "keras",
-      "Version": "2.2.5.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "9883c2e67361e668e347bfcd54225f2e"
-    },
     "knitr": {
       "Package": "knitr",
       "Version": "1.28",
@@ -1056,20 +1007,6 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "6dfe8bf774944bd5595785e3229d8771"
-    },
-    "mvtnorm": {
-      "Package": "mvtnorm",
-      "Version": "1.1-0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "b4467e29ec60b2d05e361c9141e4fc59"
-    },
-    "nleqslv": {
-      "Package": "nleqslv",
-      "Version": "3.3.2",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "bd00b0d9f6e1aa1462a89eb05d992b38"
     },
     "nlme": {
       "Package": "nlme",
@@ -1274,13 +1211,6 @@
       "Repository": "CRAN",
       "Hash": "561326df07a5bc5266ba17ce3b81cbf1"
     },
-    "rappdirs": {
-      "Package": "rappdirs",
-      "Version": "0.3.1",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "8c8298583adbbe76f3c2220eef71bebc"
-    },
     "raster": {
       "Package": "raster",
       "Version": "3.1-5",
@@ -1343,13 +1273,6 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "15a23ad30f51789188e439599559815c"
-    },
-    "reticulate": {
-      "Package": "reticulate",
-      "Version": "1.14",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "43d9cfafa786e9ebc5502baa0cf4513a"
     },
     "rgdal": {
       "Package": "rgdal",
@@ -1606,26 +1529,12 @@
       "Repository": "CRAN",
       "Hash": "507f3116a38d37ad330a038b3be07b66"
     },
-    "tensorflow": {
-      "Package": "tensorflow",
-      "Version": "2.0.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "2917ec8b7934926476b17414b8bbeac9"
-    },
     "testthat": {
       "Package": "testthat",
       "Version": "2.3.2",
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "0829b987b8961fb07f3b1b64a2fbc495"
-    },
-    "tfruns": {
-      "Package": "tfruns",
-      "Version": "1.4",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "ca89f75e59187aaadf658645118e3935"
     },
     "threejs": {
       "Package": "threejs",
@@ -1836,13 +1745,6 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "ea3cbb0fe4b22a98d1980fbf99788d7a"
-    },
-    "zeallot": {
-      "Package": "zeallot",
-      "Version": "0.1.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "ee9b643aa8331c45d8d82eb3a137c9bc"
     },
     "zoo": {
       "Package": "zoo",
