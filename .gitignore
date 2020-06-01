@@ -24,7 +24,6 @@ outputs/*
 # test folder
 test/
 temp.tif
-
+# Don't track these
 *.xz
-
 scripts/0.2_add_buffer_to_all.sh
