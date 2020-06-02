@@ -131,7 +131,6 @@ writeRaster(secondary_stratum,
 tertiary_stratum_ag <- raster("data/landis/spatial/mont_land_types.tif")
 
 # datasheet
-# TODO add datsheet
 tertiary_stratum_df <- as.data.frame(freq(tertiary_stratum_ag))
 tertiary_stratum_df_final <- tertiary_stratum_df %>% 
   dplyr::select(ID=value, -count) %>% 

@@ -265,7 +265,7 @@ if (R_AGGR$ag){
   buffer_all_empty_ag <- lu.stack.buf.ag$lu_1990
   values(buffer_all_empty_ag) <- NA
   
-  cropped <- crop(buffer_all_empty_ag, raster_base[[1]][[1]]) # TODO fix this, inelegant
+  cropped <- crop(buffer_all_empty_ag, raster_base[[1]][[1]]) # inelegant but works
   values(cropped) <-1
   buffer_allextent_with_ones_final <- mosaic(buffer_all_empty_ag, cropped, fun = max, na.rm=T,
                                              tolerance=0)

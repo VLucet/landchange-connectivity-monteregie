@@ -154,6 +154,7 @@ for (sce in sce_nb_vec){
 
 # Save list
 saveRDS(assembled_list, "outputs/final/final_raster_means.RDS")
+# assembled_list <- readRDS("outputs/final/final_raster_means.RDS")
 print("LARGE LOOP DONE")
 
 # assemble last dataset
