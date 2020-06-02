@@ -167,32 +167,6 @@ final_df$timestep <- as.numeric(final_df$timestep)
 # Save final df
 saveRDS(final_df, "outputs/final/final_df_current_density.RDS")
 
-# FULL SUM FOR FINAL OUTPUTS
-full_stack=list()
-count <- 1
-for (sce in 1:length(assembled_list)) { 
-  temp <- assembled_list[[sce]]
-  print(sce)
-  for (timestep in 1:length(temp[[1]])) {
-    print(timestep)
-    
-    the_stack <- stack(lapply(temp, `[[`, timestep))
-    the_sum <- sum(the_stack)
-    
-    full_stack[[count]] <- the_sum
-    raster_name <- paste("sce", sce, "ts", timestep, sep = "_")
-    names(full_stack[[count]]) 
-    
-    writeRaster(full_stack[[count]],
-                file.path("outputs", "current_density_sum", 
-                          paste0("full_sum_", raster_name, ".tif")), 
-                overwrite=T)
-    
-    count <- count+1
-  }
-  saveRDS(full_stack, paste0("outputs/final/final_cur_sum_sce_",sce,"_per_ts.RDS"))
-}  
-
 #-------------------------------------------------------------------------------
 
 # Now with original data
@@ -236,3 +210,29 @@ final_df_origin$timestep <- as.numeric(final_df_origin$timestep)
 saveRDS(final_df_origin, "outputs/final/final_df_origin_current_density.RDS")
 
 #-------------------------------------------------------------------------------
+
+# FULL SUM FOR FINAL OUTPUTS
+full_stack=list()
+count <- 1
+for (sce in 1:length(assembled_list)) { 
+  temp <- assembled_list[[sce]]
+  print(sce)
+  for (timestep in 1:length(temp[[1]])) {
+    print(timestep)
+    
+    the_stack <- stack(lapply(temp, `[[`, timestep))
+    the_sum <- sum(the_stack)
+    
+    full_stack[[count]] <- the_sum
+    raster_name <- paste("sce", sce, "ts", timestep, sep = "_")
+    names(full_stack[[count]]) 
+    
+    writeRaster(full_stack[[count]],
+                file.path("outputs", "current_density_sum", 
+                          paste0("full_sum_", raster_name, ".tif")), 
+                overwrite=T)
+    
+    count <- count+1
+  }
+  saveRDS(full_stack, paste0("outputs/final/final_cur_sum_sce_",sce,"_per_ts.RDS"))
+}  
