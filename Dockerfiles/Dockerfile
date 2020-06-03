@@ -41,7 +41,8 @@ RUN curl https://julialang-s3.julialang.org/bin/linux/x64/1.3/julia-1.3.1-linux-
 # Download repo and syncrosim
 RUN mkdir /home/rstudio/land_con_monteregie \
   && chown -R rstudio /home/rstudio/land_con_monteregie \
-  && git clone -b climate --single-branch https://github.com/VLucet/landchange-connectivity-monteregie.git /home/rstudio/land_con_monteregie
+  && git clone https://github.com/VLucet/landchange-connectivity-monteregie.git \
+               /home/rstudio/land_con_monteregie
 
 # Move to the working directory
 WORKDIR /home/rstudio/land_con_monteregie
