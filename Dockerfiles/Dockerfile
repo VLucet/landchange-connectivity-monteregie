@@ -36,7 +36,7 @@ WORKDIR /home/rstudio/land_con_monteregie
 
 RUN mkdir /home/rstudio/syncrosim_2_10 \
   && chown -R rstudio /home/rstudio/syncrosim_2_10 \
-  && curl https://syncrosim.com/download-id/19813/ --output syncrosim_2_10.zip \
+  && curl https://syncrosim.com/download-id/19813/ --output /home/rstudio/syncrosim_2_10.zip \
   && unzip syncrosim_2_10.zip -d /home/rstudio/syncrosim_2_10
 
 # Julia install ~ here be geospatial dragons ~
@@ -45,15 +45,16 @@ ENV JULIA_DEPOT_PATH=/opt/julia
 ENV JULIA_PKGDIR=/opt/julia
 
 # Install julia and custom version of circuitscape
-RUN curl https://julialang-s3.julialang.org/bin/linux/x64/1.3/julia-1.3.1-linux-x86_64.tar.gz --output julia-1.3.1-linux-x86_64.tar.gz \
+RUN curl https://julialang-s3.julialang.org/bin/linux/x64/1.3/julia-1.3.1-linux-x86_64.tar.gz --output /home/rstudio/julia-1.3.1-linux-x86_64.tar.gz \
   && tar -xzf julia-1.3.1-linux-x86_64.tar.gz -C /home/rstudio/ \
   && julia -e 'import Pkg; Pkg.activate("."); Pkg.instantiate(); Pkg.precompile()' \
   && chown -R rstudio /home/rstudio/julia-1.3.1 \ 
   && chown -R rstudio /opt/julia
 
 # Set up renv and Restore renv library
-  RUN R -e "install.packages('remotes', repos = c(CRAN = 'https://cloud.r-project.org'))"
-# RUN R -e 'renv::restore(lockfile = "renv.lock")'
+RUN R -e "install.packages('remotes', repos = c(CRAN = 'https://cloud.r-project.org'))"
+RUN R -e "remotes::install_github('rstudio/renv@${RENV_VERSION}')"
+RUN R -e 'renv::restore(lockfile = "renv.lock")'
 
 # -----
 # RENV_PATHS_CACHE_HOST=/opt/local/renv/cache

@@ -6,9 +6,8 @@
 #-------------------------------------------------------------------------------
 
 @everywhere using Pkg
+@everywhere Pkg.activate(".")
 @everywhere using Circuitscape
-
-Pkg.build("Circuitscape")
 
 # Read the ini files
 @everywhere searchdir(path,key) = filter(x->occursin(key,x), readdir(path))
