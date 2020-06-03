@@ -625,10 +625,10 @@
     },
     "ggplot2": {
       "Package": "ggplot2",
-      "Version": "3.3.0",
+      "Version": "3.3.1",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "911561e07da928345f1ae2d69f97f3ea"
+      "Hash": "dd6dc5b9ef202cef18c5200d76e1634c"
     },
     "ggridges": {
       "Package": "ggridges",
