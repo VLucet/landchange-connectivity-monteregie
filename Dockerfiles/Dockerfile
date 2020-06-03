@@ -32,7 +32,7 @@ ENV JULIA_PKGDIR=/opt/julia
 
 # Install julia and custom version of circuitscape
 RUN curl https://julialang-s3.julialang.org/bin/linux/x64/1.3/julia-1.3.1-linux-x86_64.tar.gz --output /home/rstudio/julia-1.3.1-linux-x86_64.tar.gz \
-  && tar -xzf julia-1.3.1-linux-x86_64.tar.gz -C /home/rstudio/ \
+  && tar -xzf /home/rstudio/julia-1.3.1-linux-x86_64.tar.gz -C /home/rstudio/ \
   && julia -e 'import Pkg; Pkg.activate("."); Pkg.instantiate(); Pkg.precompile()' \
   && chown -R rstudio /home/rstudio/julia-1.3.1 \ 
   && chown -R rstudio /opt/julia
