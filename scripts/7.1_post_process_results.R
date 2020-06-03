@@ -73,9 +73,11 @@ species_vec <- tools::file_path_sans_ext(list.files("config/rcl_tables/species/"
 list_files <- list.files("outputs/current_density", full.names = T, pattern = "curmap")
 
 # Split data repeteadly => for loop
-assembled_list <- list()
-extracted_list <- list()
-full_list <- list()
+#assembled_list <- list()
+# extracted_list <- list()
+extracted_list2 <- vector(mode = "list", 
+                          length = length(sce_dir_vec)*length(species_vec)*10)
+count <-  1
 
 for (sce in sce_nb_vec){
   print(sce)
@@ -101,7 +103,7 @@ for (sce in sce_nb_vec){
   print(ts_template)
   ts_steps <- ts_vec
   
-  spe_list <- list() 
+  #spe_list <- list() 
   for (species in species_vec) {
     print(species)
     ts_list <- list()
@@ -121,48 +123,63 @@ for (sce in sce_nb_vec){
       }
       
       # Step 3 take the mean accross all iterations
-      mean_raster <- mean(stack(iter_list))
-      ts_list[[timestep]] <- mean_raster
+      # mean_raster <- mean(stack(iter_list))
+      #ts_list[[timestep]] <- mean_raster
       
-      # Step 4 remove the NA default value
-      mean_raster[template == 2] <- NA
+      # Step 4 remove the NA default value (2)
+      # mean_raster[template == 2] <- NA
       # mean_raster <- rescale_raster_layer(mean_raster)
       
       # Make zonal stats directly on the mean raster
       # df <- as.data.frame(zonal(x = crop(mean_raster, mun_zonal), mun_zonal), 
       #                     z = mun_zonal, fun = "mean", na.rm = T)
-      mean_raster_cropped <- crop(mean_raster, mun_zonal)
-      df <- as.data.frame(zonal(x = mean_raster_cropped, 
-                                z = mun_zonal, 
-                                fun = "mean", na.rm = TRUE))
-      df$sce <- sce
-      df$zone <- as.factor(df$zone)
-      df$species <- species
-      df$timestep <- ts_steps[which(ts_template == timestep)]
+      # mean_raster_cropped <- crop(mean_raster, mun_zonal)
+      unit_rasters_cropped <- crop(stack(iter_list), mun_zonal)
+      ts_list[[timestep]] <- stack(unit_rasters_cropped)
+      
+      # df <- as.data.frame(zonal(x = mean_raster_cropped, 
+      #                           z = mun_zonal, 
+      #                           fun = "mean", na.rm = TRUE))
+      # df$sce <- sce
+      # df$zone <- as.factor(df$zone)
+      # df$species <- species
+      # df$timestep <- ts_steps[which(ts_template == timestep)]
+      
+      
+      df2 <- as.data.frame(zonal(x = unit_rasters_cropped, 
+                                 z = mun_zonal, 
+                                 fun = "mean", na.rm = TRUE)) 
+      df2$sce <- sce
+      df2$zone <- as.factor(df2$zone)
+      df2$species <- species
+      df2$timestep <- ts_steps[which(ts_template == timestep)]
       
       raster_name <- paste(sce, species, timestep, sep = "_")
-      names(mean_raster) <- raster_name
-      
-      print(head(df))
-      
-      extracted_list[[raster_name]] <- df
+      #names(mean_raster) <- raster_name
+
+      #extracted_list[[raster_name]] <- df
+      extracted_list2[[count]] <- df2 %>% 
+        pivot_longer(cols = contains("it"), names_to = "iteration", values_to = "current")
+      count = count+1
     }
-    spe_list[[species]] <- ts_list
+    #spe_list[[species]] <- ts_list
   }
-  assembled_list[[paste0("sce_",sce)]] <- spe_list
+  #assembled_list[[paste0("sce_",sce)]] <- spe_list
 }
 
 # Save list
-saveRDS(assembled_list, "outputs/final/final_raster_means.RDS")
+#saveRDS(assembled_list, "outputs/final/final_raster_means.RDS")
 # assembled_list <- readRDS("outputs/final/final_raster_means.RDS")
 print("LARGE LOOP DONE")
 
 # assemble last dataset
-final_df <- extracted_list[[1]]
-for (df in extracted_list[2:length(extracted_list)]) {
-  final_df <- full_join(final_df, df, by = c("sce", "zone", "timestep", "species", "mean"))
-}
+#final_df <- bind_rows(extracted_list)
+# for (df in extracted_list[2:length(extracted_list)]) {
+#   final_df <- full_join(final_df, df, by = c("sce", "zone", "timestep", "species", "mean"))
+# }
 final_df$timestep <- as.numeric(final_df$timestep)
+
+final_df <- bind_rows(extracted_list2)
 
 # Save final df
 saveRDS(final_df, "outputs/final/final_df_current_density.RDS")
@@ -200,39 +217,35 @@ for (species in species_vec) {
 
 saveRDS(assembled_list_T, "outputs/final/final_raster_means_TRUE.RDS")
 
-unlisted <- unlist(assembled_list_T, recursive = FALSE)
-final_df_origin <- unlisted[[1]]
-for (df in unlisted[2:length(unlisted)]) {
-  final_df_origin <- full_join(final_df_origin, df, by = c("zone", "timestep", "species", "mean"))
-}
+final_df_origin <- bind_rows(unlist(assembled_list_T, recursive = F))
 
 final_df_origin$timestep <- as.numeric(final_df_origin$timestep)
 saveRDS(final_df_origin, "outputs/final/final_df_origin_current_density.RDS")
 
 #-------------------------------------------------------------------------------
 
-# FULL SUM FOR FINAL OUTPUTS
-full_stack=list()
-count <- 1
-for (sce in 1:length(assembled_list)) { 
-  temp <- assembled_list[[sce]]
-  print(sce)
-  for (timestep in 1:length(temp[[1]])) {
-    print(timestep)
-    
-    the_stack <- stack(lapply(temp, `[[`, timestep))
-    the_sum <- sum(the_stack)
-    
-    full_stack[[count]] <- the_sum
-    raster_name <- paste("sce", sce, "ts", timestep, sep = "_")
-    names(full_stack[[count]]) 
-    
-    writeRaster(full_stack[[count]],
-                file.path("outputs", "current_density_sum", 
-                          paste0("full_sum_", raster_name, ".tif")), 
-                overwrite=T)
-    
-    count <- count+1
-  }
-  saveRDS(full_stack, paste0("outputs/final/final_cur_sum_sce_",sce,"_per_ts.RDS"))
+# # FULL SUM FOR FINAL OUTPUTS
+# full_stack=list()
+# count <- 1
+# for (sce in 1:length(assembled_list)) { 
+#   temp <- assembled_list[[sce]]
+#   print(sce)
+#   for (timestep in 1:length(temp[[1]])) {
+#     print(timestep)
+#     
+#     the_stack <- stack(lapply(temp, `[[`, timestep))
+#     the_sum <- sum(the_stack)
+#     
+#     full_stack[[count]] <- the_sum
+#     raster_name <- paste("sce", sce, "ts", timestep, sep = "_")
+#     names(full_stack[[count]]) 
+#     
+#     writeRaster(full_stack[[count]],
+#                 file.path("outputs", "current_density_sum", 
+#                           paste0("full_sum_", raster_name, ".tif")), 
+#                 overwrite=T)
+#     
+#     count <- count+1
+#   }
+#   saveRDS(full_stack, paste0("outputs/final/final_cur_sum_sce_",sce,"_per_ts.RDS"))
 }  
