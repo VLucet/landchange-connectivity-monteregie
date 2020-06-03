@@ -13,8 +13,9 @@ jobs:
 
       - uses: docker/build-push-action@v1
         with:
-          path: landchange-connectivity-monteregie/Dockerfiles
-          dockerfile: landchange-connectivity-monteregie/Dockerfiles/Dockerfile 
+          repository: vlucet/landchange-connectivity-monteregie
+          path: Dockerfiles
+          dockerfile: Dockerfile 
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
           repository: vlucet/land_con_monteregie
