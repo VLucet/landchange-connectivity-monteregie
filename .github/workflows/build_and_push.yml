@@ -18,6 +18,5 @@ jobs:
           dockerfile: Dockerfile 
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: vlucet/land_con_monteregie
           tags: 3.6.2-1
 
