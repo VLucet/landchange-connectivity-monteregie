@@ -54,7 +54,7 @@ RUN mkdir /home/rstudio/syncrosim_2_10 \
 
 # Set up renv and Restore renv library
   RUN R -e "install.packages('remotes', repos = c(CRAN = 'https://cloud.r-project.org'))"
-  RUN R -e 'renv::restore(lockfile = "renv.lock")'
+  RUN R -e 'renv::restore()'
 
 # -----
 # RENV_PATHS_CACHE_HOST=/opt/local/renv/cache
