@@ -32,24 +32,43 @@ suppressPackageStartupMessages({
 })
 
 #-------------------------------------------------------------------------------
-# Get result secenario directory 
+# Get result scenario directory 
 sce_dir_vec <- list.files("libraries/stsim/monteregie-conncons-scripted.ssim.output", 
                           full.names = T)
-sce_nb_vec <- paste0("sce_", as.numeric(unlist(lapply(str_split(sce_dir_vec, "-"), FUN = last))))
+sce_nb_vec <- paste0("sce_", as.numeric(unlist(lapply(str_split(sce_dir_vec, "-"), 
+                                                      FUN = last))))
+mun <- st_read("data/mun/munic_SHP_clean.shp", quiet = TRUE)
+
+results <- read_rds("data/temp/stsim_run_results.RDS") %>% 
+  select(scenarioId, name)
+results$name <- gsub(results$name, pattern = " \\(.+\\)", replacement = "")
+results$sce <- paste0("sce_",results$scenarioId)
+
+results_clean <- results %>% tibble() %>% 
+  mutate(splitted = str_split(name, " \\| ")) %>% 
+  mutate(climate = unlist(map(splitted, ~unlist(.x[2]))), 
+         run = unlist(map(splitted, ~unlist(.x[1])))) %>% 
+  select(-splitted) 
+#-------------------------------------------------------------------------------
 
 # Data prep
 # listofiles <- list.files("it1_lasterun/it1_MAAM_Current/", full.names = T)
-df_final <- readRDS("outputs/final/final_df_current_density.RDS") %>% 
+df_final <- readRDS("outputs/final/final_df_current_density.RDS") %>%
   mutate(timestep = (timestep*10)+1990, source = "model")
-df_final_origin <- readRDS("outputs/final/final_df_origin_current_density.RDS") %>% 
-  mutate(timestep = timestep*10+1980, source = "model")
-mun <- st_read("data/mun/munic_SHP_clean.shp", quiet = TRUE)
+df_final_origin <- readRDS("outputs/final/final_df_origin_current_density.RDS") %>%
+  mutate(timestep = timestep*10+1990, source = "model")
 
-# Summarised
+# df_final <- readRDS("test/final_df_current_density.RDS") %>%
+#   mutate(timestep = (timestep*10)+1990, source = "model")
+# df_final_origin <- readRDS("test/final_df_origin_current_density.RDS") %>%
+#   mutate(timestep = timestep*10+1980, source = "model")
+
+# Summarised => drops the zone
 df_summarised <- df_final %>%
-  group_by(sce, timestep, species) %>% 
-  summarise(sum_cur = sum(mean)) %>% ungroup %>%
+  group_by(sce, timestep, species, iteration) %>% 
+  summarise(sum_cur = sum(current)) %>% ungroup %>%
   mutate(source = "model")
+
 df_origin_summarised <- df_final_origin %>%
   group_by(timestep, species) %>% 
   summarise(sum_cur = sum(mean)) %>% ungroup %>% 
@@ -58,53 +77,151 @@ df_origin_summarised <- df_final_origin %>%
 joined <- full_join(df_summarised, 
                     df_origin_summarised, 
                     by=c("sce","source", "species", 
-                         "timestep", "sum_cur"))
+                         "timestep", "sum_cur")) %>% 
+  left_join(results_clean, by = "sce") %>% 
+  replace_na(list(climate = "none", run = "historic run")) %>% 
+  mutate(sce = as.factor(sce), 
+         run = as.factor(run), 
+         sum_cur = 10*(sum_cur),
+         climate = factor(climate, levels = c("none", 
+                                              "historic",
+                                              "baseline", "RCP 8.5")),
+         run = factor(run, levels = c("historic run",
+                                      "BAU run", 
+                                      "BAU run + corrs protection",
+                                      "BAU run + ref", 
+                                      "BAU run + corrs protection + ref",
+                                      "BAU run + corrs protection + ref TARGETED"
+         ))
+  )
 
 # Set theme
 theme_set(theme_minimal())
+theme_update(legend.position = c(0.85, 0.22),
+  #legend.justification = c(1, -0.2), # for inside plot
+  #legend.position = "none",
+  legend.box = "vertical",
+  legend.background = element_blank(),
+  legend.box.background = element_rect(colour = "black"),
+  panel.border = element_rect(fill = NA),
+  legend.title = element_text(size = 15),
+  legend.text = element_text(size = 12),
+  plot.title = element_text(size=22),
+  plot.subtitle = element_text(size=22),
+  axis.text.x = element_text(angle=65, vjust=0.6, size =15),
+  axis.text.y = element_text(size =15),
+  strip.text.x = element_text(size = 15),
+  strip.text.y = element_text(size = 15),
+  axis.title=element_text(size=18))
 
 #-------------------------------------------------------------------------------
 
-# FIGURE 0 
-all_facetted <- ggplot(df_final) + 
-  aes(x = timestep, y = mean, group = zone, color=zone) + 
-  geom_line(show.legend = FALSE, alpha=0.2) + 
-  scale_color_viridis_d(option = "plasma") + 
-  facet_grid(sce ~ species)+
-  theme(legend.position = "none") 
-ggsave("outputs/figures/final_graph.png", all_facetted)
-
 ## FIGURE 1
-animated <- joined %>% 
-  mutate(sce = as.factor(sce)) %>% 
-  ggplot() +
-  aes(x=timestep, y=sum_cur, col=source) +
-  geom_line(aes(linetype = sce)) +
-  scale_color_manual(values=c('#d8b365','#5ab4ac')) +
-  geom_point(aes(group = seq_along(timestep), pch = sce)) +
-  facet_grid(~species, scales = "fixed") +
-  #facet_grid(sce~species, scales = "fixed") +
-  labs(title = "Cumulative Connectivity for each species through time",
-       subtitle = "Year:{frame_along}",
+
+fig_1_historic <- joined %>% 
+  
+  #filter(source=="observation") %>% 
+  
+  filter(climate == "none") %>% 
+
+  ggplot(aes(x=timestep, y=sum_cur, col=source)) +
+  scale_color_manual(values=c('#d8b365','#5ab4ac'), 
+                     labels = c("Model", "Observation")) +
+  
+  geom_smooth(aes(group = sce), method = "glm", se=FALSE) +
+  scale_linetype_manual(values = c(1,3,2,5))+
+
+  geom_point(aes(group = sce)) +
+  facet_wrap(~species, scales = "free") +
+  
+  labs(title = "Connectivity change for species through time",
+       subtitle = "1990-2010",
        y = "Cummulative Connectivity",
        x = "Year",
-       col = "Source", 
-       linetype = "Scenario") +
-  theme(#legend.position = c(0.95, 0),
-    #legend.justification = c(1, -0.2),
-    legend.title = element_text(size = 20),
-    legend.text = element_text(size = 18),
-    plot.title = element_text(size=22),
-    plot.subtitle = element_text(size=22),
-    axis.text.x = element_text(angle=65, vjust=0.6),
-    #strip.text.x = element_blank(),
-    #strip.text.y = element_blank(),
-    axis.title=element_text(size=18)) +
-  transition_reveal(as.integer(timestep))
-options(gganimate.dev_args = list(width = 1200, height = 800))
-plot_anim <- animate(animated, renderer = gifski_renderer())
-anim_save(animation = plot_anim, 
-          filename = "outputs/figures/connectivity_decrease_x5species.gif")
+       col = "Source") +
+  NULL
+fig_1_historic
+ggsave(fig_1_historic, 
+       filename = "outputs/figures/connectivity_decrease_x5species_historic.png", 
+       width = 17, height = 12)
+
+fig_1_static <- joined %>% 
+
+  #filter(species %in% c("BLBR","URAM")) %>% 
+  #filter(sce %in% c("sce_15", "sce_16", "sce_0")) %>%
+  #filter(iteration =="it_1_") %>% 
+  #filter(climate %in% c("historic", "baseline")) %>% 
+  #filter(run %in% c("BAU run", "BAU run + ref")) %>% 
+  #filter(species == "MAAM") %>% 
+  #filter(run == "BAU run") %>% 
+  
+  filter(climate != "none") %>% 
+  
+  ggplot(aes(x=timestep, y=sum_cur, col=climate)) +
+  scale_color_manual(values=c('#ffe300', 
+                              '#ff7a14', 
+                              "#b31400"), 
+                      labels = c("Historic", 
+                                 "Baseline", 
+                                 "RCP 8.5"
+                                 )) +
+
+  geom_smooth(aes(group = sce, linetype=run), alpha=0.2, method="loess") +
+  scale_linetype_discrete() +
+  #geom_point(aes(group = sce, pch = run)) +
+  facet_wrap(~species, scales = "free") +
+  
+  #facet_grid(sce~species, scales = "fixed") +
+  #add_phylopic(bear, alpha = 1, x=2010, y =0.11, ysize = 10) +
+  
+  labs(title = "Connectivity change for species through time",
+       #subtitle = "1990-2100",
+       #subtitle = "Year:{frame_along}",
+       y = "Cummulative Connectivity",
+       x = "Year",
+       col = "Climate",
+       linetype = "Run") +
+  NULL
+fig_1_static
+
+# fig_1_static <- joined %>% 
+#   
+#   #filter(species %in% c("BLBR","URAM")) %>% 
+#   #filter(sce %in% c("sce_15", "sce_16", "sce_0")) %>%
+#   #filter(iteration =="it_1_") %>% 
+#   #filter(!(climate %in% c("RCP 8.5"))) %>% 
+#   #filter(run %in% c("BAU run", "BAU run + ref")) %>% 
+#   #filter(species == "BLBR") %>% 
+#   #filter(run == "BAU run") %>% 
+#   
+#   filter(climate != "none") %>% 
+#   ggplot(aes(x=timestep, y=sum_cur, col=run)) +
+#   scale_color_brewer(palette="Greens") +
+#   #                    labels = c("Historic", "Baseline", "RCP 8.5")) +
+# 
+#   geom_smooth(aes(group = sce, linetype=climate), alpha=0.2, method="loess") +
+#   scale_linetype_manual(values = c(1,2,3))+
+#   #geom_point(aes(group = sce, pch = run)) +
+#   facet_wrap(~species, scales = "free") +
+#   
+#   #facet_grid(sce~species, scales = "fixed") +
+#   #add_phylopic(bear, alpha = 1, x=2010, y =0.11, ysize = 10) +
+#   
+#   labs(title = "Cumulative Connectivity change for species through time",
+#        #subtitle = "1990-2100",
+#        #subtitle = "Year:{frame_along}",
+#        y = "Cummulative Connectivity",
+#        x = "Year",
+#        col = "Run",
+#        linetype = "Climate") +
+#   NULL
+# fig_1_static
+
+ggsave(fig_1_static, 
+       filename = "outputs/figures/connectivity_decrease_x5species.png", 
+       width = 17, height = 12)
+
+#-------------------------------------------------------------------------------
 
 ## FIGURE 2 => will break
 key <- read_csv("config/stsim/SecondaryStratum.csv") %>%
@@ -116,9 +233,10 @@ key <- read_csv("config/stsim/SecondaryStratum.csv") %>%
 #mun_joined <- left_join(mun, key, by="MUS_NM_MUN")
 
 df_final_fordiff_pivoted <- df_final %>% 
-  filter(timestep %in% c(first(unique(key$timestep)),
-                         last(unique(key$timestep)))) %>% 
-  pivot_wider(names_from=timestep, values_from=mean) %>%
+  group_by(zone, sce, species, timestep, source) %>% 
+  summarise(current = mean(current)) %>% ungroup %>% 
+  filter(timestep %in% c(2010, last(unique(key$timestep)))) %>% 
+  pivot_wider(names_from=timestep, values_from=current) %>% drop_na() %>% 
   rename(before=last_col(offset = 1), after=last_col()) %>% 
   left_join(key, by=c("zone", "sce", "species", "source")) %>% 
   filter(MUS_NM_MUN!="Not Monteregie") %>% 
@@ -133,130 +251,169 @@ change <- ggplot() +
   geom_sf(data=df_final_fordiff_pivoted,
           aes(fill=change),
           show.legend=T, lwd = 0)  + 
-  facet_grid(~sce) +
+  facet_wrap(~sce) + 
   ggtitle("Connectivity change in %", 
-          subtitle = "1990-2100") +
+          subtitle = "2010-2100") +
   scale_fill_binned(low='#d13e11', high='#fff7bc', 
                     breaks=c(-50, -40, -30, -20, -10, 0, 10))
+change
 ggsave("outputs/figures/connectivit_change_mun.png", change)
 
+#-------------------------------------------------------------------------------
+
 ## FIGURE 3
-it_1 <- list.files(file.path(sce_dir_vec[1],"stsim_OutputSpatialState"),                    
-                   pattern = "it1",
-                   full.names = T)
-it_1 <- list.files("test/it/",
-                   full.names = T)
+it_1 <- lapply(X = file.path(sce_dir_vec, "stsim_OutputSpatialState"), 
+               FUN = list.files,  pattern="it1", full.names=TRUE)
+it_1 <- lapply(X = it_1, FUN = mixedsort)
 
-it_1_CS <- stack(readRDS("test/final_cur_sum_sce_1_per_ts.RDS"))
+# it_1 <- list.files("test/it/",
+#                    full.names = T)
 
-list_lu <-  stack(lapply(mixedsort(it_1),FUN=raster))
-# list_lu_masked <- crop(mask(list_lu,mun),mun)
-extent_zoom <- extent(c(621300, 621300+20000, 5023000, 5023000+20000))
-list_lu_1_cropped <- (crop(list_lu, extent_zoom))
+list_lu <-  map(.x = map_depth(.x = it_1, .f = raster, .depth = 2), .f = stack)
+list_lu <- list_lu[2:length(list_lu)]
+names(list_lu) <- sce_nb_vec[2:length(sce_nb_vec)]
 
-cs_cropped <- crop(it_1_CS, extent_zoom)
+# for (x in 2:6) {print(freq((list_lu[[x]]$sc.it1.ts11==3) - (list_lu[[x]]$sc.it1.ts2==3)))}
+list_lu_1_cropped <- map(map(list_lu, crop, mun), mask, mun)
+#extent_zoom <- extent(c(621300, 621300+10000, 5023000, 5023000+10000))
+#extent_zoom <- drawExtent()
+#list_lu_1_cropped <- map(list_lu, crop, extent_zoom)
 
-ts_template <- seq(from =0, by=10, length.out = nlayers(list_lu))
-ts_template_year <- ts_template+1990
+# cs_cropped <- crop(it_1_CS, extent_zoom)
 
-df_list <- list()
-for (ts in 1:nlayers(list_lu_1_cropped)){
-  df <- as.data.frame(freq(list_lu_1_cropped[[ts]])) %>%
-    filter(!is.na(value)) %>%
-    filter(!(value %in% 4:6))
-  df$count <- df$count/ncell(list_lu_1_cropped[[1]])
-  df$timestep <- ts_template[ts]
-  df_list[[ts]] <- df
-}
+ts_template <- seq(from =0, by=10, length.out = nlayers(list_lu[[1]]))
+ts_template_year <- ts_template+2010
 
-df_final <- df_list[[1]]
-for (df in df_list[2:length(df_list)]){
-  df_final <- full_join(df_final, df,
-                        by = c("value", "count", "timestep"))
-}
-
-names(df_final)[2] <- "proportion"
-df_final$timestep <- df_final$timestep+1990
-df_final$value <- as.character(df_final$value)
-df_final$value[df_final$value==1] <- "Agriculture"
-df_final$value[df_final$value==2] <- "Urban"
-df_final$value[df_final$value==3] <- "Forest"
-
-plot <- ggplot(df_final)+
-  aes(x=timestep, y=proportion, col=value, show.legend=F) +
-  geom_line() +
-  geom_point(size = 2) +
-  # geom_segment(aes(xend = 2060, yend = proportion, col=value),
-  #              linetype = 2, colour = 'grey') +
-  geom_segment(aes(xend = 2103, yend = proportion), linetype = 2)+
-  geom_text(aes(x = 2105, label = value), hjust = 0, size=5, fontface="bold") +
-  scale_color_manual(values = c('#dfc27d', '#339933','#a6611a'))+
-  geom_point(aes(group = seq_along(timestep))) +
-  coord_cartesian(clip = 'off') +
-  transition_reveal(as.integer(timestep)) +
-  labs(y="Proportion",
-       x = "Year")+
-  theme_minimal()+
-  theme(legend.position = "none") +
-  theme(plot.margin = margin(5.5, 60, 5.5, 5.5),
-        axis.title=element_text(size=20, face="bold"),
-        axis.text.x =element_text(size=15),
-        axis.text.y =element_text(size=15))
-options(gganimate.dev_args = list(width = 900, height = 700))
-plot_anim <- animate(plot, renderer = gifski_renderer())
-anim_save("outputs/figures/lu_change_animated.gif")
-
-# Raster gifs
-list_lu_1_cropped_rat <- lapply(as.list(list_lu_1_cropped), ratify)
-
-rat <- as.data.frame(levels(list_lu_1_cropped_rat[[1]])) ; names(rat) <- "ID"
-rat$landcover <- c('Agriculture', 'Urban', 'Forest', "Roads", "Water", "Wetlands")
-rat$class <- c('A', 'B', 'C', 'D',"E","F")
-for (idx in 1:length(list_lu_1_cropped_rat)){
-  levels(list_lu_1_cropped_rat[[idx]]) <-rat
-}
-
-# #855C75,#D9AF6B,#AF6458,#736F4C,#526A83,#625377,
-# #68855C,#9C9C5E,#A06177,#8C785D,#467378,#7C7C7C
-
-make_plots <- function(rasters, ts){
-  for (idx in c(1:length(rasters))){
-    plot<- levelplot(rasters[[idx]],
-                     colorkey=list(space="bottom", height=0.8,
-                                   labels = list(cex=1)),
-                     col.regions=c('#D9AF6B', '#7C7C7C',
-                                   '#68855C', '#AF6458', 
-                                   '#467378', '#625377'),
-                     main=list(paste0('Year: ', ts[idx]), fontsize=25),
-                     scales=list(draw=FALSE))
-    print(plot)
+for (sce in seq_len(length(list_lu))){
+  
+  #sce <- 1
+  the_stack <- list_lu_1_cropped[[sce]]
+  #the_stack <- crop(the_stack, extent_zoom)
+  
+  df_list <- list()
+  for (ts in 1:nlayers(the_stack)){
+    df <- as.data.frame(freq(the_stack[[ts]])) %>%
+      filter(!is.na(value))
+    df$count <- df$count/(ncell(the_stack[[1]])-2111516) # number of NA 2111516
+    df$timestep <- ts_template[ts]
+    df_list[[ts]] <- df
   }
+  
+  df_final <- bind_rows(df_list)
+  
+  names(df_final)[2] <- "proportion"
+  df_final$timestep <- df_final$timestep+2010
+  #df_final$value <- as.character(df_final$value)
+  #df_final$value[as.numeric(df_final$value)>10] <- "3"
+  # TODO joining?
+  #df_final$value[df_final$value==1] <- "Agriculture"
+  #df_final$value[df_final$value==2] <- "Urban"
+  #df_final$value[df_final$value==3] <- "Forest"
+  
+  plot <- df_final %>% 
+    #filter((value > 10)) %>% 
+    mutate(value = as.factor(value)) %>% 
+    group_by(value, timestep) %>% 
+    summarise(proportion=sum(proportion)) %>% 
+    ggplot()+
+    aes(x=timestep, y=proportion, col=value, show.legend=F) +
+    geom_line() +
+    geom_point(size = 2) +
+    # geom_segment(aes(xend = 2060, yend = proportion, col=value),
+    #              linetype = 2, colour = 'grey') +
+    #geom_segment(aes(xend = 2103, yend = proportion), linetype = 2)+
+    geom_text(aes(x = 2105, label = value), hjust = 0, size=5, fontface="bold") +
+    #scale_color_manual(values = c('#dfc27d', '#339933','#a6611a'))+
+    geom_point(aes(group = seq_along(timestep))) +
+    coord_cartesian(clip = 'off') +
+    #transition_reveal(as.integer(timestep)) +
+    labs(y="Proportion",
+         x = "Year")+
+    theme_minimal()+
+    theme(legend.position = "none") +
+    theme(plot.margin = margin(5.5, 60, 5.5, 5.5),
+          axis.title=element_text(size=20, face="bold"),
+          axis.text.x =element_text(size=15),
+          axis.text.y =element_text(size=15))+
+    NULL
+  #ggsave(paste0("outputs/figures/",sce_nb_vec[sce],"_lu_change_animated.png"))
+  #options(gganimate.dev_args = list(width = 900, height = 700))
+  #plot_anim <- animate(plot, renderer = gifski_renderer())
+  #anim_save(paste0("outputs/figures/sce_",sce_nb_vec[sce],"_lu_change_animated.gif"))
 }
+#-------------------------------------------------------------------------------
+stop("Reviewed so far")
+#-------------------------------------------------------------------------------
 
+## Figure 4
+# Raster gifs
+
+# first declare function
 make_plots_cs <- function(rasters, ts){
   
-  the_max <- max(unlist(lapply(as.list(cs_cropped), cellStats, max)))
-  the_min <- min(unlist(lapply(as.list(cs_cropped), cellStats, min)))
+  the_max <- max(unlist(lapply(as.list(rasters), cellStats, max)))
+  the_min <- min(unlist(lapply(as.list(rasters), cellStats, min)))
   
   for (idx in c(1:length(rasters))){
     plot<- rasterVis::levelplot(rasters[[idx]],
-                     main=list(paste0('Year: ', ts[idx]), fontsize=25),
-                     maxpixels= 10000000,
-                     margin=list(draw=FALSE), 
-                     at=seq(the_min, the_max, length.out=100))
+                                main=list(paste0('Year: ', ts[idx]), fontsize=25),
+                                maxpixels= 10000000,
+                                margin=list(draw=FALSE), 
+                                at=seq(the_min, the_max, length.out=100))
     print(plot)
   }
 }
 
-oldwd <- getwd()
-setwd("outputs/figures/")
-saveGIF(expr = make_plots(list_lu_1_cropped_rat, ts_template_year),
-        interval=2, movie.name="lu_animated.gif",
-        ani.width=800, ani.height=800, ani.res=100)
-saveGIF(expr = make_plots_cs(as.list(cs_cropped), ts_template_year),
-        interval=2, movie.name="cs_animated.gif",
-        ani.width=800, ani.height=800, ani.res=100)
-setwd(oldwd)
+for(sce in seq_len(length(list_lu))){
+  it_CS <- stack(readRDS(paste0("outputs/final/final_cur_sum_sce_",sce+1,"_per_ts.RDS")))
+  oldwd <- getwd()
+  setwd("outputs/figures/")
+  saveGIF(expr = make_plots_cs(as.list(it_CS), ts_template_year),
+          interval=2, movie.name=paste0("sce_",sce,"_cs_animated.gif"),
+          ani.width=800, ani.height=800, ani.res=100)
+  setwd(oldwd)
+}
+
+# list_lu_1_cropped_rat <- lapply(as.list(list_lu_1_cropped), ratify)
+# rat <- as.data.frame(levels(list_lu_1_cropped_rat[[1]])) ; names(rat) <- "ID"
+# rat$landcover <- c('Agriculture', 'Urban', 'Forest', "Roads", "Water", "Wetlands")
+# rat$class <- c('A', 'B', 'C', 'D',"E","F")
+# for (idx in 1:length(list_lu_1_cropped_rat)){
+#   levels(list_lu_1_cropped_rat[[idx]]) <-rat
+# }
+# 
+# # #855C75,#D9AF6B,#AF6458,#736F4C,#526A83,#625377,
+# # #68855C,#9C9C5E,#A06177,#8C785D,#467378,#7C7C7C
+# 
+# make_plots <- function(rasters, ts){
+#   for (idx in c(1:length(rasters))){
+#     plot<- levelplot(rasters[[idx]],
+#                      colorkey=list(space="bottom", height=0.8,
+#                                    labels = list(cex=1)),
+#                      col.regions=c('#D9AF6B', '#7C7C7C',
+#                                    '#68855C', '#AF6458', 
+#                                    '#467378', '#625377'),
+#                      main=list(paste0('Year: ', ts[idx]), fontsize=25),
+#                      scales=list(draw=FALSE))
+#     print(plot)
+#   }
+# }
+
+# saveGIF(expr = make_plots(list_lu_1_cropped_rat, ts_template_year),
+#         interval=2, movie.name="lu_animated.gif",
+#         ani.width=800, ani.height=800, ani.res=100)
+
+#-------------------------------------------------------------------------------
+
+## Figure 5
+
+all_facetted <- ggplot(df_final) +
+  aes(x = timestep, y = mean, group = zone, color=zone) +
+  geom_line(show.legend = FALSE, alpha=0.2) +
+  scale_color_viridis_d(option = "plasma") +
+  facet_grid(sce ~ species)+
+  theme(legend.position = "none")
+ggsave("outputs/figures/final_graph.png", all_facetted)
 
 #-------------------------------------------------------------------------------
 library(tidymodels)
@@ -309,5 +466,63 @@ p1 + p2
 #   theme(plot.caption = element_text(size=80, family="AvantGarde"))
 # ggsave("outputs/figures/connectivit_change_mun.gif", plot)
 # #plot_anim <- animate(plot, renderer = gifski_renderer())
-# # TODO throws error
+# # throws error
 # # anim_save(plot_anim, "outputs/figures/connectivit_change_mun_gif.gif")
+
+#-------------------------------------------------------------------------------
+
+### CALCULATION
+# joined %>%
+#   group_by(species, timestep, sce) %>%
+#   filter(sce %in% c("sce_15", "sce_16")) %>% 
+#   summarise(sum_cur = sum(sum_cur)) %>% ungroup() %>% 
+#   pivot_wider(names_from=timestep, values_from=sum_cur) %>%
+#   rename(before=last_col(offset = 9), after=last_col()) %>% 
+#   select(-(`2020`:`2090`)) %>% 
+#   mutate(change = (after-before)/before*100) %>% 
+#   group_by(sce) %>% 
+#   summarise (change = mean(change))
+
+# fig_1_animated <- joined %>% 
+#   #filter(species %in% c("BLBR","URAM")) %>% 
+#   #filter(sce %in% c("sce_15", "sce_16", "sce_0")) %>% 
+#   mutate(sce = as.factor(sce)) %>% 
+#   ggplot(aes(x=timestep, y=sum_cur, col=source)) +
+#   geom_line(aes(linetype = sce)) +
+#   scale_color_manual(values=c('#d8b365','#5ab4ac'), 
+#                      labels = c("Model", "Observation")) +
+#   scale_linetype_manual(values = c(1:7), 
+#                         #labels = c("none (observations)", "BAU", "Conservation")
+#   )+
+#   geom_point(aes(group = seq_along(timestep), pch = sce), show.legend = FALSE) +
+#   #add_phylopic(bear, alpha = 1, x=2010, y =0.11, ysize = 10) +
+#   facet_grid(~species, scales = "fixed") +
+#   #facet_grid(sce~species, scales = "fixed") +
+#   labs(title = "Cumulative Connectivity change for two species through time",
+#        subtitle = "1990-2100",
+#        #subtitle = "Year:{frame_along}",
+#        y = "Cummulative Connectivity",
+#        x = "Year",
+#        col = "Source", 
+#        #pch = "Scenario",
+#        linetype = "Scenario") +
+#   theme(legend.position = c(0.10, 0.27),
+#         #legend.justification = c(1, -0.2),
+#         legend.box = "vertical",
+#         legend.background = element_blank(),
+#         legend.box.background = element_rect(colour = "black"),
+#         panel.border = element_rect(fill = NA),
+#         legend.title = element_text(size = 15),
+#         legend.text = element_text(size = 12),
+#         plot.title = element_text(size=22),
+#         plot.subtitle = element_text(size=22),
+#         axis.text.x = element_text(angle=65, vjust=0.6, size =15),
+#         axis.text.y = element_text(size =15),
+#         #strip.text.x = element_blank(),
+#         #strip.text.y = element_blank(),
+#         axis.title=element_text(size=18)) +
+#   transition_reveal(as.integer(timestep)) +
+#   NULL
+# fig_1_animated_plot <- animate(fig_1_animated, renderer = gifski_renderer())
+# anim_save(animation = fig_1_animated_plot,
+#           filename = "outputs/figures/connectivity_decrease_x5species.gif")

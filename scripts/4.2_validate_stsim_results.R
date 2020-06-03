@@ -45,55 +45,150 @@ sce_nb_vec <- as.numeric(unlist(lapply(str_split(sce_dir_vec, "-"), FUN = last))
 ## DIAGNOSTICS 
 results <- read_rds("data/temp/stsim_run_results.RDS")
 
-trans_results <- datasheet(myLibrary, scenario = results$scenarioId, 
-                           "stsim_OutputStratumTransition")
-# mun_set <- sample(trans_results$SecondaryStratumID, size = 20)
-#print(head(trans_results))
-
-targets <- read_csv("config/stsim/TransitionTarget_10y.csv") %>% 
-  #filter(SecondaryStratumID %in% mun_set) %>% 
-  group_by(Timestep, SecondaryStratumID, TransitionGroupID) %>%
-  summarise(Amount_mean = mean(Amount)) %>% ungroup
-
-trans_results_mod <- trans_results  %>% 
-  #filter(SecondaryStratumID %in% mun_set) %>% 
-  group_by(ScenarioID, Timestep, SecondaryStratumID, TransitionGroupID) %>%
-  summarise(Amount_mean = mean(Amount)) %>% ungroup
-trans_results_mod_only_3 <- trans_results_mod %>% 
-  filter(Timestep >= 3) %>% 
-  group_by(ScenarioID, SecondaryStratumID, TransitionGroupID) %>%
-  summarise(Amount_mean = mean(Amount_mean)) %>% ungroup %>% 
-  mutate(Timestep=3)
-trans_results_toplot <- bind_rows(subset(trans_results_mod, Timestep < 3), 
-                                  trans_results_mod_only_3)
-
-# Plots 
-
-for (sce in sce_nb_vec){
-  theplot <- trans_results_toplot %>% 
-    filter(TransitionGroupID != "Urbanisation", ScenarioID==sce) %>% 
-    ggplot(aes(x=Timestep, y=Amount_mean)) +
-    geom_line(show.legend = F) + 
-    facet_grid_paginate(TransitionGroupID~SecondaryStratumID, nrow=3, ncol=5, page = 8, scales = "free") +
-    geom_line(data=targets, inherit.aes = T, linetype=2)
-  ggsave(theplot, filename = paste0("outputs/figures/sce_",sce,"_one_to_one_mun.png"))
+if (length(results$scenarioId) > 1){
+  
+  for (sce in results$scenarioId[2:length(results$scenarioId)]){
+    trans_results <- datasheet(myLibrary, scenario = sce, 
+                               "stsim_OutputStratumTransition") %>% 
+      filter(Timestep >= 3) %>% 
+      group_by(Iteration, Timestep, StratumID, SecondaryStratumID, TransitionGroupID) %>% 
+      summarise(Amount = sum(Amount)) %>% ungroup %>% 
+      group_by(StratumID, SecondaryStratumID, TransitionGroupID) %>% 
+      summarise(Amount_observed = mean(Amount)) %>% ungroup %>% 
+      mutate(Timestep=3)
+    
+    # trans_results_ref <- datasheet(myLibrary, scenario = sce, 
+    #                                "stsim_OutputStratumTransition") %>% 
+    #   filter((TransitionGroupID %in% c("Reforestation [Type]", "Reforestation Gr"))) %>% 
+    #   filter(Timestep >= 3) %>% 
+    #   group_by(Iteration, Timestep, StratumID, TransitionGroupID) %>% 
+    #   summarise(Amount = sum(Amount)) %>% ungroup %>% 
+    #   group_by(StratumID, TransitionGroupID) %>% 
+    #   summarise(Amount_observed = mean(Amount)) %>% ungroup %>% 
+    #   mutate(Timestep=3)
+    # 
+    # print(trans_results_ref)
+    
+    # test <-  datasheet(myLibrary, scenario = sce, "stsim_OutputStratumTransition") 
+    # test %>% filter(StratumID == "PA") %>% pull(TransitionGroupID) %>% droplevels() %>%  table
+    # test %>% filter(StratumID == "Not_Monteregie") %>% pull(TransitionGroupID) %>% droplevels() %>%  table
+    
+    targets <- datasheet(myLibrary, scenario = sce, 
+                         "stsim_TransitionTarget") %>% 
+      filter(Timestep >= 3) %>% 
+      rename(Amount_targeted = Amount)
+    
+    targets_ref <- targets  %>% 
+      filter((TransitionGroupID %in% c("Reforestation [Type]", "Reforestation Gr")))
+    
+    print(targets_ref)
+    
+    # OLD PLOT when runs were 1990-2100
+    
+    # theplot <- trans_results_toplot %>% 
+    #   filter(TransitionGroupID != "Urbanisation", ScenarioID==sce) %>% 
+    #   ggplot(aes(x=Timestep, y=Amount_mean)) +
+    #   geom_line(show.legend = F) + 
+    #   facet_grid_paginate(TransitionGroupID~SecondaryStratumID, nrow=3, ncol=5, page = 12, scales = "free") +
+    #   geom_line(data=targets, inherit.aes = T, linetype=2)
+    # ggsave(theplot, filename = paste0("outputs/figures/sce_",sce,"_one_to_one_mun.png"))
+    
+    # JOINING
+    
+    gen_plot_df <- left_join(trans_results, targets) %>% 
+      arrange(Timestep) %>% 
+      replace_na(list(Amount_targeted = 0, Amount_observed = 0))
+    
+    gen_plot_df <- 
+      gen_plot_df[!grepl(gen_plot_df$TransitionGroupID, pattern = "_to_"),]
+    
+    the_plot <- gen_plot_df %>% 
+      #filter(ScenarioID == 9) %>% 
+      filter(!(TransitionGroupID %in% c("Reforestation [Type]", "Reforestation Gr"))) %>% 
+      ggplot(aes(x=Amount_observed, y=Amount_targeted, 
+                 color=as.factor(SecondaryStratumID))) +
+      geom_point(show.legend = F) +
+      geom_abline(slope = 1, intercept = 0, linetype=2) +
+      facet_wrap(vars(TransitionGroupID)) +
+      NULL
+    print(the_plot)
+    ggsave(paste0("outputs/figures/sce_",sce,"_one_to_one_targets.png"))
+    
+    summary(lm(Amount_targeted~Amount_observed, drop_na(gen_plot_df)))
+  }
+  # now take care of the first one
+  sce <- results$scenarioId[1]
+  
+  trans_results <- datasheet(myLibrary, scenario = sce, 
+                             "stsim_OutputStratumTransition") %>% 
+    group_by(Iteration, Timestep, StratumID, SecondaryStratumID, TransitionGroupID) %>% 
+    summarise(Amount = sum(Amount)) %>% ungroup %>% 
+    group_by(Timestep, StratumID, SecondaryStratumID, TransitionGroupID) %>% 
+    summarise(Amount_observed = mean(Amount))
+  
+  targets <- datasheet(myLibrary, scenario = sce, 
+                       "stsim_TransitionTarget") %>% 
+    rename(Amount_targeted = Amount)
+  
+  # JOINING
+  
+  gen_plot_df <- left_join(trans_results, targets) %>% 
+    arrange(Timestep) %>% 
+    replace_na(list(Amount_targeted = 0, Amount_observed = 0))
+  
+  gen_plot_df <- 
+    gen_plot_df[!grepl(gen_plot_df$TransitionGroupID, pattern = "_to_"),]
+  
+  the_plot <- gen_plot_df %>% 
+    #filter(ScenarioID == 9) %>% 
+    filter(!(TransitionGroupID %in% c("Reforestation [Type]", "Reforestation Gr"))) %>% 
+    ggplot(aes(x=Amount_observed, y=Amount_targeted, 
+               color=as.factor(SecondaryStratumID))) +
+    geom_point(show.legend = F) +
+    geom_abline(slope = 1, intercept = 0, linetype=2) +
+    facet_wrap(vars(TransitionGroupID)) +
+    NULL
+  print(the_plot)
+  ggsave(paste0("outputs/figures/sce_",sce,"_one_to_one_targets.png"))
+  
+  summary(lm(Amount_targeted~Amount_observed, drop_na(gen_plot_df)))
+  
+} else {
+  
+  sce <- results$scenarioId[1]
+  
+  trans_results <- datasheet(myLibrary, scenario = sce, 
+                             "stsim_OutputStratumTransition") %>% 
+    group_by(Iteration, Timestep, StratumID, SecondaryStratumID, TransitionGroupID) %>% 
+    summarise(Amount = sum(Amount)) %>% ungroup %>% 
+    group_by(Timestep, StratumID, SecondaryStratumID, TransitionGroupID) %>% 
+    summarise(Amount_observed = mean(Amount))
+  
+  targets <- datasheet(myLibrary, scenario = sce, 
+                       "stsim_TransitionTarget") %>% 
+    rename(Amount_targeted = Amount)
+  
+  # JOINING
+  
+  gen_plot_df <- left_join(trans_results, targets) %>% 
+    arrange(Timestep) %>% 
+    replace_na(list(Amount_targeted = 0, Amount_observed = 0))
+  
+  gen_plot_df <- 
+    gen_plot_df[!grepl(gen_plot_df$TransitionGroupID, pattern = "_to_"),]
+  
+  the_plot <- gen_plot_df %>% 
+    #filter(ScenarioID == 9) %>% 
+    filter(!(TransitionGroupID %in% c("Reforestation [Type]", "Reforestation Gr"))) %>% 
+    ggplot(aes(x=Amount_observed, y=Amount_targeted, 
+               color=as.factor(SecondaryStratumID))) +
+    geom_point(show.legend = F) +
+    geom_abline(slope = 1, intercept = 0, linetype=2) +
+    facet_wrap(vars(TransitionGroupID)) +
+    NULL
+  print(the_plot)
+  ggsave(paste0("outputs/figures/sce_",sce,"_one_to_one_targets.png"))
+  
+  summary(lm(Amount_targeted~Amount_observed, drop_na(gen_plot_df)))
+  
 }
-
-## JOIN for general diagnoctic plot
-gen_plot_df <- left_join(trans_results_toplot, targets, 
-                         by= c("Timestep", "SecondaryStratumID", "TransitionGroupID")) %>% 
-  filter(TransitionGroupID != "Urbanisation") %>% 
-  rename(observed = Amount_mean.x, targets = Amount_mean.y) %>% 
-  arrange(Timestep)
-
-# general plot
-gen_plot_df %>% 
-  #filter(ScenarioID == 9) %>% 
-  #filter(TransitionGroupID == "Agricultural Expansion [Type]") %>% 
-  ggplot(aes(x=targets, y=observed, color=as.factor(Timestep))) +
-  geom_point(show.legend = F) +
-  geom_abline(slope = 1, intercept = 0, linetype=2) +
-  facet_wrap("ScenarioID")
-ggsave("outputs/figures/one_to_one_targets.png")
-
-summary(lm(observed~targets, gen_plot_df))

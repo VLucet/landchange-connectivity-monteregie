@@ -92,7 +92,7 @@ custom_fit_and_predict <- function(modelformula, # Formulafor the model
   # Produce a plot or not
   if (make_plot){
     if (method == "gam"){
-      # TODO fix bug
+      #  fix bug
       # png(file.path(outdir, method, paste0(response_var, "_", method, "_plot.png")))
       # plot(fit, trans = plogis, pages=1,
       #      shift = coef(fit)[1],

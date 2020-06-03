@@ -1,0 +1,4 @@
+[deps]
+Circuitscape = "2b7a1792-8151-5239-925d-e2b8fdfa3201"
+GDAL = "add2ef01-049f-52c4-9ee2-e494f65e021a"
+GeoArrays = "2fb1d81b-e6a0-5fc5-82e6-8e06903437ab"

@@ -38,7 +38,7 @@ export R_RATIO='2'
 export R_METHOD_STSIM='rf'
 export R_SAMPLING_METHOD="bal"
 # Variables for STSIM
-export STSIM_ITER='10'
+export STSIM_ITER='2'
 export STSIM_TS_START='0'
 export STSIM_TS_END='11'
 export STSIM_STEP_SAVE='1'
@@ -72,6 +72,8 @@ prep_raw_data(){
   Rscript scripts/1.2_prep_census_data.R
   Rscript scripts/1.3_prep_env_vars.R
   Rscript scripts/1.4_reclass_land_use.R
+  Rscript scripts/1.5_prep_landis.R
+  # Rscript scripts/1.6_prep_neighbors.R
 }
 
 prep_stsim_data(){
@@ -162,9 +164,12 @@ post_process(){
   rm -rf outputs/current_density_sum/*
   ## Run diagnostics and plots
   Rscript scripts/7.1_post_process_results.R
-  Rscript scripts/7.2_make_plots.R
 }
 
+
+make_figures(){
+  Rscript scripts/7.2_make_plots.R
+}
 ### BUNDLE FUNCTIONS
 
 run_all(){
@@ -179,6 +184,7 @@ run_all(){
   reclassify
   run_circuitscape
   post_process
+  make_figures
 }
 
 run_model_no_prep(){
@@ -190,6 +196,7 @@ run_model_no_prep(){
   reclassify
   run_circuitscape
   post_process
+  make_figures
 }
 
 run_prep(){
@@ -203,7 +210,7 @@ run_prep(){
 
 ### Arguments matching
 
-while getopts ":pmafsrcd" opt; do
+while getopts ":pmafsrcdg" opt; do
   case ${opt} in
     p )
       run_prep
@@ -236,9 +243,12 @@ while getopts ":pmafsrcd" opt; do
     d )
       post_process 
       ;;
+    g )
+      make_figures 
+      ;;
     * )
       echo "Usage: [-p prep] [-m model no prep] [-a run all] [-f fit & predict]"
-      echo "       [-s stsim] [-r reclassify] [-c circuitscape] [-d post process]"
+      echo "       [-s stsim] [-r reclassify] [-c circuitscape] [-d post process] [-g make figures]"
       echo "" 1>&2
       exit 1
       ;;

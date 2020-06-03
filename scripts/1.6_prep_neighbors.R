@@ -1,5 +1,5 @@
 #-------------------------------------------------------------------------------
-## 1.5 Prep Neighbors
+## 1.x Prep Neighbors
 ## 2020
 ## Inputs: Land use data
 ## Outputs: Reclassified land use data
@@ -14,7 +14,7 @@ suppressPackageStartupMessages({
   library(rgrass7)
 })
 
-initGRASS(gisBase = "/usr/lib/grass76", #"/usr/lib/grass78/"
+initGRASS(gisBase = "/usr/lib/grass78", #"/usr/lib/grass78/"
           gisDbase = "libraries/grass/", location = "landusechangemodel", 
           mapset = "monteregie", 
           override = TRUE)

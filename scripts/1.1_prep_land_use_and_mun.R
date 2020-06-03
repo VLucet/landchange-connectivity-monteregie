@@ -4,7 +4,7 @@
 ## Inputs: Raw land use data (AAFC) + municipality shapefiles
 ## Outputs: Processed land use data + clean municipality shapefile
 #-------------------------------------------------------------------------------
-
+library(renv)
 # reviewed 2020 
 
 # Remove all in environment
