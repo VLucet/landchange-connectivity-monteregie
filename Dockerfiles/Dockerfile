@@ -31,7 +31,7 @@ RUN apt-get -y update -qq \
 # Download repo and syncrosim
 RUN mkdir /home/rstudio/land_con_monteregie \
   && chown -R rstudio /home/rstudio/land_con_monteregie \
-  && git clone -b climate --single-branch https://github.com/VLucet/landchange-connectivity-monteregie.git /home/rstudio/land_con_monteregie
+  && git clone https://github.com/VLucet/landchange-connectivity-monteregie.git /home/rstudio/land_con_monteregie
 
 # Move to the working directory
 WORKDIR /home/rstudio/land_con_monteregie
