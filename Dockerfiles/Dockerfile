@@ -31,8 +31,7 @@ ENV JULIA_DEPOT_PATH=/opt/julia
 ENV JULIA_PKGDIR=/opt/julia
 
 # Install julia and custom version of circuitscape
-RUN curl https://julialang-s3.julialang.org/bin/linux/x64/1.3/julia-1.3.1-linux-x86_64.tar.gz \
-         --output /home/rstudio/julia-1.3.1-linux-x86_64.tar.gz \
+RUN curl https://julialang-s3.julialang.org/bin/linux/x64/1.3/julia-1.3.1-linux-x86_64.tar.gz --output /home/rstudio/julia-1.3.1-linux-x86_64.tar.gz \
   && tar -xzf julia-1.3.1-linux-x86_64.tar.gz -C /home/rstudio/ \
   && julia -e 'import Pkg; Pkg.activate("."); Pkg.instantiate(); Pkg.precompile()' \
   && chown -R rstudio /home/rstudio/julia-1.3.1 \ 
@@ -41,8 +40,7 @@ RUN curl https://julialang-s3.julialang.org/bin/linux/x64/1.3/julia-1.3.1-linux-
 # Download repo and syncrosim
 RUN mkdir /home/rstudio/land_con_monteregie \
   && chown -R rstudio /home/rstudio/land_con_monteregie \
-  && git clone https://github.com/VLucet/landchange-connectivity-monteregie.git \
-               /home/rstudio/land_con_monteregie
+  && git clone https://github.com/VLucet/landchange-connectivity-monteregie.git /home/rstudio/land_con_monteregie
 
 # Move to the working directory
 WORKDIR /home/rstudio/land_con_monteregie
