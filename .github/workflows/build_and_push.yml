@@ -8,6 +8,7 @@ on:
     paths: 
       - "Dockerfiles/**"
       - ".github/workflows/**"
+      - "renv.lock"
   schedule:
     - cron: "0 1 * * *"
 
