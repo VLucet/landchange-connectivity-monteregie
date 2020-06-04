@@ -36,15 +36,15 @@ mun.list <- as.character(unique((mun.sub.18.clean$MUS_NM_MUN)))
 classes <- data.frame(Code=(0:6), Label=c("Other","Agriculture", "Urban", 
                                           "Forest", "Roads", "Water","Wetlands"))
 
-# All.Mont <- ExtractValsAndTrans(
-#   shape_vec = mun.list,
-#   shape_sf = mun.sub.18.clean,
-#   attribute = "MUS_NM_MUN",
-#   landUse_stack = lu.18.sub,
-#   classes = classes
-# )
+All.Mont <- ExtractValsAndTrans(
+  shape_vec = mun.list,
+  shape_sf = mun.sub.18.clean,
+  attribute = "MUS_NM_MUN",
+  landUse_stack = lu.18.sub,
+  classes = classes
+)
 
-#saveRDS(All.Mont, "data/temp/vals_and_trans.RDS")
+saveRDS(All.Mont, "data/temp/vals_and_trans.RDS")
 All.Mont <- readRDS("data/temp/vals_and_trans.RDS")
 
 TransTotal <- All.Mont$Transitions
