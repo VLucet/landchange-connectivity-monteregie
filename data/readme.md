@@ -1,5 +1,6 @@
 ### Folder structure of /data
 
+- raw [raw data]
 - census
    - vector
 - distances
