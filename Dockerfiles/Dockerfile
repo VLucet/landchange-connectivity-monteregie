@@ -48,7 +48,7 @@ RUN mkdir /home/rstudio/syncrosim_2_10 \
   && curl https://syncrosim.com/download-id/19813/ --output /home/rstudio/syncrosim_2_10.zip \
   && unzip /home/rstudio/syncrosim_2_10.zip -d /home/rstudio/syncrosim_2_10 \
   && mkdir /home/rstudio/syncrosim_packages \
-  && chown /home/rstudio/syncrosim_packages \
+  && chown -R rstudio /home/rstudio/syncrosim_packages \
   && curl https://github.com/ApexRMS/stsim/releases/download/3.2.17/stsim-3-2-17.ssimpkg --ouput /home/rstudio/syncrosim_packages/stsim-3-2-17.ssimpkg
 
 # Download repo
