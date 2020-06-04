@@ -933,10 +933,8 @@
     },
     "lwgeom": {
       "Package": "lwgeom",
-      "Version": "0.2-4",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "e54827b35a239846188b2200deb1d8f2"
+      "Version": "0.2-3",
+      "Source": "Repository"
     },
     "magick": {
       "Package": "magick",
@@ -1441,9 +1439,7 @@
     "sf": {
       "Package": "sf",
       "Version": "0.9-0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "8010b7ff1e24182cd9bb40c1fd8284d0"
+      "Source": "Repository"
     },
     "shiny": {
       "Package": "shiny",
