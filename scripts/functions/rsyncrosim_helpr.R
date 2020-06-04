@@ -26,12 +26,12 @@ loadSheet <- function(sheetname, filename=NULL, proj_or_sce, path = getwd(), par
   
   # Save the sheet
   print(head(mySheet))
-  saved_message <- saveDatasheet(proj_or_sce, mySheet, sheetname)
+  out <- saveDatasheet(proj_or_sce, mySheet, sheetname)
   
-  # Check if sucessul 
-  if (saved_message[1]=="saved"){
-    print(paste0(sheetname, " Saved"))
-  } else{
+  # Check if successful 
+  if (out==FALSE){
+#    print(paste0(sheetname, " Saved"))
+#  } else{
     stop("ERROR: Datasheet could not be loaded. Check path or name.")
   }
 }
