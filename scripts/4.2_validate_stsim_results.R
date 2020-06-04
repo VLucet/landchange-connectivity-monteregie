@@ -8,8 +8,8 @@
 rm(list=ls())
 set.seed(77)
 
-ST_SIM_DIR <- "../../syncrosim_2_10/"
 #ST_SIM_DIR <- "/home/vlucet/Documents/Apex/syncrosim_2_10"
+ST_SIM_DIR <- "../syncrosim_2_10/"
 
 #-------------------------------------------------------------------------------
 

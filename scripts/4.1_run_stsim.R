@@ -20,7 +20,7 @@ STSIM_TS_END <- as.numeric(Sys.getenv("STSIM_TS_END", unset = 6))
 
 STSIM_STEP_SAVE <- as.numeric(Sys.getenv("STSIM_STEP_SAVE", unset = 1))
 STSIM_STEP_COMPUTE <- as.numeric(Sys.getenv("STSIM_STEP_COMPUTE", unset = 10))
-ST_SIM_DIR <- "../../syncrosim_2_10/"
+ST_SIM_DIR <- "../syncrosim_2_10/"
 
 STSIM_RUN  <- as.logical(Sys.getenv("STSIM_RUN", unset = TRUE))
 
