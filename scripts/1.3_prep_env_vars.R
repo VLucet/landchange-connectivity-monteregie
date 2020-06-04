@@ -83,7 +83,7 @@ writeRaster(lu.10.mont.urb, "data/land_use/urban/lu_10_mont_urb.tif",
 ## !! -
 
 # Calculate distance => in GRASS Start Grass session
-initGRASS(gisBase = "/usr/lib/grass78/", 
+initGRASS(gisBase = "/usr/lib/grass76/", 
           gisDbase = "libraries/grass/", location = "landusechangemodel", 
           mapset = "monteregie", 
           override = TRUE)
