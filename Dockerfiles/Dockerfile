@@ -28,7 +28,8 @@ RUN apt-get -y update -qq \
     grass-dev=7.6.0-1 \
     curl=7.64.0-4+deb10u1 \ 
     cargo=0.35.0-2 \
-    nano
+    nano \
+    htop
     
 # Julia install
 ENV JULIA_DEPOT_PATH=/opt/julia
