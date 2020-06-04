@@ -22,8 +22,17 @@ data/raw/**
 !data/raw/readme.md
 
 # libraries folder
-libraries/*
+!libraries/
+libraries/**
 !libraries/readme.md
+
+!libraries/grass/
+libraries/grass/**
+!libraries/grass/readme.md
+
+!libraries/stsim/
+libraries/stsim/**
+!libraries/stsim/readme.md
 
 # output folder
 outputs/*
