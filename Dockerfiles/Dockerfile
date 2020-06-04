@@ -44,7 +44,7 @@ RUN curl -L https://julialang-s3.julialang.org/bin/linux/x64/1.3/julia-1.3.1-lin
 RUN mkdir /home/rstudio/syncrosim_2_10 \
   && chown -R rstudio /home/rstudio/syncrosim_2_10 \
   && curl https://syncrosim.com/download-id/19813/ --output /home/rstudio/syncrosim_2_10.zip \
-  && unzip syncrosim_2_10.zip -d /home/rstudio/syncrosim_2_10
+  && unzip /home/rstudio/syncrosim_2_10.zip -d /home/rstudio/syncrosim_2_10
 
 # Download repo and syncrosim
 RUN mkdir /home/rstudio/land_con_monteregie \
