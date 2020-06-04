@@ -13,6 +13,7 @@ rm(list = ls())
 # Load required packages
 suppressPackageStartupMessages({
   library(raster)
+  library(lwgeom)
   library(sf)
   library(tidyverse)
   library(fasterize)

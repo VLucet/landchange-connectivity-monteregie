@@ -36,6 +36,8 @@ suppressPackageStartupMessages({
   library(doParallel)
   library(foreach)
   library(purrr)
+  library(ranger)
+  library(ROCR)
 })
 
 # Reset Raster tmp files

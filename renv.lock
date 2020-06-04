@@ -117,7 +117,9 @@
     "ROCR": {
       "Package": "ROCR",
       "Version": "1.0-7",
-      "Source": "Repository"
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "fd202bb77d2b1b19fb9dcc393d489ef0"
     },
     "RSQLite": {
       "Package": "RSQLite",
@@ -312,6 +314,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "70ec3aef8a0df13661bf6cc2ff877d61"
+    },
+    "caTools": {
+      "Package": "caTools",
+      "Version": "1.18.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "6f7c1405e500ef25a7c147e860b5fe32"
     },
     "callr": {
       "Package": "callr",
@@ -572,6 +581,13 @@
       "Repository": "CRAN",
       "Hash": "05ee75453c7c7cf6741a050af30927ba"
     },
+    "gdata": {
+      "Package": "gdata",
+      "Version": "2.18.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "465ccb84427f5fe2c54f8620666db131"
+    },
     "generics": {
       "Package": "generics",
       "Version": "0.0.2",
@@ -648,6 +664,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "1e7e711f2f87cc3a326f7f406815d019"
+    },
+    "gplots": {
+      "Package": "gplots",
+      "Version": "3.0.3",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "8c9dd0fe4766504762688b9f1de3139e"
     },
     "gridExtra": {
       "Package": "gridExtra",
@@ -907,6 +930,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "6c04c31012c1be39783bebbbfc27b3a3"
+    },
+    "lwgeom": {
+      "Package": "lwgeom",
+      "Version": "0.2-4",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "e54827b35a239846188b2200deb1d8f2"
     },
     "magick": {
       "Package": "magick",
@@ -1184,7 +1214,9 @@
     "ranger": {
       "Package": "ranger",
       "Version": "0.12.1",
-      "Source": "Repository"
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "561326df07a5bc5266ba17ce3b81cbf1"
     },
     "raster": {
       "Package": "raster",
