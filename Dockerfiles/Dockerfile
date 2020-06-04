@@ -49,7 +49,7 @@ RUN mkdir /home/rstudio/syncrosim_2_10 \
   && unzip /home/rstudio/syncrosim_2_10.zip -d /home/rstudio/syncrosim_2_10 \
   && mkdir /home/rstudio/syncrosim_packages \
   && chown -R rstudio /home/rstudio/syncrosim_packages \
-  && curl https://github.com/ApexRMS/stsim/releases/download/3.2.17/stsim-3-2-17.ssimpkg --ouput /home/rstudio/syncrosim_packages/stsim-3-2-17.ssimpkg
+  && curl https://github.com/ApexRMS/stsim/releases/download/3.2.17/stsim-3-2-17.ssimpkg --output /home/rstudio/syncrosim_packages/stsim-3-2-17.ssimpkg
 
 # Download repo
 RUN mkdir /home/rstudio/land_con_monteregie \
