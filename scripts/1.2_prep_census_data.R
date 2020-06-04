@@ -32,12 +32,12 @@ raster_mont <- raster("data/land_use/AAFC_zone18_mont_mask_1990.tif")
 # 1991
 
 # import dataset and shapefile
-chass.DA.1991.data <- read.csv("data_raw//census/CHASS_data/1991/1991_data.csv") %>%
+chass.DA.1991.data <- read.csv("data/raw/census/CHASS_data/1991/1991_data.csv") %>%
   rename(EA = COL0)
 # Dim:  10245   514
 # Also  10245 unique EA
 chass.DA.1991.sh.sf <- st_read(paste0(
-  "data_raw/census/boundary_files/EAs_1991/EAs_1991_shapes/",
+  "data/raw/census/boundary_files/EAs_1991/EAs_1991_shapes/",
   "DLI_1991_Census_DBF_Eng_Nat_ea.shp"
 ), quiet = TRUE)
 chass.DA.1991.sh.sf <- st_transform(chass.DA.1991.sh.sf, crs = st_crs(mun_sub_18_clean))
@@ -122,10 +122,10 @@ writeRaster(income.90, "data/census/Income_1991.tif",
 # 2001
 
 # import dataset and shapefile
-chass.DA.2001.data <- read.csv("data_raw/census/CHASS_data/2001/2001_data.csv")
+chass.DA.2001.data <- read.csv("data/raw/census/CHASS_data/2001/2001_data.csv")
 
 chass.DA.2001.sh.sf <- 
-  st_read("data_raw/census/boundary_files//DAs_2001/DAs_2001_shapes/DLI_2001_Census_CBF_Eng_Nat_da.shp",
+  st_read("data/raw/census/boundary_files//DAs_2001/DAs_2001_shapes/DLI_2001_Census_CBF_Eng_Nat_da.shp",
           quiet = TRUE)
 chass.DA.2001.sh.sf <- st_transform(chass.DA.2001.sh.sf, crs = st_crs(mun_sub_18_clean))
 
@@ -180,12 +180,12 @@ writeRaster(income.01, "data/census/Income_2001.tif", overwrite = TRUE, format =
 # 2011 SHORT 
 
 # import dataset and shapefile
-chass.DA.2011.sht.data <- read.csv("data_raw/census/CHASS_data/2011/2011_short_data.csv")
+chass.DA.2011.sht.data <- read.csv("data/raw/census/CHASS_data/2011/2011_short_data.csv")
 
 # chass.DA.2011.sh = shapefile(paste0(inputDir, 'Boundary_files/DAs_2011/DAs_2011_shapes/',
 # 'DLI_2011_Census_CBF_Eng_Nat_da.shp'))
 chass.DA.2011.sh.sf <- 
-  st_read("data_raw/census/boundary_files/DAs_2011/DAs_2011_shapes/DLI_2011_Census_CBF_Eng_Nat_da.shp",
+  st_read("data/raw/census/boundary_files/DAs_2011/DAs_2011_shapes/DLI_2011_Census_CBF_Eng_Nat_da.shp",
           quiet = TRUE)
 
 # chass.DA.2011.sh = spTransform(chass.DA.2011.sh, crs(mun.data))
@@ -272,12 +272,12 @@ CHASS.2011.all.interest <-
 # 2011 NHS
 
 # import dataset and shapefile
-chass.DA.2011.nhs.data <- read.csv("data_raw/census/CHASS_data/2011/2011_NHS_data.csv")
+chass.DA.2011.nhs.data <- read.csv("data/raw/census/CHASS_data/2011/2011_NHS_data.csv")
 
 # chass.DA.2011.sh = shapefile(paste0(inputDir, 'Boundary_files/DAs_2011/DAs_2011_shapes/',
 # 'DLI_2011_Census_CBF_Eng_Nat_da.shp'))
 chass.DA.2011.sh.sf <- 
-  st_read("data_raw/census/boundary_files/DAs_2011/DAs_2011_shapes/DLI_2011_Census_CBF_Eng_Nat_da.shp", 
+  st_read("data/raw/census/boundary_files/DAs_2011/DAs_2011_shapes/DLI_2011_Census_CBF_Eng_Nat_da.shp", 
           quiet = TRUE)
 
 # chass.DA.2011.sh = spTransform(chass.DA.2011.sh, crs(mun.data))

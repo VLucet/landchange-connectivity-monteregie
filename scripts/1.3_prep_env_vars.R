@@ -179,8 +179,8 @@ road.stack <- stack(road_dist.90, road_dist.00, road_dist.10)
 
 ## 2. CLI - SUITABILITY FOR AGRICULTURE
 
-CLI.50 <- shapefile("data_raw/env_vars/CLI/CLI_50k_clipped")
-CLI.250 <- shapefile("data_raw/env_vars/CLI/CLI_250k_clipped")
+CLI.50 <- shapefile("data/raw/env_vars/CLI/CLI_50k_clipped")
+CLI.250 <- shapefile("data/raw/env_vars/CLI/CLI_250k_clipped")
 
 CLI.50.reproj <- spTransform(CLI.50, crs(lu.90.mont.roads))
 CLI.250.reproj <- spTransform(CLI.250, crs(lu.90.mont.roads))
@@ -252,7 +252,7 @@ writeRaster(mosaic, "data/env_vars/CLI/CLI_mosaic_no0.tif", overwrite=TRUE)
 
 ## Input data
 
-Elev.mont <- raster("data_raw/env_vars/elevation_GEE/Mont_slope.tif")
+Elev.mont <- raster("data/raw/env_vars/elevation_GEE/Mont_slope.tif")
 
 # Reproject and crop
 Elev.mont.reproj <- projectRaster(Elev.mont, lu.1990.18.m.mont)

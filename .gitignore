@@ -16,8 +16,7 @@
 # data folders
 data/*
 !data/readme.md
-data_raw/*
-!data_raw/readme.md
+!data/raw/readme.md
 
 # libraries folder
 libraries/*

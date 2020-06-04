@@ -34,23 +34,23 @@ showTmpFiles()
 # UTM 18
 # Stack and check crs - can only stack if same extent and resolution
 lu_18 <- stack(
-  raster("data_raw/land_use/LandUse_AAFC/Z18_1990/IMG_AAFC_LANDUSE_Z18_1990.tif"),
-  raster("data_raw/land_use/LandUse_AAFC/Z18_2000/IMG_AAFC_LANDUSE_Z18_2000.tif"),
-  raster("data_raw/land_use/LandUse_AAFC/Z18_2010/IMG_AAFC_LANDUSE_Z18_2010.tif")
+  raster("data/raw/land_use/LandUse_AAFC/Z18_1990/IMG_AAFC_LANDUSE_Z18_1990.tif"),
+  raster("data/raw/land_use/LandUse_AAFC/Z18_2000/IMG_AAFC_LANDUSE_Z18_2000.tif"),
+  raster("data/raw/land_use/LandUse_AAFC/Z18_2010/IMG_AAFC_LANDUSE_Z18_2010.tif")
 )
 names(lu_18) <- c("lu_1990_18", "lu_2000_18", "lu_2010_18")
 print(crs(lu_18))
 crs_lu_18 <- crs(lu_18)
 
 # Load table of land use classes - might be needed later
-classes <- read.csv("data_raw/land_use/LandUse_AAFC/landUse_class.csv", sep = ";")
+classes <- read.csv("data/raw/land_use/LandUse_AAFC/landUse_class.csv", sep = ";")
 
 # Load administrative data (MRC/Municipality)
 
 # Vector data: Municipalities and MRCs - data from Donnees Quebec
 # Using sf package
-mun_all <- st_read("data_raw/vector/munic_SHP/munic_polygone.shp", quiet = TRUE)
-mrc_all <- st_read("data_raw/vector/mrc_SHP/mrc_polygone.shp", quiet = TRUE)
+mun_all <- st_read("data/raw/vector/munic_SHP/munic_polygone.shp", quiet = TRUE)
+mrc_all <- st_read("data/raw/vector/mrc_SHP/mrc_polygone.shp", quiet = TRUE)
 
 # Select Monteregie ONLY and reproject
 

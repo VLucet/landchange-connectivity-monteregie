@@ -38,9 +38,9 @@ showTmpFiles()
 source("scripts/functions/aggregation_helpr.R")
 
 ## Import data
-corridors <- st_read("data_raw/workshop/corridors/Key_links_smoothed_RegTables.shp", 
+corridors <- st_read("data/raw/workshop/corridors/Key_links_smoothed_RegTables.shp", 
                      quiet = TRUE)
-areas <- st_read("data_raw/workshop/ensembles/Key_ensembles_smoothed_RegTables.shp", 
+areas <- st_read("data/raw/workshop/ensembles/Key_ensembles_smoothed_RegTables.shp", 
                  quiet = TRUE)
 
 # Spatial Mul raster
