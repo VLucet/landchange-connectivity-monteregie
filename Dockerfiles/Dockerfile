@@ -45,11 +45,11 @@ RUN curl -L https://julialang-s3.julialang.org/bin/linux/x64/1.3/julia-1.3.1-lin
 # Install syncrosim and download package file
 RUN mkdir /home/rstudio/syncrosim_2_10 \
   && chown -R rstudio /home/rstudio/syncrosim_2_10 \
-  && curl https://syncrosim.com/download-id/19813/ --output /home/rstudio/syncrosim_2_10.zip \
+  && curl -L https://syncrosim.com/download-id/19813/ --output /home/rstudio/syncrosim_2_10.zip \
   && unzip /home/rstudio/syncrosim_2_10.zip -d /home/rstudio/syncrosim_2_10 \
   && mkdir /home/rstudio/syncrosim_packages \
   && chown -R rstudio /home/rstudio/syncrosim_packages \
-  && curl https://github.com/ApexRMS/stsim/releases/download/3.2.17/stsim-3-2-17.ssimpkg --output /home/rstudio/syncrosim_packages/stsim-3-2-17.ssimpkg
+  && curl -L https://github.com/ApexRMS/stsim/releases/download/3.2.17/stsim-3-2-17.ssimpkg --output /home/rstudio/syncrosim_packages/stsim-3-2-17.ssimpkg
 
 # Download repo
 RUN mkdir /home/rstudio/land_con_monteregie \
