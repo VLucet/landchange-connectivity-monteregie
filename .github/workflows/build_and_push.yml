@@ -5,9 +5,13 @@ name: Build / Push Docker image
 on:
   push:
     branches: [ master ]
+    tags:
+      - "docker"
     paths: 
-    - "Dockerfiles/**"
-    - ".github/workflows/**"
+      - "Dockerfiles/**"
+      - ".github/workflows/**"
+  schedule:
+    - cron: "0 1 * * *"
 
 jobs:
   build_and_push:
