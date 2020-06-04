@@ -934,7 +934,9 @@
     "lwgeom": {
       "Package": "lwgeom",
       "Version": "0.2-3",
-      "Source": "Repository"
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "da34fe68b6c51a004d5cef33d1f54f40"
     },
     "magick": {
       "Package": "magick",
@@ -1398,15 +1400,10 @@
     },
     "rsyncrosim": {
       "Package": "rsyncrosim",
-      "Version": "1.2",
-      "Source": "GitHub",
-      "RemoteType": "github",
-      "RemoteHost": "api.github.com",
-      "RemoteRepo": "rsyncrosim",
-      "RemoteUsername": "syncrosim",
-      "RemoteRef": "dev",
-      "RemoteSha": "7522538599a2801e177e76912e431a3adc0df1db",
-      "Hash": "2bc27b247de623d9b0e02fc277f1c604"
+      "Version": "1.2.4",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "327eb20caa069ac2f63f9dc586b02577"
     },
     "rvest": {
       "Package": "rvest",
@@ -1439,7 +1436,9 @@
     "sf": {
       "Package": "sf",
       "Version": "0.9-0",
-      "Source": "Repository"
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "8010b7ff1e24182cd9bb40c1fd8284d0"
     },
     "shiny": {
       "Package": "shiny",
