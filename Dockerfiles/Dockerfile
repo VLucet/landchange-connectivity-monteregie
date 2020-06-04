@@ -40,6 +40,11 @@ RUN curl -L https://julialang-s3.julialang.org/bin/linux/x64/1.3/julia-1.3.1-lin
   && julia -e 'import Pkg; Pkg.activate("."); Pkg.instantiate(); Pkg.precompile()' \
   && chown -R rstudio /home/rstudio/julia-1.3.1 \ 
   && chown -R rstudio /opt/julia
+  
+RUN mkdir /home/rstudio/syncrosim_2_10 \
+  && chown -R rstudio /home/rstudio/syncrosim_2_10 \
+  && curl https://syncrosim.com/download-id/19813/ --output /home/rstudio/syncrosim_2_10.zip \
+  && unzip syncrosim_2_10.zip -d /home/rstudio/syncrosim_2_10
 
 # Download repo and syncrosim
 RUN mkdir /home/rstudio/land_con_monteregie \
@@ -48,11 +53,6 @@ RUN mkdir /home/rstudio/land_con_monteregie \
 
 # Move to the working directory
 WORKDIR /home/rstudio/land_con_monteregie
-
-RUN mkdir /home/rstudio/syncrosim_2_10 \
-  && chown -R rstudio /home/rstudio/syncrosim_2_10 \
-  && curl https://syncrosim.com/download-id/19813/ --output syncrosim_2_10.zip \
-  && unzip syncrosim_2_10.zip -d /home/rstudio/syncrosim_2_10
 
 # Set up renv and Restore renv library
   RUN R -e "install.packages('remotes', repos = c(CRAN = 'https://cloud.r-project.org'))"
