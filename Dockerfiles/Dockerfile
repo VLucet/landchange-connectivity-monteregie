@@ -7,7 +7,7 @@
 ## Interactive:
 # docker run -it -u rstudio -e DISABLE_AUTH=true vlucet/land_con_monteregie:3.6.2-1 /bin/bash && cd ~/land_con_monteregie
 ## With data volume: 
-# -v "$(pwd)/data/:/home/rstudio/land_con_monteregie/data/"
+# -v "$(pwd)/data/:/home/rstudio/land_con_monteregie/data/" -v "$(pwd)/outputs:/home/rstudio/land_con_monteregie/outputs/"
 # -----
 
 # Building on top of: rocker/geospatial:3.6.2
