@@ -60,7 +60,7 @@ writeRaster(baseline_combined_reproj, "data/landis/spatial/temp_baseline.tif",
 
 # Calculate distance => in GRASS Start Grass session
 unlink("libraries/grass/landusechangemodel/", recursive = T)
-initGRASS(gisBase = "/usr/lib/grass78/", gisDbase = "libraries/grass/", 
+initGRASS(gisBase = "/usr/lib/grass76/", gisDbase = "libraries/grass/", 
           location = "landusechangemodel", mapset = "landis", 
           override = TRUE)
 # Run section below to set projection again

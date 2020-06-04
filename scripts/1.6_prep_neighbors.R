@@ -14,7 +14,7 @@ suppressPackageStartupMessages({
   library(rgrass7)
 })
 
-initGRASS(gisBase = "/usr/lib/grass78", #"/usr/lib/grass78/"
+initGRASS(gisBase = "/usr/lib/grass76", #"/usr/lib/grass78/"
           gisDbase = "libraries/grass/", location = "landusechangemodel", 
           mapset = "monteregie", 
           override = TRUE)
