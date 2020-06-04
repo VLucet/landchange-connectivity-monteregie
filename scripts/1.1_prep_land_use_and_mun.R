@@ -105,7 +105,7 @@ writeRaster(lu_18_sub_rect,
 
 # Mask - takes time - only need once
 masked <- mask(lu_18_sub_rect, mun_sub_18_clean)
-lu_18_sub <- stack(masked)
+suppressWarnings(lu_18_sub <- stack(masked))
 writeRaster(lu_18_sub,
             "data/land_use/AAFC_zone18_mont_mask.tif",
             bylayer = TRUE,
