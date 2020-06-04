@@ -5,8 +5,6 @@ name: Build / Push Docker image
 on:
   push:
     branches: [ master ]
-    tags:
-      - "docker"
     paths: 
       - "Dockerfiles/**"
       - ".github/workflows/**"
