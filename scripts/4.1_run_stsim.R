@@ -60,7 +60,7 @@ libraryDir <- paste0(getwd(), "/libraries/stsim/")
 # STSim library
 mySession <- session(ST_SIM_DIR)
 print(mySession)
-addPackage("stsim", mySession)
+addPackageFile(filename = "../syncrosim_packages/stsim-3-2-17.ssimpkg", session = mySession)
 myLibraryName <- paste0(libraryDir, "monteregie-conncons-scripted.ssim")
 myLibrary <- ssimLibrary(myLibraryName, session=mySession, overwrite = TRUE) 
 Definitions <- project(myLibrary, project="Definitions")

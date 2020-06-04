@@ -41,13 +41,17 @@ RUN curl -L https://julialang-s3.julialang.org/bin/linux/x64/1.3/julia-1.3.1-lin
   && julia -e 'import Pkg; Pkg.activate("."); Pkg.instantiate(); Pkg.precompile()' \
   && chown -R rstudio /home/rstudio/julia-1.3.1 \ 
   && chown -R rstudio /opt/julia
-  
+
+# Install syncrosim and download package file
 RUN mkdir /home/rstudio/syncrosim_2_10 \
   && chown -R rstudio /home/rstudio/syncrosim_2_10 \
   && curl https://syncrosim.com/download-id/19813/ --output /home/rstudio/syncrosim_2_10.zip \
   && unzip /home/rstudio/syncrosim_2_10.zip -d /home/rstudio/syncrosim_2_10
+  && mkdir /home/rstudio/syncrosim_packages \
+  && chown /home/rstudio/syncrosim_packages \
+  && curl https://github.com/ApexRMS/stsim/releases/download/3.2.17/stsim-3-2-17.ssimpkg --ouput /home/rstudio/syncrosim_packages/stsim-3-2-17.ssimpkg
 
-# Download repo and syncrosim
+# Download repo
 RUN mkdir /home/rstudio/land_con_monteregie \
   && chown -R rstudio /home/rstudio/land_con_monteregie \
   && git clone https://github.com/VLucet/landchange-connectivity-monteregie.git /home/rstudio/land_con_monteregie
