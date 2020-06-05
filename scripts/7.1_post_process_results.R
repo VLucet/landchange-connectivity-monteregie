@@ -177,7 +177,7 @@ print("LARGE LOOP DONE")
 # for (df in extracted_list[2:length(extracted_list)]) {
 #   final_df <- full_join(final_df, df, by = c("sce", "zone", "timestep", "species", "mean"))
 # }
-final_df$timestep <- as.numeric(final_df$timestep)
+# final_df$timestep <- as.numeric(final_df$timestep)
 
 final_df <- bind_rows(extracted_list2)
 
