@@ -282,14 +282,14 @@ right_side <- sapply(strsplit(trans_unique_no_type, "_to_"), `[[`, 2)
 adj_settings <- data.frame(
   TransitionGroupID = c("Urbanisation", "Agricultural Expansion Gr", "Reforestation Gr") ,
   StateAttributeTypeID = c("Urban", "Agriculture", "Forest"),
-  NeighborhoodRadius = c(1040, 520, 130), # 1500
+  NeighborhoodRadius = c(500, 250, 225), # 1500
   UpdateFrequency = c(1)
   
 ) %>% bind_rows(
   
   data.frame(TransitionGroupID = trans_unique,
              StateAttributeTypeID = right_side,
-             NeighborhoodRadius = 130, # 1500
+             NeighborhoodRadius = 225, # 1500
              UpdateFrequency = c(1))
   
 )
@@ -301,9 +301,9 @@ adj_mul <- data.frame(
   TransitionGroupID = c("Urbanisation", "Urbanisation",
                         "Agricultural Expansion Gr", "Agricultural Expansion Gr",
                         "Reforestation Gr", "Reforestation Gr"),
-  AttributeValue = c(0.000, 0.750, 
+  AttributeValue = c(0.000, 0.5, 
                      0.000, 0.750, 
-                     0.000, 0.15),
+                     0.000, 0.05),
   Amount = c(0,1,
              0,1,
              0,1)
@@ -328,7 +328,7 @@ write_csv(TST_group, "config/stsim/TimeSinceTransitionGroup.csv")
 
 TST_random <- data.frame(
   TransitionGroupID = "Forest Internals Gr",
-  MinInitialTST = 20 
+  MinInitialTST = 2 
 )
 write_csv(TST_random, "config/stsim/TimeSinceTransitionRandomize.csv")
 
