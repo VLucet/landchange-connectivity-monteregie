@@ -1,7 +1,7 @@
 # -----
 ## To build:
 # docker build Dockerfiles -t vlucet/land_con_monteregie:3.6.2-1
-## To run
+## To run:
 ## Within Rstudio:
 # docker run -d -p 8787:8787 -e DISABLE_AUTH=true -e PATH="$PATH:/home/rstudio/julia-1.3.1/bin" vlucet/land_con_monteregie:3.6.2-1
 ## Interactive:
