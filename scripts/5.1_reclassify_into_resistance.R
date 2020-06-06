@@ -36,7 +36,7 @@ sce_dir_vec <- list.files("libraries/stsim/monteregie-conncons-scripted.ssim.out
 iter_template <- paste0("it", 1:STSIM_ITER)
 
 ## Load classification matrices
-species_list <- tools::file_path_sans_ext(list.files("config/rcl_tables/species/"))[5]
+species_list <- tools::file_path_sans_ext(list.files("config/rcl_tables/species/"))
 patch_size <- read_csv("config/rcl_tables/grass/patch_size.csv")
 non_habitat <- read_csv("config/rcl_tables/grass/non_habitat.csv")
 too_small <- read_csv("config/rcl_tables/grass/too_small.csv")
@@ -399,10 +399,14 @@ for (sce in sce_dir_vec){
                                   "_ts_", the_ts,
                                   "_", specie,"_.tif"),
                   flags=c('overwrite'))
+        
+        execGRASS("g.remove", pattern=paste0(species, "*"))
       }
-      
+      execGRASS("g.remove", pattern=paste0(ts, "*"))
     }
+    execGRASS("g.remove", pattern=paste0(it, "*"))
   }
+  execGRASS("g.remove", pattern=paste0(sce, "*"))
 }
 
 #-------------------------------------------------------------------------------
