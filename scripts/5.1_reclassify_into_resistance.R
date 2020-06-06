@@ -36,7 +36,7 @@ sce_dir_vec <- list.files("libraries/stsim/monteregie-conncons-scripted.ssim.out
 iter_template <- paste0("it", 1:STSIM_ITER)
 
 ## Load classification matrices
-species_list <- tools::file_path_sans_ext(list.files("config/rcl_tables/species/"))
+species_list <- tools::file_path_sans_ext(list.files("config/rcl_tables/species/"))[5]
 patch_size <- read_csv("config/rcl_tables/grass/patch_size.csv")
 non_habitat <- read_csv("config/rcl_tables/grass/non_habitat.csv")
 too_small <- read_csv("config/rcl_tables/grass/too_small.csv")
