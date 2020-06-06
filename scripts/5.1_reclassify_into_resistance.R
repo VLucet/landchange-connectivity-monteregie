@@ -400,13 +400,13 @@ for (sce in sce_dir_vec){
                                   "_", specie,"_.tif"),
                   flags=c('overwrite'))
         
-        execGRASS("g.remove", pattern=paste0(specie, "*"))
+        execGRASS("g.remove", pattern=paste0(specie, "*"), type = "all", flags = "f")
       }
-      execGRASS("g.remove", pattern=paste0(ts, "*"))
+      execGRASS("g.remove", pattern=paste0(ts, "*"), type = "all", flags = "f")
     }
-    execGRASS("g.remove", pattern=paste0(it, "*"))
+    execGRASS("g.remove", pattern=paste0(it, "*"), type = "all", flags = "f")
   }
-  execGRASS("g.remove", pattern=paste0(sce, "*"))
+  execGRASS("g.remove", pattern=paste0(sce, "*"), type = "all", flags = "f")
 }
 
 #-------------------------------------------------------------------------------
