@@ -16,13 +16,6 @@ aggregation <- list(ag = as.logical(Sys.getenv("R_AGGR", unset = TRUE)),
 STSIM_STEP_SAVE <- as.numeric(Sys.getenv("STSIM_STEP_SAVE", unset = 1))
 #-------------------------------------------------------------------------------
 
-##-- for shorter tests
-# STSIM_STEP_SAVE=1
-# STSIM_ITER=2
-# STSIM_TS_START=0
-# STSIM_TS_END=5
-##--
-
 print(c(STSIM_ITER, aggregation, STSIM_STEP_SAVE))
 
 # Load important libraries
@@ -33,8 +26,9 @@ suppressPackageStartupMessages({
   library(SDMTools)
   library(ggplot2)
   library(assertthat)
+  library(foreach)
+  library(doParallel)
 })
-# suppressPackageStartupMessages(library(exactextractr))
 
 #-------------------------------------------------------------------------------
 
@@ -59,92 +53,82 @@ template <- raster("outputs/reclassed_with_buffer/circuitscape_buffer.tif")
 # Get result secenario directory 
 sce_dir_vec <- list.files("libraries/stsim/monteregie-conncons-scripted.ssim.output", 
                           full.names = T)
-sce_nb_vec <- paste0("sce_", as.numeric(unlist(lapply(str_split(sce_dir_vec, "-"), FUN = last))))
+sce_nb_vec <- paste0("sce_", as.numeric(unlist(lapply(str_split(sce_dir_vec, "-"), 
+                                                      FUN = last))))
 
 # Templates
 iter_template <- paste0("it_", 1:STSIM_ITER, "_")
-#ts_template <- unique(paste0("ts_", c(STSIM_TS_START, seq(STSIM_STEP_SAVE, STSIM_TS_END, STSIM_STEP_SAVE)), "_"))
-#ts_steps <- as.numeric(unique(c(STSIM_TS_START, seq(STSIM_STEP_SAVE, STSIM_TS_END, STSIM_STEP_SAVE))))
-
 #-------------------------------------------------------------------------------
 
 # Load raster inputs (maybe this will take too much ram?)
 species_vec <- tools::file_path_sans_ext(list.files("config/rcl_tables/species/"))
 list_files <- list.files("outputs/current_density", full.names = T, pattern = "curmap")
+#-------------------------------------------------------------------------------
 
-# Split data repeteadly => for loop
-#assembled_list <- list()
-# extracted_list <- list()
-extracted_list2 <- vector(mode = "list", 
-                          length = length(sce_dir_vec)*length(species_vec)*10)
-count <-  1
+# Make a function that determines the ts_template for the iteration
 
-for (sce in sce_nb_vec){
-  print(sce)
+get_ts_template <- function(list_of_files, step_save) {
   
-  sub_list_files <- list_files[grepl(x = list_files, pattern = sce)]
-  # print(sub_list_files)
-  
-  # Determibe ts template for this iteration
-  ts_vec <- gtools::mixedsort(unique(as.numeric(
-    unlist(
-      lapply(
-        unlist(
-          lapply(sub_list_files,str_split,"_"), # split after all _ 
-          recursive = F), # unlist, but only one level
-        nth, n=7))
+  ts_vec <- mixedsort(unique(as.numeric(
+    unlist(lapply(
+      unlist(lapply(list_of_files, str_split,"_"), # split after all _ 
+             recursive = F), # unlist, but only one level
+      nth, n=7))
   )))
-  print(ts_vec)
-  
   ts_template <- 
     gtools::mixedsort(unique(paste0("ts_", seq(min(ts_vec), #from min for this sce
                                                max(ts_vec), # to max
-                                               STSIM_STEP_SAVE), "_"))) # by whatever we save
-  print(ts_template)
-  ts_steps <- ts_vec
+                                               step_save), "_"))) # by whatever we save
+  return(list(ts_vec, ts_template))
   
-  #spe_list <- list() 
+}
+
+if(detectCores() > (length(sce_dir_vec)+2)){
+  n_cores <- length(sce_dir_vec)
+} else {
+  n_cores <- detectCores()-2
+}
+
+clust <- makeCluster(n_cores, outfile="log.txt")
+registerDoParallel(cl = clust)
+
+final_df <- foreach(sce = sce_nb_vec, .combine = dplyr::bind_rows) %dopar% {
+  
+  library(tidyverse)
+  library(raster)
+  library(gtools)
+  library(assertthat)
+  
+  print(sce)
+  sub_list_files <- list_files[grepl(x = list_files, pattern = sce)]
+  templates <- get_ts_template(sub_list_files, STSIM_STEP_SAVE)
+  ts_template <- templates[[1]]
+  ts_vec <- templates[[2]]
+  
+  spe_list <- list() 
   for (species in species_vec) {
     print(species)
     ts_list <- list()
-    for (timestep in ts_template) {
+    for (timestep in ts_vec) {
       print(timestep)
       iter_list <- list()
       for (iter in iter_template) {
+        print(iter)
         # Step 1 assemble NS and EW for each spe, ts, iter, sce
         stack_files <- list_files[grepl(x = list_files, pattern = species) & 
                                     grepl(x = list_files, pattern = timestep) & 
                                     grepl(x = list_files, pattern = iter) &
                                     grepl(x = list_files, pattern = sce)]
+        #print(length(stack_files))
+        print(stack_files)
         assert_that(length(stack_files)==2)
         # Step 2 sum NS and EW
-        print(stack_files)
         iter_list[[iter]] <- sum(stack(lapply(stack_files, FUN = raster)))      
       }
       
-      # Step 3 take the mean accross all iterations
-      # mean_raster <- mean(stack(iter_list))
-      #ts_list[[timestep]] <- mean_raster
+      idx <- which(ts_vec == timestep)
       
-      # Step 4 remove the NA default value (2)
-      # mean_raster[template == 2] <- NA
-      # mean_raster <- rescale_raster_layer(mean_raster)
-      
-      # Make zonal stats directly on the mean raster
-      # df <- as.data.frame(zonal(x = crop(mean_raster, mun_zonal), mun_zonal), 
-      #                     z = mun_zonal, fun = "mean", na.rm = T)
-      # mean_raster_cropped <- crop(mean_raster, mun_zonal)
       unit_rasters_cropped <- crop(stack(iter_list), mun_zonal)
-      ts_list[[timestep]] <- stack(unit_rasters_cropped)
-      
-      # df <- as.data.frame(zonal(x = mean_raster_cropped, 
-      #                           z = mun_zonal, 
-      #                           fun = "mean", na.rm = TRUE))
-      # df$sce <- sce
-      # df$zone <- as.factor(df$zone)
-      # df$species <- species
-      # df$timestep <- ts_steps[which(ts_template == timestep)]
-      
       
       df2 <- as.data.frame(zonal(x = unit_rasters_cropped, 
                                  z = mun_zonal, 
@@ -152,41 +136,27 @@ for (sce in sce_nb_vec){
       df2$sce <- sce
       df2$zone <- as.factor(df2$zone)
       df2$species <- species
-      df2$timestep <- ts_steps[which(ts_template == timestep)]
+      df2$timestep <- ts_template[which(ts_vec == timestep)]
+      print(head(df2))
       
-      raster_name <- paste(sce, species, timestep, sep = "_")
-      #names(mean_raster) <- raster_name
-
-      #extracted_list[[raster_name]] <- df
-      extracted_list2[[count]] <- df2 %>% 
+      final <- df2 %>% 
         pivot_longer(cols = contains("it"), names_to = "iteration", values_to = "current")
-      count = count+1
+      
+      ts_list[[which(ts_vec == timestep)]] <- final
     }
-    #spe_list[[species]] <- ts_list
+    spe_list[[which(species == species_vec)]] <- bind_rows(ts_list)
   }
-  #assembled_list[[paste0("sce_",sce)]] <- spe_list
+  bind_rows(spe_list)
 }
+stopCluster(clust)
 
-# Save list
-#saveRDS(assembled_list, "outputs/final/final_raster_means.RDS")
-# assembled_list <- readRDS("outputs/final/final_raster_means.RDS")
-print("LARGE LOOP DONE")
-
-# assemble last dataset
-#final_df <- bind_rows(extracted_list)
-# for (df in extracted_list[2:length(extracted_list)]) {
-#   final_df <- full_join(final_df, df, by = c("sce", "zone", "timestep", "species", "mean"))
-# }
-# final_df$timestep <- as.numeric(final_df$timestep)
-
-final_df <- bind_rows(extracted_list2)
-
+print("LARGE FOREACH LOOP DONE")
 # Save final df
 saveRDS(final_df, "outputs/final/final_df_current_density.RDS")
 
 #-------------------------------------------------------------------------------
 
-# Now with original data
+# Now with original data - simple loop this time
 list_files_origin <- list_files[grepl(x = list_files, pattern = "TRUE")]
 
 assembled_list_T <- list()
