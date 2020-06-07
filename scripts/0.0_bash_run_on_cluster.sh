@@ -150,7 +150,7 @@ run_circuitscape(){
   echo "Run Circuitscape"
   rm -rf outputs/current_density/*
   ## Run circuitscapes
-  ~/julia-1.3.1/bin/julia -p $CS_CORES scripts/6.2_run_circuitscape.jl
+  julia -p $CS_CORES scripts/6.2_run_circuitscape.jl
   # Remove cron job
   # crontab -r
   # Remove out files
