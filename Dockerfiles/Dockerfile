@@ -28,11 +28,11 @@ RUN apt-get -y update -qq \
     grass-dev=7.6.0-1 \
     curl=7.64.0-4+deb10u1 \ 
     cargo=0.35.0-2 \
-    gdal-bin=2.4.2+dfsg-1build2 \
-    python-gdal=2.4.2+dfsg-1build2 \
-    bc=1.07.1-2build1 \
-    nano=4.3-1 \
-    htop=2.2.0-2
+    gdal-bin=2.4.0+dfsg-1+b1 \
+    python-gdal=2.4.0+dfsg-1+b1 \
+    bc=1.07.1-2+b1 \
+    nano=3.2-3 \
+    htop=2.2.0-1+b1
     
 # Julia install
 ENV JULIA_DEPOT_PATH=/opt/julia
