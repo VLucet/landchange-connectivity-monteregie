@@ -38,13 +38,13 @@ export R_RATIO='2'
 export R_METHOD_STSIM='rf'
 export R_SAMPLING_METHOD="bal"
 # Variables for STSIM
-export STSIM_ITER='2'
+export STSIM_ITER='10'
 export STSIM_TS_START='0'
 export STSIM_TS_END='11'
 export STSIM_STEP_SAVE='1'
 export STSIM_STEP_COMPUTE='10'
 # Variables for CS
-export CS_CORES='9' # 2 on thinkpad, 12 on cluster
+export CS_CORES='12' # 2 on thinkpad, 12 on cluster
 
 print_vars(){
   echo "Variables for R: R_crop = $R_CROP, R_AGGR = $R_AGGR"
