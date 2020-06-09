@@ -264,10 +264,10 @@ ggsave("outputs/figures/connectivit_change_mun.png", change)
 ## FIGURE 3
 it_1 <- lapply(X = file.path(sce_dir_vec, "stsim_OutputSpatialState"), 
                FUN = list.files,  pattern="it1", full.names=TRUE)
+# it_1 <- list.files("test/june/cloud/",
+#                    pattern="it1", full.names = T)
 it_1 <- lapply(X = it_1, FUN = mixedsort)
-
-# it_1 <- list.files("test/it/",
-#                    full.names = T)
+#it_1 <- mixedsort(unlist(it_1))
 
 list_lu <-  map(.x = map_depth(.x = it_1, .f = raster, .depth = 2), .f = stack)
 list_lu <- list_lu[2:length(list_lu)]
