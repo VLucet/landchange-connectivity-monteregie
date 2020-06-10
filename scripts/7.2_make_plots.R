@@ -40,7 +40,7 @@ sce_nb_vec <- paste0("sce_", as.numeric(unlist(lapply(str_split(sce_dir_vec, "-"
 mun <- st_read("data/mun/munic_SHP_clean.shp", quiet = TRUE)
 
 results <- read_rds("data/temp/stsim_run_results.RDS") %>% 
-  select(scenarioId, name)
+  dplyr::select(scenarioId, name)
 results$name <- gsub(results$name, pattern = " \\(.+\\)", replacement = "")
 results$sce <- paste0("sce_",results$scenarioId)
 
@@ -48,7 +48,7 @@ results_clean <- results %>% tibble() %>%
   mutate(splitted = str_split(name, " \\| ")) %>% 
   mutate(climate = unlist(map(splitted, ~unlist(.x[2]))), 
          run = unlist(map(splitted, ~unlist(.x[1])))) %>% 
-  select(-splitted) 
+  dplyr::select(-splitted) 
 #-------------------------------------------------------------------------------
 
 # Data prep
@@ -223,7 +223,7 @@ ggsave(fig_1_static,
 
 #-------------------------------------------------------------------------------
 
-## FIGURE 2 => will break
+## FIGURE 2
 key <- read_csv("config/stsim/SecondaryStratum.csv") %>%
   mutate(ID = as.factor(ID)) %>%
   rename(zone=ID, MUS_NM_MUN=Name) %>%
@@ -260,6 +260,8 @@ change
 ggsave("outputs/figures/connectivit_change_mun.png", change)
 
 #-------------------------------------------------------------------------------
+stop("Reviewed so far")
+#-------------------------------------------------------------------------------
 
 ## FIGURE 3
 it_1 <- lapply(X = file.path(sce_dir_vec, "stsim_OutputSpatialState"), 
@@ -269,15 +271,16 @@ it_1 <- lapply(X = file.path(sce_dir_vec, "stsim_OutputSpatialState"),
 it_1 <- lapply(X = it_1, FUN = mixedsort)
 #it_1 <- mixedsort(unlist(it_1))
 
-list_lu <-  map(.x = map_depth(.x = it_1, .f = raster, .depth = 2), .f = stack)
-list_lu <- list_lu[2:length(list_lu)]
-names(list_lu) <- sce_nb_vec[2:length(sce_nb_vec)]
+list_lu <-  map(.x = map_depth(.x = it_1, .f = raster, .depth = 2), 
+                .f = stack)
+#list_lu <- list_lu[2:length(list_lu)]
+#names(list_lu) <- sce_nb_vec[2:length(sce_nb_vec)]
 
 # for (x in 2:6) {print(freq((list_lu[[x]]$sc.it1.ts11==3) - (list_lu[[x]]$sc.it1.ts2==3)))}
 list_lu_1_cropped <- map(map(list_lu, crop, mun), mask, mun)
-#extent_zoom <- extent(c(621300, 621300+10000, 5023000, 5023000+10000))
+extent_zoom <- extent(c(554687.5, 568838.3, 5024170, 5035009))
 #extent_zoom <- drawExtent()
-#list_lu_1_cropped <- map(list_lu, crop, extent_zoom)
+list_lu_1_cropped_2 <- map(list_lu, crop, extent_zoom)
 
 # cs_cropped <- crop(it_1_CS, extent_zoom)
 
@@ -342,7 +345,6 @@ for (sce in seq_len(length(list_lu))){
   #anim_save(paste0("outputs/figures/sce_",sce_nb_vec[sce],"_lu_change_animated.gif"))
 }
 #-------------------------------------------------------------------------------
-stop("Reviewed so far")
 #-------------------------------------------------------------------------------
 
 ## Figure 4
