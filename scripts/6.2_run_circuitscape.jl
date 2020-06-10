@@ -6,17 +6,19 @@
 #-------------------------------------------------------------------------------
 
 @everywhere using Pkg
-@everywhere Pkg.activate(".")
+@everywhere using Distributed
+@everywhere using LinearAlgebra.BLAS
+
+# Set BLAS threads to 1 to avoid oversubscription
+@everywhere BLAS.set_num_threads(1)
+
+Pkg.activate(".")
 @everywhere using Circuitscape
 
 # Read the ini files
 @everywhere searchdir(path,key) = filter(x->occursin(key,x), readdir(path))
-@everywhere ini_list = searchdir("config/ini_circuitscape/all/", "ini")
+@everywhere dir = "config/ini_circuitscape/all/"
+@everywhere ext = "ini"
+@everywhere ini_list = dir .* searchdir(dir, ext)
 
-@everywhere function comp(file)
-    println(file)
-    compute(string("config/ini_circuitscape/all/",file))
-    println("Done")
-end
-
-@time pmap(comp, ini_list)
+pmap(compute, ini_list)
