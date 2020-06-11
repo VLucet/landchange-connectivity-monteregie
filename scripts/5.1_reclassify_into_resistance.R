@@ -19,6 +19,7 @@ suppressPackageStartupMessages({
   library(rgrassdoc)
   library(assertthat)
   library(gtools)
+  library(parallel)
 })
 
 # Reset Raster tmp files
@@ -66,7 +67,7 @@ initGRASS(gisBase = "/usr/lib/grass76/", gisDbase = "libraries/grass/",
           location = "habsuit", mapset = "PERMANENT", 
           override = TRUE)
 execGRASS("g.proj", flags = c("c"), proj4 = projection(raster(true_landuse_list[1])))
-execGRASS("g.mapset", mapset = "habsuit_1", flags = c("c", "overwrite"))
+execGRASS("g.mapset", mapset = "habsuit_true", flags = c("c", "overwrite"))
 
 for (true_lu in true_landuse_list){
   
@@ -213,13 +214,179 @@ for (true_lu in true_landuse_list){
 
 #-------------------------------------------------------------------------------
 
+clust <- makeCluster(2, outfile="log.txt")
+
 message("MODELLED LAND USE")
 unlink("libraries/grass/habsuit/", recursive = T)
 initGRASS(gisBase = "/usr/lib/grass76/", gisDbase = "libraries/grass/", 
           location = "habsuit", mapset = "PERMANENT", 
           override = TRUE)
 execGRASS("g.proj", flags = c("c"), proj4 = projection(raster(true_landuse_list[1])))
-execGRASS("g.mapset", mapset = "habsuit_2", flags = c("c", "overwrite"))
+execGRASS("g.mapset", mapset = "habsuit_mapset", flags = c("c", "overwrite"))
+
+reclass_iter <- function(iter_nb, 
+                         sce_nb, 
+                         species_list) {
+  # for (it in split_by_iter){
+  
+  it <- iter_nb
+  patch_size <- readr::read_csv("config/rcl_tables/grass/patch_size.csv")
+  non_habitat <- readr::read_csv("config/rcl_tables/grass/non_habitat.csv")
+  too_small <- readr::read_csv("config/rcl_tables/grass/too_small.csv")
+  
+  print(it)
+  for(ts in unlist(it)){
+    print(ts)
+    
+    base_name <- paste("s",sce_nb, tools::file_path_sans_ext(basename(ts)), sep = "_")
+    
+    # Input **
+    rgrass7::execGRASS("r.in.gdal", 
+                       input = ts, 
+                       output = base_name, 
+                       flags = c("overwrite"))
+    
+    rgrass7::execGRASS("g.region", raster = base_name)
+    
+    # Get only forest **
+    readr::write_lines(c("0 thru 10 = NULL", "* = *"), "config/rcl_tables/grass/rule.txt")
+    forest_name <- paste0(base_name,"_for")
+    rgrass7::execGRASS("r.reclass", 
+                       input = base_name, 
+                       rules = "config/rcl_tables/grass/rule.txt",
+                       output = forest_name, 
+                       flags = c("overwrite"))
+    
+    # clump it **
+    forest_clumped_name <- paste0(forest_name,"_c")
+    rgrass7::execGRASS("r.clump", 
+                       input = forest_name, 
+                       output = forest_clumped_name,
+                       flags = c("overwrite", "d"))                                 
+    
+    # Get the no forest **
+    readr::write_lines(c("10 thru 100 = NULL", "* = *"), "config/rcl_tables/grass/rule.txt")
+    no_forest_name <- paste0(base_name,"_no_f")
+    rgrass7::execGRASS("r.reclass", 
+                       input = base_name, 
+                       output = no_forest_name, 
+                       rules = "config/rcl_tables/grass/rule.txt",
+                       flags = "overwrite")
+    
+    #for (specie in species_list){}
+    for (specie in species_list){
+      print(specie)
+      # RECLASS NON-FOREST **
+      no_forest_reclassed_name <- paste0(specie,"_", no_forest_name,"_r")
+      rgrass7::execGRASS("r.reclass", 
+                         input = no_forest_name, 
+                         output = no_forest_reclassed_name, 
+                         rules = paste0("config/rcl_tables/species/",specie,".txt"), 
+                         flags = "overwrite")
+      
+      ## Reclass all forest based on prefered versus non prefered pixels
+      binary_forest_name <- paste0(specie, "_", forest_name, "_b") 
+      rgrass7::execGRASS("r.reclass", 
+                         input = forest_name, 
+                         output = binary_forest_name, 
+                         rules = paste0("config/rcl_tables/species/",specie,".txt"), 
+                         flags = "overwrite")
+      
+      # r.stats.zonal per patch for patch suitability
+      stat_zonal_name <- paste0(binary_forest_name,"_s")
+      rgrass7::execGRASS("r.stats.zonal", 
+                         base = forest_clumped_name,
+                         cover = binary_forest_name, 
+                         method = "average",
+                         output = stat_zonal_name,
+                         flags = "overwrite")
+      
+      # separate unsuitable from suitable patches 
+      habitat_suit <- paste0(stat_zonal_name, "_su")
+      rgrass7::execGRASS("r.mapcalc", 
+                         expression=paste0(habitat_suit," = ", stat_zonal_name, " >= 0.5"), 
+                         flags = "overwrite")
+      rgrass7::execGRASS("r.null", map = habitat_suit, setnull="0")
+      habitat_unsuit <- paste0(stat_zonal_name, "_un")
+      rgrass7::execGRASS("r.mapcalc", 
+                         expression=paste0(habitat_unsuit, " = ",stat_zonal_name, " < 0.5"), 
+                         flags = "overwrite")
+      rgrass7::execGRASS("r.null", map = habitat_unsuit, setnull="0")
+      
+      # Reclass all unsuit based on non habitat rule
+      readr::write_lines(paste0("* = ", as.character(subset(non_habitat, 
+                                                            species==specie)$value)), 
+                         "config/rcl_tables/grass/rule.txt")
+      habitat_unsuit_reclassed <- paste0(habitat_unsuit, "_r")
+      rgrass7::execGRASS("r.reclass", 
+                         input = habitat_unsuit,
+                         output = habitat_unsuit_reclassed,
+                         rules = "config/rcl_tables/grass/rule.txt")
+      
+      # GREATER
+      greater_area_name <- paste0(habitat_suit, "_ra_g")
+      rgrass7::execGRASS("r.reclass.area",
+                         input = habitat_suit,
+                         output = greater_area_name,
+                         value =  subset(patch_size, species == specie)$value,
+                         mode = "greater",
+                         flags = c("overwrite", "d")) # diagonal neighbors
+      greater_area_reclassed_name <-  paste0(greater_area_name, "_r")
+      readr::write_lines(paste0("* = 1"), "config/rcl_tables/grass/rule.txt")
+      rgrass7::execGRASS("r.reclass",
+                         input = greater_area_name,
+                         output = greater_area_reclassed_name,
+                         rules = "config/rcl_tables/grass/rule.txt",
+                         flags = "overwrite")
+      #rgrass7::execGRASS("g.remove", type = "raster", name = greater_area_name)
+      
+      # SMALLER
+      lesser_area_name <- paste0(habitat_suit, "_ra_l")
+      rgrass7::execGRASS("r.reclass.area",
+                         input = habitat_suit,
+                         output = lesser_area_name,
+                         value =  subset(patch_size, species == specie)$value,
+                         mode = "lesser",
+                         flags = c("overwrite", "d")) # diagonal neighbors
+      lesser_area_reclassed_name <- paste0(lesser_area_name, "_r")
+      readr::write_lines(paste0("* = ", as.character(subset(too_small, species==specie)$value)), 
+                         "config/rcl_tables/grass/rule.txt")
+      rgrass7::execGRASS("r.reclass",
+                         input = lesser_area_name,
+                         output = lesser_area_reclassed_name,
+                         rules = "config/rcl_tables/grass/rule.txt",
+                         flags = "overwrite")
+      #rgrass7::execGRASS("g.remove", type = "raster", name = lesser_area_name)
+      
+      # PATCH WITH RECLASSED NO FOREST
+      final_name <- paste(specie, base_name, "final", sep = "_")
+      rgrass7::execGRASS("r.patch", 
+                         input = c(no_forest_reclassed_name, 
+                                   habitat_unsuit_reclassed,
+                                   lesser_area_reclassed_name,
+                                   greater_area_reclassed_name
+                         ), 
+                         output = final_name, 
+                         flags = "overwrite")
+      
+      the_it <- unlist(stringr::str_split(unlist(stringr::str_split(base_name, pattern = "it*"))[2], pattern = "\\."))[1]
+      the_ts <- unlist(stringr::str_split(base_name, pattern = "ts"))[2]
+      
+      rgrass7::execGRASS("r.out.gdal", 
+                         input = final_name, 
+                         format='GTiff',createopt='COMPRESS=LZW', 
+                         output = paste0("outputs/reclassed/sce_",sce_nb,
+                                         "_it_", the_it,
+                                         "_ts_", the_ts,
+                                         "_", specie,"_.tif"),
+                         flags=c('overwrite'))
+      
+      #rgrass7::execGRASS("g.remove", pattern=paste0(specie, "*"), type = "all", flags = "f")
+    }
+    #rgrass7::execGRASS("g.remove", pattern=paste0("ts", the_ts), type = "all", flags = "f")
+  }
+  #rgrass7::execGRASS("g.remove", pattern=paste0("it", the_it), type = "all", flags = "f")
+}
 
 for (sce in sce_dir_vec){
   
@@ -252,161 +419,13 @@ for (sce in sce_dir_vec){
                                           max(ts_vec), # to max
                                           STSIM_STEP_SAVE))) # by whatever we save
   
-  for (it in split_by_iter){
-    print(it)
-    
-    for(ts in unlist(it)){
-      print(ts)
-      
-      base_name <- paste("s",sce_nb, tools::file_path_sans_ext(basename(ts)), sep = "_")
-      
-      # Input **
-      execGRASS("r.in.gdal", 
-                input = ts, 
-                output = base_name, 
-                flags = c("overwrite"))
-      
-      execGRASS("g.region", raster = base_name)
-      
-      # Get only forest **
-      write_lines(c("0 thru 10 = NULL", "* = *"), "config/rcl_tables/grass/rule.txt")
-      forest_name <- paste0(base_name,"_for")
-      execGRASS("r.reclass", 
-                input = base_name, 
-                rules = "config/rcl_tables/grass/rule.txt",
-                output = forest_name, 
-                flags = c("overwrite"))
-      
-      # clump it **
-      forest_clumped_name <- paste0(forest_name,"_c")
-      execGRASS("r.clump", 
-                input = forest_name, 
-                output = forest_clumped_name,
-                flags = c("overwrite", "d"))                                 
-      
-      # Get the no forest **
-      write_lines(c("10 thru 100 = NULL", "* = *"), "config/rcl_tables/grass/rule.txt")
-      no_forest_name <- paste0(base_name,"_no_f")
-      execGRASS("r.reclass", 
-                input = base_name, 
-                output = no_forest_name, 
-                rules = "config/rcl_tables/grass/rule.txt",
-                flags = "overwrite")
-      
-      #for (specie in species_list){}
-      for (specie in species_list){
-        print(specie)
-        # RECLASS NON-FOREST **
-        no_forest_reclassed_name <- paste0(specie,"_", no_forest_name,"_r")
-        execGRASS("r.reclass", 
-                  input = no_forest_name, 
-                  output = no_forest_reclassed_name, 
-                  rules = paste0("config/rcl_tables/species/",specie,".txt"), 
-                  flags = "overwrite")
-        
-        ## Reclass all forest based on prefered versus non prefered pixels
-        binary_forest_name <- paste0(specie, "_", forest_name, "_b") 
-        execGRASS("r.reclass", 
-                  input = forest_name, 
-                  output = binary_forest_name, 
-                  rules = paste0("config/rcl_tables/species/",specie,".txt"), 
-                  flags = "overwrite")
-        
-        # r.stats.zonal per patch for patch suitability
-        stat_zonal_name <- paste0(binary_forest_name,"_s")
-        execGRASS("r.stats.zonal", 
-                  base = forest_clumped_name,
-                  cover = binary_forest_name, 
-                  method = "average",
-                  output = stat_zonal_name,
-                  flags = "overwrite")
-        
-        # separate unsuitable from suitable patches 
-        habitat_suit <- paste0(stat_zonal_name, "_su")
-        execGRASS("r.mapcalc", 
-                  expression=paste0(habitat_suit," = ", stat_zonal_name, " >= 0.5"), 
-                  flags = "overwrite")
-        execGRASS("r.null", map = habitat_suit, setnull="0")
-        habitat_unsuit <- paste0(stat_zonal_name, "_un")
-        execGRASS("r.mapcalc", 
-                  expression=paste0(habitat_unsuit, " = ",stat_zonal_name, " < 0.5"), 
-                  flags = "overwrite")
-        execGRASS("r.null", map = habitat_unsuit, setnull="0")
-        
-        # Reclass all unsuit based on non habitat rule
-        write_lines(paste0("* = ", as.character(subset(non_habitat, species==specie)$value)), 
-                    "config/rcl_tables/grass/rule.txt")
-        habitat_unsuit_reclassed <- paste0(habitat_unsuit, "_r")
-        execGRASS("r.reclass", 
-                  input = habitat_unsuit,
-                  output = habitat_unsuit_reclassed,
-                  rules = "config/rcl_tables/grass/rule.txt")
-        
-        # GREATER
-        greater_area_name <- paste0(habitat_suit, "_ra_g")
-        execGRASS("r.reclass.area",
-                  input = habitat_suit,
-                  output = greater_area_name,
-                  value =  subset(patch_size, species == specie)$value,
-                  mode = "greater",
-                  flags = c("overwrite", "d")) # diagonal neighbors
-        greater_area_reclassed_name <-  paste0(greater_area_name, "_r")
-        write_lines(paste0("* = 1"), "config/rcl_tables/grass/rule.txt")
-        execGRASS("r.reclass",
-                  input = greater_area_name,
-                  output = greater_area_reclassed_name,
-                  rules = "config/rcl_tables/grass/rule.txt",
-                  flags = "overwrite")
-        #execGRASS("g.remove", type = "raster", name = greater_area_name)
-        
-        # SMALLER
-        lesser_area_name <- paste0(habitat_suit, "_ra_l")
-        execGRASS("r.reclass.area",
-                  input = habitat_suit,
-                  output = lesser_area_name,
-                  value =  subset(patch_size, species == specie)$value,
-                  mode = "lesser",
-                  flags = c("overwrite", "d")) # diagonal neighbors
-        lesser_area_reclassed_name <- paste0(lesser_area_name, "_r")
-        write_lines(paste0("* = ", as.character(subset(too_small, species==specie)$value)), 
-                    "config/rcl_tables/grass/rule.txt")
-        execGRASS("r.reclass",
-                  input = lesser_area_name,
-                  output = lesser_area_reclassed_name,
-                  rules = "config/rcl_tables/grass/rule.txt",
-                  flags = "overwrite")
-        #execGRASS("g.remove", type = "raster", name = lesser_area_name)
-        
-        # PATCH WITH RECLASSED NO FOREST
-        final_name <- paste(specie, base_name, "final", sep = "_")
-        execGRASS("r.patch", 
-                  input = c(no_forest_reclassed_name, 
-                            habitat_unsuit_reclassed,
-                            lesser_area_reclassed_name,
-                            greater_area_reclassed_name
-                  ), 
-                  output = final_name, 
-                  flags = "overwrite")
-        
-        the_it <- unlist(str_split(unlist(str_split(base_name, pattern = "it*"))[2], pattern = "\\."))[1]
-        the_ts <- unlist(str_split(base_name, pattern = "ts"))[2]
-        
-        execGRASS("r.out.gdal", 
-                  input = final_name, 
-                  format='GTiff',createopt='COMPRESS=LZW', 
-                  output = paste0("outputs/reclassed/sce_",sce_nb,
-                                  "_it_", the_it,
-                                  "_ts_", the_ts,
-                                  "_", specie,"_.tif"),
-                  flags=c('overwrite'))
-        
-        execGRASS("g.remove", pattern=paste0(specie, "*"), type = "all", flags = "f")
-      }
-      execGRASS("g.remove", pattern=paste0("ts", the_ts), type = "all", flags = "f")
-    }
-    execGRASS("g.remove", pattern=paste0("it", the_it), type = "all", flags = "f")
-  }
-  execGRASS("g.remove", pattern=paste0("sce", sce_nb), type = "all", flags = "f")
+  
+  parLapply(split_by_iter, fun = reclass_iter, cl = clust, 
+            sce_nb = sce_nb,
+            species_list = species_list)
+  
+  execGRASS("g.remove", pattern=paste0("*s_", sce_nb, "*"), type = "all", flags = "f")
+  execGRASS("g.remove", pattern=paste0("*s_", sce_nb, "*"), type = "all", flags = "f")
 }
 
 #-------------------------------------------------------------------------------
