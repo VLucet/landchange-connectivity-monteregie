@@ -3,8 +3,6 @@
 ## 2020
 ## Inputs: INI files, resistance rasters
 ## Outputs: connectivity rasters
-## Pkg.add(Pkg.PackageSpec(name="Circuitscape", 
-##         rev="93fc58fc38d2e1f7b17241e7d6aa2764dd56ff13"))
 #-------------------------------------------------------------------------------
 
 @everywhere using Pkg
