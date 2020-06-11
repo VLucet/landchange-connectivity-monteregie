@@ -7,7 +7,7 @@
 ## Interactive:
 # docker run -it -u rstudio -e DISABLE_AUTH=true vlucet/land_con_monteregie:3.6.2-1 /bin/bash && cd ~/land_con_monteregie
 ## With data volume: 
-#  docker run -it -e DISABLE_AUTH=true -v "$(pwd)/data/:/home/rstudio/land_con_monteregie/data/" -v "$(pwd)/outputs:/home/rstudio/land_con_monteregie/outputs/" -v "$(pwd)/libraries:/home/rstudio/land_con_monteregie/libraries" --shm-size 10G vlucet/land_con_monteregie:3.6.2-1 /bin/bash && cd ~/land_con_monteregie
+#  docker run -it -e DISABLE_AUTH=true -v "$(pwd)/config/:/home/rstudio/land_con_monteregie/config/" -v "$(pwd)/outputs:/home/rstudio/land_con_monteregie/outputs/" -v "$(pwd)/libraries:/home/rstudio/land_con_monteregie/libraries" -v "$(pwd)/data:/home/rstudio/land_con_monteregie/data" --shm-size 10G vlucet/land_con_monteregie:3.6.2-1 /bin/bash && cd ~/land_con_monteregie
 # -----
 
 # Building on top of: rocker/geospatial:3.6.2
