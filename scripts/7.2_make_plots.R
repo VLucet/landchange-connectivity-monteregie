@@ -28,7 +28,10 @@ suppressPackageStartupMessages({
   library(ggmap)
   library(gifski)
   library(gtools)
-  #library(caret)
+  library(fmsb)
+  library(RColorBrewer)
+  library(scales)
+  library(ggradar)
 })
 
 #-------------------------------------------------------------------------------
@@ -98,39 +101,39 @@ joined <- full_join(df_summarised,
 # Set theme
 theme_set(theme_minimal())
 theme_update(legend.position = c(0.85, 0.22),
-  #legend.justification = c(1, -0.2), # for inside plot
-  #legend.position = "none",
-  legend.box = "vertical",
-  legend.background = element_blank(),
-  legend.box.background = element_rect(colour = "black"),
-  panel.border = element_rect(fill = NA),
-  legend.title = element_text(size = 15),
-  legend.text = element_text(size = 12),
-  plot.title = element_text(size=22),
-  plot.subtitle = element_text(size=22),
-  axis.text.x = element_text(angle=65, vjust=0.6, size =15),
-  axis.text.y = element_text(size =15),
-  strip.text.x = element_text(size = 15),
-  strip.text.y = element_text(size = 15),
-  axis.title=element_text(size=18))
+             #legend.justification = c(1, -0.2), # for inside plot
+             #legend.position = "none",
+             legend.box = "vertical",
+             legend.background = element_blank(),
+             legend.box.background = element_rect(colour = "black"),
+             panel.border = element_rect(fill = NA),
+             legend.title = element_text(size = 15),
+             legend.text = element_text(size = 12),
+             plot.title = element_text(size=22),
+             plot.subtitle = element_text(size=22),
+             axis.text.x = element_text(angle=65, vjust=0.6, size =15),
+             axis.text.y = element_text(size =15),
+             strip.text.x = element_text(size = 15),
+             strip.text.y = element_text(size = 15),
+             axis.title=element_text(size=18))
 
 #-------------------------------------------------------------------------------
 
-## FIGURE 1
+## FIGURE 1 => smoothed trajectories
 
 fig_1_historic <- joined %>% 
   
   #filter(source=="observation") %>% 
   
   filter(climate == "none") %>% 
-
+  
   ggplot(aes(x=timestep, y=sum_cur, col=source)) +
   scale_color_manual(values=c('#d8b365','#5ab4ac'), 
                      labels = c("Model", "Observation")) +
   
   geom_smooth(aes(group = sce), method = "glm", se=FALSE) +
   scale_linetype_manual(values = c(1,3,2,5))+
-
+  
   geom_point(aes(group = sce)) +
   facet_wrap(~species, scales = "free") +
   
@@ -146,7 +149,7 @@ ggsave(fig_1_historic,
        width = 17, height = 12)
 
 fig_1_static <- joined %>% 
-
+  
   #filter(species %in% c("BLBR","URAM")) %>% 
   #filter(sce %in% c("sce_15", "sce_16", "sce_0")) %>%
   #filter(iteration =="it_1_") %>% 
@@ -161,11 +164,11 @@ fig_1_static <- joined %>%
   scale_color_manual(values=c('#ffe300', 
                               '#ff7a14', 
                               "#b31400"), 
-                      labels = c("Historic", 
-                                 "Baseline", 
-                                 "RCP 8.5"
-                                 )) +
-
+                     labels = c("Historic", 
+                                "Baseline", 
+                                "RCP 8.5"
+                     )) +
+  
   geom_smooth(aes(group = sce, linetype=run), alpha=0.2, method="loess") +
   scale_linetype_discrete() +
   #geom_point(aes(group = sce, pch = run)) +
@@ -184,46 +187,14 @@ fig_1_static <- joined %>%
   NULL
 fig_1_static
 
-# fig_1_static <- joined %>% 
-#   
-#   #filter(species %in% c("BLBR","URAM")) %>% 
-#   #filter(sce %in% c("sce_15", "sce_16", "sce_0")) %>%
-#   #filter(iteration =="it_1_") %>% 
-#   #filter(!(climate %in% c("RCP 8.5"))) %>% 
-#   #filter(run %in% c("BAU run", "BAU run + ref")) %>% 
-#   #filter(species == "BLBR") %>% 
-#   #filter(run == "BAU run") %>% 
-#   
-#   filter(climate != "none") %>% 
-#   ggplot(aes(x=timestep, y=sum_cur, col=run)) +
-#   scale_color_brewer(palette="Greens") +
-#   #                    labels = c("Historic", "Baseline", "RCP 8.5")) +
-# 
-#   geom_smooth(aes(group = sce, linetype=climate), alpha=0.2, method="loess") +
-#   scale_linetype_manual(values = c(1,2,3))+
-#   #geom_point(aes(group = sce, pch = run)) +
-#   facet_wrap(~species, scales = "free") +
-#   
-#   #facet_grid(sce~species, scales = "fixed") +
-#   #add_phylopic(bear, alpha = 1, x=2010, y =0.11, ysize = 10) +
-#   
-#   labs(title = "Cumulative Connectivity change for species through time",
-#        #subtitle = "1990-2100",
-#        #subtitle = "Year:{frame_along}",
-#        y = "Cummulative Connectivity",
-#        x = "Year",
-#        col = "Run",
-#        linetype = "Climate") +
-#   NULL
-# fig_1_static
-
 ggsave(fig_1_static, 
        filename = "outputs/figures/connectivity_decrease_x5species.png", 
        width = 17, height = 12)
 
 #-------------------------------------------------------------------------------
 
-## FIGURE 2
+## FIGURE 2 => maps, needs better color scheme 
+
 key <- read_csv("config/stsim/SecondaryStratum.csv") %>%
   mutate(ID = as.factor(ID)) %>%
   rename(zone=ID, MUS_NM_MUN=Name) %>%
@@ -258,6 +229,52 @@ change <- ggplot() +
                     breaks=c(-50, -40, -30, -20, -10, 0, 10))
 change
 ggsave("outputs/figures/connectivit_change_mun.png", change)
+
+#-------------------------------------------------------------------------------
+
+## FUGURE 3 => radar charts
+
+joined %>% 
+  filter(sce != "sce_0", name != "historic run") %>% 
+  group_by(timestep, species, sce) %>% 
+  summarise(sum_cur = mean(sum_cur)) %>% ungroup %>% 
+  pivot_wider(names_from = timestep, values_from = sum_cur) %>% 
+  mutate(diff = ((`2100`-`2010`)/`2010`)*100) %>% 
+  select(-c(`2010`:`2100`)) %>%  
+  pivot_wider(names_from = sce, values_from = diff)-> radar_data
+
+radar_data_nosp <- radar_data[,2:16]
+rownames(radar_data_nosp) <- radar_data$species
+
+min <- as.data.frame(t(rep(-20, ncol(radar_data_nosp))))
+colnames(min) <- colnames(radar_data_nosp)
+
+max <- as.data.frame(t(rep(1, ncol(radar_data_nosp))))
+colnames(max) <- colnames(radar_data_nosp)
+
+coul <- brewer.pal(5, "Dark2")
+colors_border <- coul
+colors_in <- alpha(coul,0.05)
+
+radar <- bind_rows(max, min, radar_data_nosp)
+radar_sorted <- radar %>% 
+  select(gtools::mixedsort(names(radar), decreasing = T))
+fmsb::radarchart(radar_sorted, pcol=colors_border , pfcol=colors_in,
+                 axistype=0, plwd=2, plty=1, maxmin = T, centerzero=T, 
+                 cglcol="grey", cglty=1, axislabcol="black", cglwd=0.8, 
+                 vlcex=0.8, caxislabels = c("m", "b"))
+
+legend(x=1.3, y=1.2, legend = radar_data$species, bty = "n", pch=20 , 
+       col=colors_border, cex=1.1, pt.cex=2)
+
+radar_data_2 <- radar_data %>% rename(group = species)
+ggradar(radar_data_2, centre.y = -20, legend.position = "right",
+        grid.min = -20, grid.max = 2, grid.mid = 0, 
+        values.radar = c("-20 %", "0 %", "+2 %"), 
+        gridline.label.offset	=5, legend.text.size= 12,
+        background.circle.colour	= "#ffffff", group.point.size	=3)
+
+
 
 #-------------------------------------------------------------------------------
 stop("Reviewed so far")
@@ -375,35 +392,6 @@ for(sce in seq_len(length(list_lu))){
           ani.width=800, ani.height=800, ani.res=100)
   setwd(oldwd)
 }
-
-# list_lu_1_cropped_rat <- lapply(as.list(list_lu_1_cropped), ratify)
-# rat <- as.data.frame(levels(list_lu_1_cropped_rat[[1]])) ; names(rat) <- "ID"
-# rat$landcover <- c('Agriculture', 'Urban', 'Forest', "Roads", "Water", "Wetlands")
-# rat$class <- c('A', 'B', 'C', 'D',"E","F")
-# for (idx in 1:length(list_lu_1_cropped_rat)){
-#   levels(list_lu_1_cropped_rat[[idx]]) <-rat
-# }
-# 
-# # #855C75,#D9AF6B,#AF6458,#736F4C,#526A83,#625377,
-# # #68855C,#9C9C5E,#A06177,#8C785D,#467378,#7C7C7C
-# 
-# make_plots <- function(rasters, ts){
-#   for (idx in c(1:length(rasters))){
-#     plot<- levelplot(rasters[[idx]],
-#                      colorkey=list(space="bottom", height=0.8,
-#                                    labels = list(cex=1)),
-#                      col.regions=c('#D9AF6B', '#7C7C7C',
-#                                    '#68855C', '#AF6458', 
-#                                    '#467378', '#625377'),
-#                      main=list(paste0('Year: ', ts[idx]), fontsize=25),
-#                      scales=list(draw=FALSE))
-#     print(plot)
-#   }
-# }
-
-# saveGIF(expr = make_plots(list_lu_1_cropped_rat, ts_template_year),
-#         interval=2, movie.name="lu_animated.gif",
-#         ani.width=800, ani.height=800, ani.res=100)
 
 #-------------------------------------------------------------------------------
 
@@ -528,3 +516,66 @@ p1 + p2
 # fig_1_animated_plot <- animate(fig_1_animated, renderer = gifski_renderer())
 # anim_save(animation = fig_1_animated_plot,
 #           filename = "outputs/figures/connectivity_decrease_x5species.gif")
+
+# fig_1_static <- joined %>% 
+#   
+#   #filter(species %in% c("BLBR","URAM")) %>% 
+#   #filter(sce %in% c("sce_15", "sce_16", "sce_0")) %>%
+#   #filter(iteration =="it_1_") %>% 
+#   #filter(!(climate %in% c("RCP 8.5"))) %>% 
+#   #filter(run %in% c("BAU run", "BAU run + ref")) %>% 
+#   #filter(species == "BLBR") %>% 
+#   #filter(run == "BAU run") %>% 
+#   
+#   filter(climate != "none") %>% 
+#   ggplot(aes(x=timestep, y=sum_cur, col=run)) +
+#   scale_color_brewer(palette="Greens") +
+#   #                    labels = c("Historic", "Baseline", "RCP 8.5")) +
+# 
+#   geom_smooth(aes(group = sce, linetype=climate), alpha=0.2, method="loess") +
+#   scale_linetype_manual(values = c(1,2,3))+
+#   #geom_point(aes(group = sce, pch = run)) +
+#   facet_wrap(~species, scales = "free") +
+#   
+#   #facet_grid(sce~species, scales = "fixed") +
+#   #add_phylopic(bear, alpha = 1, x=2010, y =0.11, ysize = 10) +
+#   
+#   labs(title = "Cumulative Connectivity change for species through time",
+#        #subtitle = "1990-2100",
+#        #subtitle = "Year:{frame_along}",
+#        y = "Cummulative Connectivity",
+#        x = "Year",
+#        col = "Run",
+#        linetype = "Climate") +
+#   NULL
+# fig_1_static
+
+
+# list_lu_1_cropped_rat <- lapply(as.list(list_lu_1_cropped), ratify)
+# rat <- as.data.frame(levels(list_lu_1_cropped_rat[[1]])) ; names(rat) <- "ID"
+# rat$landcover <- c('Agriculture', 'Urban', 'Forest', "Roads", "Water", "Wetlands")
+# rat$class <- c('A', 'B', 'C', 'D',"E","F")
+# for (idx in 1:length(list_lu_1_cropped_rat)){
+#   levels(list_lu_1_cropped_rat[[idx]]) <-rat
+# }
+# 
+# # #855C75,#D9AF6B,#AF6458,#736F4C,#526A83,#625377,
+# # #68855C,#9C9C5E,#A06177,#8C785D,#467378,#7C7C7C
+# 
+# make_plots <- function(rasters, ts){
+#   for (idx in c(1:length(rasters))){
+#     plot<- levelplot(rasters[[idx]],
+#                      colorkey=list(space="bottom", height=0.8,
+#                                    labels = list(cex=1)),
+#                      col.regions=c('#D9AF6B', '#7C7C7C',
+#                                    '#68855C', '#AF6458', 
+#                                    '#467378', '#625377'),
+#                      main=list(paste0('Year: ', ts[idx]), fontsize=25),
+#                      scales=list(draw=FALSE))
+#     print(plot)
+#   }
+# }
+
+# saveGIF(expr = make_plots(list_lu_1_cropped_rat, ts_template_year),
+#         interval=2, movie.name="lu_animated.gif",
+#         ani.width=800, ani.height=800, ani.res=100)

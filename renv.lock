@@ -525,6 +525,13 @@
       "Repository": "CRAN",
       "Hash": "83ab58a0518afe3d17e41da01af13b60"
     },
+    "fmsb": {
+      "Package": "fmsb",
+      "Version": "0.7.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "a3c0f930bb46c1bb7e7077ed3689f921"
+    },
     "forcats": {
       "Package": "forcats",
       "Version": "0.5.0",
@@ -629,6 +636,18 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "dd6dc5b9ef202cef18c5200d76e1634c"
+    },
+    "ggradar": {
+      "Package": "ggradar",
+      "Version": "0.2",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteUsername": "ricardo-bion",
+      "RemoteRepo": "ggradar",
+      "RemoteRef": "master",
+      "RemoteSha": "63e5cefc841f4b1ceac9aeb33aae6ff6bed6d568",
+      "Hash": "4d39ddfeb562146d53619f8031de6b9f"
     },
     "ggridges": {
       "Package": "ggridges",
