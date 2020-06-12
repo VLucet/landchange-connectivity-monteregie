@@ -296,6 +296,7 @@ list_lu <-  map(.x = map_depth(.x = it_1, .f = raster, .depth = 2),
 # for (x in 2:6) {print(freq((list_lu[[x]]$sc.it1.ts11==3) - (list_lu[[x]]$sc.it1.ts2==3)))}
 list_lu_1_cropped <- map(map(list_lu, crop, mun), mask, mun)
 extent_zoom <- extent(c(554687.5, 568838.3, 5024170, 5035009))
+#extent_zoom <- extent(c(621300, 621300+10000, 5023000, 5023000+10000))
 #extent_zoom <- drawExtent()
 list_lu_1_cropped_2 <- map(list_lu, crop, extent_zoom)
 
