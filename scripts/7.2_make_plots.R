@@ -280,7 +280,7 @@ ggradar(radar_data_2, centre.y = -20, legend.position = "right",
 stop("Reviewed so far")
 #-------------------------------------------------------------------------------
 
-## FIGURE 3
+## FIGURE 4
 it_1 <- lapply(X = file.path(sce_dir_vec, "stsim_OutputSpatialState"), 
                FUN = list.files,  pattern="it1", full.names=TRUE)
 # it_1 <- list.files("test/june/cloud/",
