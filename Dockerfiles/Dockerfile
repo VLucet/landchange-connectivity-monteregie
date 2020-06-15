@@ -39,7 +39,7 @@ ENV JULIA_DEPOT_PATH=/opt/julia
 ENV JULIA_PKGDIR=/opt/julia
 
 # Install julia and custom version of circuitscape
-RUN curl -L https://julialang-s3.julialang.org/bin/linux/x64/1.3/julia-1.4.2-linux-x86_64.tar.gz --output /home/rstudio/julia-1.4.2-linux-x86_64.tar.gz \
+RUN curl -L https://julialang-s3.julialang.org/bin/linux/x64/1.4/julia-1.4.2-linux-x86_64.tar.gz --output /home/rstudio/julia-1.4.2-linux-x86_64.tar.gz \
   && tar -xzf /home/rstudio/julia-1.4.2-linux-x86_64.tar.gz -C /home/rstudio/ \
   && julia -e 'import Pkg; Pkg.activate("."); Pkg.instantiate(); Pkg.precompile()' \
   && chown -R rstudio /home/rstudio/julia-1.4.2 \ 
@@ -63,9 +63,8 @@ RUN mkdir /home/rstudio/land_con_monteregie \
 WORKDIR /home/rstudio/land_con_monteregie
 
 # Set up renv and Restore renv library
-  RUN R -e "install.packages('remotes', repos = c(CRAN = 'https://cloud.r-project.org'))"
-  RUN R -e 'renv::restore()'
-
+#  RUN R -e "install.packages('remotes', repos = c(CRAN = 'https://cloud.r-project.org'))"
+#  RUN R -e 'renv::restore()'
 # -----
 # RENV_PATHS_CACHE_HOST=/opt/local/renv/cache
 # RENV_PATHS_CACHE_CONTAINER=/renv/cache
