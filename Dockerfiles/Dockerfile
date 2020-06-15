@@ -7,6 +7,8 @@
 ## Interactive:
 # docker run -it -u rstudio -e DISABLE_AUTH=true vlucet/land_con_monteregie:3.6.2-1 /bin/bash && cd ~/land_con_monteregie
 ## With data volume: 
+# RENV_PATHS_CACHE_HOST=/opt/local/renv/cache
+# RENV_PATHS_CACHE_CONTAINER=/renv/cache
 #  docker run -it -e DISABLE_AUTH=true -e "RENV_PATHS_CACHE=${RENV_PATHS_CACHE_CONTAINER}" -v "$(pwd)/config/:/home/rstudio/land_con_monteregie/config/" -v "$(pwd)/outputs:/home/rstudio/land_con_monteregie/outputs/" -v "$(pwd)/libraries:/home/rstudio/land_con_monteregie/libraries" -v "$(pwd)/data:/home/rstudio/land_con_monteregie/data" -v "${RENV_PATHS_CACHE_HOST}:${RENV_PATHS_CACHE_CONTAINER}" --shm-size 50G vlucet/land_con_monteregie:3.6.2-1 /bin/bash && cd ~/land_con_monteregie
 # -----
 
@@ -65,14 +67,4 @@ WORKDIR /home/rstudio/land_con_monteregie
 # Set up renv and Restore renv library
 RUN R -e "install.packages('remotes', repos = c(CRAN = 'https://cloud.r-project.org'))"
 RUN R -e "remotes::install_github('rstudio/renv@${RENV_VERSION}')"
-
-# -----
-# Run with local cache
-# RENV_PATHS_CACHE_HOST=/opt/local/renv/cache
-# RENV_PATHS_CACHE_CONTAINER=/renv/cache
-# docker run --rm \
-#     -e "RENV_PATHS_CACHE=${RENV_PATHS_CACHE_CONTAINER}" \
-#     -v "${RENV_PATHS_CACHE_HOST}:${RENV_PATHS_CACHE_CONTAINER}" \
-#     -p 14618:14618 \
-#     R --slave -e 'renv::restore()'
-# -----
+RUN R -e "renv::restore()"
