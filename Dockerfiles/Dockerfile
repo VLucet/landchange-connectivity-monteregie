@@ -17,7 +17,7 @@ FROM rocker/geospatial:3.6.2
 MAINTAINER Valentin Lucet <valentin.lucet@gmail.com>
 
 # ENV vars
-ENV PATH="$PATH:/home/rstudio/julia-1.3.1/bin"
+ENV PATH="$PATH:/home/rstudio/julia-1.4.2/bin"
 ENV RENV_VERSION 0.10.0
 
 # Install System dependencies
@@ -39,10 +39,10 @@ ENV JULIA_DEPOT_PATH=/opt/julia
 ENV JULIA_PKGDIR=/opt/julia
 
 # Install julia and custom version of circuitscape
-RUN curl -L https://julialang-s3.julialang.org/bin/linux/x64/1.3/julia-1.3.1-linux-x86_64.tar.gz --output /home/rstudio/julia-1.3.1-linux-x86_64.tar.gz \
-  && tar -xzf /home/rstudio/julia-1.3.1-linux-x86_64.tar.gz -C /home/rstudio/ \
+RUN curl -L https://julialang-s3.julialang.org/bin/linux/x64/1.3/julia-1.4.2-linux-x86_64.tar.gz --output /home/rstudio/julia-1.4.2-linux-x86_64.tar.gz \
+  && tar -xzf /home/rstudio/julia-1.4.2-linux-x86_64.tar.gz -C /home/rstudio/ \
   && julia -e 'import Pkg; Pkg.activate("."); Pkg.instantiate(); Pkg.precompile()' \
-  && chown -R rstudio /home/rstudio/julia-1.3.1 \ 
+  && chown -R rstudio /home/rstudio/julia-1.4.2 \ 
   && chown -R rstudio /opt/julia
 
 # Install syncrosim and download package file

@@ -2,7 +2,7 @@
 
 [[AlgebraicMultigrid]]
 deps = ["Compat", "CompatHelper", "DelimitedFiles", "IterativeSolvers", "LinearAlgebra", "Printf", "Random", "SparseArrays", "Test"]
-path = "/home/vlucet/.julia/dev/AlgebraicMultigrid"
+git-tree-sha1 = "35d7f0b46082d8035bcececdfc83b93abe72d470"
 uuid = "2169fc97-5a83-5252-b627-83903c6c433c"
 version = "0.3.0"
 
@@ -28,17 +28,17 @@ version = "0.4.1"
 
 [[Circuitscape]]
 deps = ["AlgebraicMultigrid", "ArchGDAL", "Dates", "DelimitedFiles", "Distributed", "GZip", "IterativeSolvers", "LightGraphs", "LinearAlgebra", "Logging", "REPL", "SharedArrays", "SimpleWeightedGraphs", "SparseArrays", "Test"]
-git-tree-sha1 = "0cb99e5aa4e3e4d621f724113f83977972497b29"
-repo-rev = "93fc58fc38d2e1f7b17241e7d6aa2764dd56ff13"
+git-tree-sha1 = "4078a4beea76442c5d6fb0ffea936ca0c8e43e92"
+repo-rev = "7ae78ff6e81ce904c205cd8b7fcf344b1cf9e1af"
 repo-url = "https://github.com/Circuitscape/Circuitscape.jl.git"
 uuid = "2b7a1792-8151-5239-925d-e2b8fdfa3201"
 version = "5.6.0"
 
 [[Compat]]
 deps = ["Base64", "Dates", "DelimitedFiles", "Distributed", "InteractiveUtils", "LibGit2", "Libdl", "LinearAlgebra", "Markdown", "Mmap", "Pkg", "Printf", "REPL", "Random", "SHA", "Serialization", "SharedArrays", "Sockets", "SparseArrays", "Statistics", "Test", "UUIDs", "Unicode"]
-git-tree-sha1 = "37964a28fa8231d769faa10eec8c4436253c48ba"
+git-tree-sha1 = "054993b6611376ddb40203e973e954fd9d1d1902"
 uuid = "34da2185-b29b-5c13-b0c7-acf172513d20"
-version = "3.11.0"
+version = "3.12.0"
 
 [[CompatHelper]]
 deps = ["Base64", "Dates", "GitHub", "JSON", "Pkg", "Printf", "TimeZones", "UUIDs"]
@@ -59,9 +59,9 @@ version = "0.4.2"
 
 [[DataStructures]]
 deps = ["InteractiveUtils", "OrderedCollections"]
-git-tree-sha1 = "af6d9c86e191c917c2276fbede1137e8ea20157f"
+git-tree-sha1 = "be680f1ad03c0a03796aa3fda5a2180df7f83b46"
 uuid = "864edb3b-99cc-5e75-8d2d-829cb0a9cfe8"
-version = "0.17.17"
+version = "0.17.18"
 
 [[Dates]]
 deps = ["Printf"]
@@ -167,6 +167,7 @@ uuid = "deac9b47-8bc7-5906-a0fe-35ac56dc84c0"
 version = "7.70.0+0"
 
 [[LibGit2]]
+deps = ["Printf"]
 uuid = "76f85450-5226-5b5a-8eaa-529ad045b433"
 
 [[LibSSH2_jll]]
@@ -252,7 +253,7 @@ uuid = "69de0a69-1ddd-5017-9359-2bf0b02dc9f0"
 version = "1.0.5"
 
 [[Pkg]]
-deps = ["Dates", "LibGit2", "Libdl", "Logging", "Markdown", "Printf", "REPL", "Random", "SHA", "Test", "UUIDs"]
+deps = ["Dates", "LibGit2", "Libdl", "Logging", "Markdown", "Printf", "REPL", "Random", "SHA", "UUIDs"]
 uuid = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
 
 [[Printf]]
