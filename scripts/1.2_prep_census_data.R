@@ -80,9 +80,9 @@ test_3 <- chass.DA.1991.sh.sf %>%
 # map-carte/pdf/CSD_SDR/2011-92145-2453072-00.pdf
 
 # Cheack for NAs
-matches <- match(chass.DA.1991.sh.sf.j$EA, chass.DA.1991.data$COL0)
+matches <- match(chass.DA.1991.sh.sf.j$EA, chass.DA.1991.data$EA)
 matches.NA <- which(is.na(matches))
-unmachted <- chass.DA.1991.sh.sf.j[matches.NA, ]
+unmachted <- chass.DA.1991.sh.sf.j[matches.NA, ] # (55/1413)*100 4% unmatched 
 
 # Plot to see where the NAs are
 # ggplot() +
@@ -146,7 +146,7 @@ st_geometry(chass.DA.2001.sh.sf.j) <- st_geometry(right_geom)
 matches <- match(chass.DA.2001.sh.sf.j$DAUID, chass.DA.2001.data$COL0)
 
 matches.NA <- which(is.na(matches))
-unmachted <- chass.DA.2001.sh.sf.j[matches.NA, ]
+unmachted <- chass.DA.2001.sh.sf.j[matches.NA, ] # (44/1882) * 100 2.3 %percent
 
 #chass.DA.2001.data[matches, ] # NOT EMPTY good
 
@@ -205,7 +205,7 @@ chass.DA.2011.sh.sf.iU <- chass.DA.2011.sh.sf.i %>% aggregate(list(chass.DA.2011
 matches <- match(chass.DA.2011.sh.sf.iU$DAUID, chass.DA.2011.sht.data$COL0)
 
 matches.NA <- which(is.na(matches))
-unmachted <- chass.DA.2011.sh.sf.iU[matches.NA, ]
+unmachted <- chass.DA.2011.sh.sf.iU[matches.NA, ] #0 %
 
 #chass.DA.2011.sht.data[matches, ]  # NOT EMPTY good
 
@@ -299,7 +299,7 @@ chass.DA.2011.sh.sf.iU <- chass.DA.2011.sh.sf.i %>% aggregate(
 matches <- match(chass.DA.2011.sh.sf.iU$DAUID, chass.DA.2011.nhs.data$COL0)
 
 matches.NA <- which(is.na(matches))
-unmachted <- chass.DA.2011.sh.sf.iU[matches.NA, ]
+unmachted <- chass.DA.2011.sh.sf.iU[matches.NA, ] # (46/2453)*100 #1.8 %
 
 #chass.DA.2011.nhs.data[matches, ] # NOT EMPTY good
 
