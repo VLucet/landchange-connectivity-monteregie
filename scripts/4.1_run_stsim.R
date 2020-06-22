@@ -270,8 +270,8 @@ loadSheet("TimeSinceTransitionGroup", NULL, TST_default, path = "config/stsim/")
 loadSheet("TimeSinceTransitionRandomize", NULL, TST_default, path = "config/stsim/")
 
 # TPA
-TPA_default <- scenario(Definitions, scenario = "TPA: default")
-loadSheet("TransitionPathwayAutoCorrelation", NULL, TPA_default, path = "config/stsim/")
+# TPA_default <- scenario(Definitions, scenario = "TPA: default")
+# loadSheet("TransitionPathwayAutoCorrelation", NULL, TPA_default, path = "config/stsim/")
 
 ####################
 ## Full Scenarios ##
@@ -284,8 +284,7 @@ unchanging_sub_scenarios <-
     output_default,
     transition_adjacency,
     trans_size_distribution,
-    TST_default,
-    TPA_default)
+    TST_default)
 
 # Scenario BAU 1990-2010
 historic_run <- scenario(Definitions, scenario = "historic run")
