@@ -8,9 +8,9 @@ version = "0.3.0"
 
 [[ArchGDAL]]
 deps = ["DataStreams", "Dates", "GDAL", "GeoFormatTypes", "GeoInterface"]
-git-tree-sha1 = "12a9901f28472b314bef7878372a7454cec8f760"
+git-tree-sha1 = "43ac6cd3fecfe21c48d7edaa4829a6c7c8418764"
 uuid = "c9ce4bd3-c3d5-55b8-8973-c0e20141b8c3"
-version = "0.4.0"
+version = "0.4.1"
 
 [[ArnoldiMethod]]
 deps = ["DelimitedFiles", "LinearAlgebra", "Random", "SparseArrays", "StaticArrays", "Test"]
@@ -28,8 +28,8 @@ version = "0.4.1"
 
 [[Circuitscape]]
 deps = ["AlgebraicMultigrid", "ArchGDAL", "Dates", "DelimitedFiles", "Distributed", "GZip", "IterativeSolvers", "LightGraphs", "LinearAlgebra", "Logging", "REPL", "SharedArrays", "SimpleWeightedGraphs", "SparseArrays", "Test"]
-git-tree-sha1 = "4078a4beea76442c5d6fb0ffea936ca0c8e43e92"
-repo-rev = "7ae78ff6e81ce904c205cd8b7fcf344b1cf9e1af"
+git-tree-sha1 = "64bdaa4bcfded4f3221c6eba99cf9da98b8a094a"
+repo-rev = "9acdd0ae0f0c495c3872cff3752da1db08f06329"
 repo-url = "https://github.com/Circuitscape/Circuitscape.jl.git"
 uuid = "2b7a1792-8151-5239-925d-e2b8fdfa3201"
 version = "5.6.0"
@@ -88,15 +88,15 @@ version = "1.1.0"
 
 [[GDAL]]
 deps = ["CEnum", "GDAL_jll", "PROJ_jll"]
-git-tree-sha1 = "a83201bc36b81a68ab67d9509b53c48e1c94e218"
+git-tree-sha1 = "e428bacb1fa2f825acce2fccd4f47020fa1f7664"
 uuid = "add2ef01-049f-52c4-9ee2-e494f65e021a"
-version = "1.1.2"
+version = "1.1.3"
 
 [[GDAL_jll]]
-deps = ["GEOS_jll", "LibCURL_jll", "Libdl", "PROJ_jll", "Pkg", "SQLite_jll", "Zlib_jll"]
-git-tree-sha1 = "b73c63b05036d90de4561bae34cf1462157020e9"
+deps = ["GEOS_jll", "LibCURL_jll", "Libdl", "OpenJpeg_jll", "PROJ_jll", "Pkg", "SQLite_jll", "Zlib_jll"]
+git-tree-sha1 = "99122dd4d2ce4998a0bac7532d3f400059479571"
 uuid = "a7073274-a066-55f0-b90d-d619367d196c"
-version = "3.0.4+0"
+version = "3.0.4+1"
 
 [[GEOS_jll]]
 deps = ["Libdl", "Pkg"]
@@ -160,11 +160,17 @@ git-tree-sha1 = "b34d7cef7b337321e97d22242c3c2b91f476748e"
 uuid = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
 version = "0.21.0"
 
+[[JpegTurbo_jll]]
+deps = ["Libdl", "Pkg"]
+git-tree-sha1 = "b007cedc10bb017cdae3af0062fe4dd29b483c70"
+uuid = "aacddb02-875f-59d6-b918-886e6ef4fbf8"
+version = "2.0.1+0"
+
 [[LibCURL_jll]]
 deps = ["LibSSH2_jll", "Libdl", "MbedTLS_jll", "Pkg", "Zlib_jll", "nghttp2_jll"]
-git-tree-sha1 = "54e7f2364ff5134e43c2514309ddf47d2eafa773"
+git-tree-sha1 = "6c534e2b2df618f722dd8fd1a753304f9476ddbe"
 uuid = "deac9b47-8bc7-5906-a0fe-35ac56dc84c0"
-version = "7.70.0+0"
+version = "7.70.0+1"
 
 [[LibGit2]]
 deps = ["Printf"]
@@ -172,18 +178,24 @@ uuid = "76f85450-5226-5b5a-8eaa-529ad045b433"
 
 [[LibSSH2_jll]]
 deps = ["Libdl", "MbedTLS_jll", "Pkg"]
-git-tree-sha1 = "2daf0a757293e5355904b96262fcc54cf45d8fd3"
+git-tree-sha1 = "c6a9d7979d560963384ef1b003aff862506c386d"
 uuid = "29816b5a-b9ab-546f-933c-edad1886dfa8"
-version = "1.9.0+1"
+version = "1.9.0+2"
 
 [[Libdl]]
 uuid = "8f399da3-3557-5675-b5ff-fb832c97cbdb"
 
 [[Libiconv_jll]]
 deps = ["Libdl", "Pkg"]
-git-tree-sha1 = "e5256a3b0ebc710dbd6da0c0b212164a3681037f"
+git-tree-sha1 = "18e9398dbdc297d6f31b2a8ba90c3d8d6a244b2f"
 uuid = "94ce4f54-9a6c-5748-9c1c-f9c7231a4531"
-version = "1.16.0+2"
+version = "1.16.0+3"
+
+[[Libtiff_jll]]
+deps = ["JpegTurbo_jll", "Libdl", "Pkg", "Zlib_jll", "Zstd_jll"]
+git-tree-sha1 = "1fe8c3608dfe7bdec81d018de1cc66e959016e8c"
+uuid = "89763e89-9b03-5906-acba-b20f662cd828"
+version = "4.1.0+0"
 
 [[LightGraphs]]
 deps = ["ArnoldiMethod", "DataStructures", "Distributed", "Inflate", "LinearAlgebra", "Random", "SharedArrays", "SimpleTraits", "SparseArrays", "Statistics"]
@@ -194,6 +206,12 @@ version = "1.3.3"
 [[LinearAlgebra]]
 deps = ["Libdl"]
 uuid = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+
+[[LittleCMS_jll]]
+deps = ["JpegTurbo_jll", "Libdl", "Libtiff_jll", "Pkg"]
+git-tree-sha1 = "e6ea89d915cdad8d264f7f9158c6664f879edcde"
+uuid = "d3a379c0-f9a3-5b72-a4c0-6bf4d2e8af0f"
+version = "2.9.0+0"
 
 [[Logging]]
 uuid = "56ddb016-857b-54e1-b83d-db4d58db5568"
@@ -235,16 +253,22 @@ git-tree-sha1 = "916b850daad0d46b8c71f65f719c49957e9513ed"
 uuid = "78c3b35d-d492-501b-9361-3d52fe80e533"
 version = "0.7.1"
 
+[[OpenJpeg_jll]]
+deps = ["Libdl", "Libtiff_jll", "LittleCMS_jll", "Pkg", "libpng_jll"]
+git-tree-sha1 = "e330ffff1c6a593fa44cc40c29900bee82026406"
+uuid = "643b3616-a352-519d-856d-80112ee9badc"
+version = "2.3.1+0"
+
 [[OrderedCollections]]
 git-tree-sha1 = "12ce190210d278e12644bcadf5b21cbdcf225cd3"
 uuid = "bac558e1-5e72-5ebc-8fee-abe8a469f55d"
 version = "1.2.0"
 
 [[PROJ_jll]]
-deps = ["Libdl", "Pkg", "SQLite_jll"]
-git-tree-sha1 = "9f7cfb270831958a155a858fc5fd66bdd654b3a8"
+deps = ["LibCURL_jll", "Libdl", "Libtiff_jll", "Pkg", "SQLite_jll"]
+git-tree-sha1 = "8f30d3c8cc794b2fd2d20b7d7b6511acf3390c03"
 uuid = "58948b4f-47e0-5654-a9ad-f609743f8632"
-version = "6.3.2+1"
+version = "7.0.1+0"
 
 [[Parsers]]
 deps = ["Dates", "Test"]
@@ -343,18 +367,30 @@ version = "0.6.2"
 
 [[XML2_jll]]
 deps = ["Libdl", "Libiconv_jll", "Pkg", "Zlib_jll"]
-git-tree-sha1 = "987c02a43fa10a491a5f0f7c46a6d3559ed6a8e2"
+git-tree-sha1 = "6b2ffe6728bdba991da4fc1aa5980a53db46a23f"
 uuid = "02c8fc9c-b97f-50b9-bbe4-9be30ff0a78a"
-version = "2.9.9+4"
+version = "2.9.9+5"
 
 [[Zlib_jll]]
 deps = ["Libdl", "Pkg"]
-git-tree-sha1 = "a2e0d558f6031002e380a90613b199e37a8565bf"
+git-tree-sha1 = "64b39656c75e67f85b4ac2b336c54674a39f599d"
 uuid = "83775a58-1f1d-513f-b197-d71354ab007a"
-version = "1.2.11+10"
+version = "1.2.11+11"
+
+[[Zstd_jll]]
+deps = ["Libdl", "Pkg"]
+git-tree-sha1 = "b25b0fb10176c42e9a5a20e1f40d570ac0288d4e"
+uuid = "3161d3a3-bdf6-5164-811a-617609db77b4"
+version = "1.4.5+0"
+
+[[libpng_jll]]
+deps = ["Libdl", "Pkg", "Zlib_jll"]
+git-tree-sha1 = "594cb058723c13941cf463fd09e5859499594f50"
+uuid = "b53b4c65-9356-5827-b1ea-8c7a1a84506f"
+version = "1.6.37+3"
 
 [[nghttp2_jll]]
 deps = ["Libdl", "Pkg"]
-git-tree-sha1 = "d4b1ff45cfa721fd60f624fdb52c5a836fafaf8f"
+git-tree-sha1 = "4a274d8238d9fc75588a75962f33314dd60141e6"
 uuid = "8e850ede-7688-5339-a07c-302acd2aaf8d"
-version = "1.40.0+0"
+version = "1.40.0+1"
