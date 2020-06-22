@@ -31,6 +31,7 @@ suppressPackageStartupMessages({
   library(fmsb)
   library(RColorBrewer)
   library(scales)
+  library(ggradar)
   #library(caret)
 })
 
@@ -267,7 +268,6 @@ fmsb::radarchart(radar_sorted, pcol=colors_border , pfcol=colors_in,
 legend(x=1.3, y=1.2, legend = radar_data$species, bty = "n", pch=20 , 
        col=colors_border, cex=1.1, pt.cex=2)
 
-library(ggradar)
 radar_data_2 <- radar_data %>% rename(group = species)
 ggradar(radar_data_2, centre.y = -20, legend.position = "right",
         grid.min = -20, grid.max = 2, grid.mid = 0, 
