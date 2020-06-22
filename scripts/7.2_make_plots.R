@@ -250,7 +250,7 @@ rownames(radar_data_nosp) <- radar_data$species
 min <- as.data.frame(t(rep(-20, ncol(radar_data_nosp))))
 colnames(min) <- colnames(radar_data_nosp)
 
-max <- as.data.frame(t(rep(1, ncol(radar_data_nosp))))
+max <- as.data.frame(t(rep(5, ncol(radar_data_nosp))))
 colnames(max) <- colnames(radar_data_nosp)
 
 coul <- brewer.pal(5, "Dark2")
@@ -260,22 +260,21 @@ colors_in <- alpha(coul,0.05)
 radar <- bind_rows(max, min, radar_data_nosp)
 radar_sorted <- radar %>% 
   select(gtools::mixedsort(names(radar), decreasing = T))
-fmsb::radarchart(radar_sorted, pcol=colors_border , pfcol=colors_in,
+radar_1 <- fmsb::radarchart(radar_sorted, pcol=colors_border , pfcol=colors_in,
                  axistype=0, plwd=2, plty=1, maxmin = T, centerzero=T, 
                  cglcol="grey", cglty=1, axislabcol="black", cglwd=0.8, 
                  vlcex=0.8, caxislabels = c("m", "b"))
-
 legend(x=1.3, y=1.2, legend = radar_data$species, bty = "n", pch=20 , 
        col=colors_border, cex=1.1, pt.cex=2)
 
 radar_data_2 <- radar_data %>% rename(group = species)
-ggradar(radar_data_2, centre.y = -20, legend.position = "right",
-        grid.min = -20, grid.max = 2, grid.mid = 0, 
+radar_2 <- ggradar(radar_data_2, centre.y = -20, legend.position = "right",
+        grid.min = -20, grid.max = 5, grid.mid = 0, 
         values.radar = c("-20 %", "0 %", "+2 %"), 
         gridline.label.offset	=5, legend.text.size= 12,
-        background.circle.colour	= "#ffffff", group.point.size	=3)
-
-
+        group.line.width =0.8,
+        background.circle.colour	= "#ffffff", group.point.size	=2)
+ggsave("outputs/figures/radar_ggradar.png", radar_2)
 
 #-------------------------------------------------------------------------------
 stop("Reviewed so far")
