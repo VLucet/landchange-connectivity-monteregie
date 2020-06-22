@@ -255,6 +255,7 @@ loadSheet("TransitionSpatialMultiplier", NULL, spatial_multiplier_corrs_reforest
 # Transition size distribution
 trans_size_distribution <- scenario(Definitions, scenario = "Transition Size Distribution: Default") 
 loadSheet("TransitionSizeDistribution", NULL, trans_size_distribution, path = "config/stsim/")
+loadSheet("TransitionSizePrioritization", NULL, trans_size_distribution, path = "config/stsim/")
 
 # Transition Adjacency
 transition_adjacency <- scenario(Definitions, scenario = "Transition Adjacency: Default")

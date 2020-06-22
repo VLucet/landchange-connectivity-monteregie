@@ -282,7 +282,7 @@ right_side <- sapply(strsplit(trans_unique_no_type, "_to_"), `[[`, 2)
 adj_settings <- data.frame(
   TransitionGroupID = c("Urbanisation", "Agricultural Expansion Gr", "Reforestation Gr") ,
   StateAttributeTypeID = c("Urban", "Agriculture", "Forest"),
-  NeighborhoodRadius = c(500, 250, 225), # 1500
+  NeighborhoodRadius = c(500, 250, 250), # 1500 #200
   UpdateFrequency = c(1)
   
 ) %>% bind_rows(
@@ -301,9 +301,9 @@ adj_mul <- data.frame(
   TransitionGroupID = c("Urbanisation", "Urbanisation",
                         "Agricultural Expansion Gr", "Agricultural Expansion Gr",
                         "Reforestation Gr", "Reforestation Gr"),
-  AttributeValue = c(0.000, 0.5, 
-                     0.000, 0.750, 
-                     0.000, 0.05),
+  AttributeValue = c(0.000, 0.7, 
+                     0.000, 0.9, 
+                     0.000, 0.9),
   Amount = c(0,1,
              0,1,
              0,1)

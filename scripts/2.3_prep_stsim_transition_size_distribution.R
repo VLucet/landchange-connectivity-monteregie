@@ -90,3 +90,23 @@ df_change$TransitionGroupID[df_change$TransitionGroupID=="agex"] <-
 
 write.csv(df_change, "config/stsim/TransitionSizeDistribution.csv", 
           row.names = F)
+
+df_change <- read_csv("config/stsim/TransitionSizeDistribution.csv") %>%
+  filter(TransitionGroupID != "Reforestation Gr")
+  
+# 2 par 2 4 // 3 par 3 8 // 3 par 5 13
+df_change <- df_change %>% bind_rows(
+  
+  data.frame(TransitionGroupID = rep("Reforestation Gr", 2), 
+             RelativeAmount = c(0, 1), 
+             MaximumArea = c(50, 100))
+  
+)
+
+write.csv(df_change, "config/stsim/TransitionSizeDistribution.csv", 
+          row.names = F)
+
+prior <- data.frame(TransitionGroupID = c("Reforestation Gr", "Urbanisation", "Agricultural Expansion Gr"), 
+                    MaximizeFidelityToTotalArea = c("Yes", "Yes", "Yes"))
+write.csv(prior, "config/stsim/TransitionSizePrioritization.csv", 
+          row.names = F)

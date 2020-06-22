@@ -1,7 +1,7 @@
 TransitionGroupID,StateAttributeTypeID,NeighborhoodRadius,UpdateFrequency
 Urbanisation,Urban,500,1
 Agricultural Expansion Gr,Agriculture,250,1
-Reforestation Gr,Forest,225,1
+Reforestation Gr,Forest,250,1
 decid_2_to_decid_1 [Type],decid_1,225,1
 decid_3_to_decid_1 [Type],decid_1,225,1
 mixt_1_to_decid_1 [Type],decid_1,225,1
