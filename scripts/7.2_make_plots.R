@@ -362,7 +362,7 @@ for (sce in seq_len(length(list_lu))){
   #plot_anim <- animate(plot, renderer = gifski_renderer())
   #anim_save(paste0("outputs/figures/sce_",sce_nb_vec[sce],"_lu_change_animated.gif"))
 }
-#-------------------------------------------------------------------------------
+
 #-------------------------------------------------------------------------------
 
 ## Figure 4
