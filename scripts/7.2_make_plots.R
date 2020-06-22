@@ -28,6 +28,9 @@ suppressPackageStartupMessages({
   library(ggmap)
   library(gifski)
   library(gtools)
+  library(fmsb)
+  library(RColorBrewer)
+  library(scales)
   #library(caret)
 })
 
@@ -230,9 +233,6 @@ ggsave("outputs/figures/connectivit_change_mun.png", change)
 #-------------------------------------------------------------------------------
 
 ## FUGURE 3 => radar charts
-library(fmsb)
-library(RColorBrewer)
-library(scales)
 
 joined %>% 
   filter(sce != "sce_0", name != "historic run") %>% 
