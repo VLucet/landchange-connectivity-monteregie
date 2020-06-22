@@ -149,39 +149,40 @@ ggsave(fig_1_historic,
        filename = "outputs/figures/connectivity_decrease_x5species_historic.png", 
        width = 17, height = 12)
 
+ggsave(fig_1_static, 
+       filename = "outputs/figures/connectivity_decrease_x5species.png", 
+       width = 17, height = 12)
+
 fig_1_static <- joined %>% 
   
-  #filter(species %in% c("BLBR","URAM")) %>% 
-  #filter(sce %in% c("sce_15", "sce_16", "sce_0")) %>%
-  #filter(iteration =="it_1_") %>% 
-  #filter(climate %in% c("historic", "baseline")) %>% 
-  #filter(run %in% c("BAU run", "BAU run + ref")) %>% 
-  #filter(species == "MAAM") %>% 
-  #filter(run == "BAU run") %>% 
-  
   filter(climate != "none") %>% 
+  group_by(scenarioId, species, iteration) %>% 
+  group_modify(~mutate(.x , baseline = subset(.x, timestep == 2010)$sum_cur, 
+                       the_diff = ((sum_cur-baseline)/baseline)*100 )) %>% 
   
-  ggplot(aes(x=timestep, y=sum_cur, col=climate)) +
+  ggplot(aes(x=timestep, y=the_diff, col=climate)) +
   scale_color_manual(values=c('#ffe300', 
                               '#ff7a14', 
                               "#b31400"), 
                      labels = c("Historic", 
                                 "Baseline", 
-                                "RCP 8.5"
-                     )) +
+                                "RCP 8.5")) +
   
   geom_smooth(aes(group = sce, linetype=run), alpha=0.2, method="loess") +
   scale_linetype_discrete() +
   #geom_point(aes(group = sce, pch = run)) +
-  facet_wrap(~species, scales = "free") +
+  facet_wrap(~species, scales = "fixed") +
   
   #facet_grid(sce~species, scales = "fixed") +
   #add_phylopic(bear, alpha = 1, x=2010, y =0.11, ysize = 10) +
   
-  labs(title = "Connectivity change for species through time",
+  geom_hline(yintercept = 0, linetype = "dashed", alpha = 0.5) +
+  geom_vline(xintercept = 2020, linetype = "dashed", color = "darkGreen", alpha = 0.5) +
+  
+  labs(title = "Connectivity change (% flow) through time",
        #subtitle = "1990-2100",
        #subtitle = "Year:{frame_along}",
-       y = "Cummulative Connectivity",
+       y = "Current flow change (%)",
        x = "Year",
        col = "Climate",
        linetype = "Run") +
@@ -261,19 +262,19 @@ radar <- bind_rows(max, min, radar_data_nosp)
 radar_sorted <- radar %>% 
   select(gtools::mixedsort(names(radar), decreasing = T))
 radar_1 <- fmsb::radarchart(radar_sorted, pcol=colors_border , pfcol=colors_in,
-                 axistype=0, plwd=2, plty=1, maxmin = T, centerzero=T, 
-                 cglcol="grey", cglty=1, axislabcol="black", cglwd=0.8, 
-                 vlcex=0.8, caxislabels = c("m", "b"))
+                            axistype=0, plwd=2, plty=1, maxmin = T, centerzero=T, 
+                            cglcol="grey", cglty=1, axislabcol="black", cglwd=0.8, 
+                            vlcex=0.8, caxislabels = c("m", "b"))
 legend(x=1.3, y=1.2, legend = radar_data$species, bty = "n", pch=20 , 
        col=colors_border, cex=1.1, pt.cex=2)
 
 radar_data_2 <- radar_data %>% rename(group = species)
 radar_2 <- ggradar(radar_data_2, centre.y = -20, legend.position = "right",
-        grid.min = -20, grid.max = 5, grid.mid = 0, 
-        values.radar = c("-20 %", "0 %", "+2 %"), 
-        gridline.label.offset	=5, legend.text.size= 12,
-        group.line.width =0.8,
-        background.circle.colour	= "#ffffff", group.point.size	=2)
+                   grid.min = -20, grid.max = 5, grid.mid = 0, 
+                   values.radar = c("-20 %", "0 %", "+2 %"), 
+                   gridline.label.offset	=5, legend.text.size= 12,
+                   group.line.width =0.8,
+                   background.circle.colour	= "#ffffff", group.point.size	=2)
 ggsave("outputs/figures/radar_ggradar.png", radar_2)
 
 #-------------------------------------------------------------------------------
@@ -578,3 +579,41 @@ p1 + p2
 # saveGIF(expr = make_plots(list_lu_1_cropped_rat, ts_template_year),
 #         interval=2, movie.name="lu_animated.gif",
 #         ani.width=800, ani.height=800, ani.res=100)
+
+# fig_1_static <- joined %>% 
+#   
+#   #filter(species %in% c("BLBR","URAM")) %>% 
+#   #filter(sce %in% c("sce_15", "sce_16", "sce_0")) %>%
+#   #filter(iteration =="it_1_") %>% 
+#   #filter(climate %in% c("historic", "baseline")) %>% 
+#   #filter(run %in% c("BAU run", "BAU run + ref")) %>% 
+#   #filter(species == "MAAM") %>% 
+#   #filter(run == "BAU run") %>% 
+#   
+#   filter(climate != "none") %>% 
+#   
+#   ggplot(aes(x=timestep, y=sum_cur, col=climate)) +
+#   scale_color_manual(values=c('#ffe300', 
+#                               '#ff7a14', 
+#                               "#b31400"), 
+#                      labels = c("Historic", 
+#                                 "Baseline", 
+#                                 "RCP 8.5"
+#                      )) +
+#   
+#   geom_smooth(aes(group = sce, linetype=run), alpha=0.2, method="loess") +
+#   scale_linetype_discrete() +
+#   #geom_point(aes(group = sce, pch = run)) +
+#   facet_wrap(~species, scales = "free") +
+#   
+#   #facet_grid(sce~species, scales = "fixed") +
+#   #add_phylopic(bear, alpha = 1, x=2010, y =0.11, ysize = 10) +
+#   
+#   labs(title = "Connectivity change through time",
+#        #subtitle = "1990-2100",
+#        #subtitle = "Year:{frame_along}",
+#        y = "Cummulative Connectivity",
+#        x = "Year",
+#        col = "Climate",
+#        linetype = "Run") +
+#   NULL
