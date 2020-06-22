@@ -551,7 +551,6 @@ p1 + p2
 #   NULL
 # fig_1_static
 
-
 # list_lu_1_cropped_rat <- lapply(as.list(list_lu_1_cropped), ratify)
 # rat <- as.data.frame(levels(list_lu_1_cropped_rat[[1]])) ; names(rat) <- "ID"
 # rat$landcover <- c('Agriculture', 'Urban', 'Forest', "Roads", "Water", "Wetlands")
