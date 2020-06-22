@@ -35,8 +35,8 @@ suppressPackageStartupMessages({
 # Get result scenario directory 
 sce_dir_vec <- list.files("libraries/stsim/monteregie-conncons-scripted.ssim.output", 
                           full.names = T)
-sce_nb_vec <- paste0("sce_", as.numeric(unlist(lapply(str_split(sce_dir_vec, "-"), 
-                                                      FUN = last))))
+# sce_nb_vec <- paste0("sce_", as.numeric(unlist(lapply(str_split(sce_dir_vec, "-"), 
+#                                                       FUN = last))))
 mun <- st_read("data/mun/munic_SHP_clean.shp", quiet = TRUE)
 
 results <- read_rds("data/temp/stsim_run_results.RDS") %>% 
