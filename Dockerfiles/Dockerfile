@@ -13,7 +13,7 @@
 ## For compute cloud 1:
 # docker run -it -e DISABLE_AUTH=true -v "$(pwd)/config/:/home/rstudio/land_con_monteregie/config/" -v "$(pwd)/outputs:/home/rstudio/land_con_monteregie/outputs/" -v "$(pwd)/libraries:/home/rstudio/land_con_monteregie/libraries" -v "$(pwd)/data:/home/rstudio/land_con_monteregie/data" -v "/home/ubuntu/data/val/current_density_dump:/home/rstudio/current_density_2" --shm-size 50G vlucet/land_con_monteregie:3.6.2-1 /bin/bash && cd ~/land_con_monteregie
 # ~~
-# docker run -it -e DISABLE_AUTH=true -v "$(pwd)/config/:/home/rstudio/land_con_monteregie/ -v "/home/ubuntu/data/val/current_density_dump:/home/rstudio/current_density_2" --shm-size 50G vlucet/land_con_monteregie:3.6.2-1 /bin/bash && cd ~/land_con_monteregie
+# docker run -it -e DISABLE_AUTH=true -v "$(pwd):/home/rstudio/land_con_monteregie/ -v "/home/ubuntu/data/val/current_density_dump:/home/rstudio/current_density_2" --shm-size 50G vlucet/land_con_monteregie:3.6.2-1 /bin/bash && cd ~/land_con_monteregie
 # -----
 
 # Building on top of: rocker/geospatial:3.6.2
