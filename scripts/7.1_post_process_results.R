@@ -10,7 +10,7 @@ set.seed(77)
 
 #-------------------------------------------------------------------------------
 # Set parameters
-STSIM_ITER <- as.numeric(Sys.getenv("STSIM_ITER", unset=2))
+STSIM_ITER <- as.numeric(Sys.getenv("STSIM_ITER", unset=10))
 aggregation <- list(ag = as.logical(Sys.getenv("R_AGGR", unset = TRUE)), 
                     factor = as.numeric(Sys.getenv("R_AGGR_FACT", unset = 3)))
 STSIM_STEP_SAVE <- as.numeric(Sys.getenv("STSIM_STEP_SAVE", unset = 1))
@@ -36,6 +36,7 @@ suppressPackageStartupMessages({
 source("scripts/functions/rescale_raster_layer.R")
 removeTmpFiles(h = 0)
 showTmpFiles()
+rasterOptions(tmpdir = "data/temp/raster_tmp")
 
 # For zonal statistics
 if (aggregation$ag) {
@@ -62,35 +63,43 @@ iter_template <- paste0("it_", 1:STSIM_ITER, "_")
 
 # Load raster inputs (maybe this will take too much ram?)
 species_vec <- tools::file_path_sans_ext(list.files("config/rcl_tables/species/"))
-list_files <- list.files("outputs/current_density", full.names = T, pattern = "curmap")
+#list_files <- list.files("outputs/current_density", full.names = T, pattern = "curmap")
+list_files <- c(list.files("../current_density_2", full.names=T, pattern = "curmap"),
+                list.files("outputs/current_density", full.names = T, pattern = "curmap"))
+# list_files <- c(list.files("/home/ubuntu/data/val/current_density_dump", full.names=T, pattern = "curmap"),
+#                 list.files("outputs/current_density", full.names = T, pattern = "curmap"))
 #-------------------------------------------------------------------------------
 
 # Make a function that determines the ts_template for the iteration
 
+# if(detectCores() > (length(sce_dir_vec)+2)){
+#   n_cores <- length(sce_dir_vec)
+# } else {
+#   n_cores <- detectCores()-2
+# }
+n_cores = 5 # very important smaller number of cores!!
+clust <- makeCluster(n_cores, outfile="log.txt")
+registerDoParallel(cl = clust)
+
+#-------------------------------------------------------------------------------
+
 get_ts_template <- function(list_of_files, step_save) {
   
-  ts_vec <- mixedsort(unique(as.numeric(
+  ts_vec <- gtools::mixedsort(unique(as.numeric(
     unlist(lapply(
-      unlist(lapply(list_of_files, str_split,"_"), # split after all _ 
+      unlist(lapply(basename(list_of_files), str_split,"_"), # split after all _ 
              recursive = F), # unlist, but only one level
-      nth, n=7))
+      nth, n=6))
   )))
+  print(ts_vec)
   ts_template <- 
     gtools::mixedsort(unique(paste0("ts_", seq(min(ts_vec), #from min for this sce
                                                max(ts_vec), # to max
                                                step_save), "_"))) # by whatever we save
+  print(ts_template)
   return(list(ts_vec, ts_template))
   
 }
-
-if(detectCores() > (length(sce_dir_vec)+2)){
-  n_cores <- length(sce_dir_vec)
-} else {
-  n_cores <- detectCores()-2
-}
-
-clust <- makeCluster(n_cores, outfile="log.txt")
-registerDoParallel(cl = clust)
 
 final_df <- foreach(sce = sce_nb_vec, .combine = dplyr::bind_rows) %dopar% {
   
@@ -146,6 +155,7 @@ final_df <- foreach(sce = sce_nb_vec, .combine = dplyr::bind_rows) %dopar% {
     }
     spe_list[[which(species == species_vec)]] <- bind_rows(ts_list)
   }
+  removeTmpFiles(h=0)
   bind_rows(spe_list)
 }
 stopCluster(clust)
