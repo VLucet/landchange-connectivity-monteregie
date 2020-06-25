@@ -31,6 +31,7 @@ cores = Sys.CPU_THREADS -2
 # -----------------------------------------------------------------------------
 # Splitting # If need to split between cores
 # ini_list_split = Iterators.partition(ini_list_masked, group_size) |> collect
+# @everywhere ini_list_split = Iterators.partition(ini_list, 5) |> collect
 # -----------------------------------------------------------------------------
 
 # Add cores with prokect flag
@@ -38,7 +39,6 @@ addprocs(cores, exeflags="--project")
 
 # Still need to declare Circuitscape everywhere
 @everywhere using Circuitscape
-@everywhere ini_list_split = Iterators.partition(ini_list, 5) |> collect
 
 # -----------------------------------------------------------------------------
 # Custom functions if other approachaes
@@ -59,7 +59,7 @@ addprocs(cores, exeflags="--project")
 
 # META-PARALLELIZATION => Call to pmap, batch_size size in question
 
-@time pmap(compute_custom_loop, ini_list_split, batch_size=3)
+@time pmap(compute, ini_list, batch_size=3)
 
 # -----------------------------------------------------------------------------
 # Look for diff in ini/curmap in case of crash 
