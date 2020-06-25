@@ -59,8 +59,7 @@ addprocs(cores, exeflags="--project")
 
 # META-PARALLELIZATION => Call to pmap, batch_size size in question
 
-@time pmap(compute_custom_loop, ini_list_split, batch_size=1)
-
+@time pmap(compute_custom_loop, ini_list_split, batch_size=3)
 
 # -----------------------------------------------------------------------------
 # Look for diff in ini/curmap in case of crash 
