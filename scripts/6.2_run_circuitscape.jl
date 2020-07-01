@@ -20,7 +20,17 @@ ext = "ini"
 ini_list = dir .* searchdir(dir, ext)
 
 # Get cores
-cores = Sys.CPU_THREADS -2
+cores = 8
+
+# Add cores with prokect flag
+addprocs(cores, exeflags="--project")
+
+# Still need to declare Circuitscape everywhere
+@everywhere using Circuitscape
+
+# META-PARALLELIZATION => Call to pmap, batch_size size in question
+
+@time pmap(compute, ini_list, batch_size=3)
 
 # -----------------------------------------------------------------------------
 # Mask # if stopped and needs a mask
@@ -33,12 +43,6 @@ cores = Sys.CPU_THREADS -2
 # ini_list_split = Iterators.partition(ini_list_masked, group_size) |> collect
 # @everywhere ini_list_split = Iterators.partition(ini_list, 5) |> collect
 # -----------------------------------------------------------------------------
-
-# Add cores with prokect flag
-addprocs(cores, exeflags="--project")
-
-# Still need to declare Circuitscape everywhere
-@everywhere using Circuitscape
 
 # -----------------------------------------------------------------------------
 # Custom functions if other approachaes
@@ -57,27 +61,23 @@ addprocs(cores, exeflags="--project")
 # end
 # ----------------------------------------------------------------------------- 
 
-# META-PARALLELIZATION => Call to pmap, batch_size size in question
-
-@time pmap(compute, ini_list, batch_size=3)
-
 # -----------------------------------------------------------------------------
 # Look for diff in ini/curmap in case of crash 
-
+#
 # searchdir(path,key) = filter(x->occursin(key,x), readdir(path))
 # list_outputs = searchdir("outputs/current_density", "tif")
 # list_outputs_dump = searchdir("/home/ubuntu/data/val/current_density_dump/", "tif")
 # full_list = vcat(list_outputs, list_outputs_dump)
 # full_list = replace.(full_list, "_out_cum_curmap.tif" => "")
-
+#
 # list_ini_files = searchdir("config/ini_circuitscape/all/", "ini")
 # list_ini_files = replace.(list_ini_files, ".ini" => "")
-
+#
 # intersect(full_list, list_ini_files)
 # the_diff = setdiff(list_ini_files, full_list)
 # using DelimitedFiles
 # writedlm("config/ini_circuitscape/remaining_files.csv",  the_diff, ',')
-
+#
 # using DelimitedFiles
 # the_diff = "config/ini_circuitscape/all/" .* String.(readdlm("config/ini_circuitscape/remaining_files.csv")) .* ".ini"
 # -----------------------------------------------------------------------------
