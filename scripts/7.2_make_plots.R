@@ -149,10 +149,6 @@ ggsave(fig_1_historic,
        filename = "outputs/figures/connectivity_decrease_x5species_historic.png", 
        width = 17, height = 12)
 
-ggsave(fig_1_static, 
-       filename = "outputs/figures/connectivity_decrease_x5species.png", 
-       width = 17, height = 12)
-
 fig_1_static <- joined %>% 
   
   filter(climate != "none") %>% 
