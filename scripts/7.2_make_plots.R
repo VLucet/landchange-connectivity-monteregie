@@ -43,7 +43,7 @@ sce_dir_vec <- list.files("libraries/stsim/monteregie-conncons-scripted.ssim.out
 #                                                       FUN = last))))
 mun <- st_read("data/mun/munic_SHP_clean.shp", quiet = TRUE)
 
-results <- read_rds("test/june/10itercloud1//stsim_run_results.RDS") %>% 
+results <- read_rds("data/temp/stsim_run_results.RDS") %>% 
   dplyr::select(scenarioId, name)
 results$name <- gsub(results$name, pattern = " \\(.+\\)", replacement = "")
 results$sce <- paste0("sce_",results$scenarioId)
@@ -57,9 +57,9 @@ results_clean <- results %>% tibble() %>%
 
 # Data prep
 # listofiles <- list.files("it1_lasterun/it1_MAAM_Current/", full.names = T)
-df_final <- readRDS("test/june/10itercloud1//final_df_current_density.RDS") %>%
+df_final <- readRDS("outputs/final/final_df_current_density.RDS") %>%
   mutate(timestep = (timestep*10)+1990, source = "model")
-df_final_origin <- readRDS("test/june/10itercloud1/final_df_origin_current_density.RDS") %>%
+df_final_origin <- readRDS("outputs/final/final_df_origin_current_density.RDS") %>%
   mutate(timestep = timestep*10+1990, source = "model")
 
 # df_final <- readRDS("test/final_df_current_density.RDS") %>%
@@ -617,4 +617,3 @@ p1 + p2
 #        col = "Climate",
 #        linetype = "Run") +
 #   NULL
-# fig_1_static
