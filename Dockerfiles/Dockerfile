@@ -85,7 +85,7 @@ RUN wget -O /home/rstudio/opencv.zip https://github.com/opencv/opencv/archive/4.
 	-D INSTALL_PYTHON_EXAMPLES=ON \
 	-D INSTALL_C_EXAMPLES=OFF \
 	-D OPENCV_ENABLE_NONFREE=ON \
-	-D OPENCV_EXTRA_MODULES_PATH=/home/rstudio/opencv_contrib/modules \
+	-D OPENCV_EXTRA_MODULES_PATH=/home/rstudio/opencv_contrib-4.0.0/modules \
 	-D PYTHON_EXECUTABLE=/usr/bin/python \
 	-D BUILD_EXAMPLES=ON \
 	&& make \
