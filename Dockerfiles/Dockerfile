@@ -33,6 +33,7 @@ RUN apt-get -y update -qq \
     bc=1.07.1-2+b1 \
     nano=3.2-3 \
     htop=2.2.0-1+b1 \
+    # OpenCV req
     cmake \
     unzip \
     pkg-config \
@@ -46,7 +47,8 @@ RUN apt-get -y update -qq \
     libxvidcore-dev \
     libx264-dev \
     libatlas-base-dev \
-    gfortran
+    gfortran \
+    python3-dev
     
 # Julia install
 ENV JULIA_DEPOT_PATH=/opt/julia
