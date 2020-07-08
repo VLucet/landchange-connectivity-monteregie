@@ -84,7 +84,23 @@ RUN wget -O /home/rstudio/opencv.zip https://github.com/opencv/opencv/archive/4.
   && echo "source /usr/local/bin/virtualenvwrapper.sh" >> ~/.bashrc \
   && source ~/.bashrc \
   && mkvirtualenv home/rstudio/cv -p python3 \
-  && pip install numpy 
+  && pip install numpy \
+  && cd /home/rstudio/opencv \
+  && mkdir build \
+  && cd build \
+  && cmake -D CMAKE_BUILD_TYPE=RELEASE \
+	-D CMAKE_INSTALL_PREFIX=/usr/local \
+	-D INSTALL_PYTHON_EXAMPLES=ON \
+	-D INSTALL_C_EXAMPLES=OFF \
+	-D OPENCV_ENABLE_NONFREE=ON \
+	-D OPENCV_EXTRA_MODULES_PATH=/home/rstudio/opencv_contrib/modules \
+	-D PYTHON_EXECUTABLE=~/.virtualenvs/cv/bin/python \
+	-D BUILD_EXAMPLES=ON \
+	&& make \
+	&& make install \
+	&& ldconfig \
+	&& workon cv \
+	&& ln -s /usr/local/python/cv2/python-3.5/cv2.so /usr/local/python/cv2/python-3.5/cv2.cpython-35m-x86_64-linux-gnu.so
 
 # Download repo
 RUN mkdir /home/rstudio/land_con_monteregie \
