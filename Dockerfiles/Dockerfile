@@ -48,7 +48,8 @@ RUN apt-get -y update -qq \
     libx264-dev \
     libatlas-base-dev \
     gfortran \
-    python3-dev
+    python3-dev \
+    python-pip
     
 # Julia install
 ENV JULIA_DEPOT_PATH=/opt/julia
@@ -74,7 +75,7 @@ RUN mkdir /home/rstudio/syncrosim_2_10 \
 RUN wget -O /home/rstudio/opencv.zip https://github.com/opencv/opencv/archive/4.0.0.zip \
   && wget -O /home/rstudio/opencv_contrib.zip https://github.com/opencv/opencv_contrib/archive/4.0.0.zip \
   && unzip /home/rstudio/opencv.zip -d /home/rstudio/opencv \
-  && unzip /home/rstudio/opencv_contrib.zip -d /home/rstudio/opencv_contrib
+  && unzip /home/rstudio/opencv_contrib.zip -d /home/rstudio/opencv_contrib \
 
 # Download repo
 RUN mkdir /home/rstudio/land_con_monteregie \
