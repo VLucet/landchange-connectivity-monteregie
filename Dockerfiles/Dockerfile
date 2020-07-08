@@ -72,25 +72,20 @@ RUN mkdir /home/rstudio/syncrosim_2_10 \
   && curl -L https://github.com/ApexRMS/stsim/releases/download/3.2.17/stsim-3-2-17.ssimpkg --output /home/rstudio/syncrosim_packages/stsim-3-2-17.ssimpkg
 
 # OpenCV / python
-RUN wget -O /home/rstudio/opencv.zip https://github.com/opencv/opencv/archive/4.3.0.zip \
-  && wget -O /home/rstudio/opencv_contrib.zip https://github.com/opencv/opencv_contrib/archive/4.3.0.zip \
-  && unzip /home/rstudio/opencv.zip -d /home/rstudio/ \
-  && unzip /home/rstudio/opencv_contrib.zip -d /home/rstudio/ \
-  && cd /home/rstudio/opencv-4.3.0 \
+RUN cd /home/rstudio \
+  && git clone https://github.com/opencv/opencv.git \
+  && git clone https://github.com/opencv/opencv_contrib.git \
+  && cd /home/rstudio/opencv \
   && mkdir build \
   && cd build \
   && cmake -D CMAKE_BUILD_TYPE=RELEASE \
 	-D CMAKE_INSTALL_PREFIX=/usr/local \
-	-D INSTALL_PYTHON_EXAMPLES=ON \
-	-D INSTALL_C_EXAMPLES=OFF \
 	-D OPENCV_ENABLE_NONFREE=ON \
-	-D OPENCV_EXTRA_MODULES_PATH=/home/rstudio/opencv_contrib-4.3.0/modules \
-	-D PYTHON_EXECUTABLE=/usr/bin/python \
-	-D BUILD_EXAMPLES=ON .. \
-	&& make \
+	-D OPENCV_EXTRA_MODULES_PATH=/home/rstudio/opencv_contrib/modules \
+	-D PYTHON_EXECUTABLE=/usr/bin/python3 .. \
+	&& make -j4 \
 	&& make install \
-	&& ldconfig \
-	&& pip3 install opencv-python opencv-contrib-python numpy matplotlib pandas
+	&& pip3 install numpy matplotlib pandas scikit-image
 
 # Download repo
 RUN mkdir /home/rstudio/land_con_monteregie \
@@ -103,7 +98,7 @@ WORKDIR /home/rstudio/land_con_monteregie
 # Set up renv and Restore renv library
 RUN R -e "install.packages('remotes', repos = c(CRAN = 'https://cloud.r-project.org'))"
 RUN R -e "remotes::install_github('rstudio/renv@${RENV_VERSION}')"
-# RUN R -e "renv::restore()"
+RUN R -e "renv::restore()"
 
 # ------------------------------------------------------------------------------
 ## With renv cache, has not worked so far: 
