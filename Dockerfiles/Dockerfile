@@ -44,7 +44,9 @@ RUN apt-get -y update -qq \
     libswscale-dev \
     libv4l-dev \
     libxvidcore-dev \
-    libx264-dev
+    libx264-dev \
+    libatlas-base-dev \
+    gfortran
     
 # Julia install
 ENV JULIA_DEPOT_PATH=/opt/julia
