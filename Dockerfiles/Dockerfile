@@ -76,7 +76,6 @@ RUN wget -O /home/rstudio/opencv.zip https://github.com/opencv/opencv/archive/4.
   && wget -O /home/rstudio/opencv_contrib.zip https://github.com/opencv/opencv_contrib/archive/4.0.0.zip \
   && unzip /home/rstudio/opencv.zip -d /home/rstudio/ \
   && unzip /home/rstudio/opencv_contrib.zip -d /home/rstudio/ \
-  && pip3 install wheel numpy \
   && cd /home/rstudio/opencv-4.0.0 \
   && mkdir build \
   && cd build \
@@ -90,7 +89,8 @@ RUN wget -O /home/rstudio/opencv.zip https://github.com/opencv/opencv/archive/4.
 	-D BUILD_EXAMPLES=ON .. \
 	&& make \
 	&& make install \
-	&& ldconfig 
+	&& ldconfig \
+	&& pip3 install opencv-python opencv-contrib numpy matplotlib pandas
 
 # Download repo
 RUN mkdir /home/rstudio/land_con_monteregie \
@@ -103,7 +103,7 @@ WORKDIR /home/rstudio/land_con_monteregie
 # Set up renv and Restore renv library
 RUN R -e "install.packages('remotes', repos = c(CRAN = 'https://cloud.r-project.org'))"
 RUN R -e "remotes::install_github('rstudio/renv@${RENV_VERSION}')"
-# RUN R -e "renv::restore()"
+RUN R -e "renv::restore()"
 
 # ------------------------------------------------------------------------------
 ## With renv cache, has not worked so far: 
