@@ -70,6 +70,10 @@ RUN mkdir /home/rstudio/syncrosim_2_10 \
   && chown -R rstudio /home/rstudio/syncrosim_packages \
   && curl -L https://github.com/ApexRMS/stsim/releases/download/3.2.17/stsim-3-2-17.ssimpkg --output /home/rstudio/syncrosim_packages/stsim-3-2-17.ssimpkg
 
+# OpenCV / python
+RUN wget -O /home/rstudio/opencv.zip https://github.com/opencv/opencv/archive/4.0.0.zip \
+  && wget -O /home/rstudio/opencv_contrib.zip https://github.com/opencv/opencv_contrib/archive/4.0.0.zip
+
 # Download repo
 RUN mkdir /home/rstudio/land_con_monteregie \
   && chown -R rstudio /home/rstudio/land_con_monteregie \
@@ -82,9 +86,6 @@ WORKDIR /home/rstudio/land_con_monteregie
 RUN R -e "install.packages('remotes', repos = c(CRAN = 'https://cloud.r-project.org'))"
 RUN R -e "remotes::install_github('rstudio/renv@${RENV_VERSION}')"
 # RUN R -e "renv::restore()"
-
-# Python environment
-
 
 # ------------------------------------------------------------------------------
 ## With renv cache, has not worked so far: 
