@@ -72,7 +72,9 @@ RUN mkdir /home/rstudio/syncrosim_2_10 \
 
 # OpenCV / python
 RUN wget -O /home/rstudio/opencv.zip https://github.com/opencv/opencv/archive/4.0.0.zip \
-  && wget -O /home/rstudio/opencv_contrib.zip https://github.com/opencv/opencv_contrib/archive/4.0.0.zip
+  && wget -O /home/rstudio/opencv_contrib.zip https://github.com/opencv/opencv_contrib/archive/4.0.0.zip \
+  && unzip /home/rstudio/opencv.zip -d /home/rstudio/opencv \
+  && unzip /home/rstudio/opencv_contrib.zip -d /home/rstudio/opencv_contrib
 
 # Download repo
 RUN mkdir /home/rstudio/land_con_monteregie \
