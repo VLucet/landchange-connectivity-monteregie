@@ -90,7 +90,7 @@ RUN wget -O /home/rstudio/opencv.zip https://github.com/opencv/opencv/archive/4.
 	&& make \
 	&& make install \
 	&& ldconfig \
-	&& pip3 install opencv-python opencv-contrib numpy matplotlib pandas
+	&& pip3 install opencv-python opencv-contrib-python numpy matplotlib pandas
 
 # Download repo
 RUN mkdir /home/rstudio/land_con_monteregie \
