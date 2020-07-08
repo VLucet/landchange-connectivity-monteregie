@@ -74,19 +74,10 @@ RUN mkdir /home/rstudio/syncrosim_2_10 \
 # OpenCV / python
 RUN wget -O /home/rstudio/opencv.zip https://github.com/opencv/opencv/archive/4.0.0.zip \
   && wget -O /home/rstudio/opencv_contrib.zip https://github.com/opencv/opencv_contrib/archive/4.0.0.zip \
-  && unzip /home/rstudio/opencv.zip -d /home/rstudio/opencv \
-  && unzip /home/rstudio/opencv_contrib.zip -d /home/rstudio/opencv_contrib \
-  && pip install wheel \
-  && pip install virtualenv virtualenvwrapper \
-  && rm -rf ~/get-pip.py ~/.cache/pip \
-  && echo -e "\n# virtualenv and virtualenvwrapper" >> ~/.bashrc \
-  && echo "export WORKON_HOME=$HOME/.virtualenvs" >> ~/.bashrc \
-  && echo "export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3" >> ~/.bashrc \
-  && echo "source /usr/local/bin/virtualenvwrapper.sh" >> ~/.bashrc \
-  && source ~/.bashrc \
-  && mkvirtualenv home/rstudio/cv -p python3 \
-  && pip install numpy \
-  && cd /home/rstudio/opencv \
+  && unzip /home/rstudio/opencv.zip -d /home/rstudio/ \
+  && unzip /home/rstudio/opencv_contrib.zip -d /home/rstudio/ \
+  && pip install wheel numpy \
+  && cd /home/rstudio/opencv-4.0.0 \
   && mkdir build \
   && cd build \
   && cmake -D CMAKE_BUILD_TYPE=RELEASE \
@@ -95,7 +86,7 @@ RUN wget -O /home/rstudio/opencv.zip https://github.com/opencv/opencv/archive/4.
 	-D INSTALL_C_EXAMPLES=OFF \
 	-D OPENCV_ENABLE_NONFREE=ON \
 	-D OPENCV_EXTRA_MODULES_PATH=/home/rstudio/opencv_contrib/modules \
-	-D PYTHON_EXECUTABLE=~/.virtualenvs/cv/bin/python \
+	-D PYTHON_EXECUTABLE=/usr/bin/python \
 	-D BUILD_EXAMPLES=ON \
 	&& make \
 	&& make install \
