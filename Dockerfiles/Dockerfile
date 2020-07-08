@@ -90,9 +90,7 @@ RUN wget -O /home/rstudio/opencv.zip https://github.com/opencv/opencv/archive/4.
 	-D BUILD_EXAMPLES=ON \
 	&& make \
 	&& make install \
-	&& ldconfig \
-	&& workon cv \
-	&& ln -s /usr/local/python/cv2/python-3.5/cv2.so /usr/local/python/cv2/python-3.5/cv2.cpython-35m-x86_64-linux-gnu.so
+	&& ldconfig 
 
 # Download repo
 RUN mkdir /home/rstudio/land_con_monteregie \
