@@ -49,7 +49,7 @@ RUN apt-get -y update -qq \
     libatlas-base-dev \
     gfortran \
     python3-dev \
-    python-pip
+    python3-pip
     
 # Julia install
 ENV JULIA_DEPOT_PATH=/opt/julia
@@ -76,7 +76,7 @@ RUN wget -O /home/rstudio/opencv.zip https://github.com/opencv/opencv/archive/4.
   && wget -O /home/rstudio/opencv_contrib.zip https://github.com/opencv/opencv_contrib/archive/4.0.0.zip \
   && unzip /home/rstudio/opencv.zip -d /home/rstudio/ \
   && unzip /home/rstudio/opencv_contrib.zip -d /home/rstudio/ \
-  && pip install wheel numpy \
+  && pip3 install wheel numpy \
   && cd /home/rstudio/opencv-4.0.0 \
   && mkdir build \
   && cd build \
@@ -87,7 +87,7 @@ RUN wget -O /home/rstudio/opencv.zip https://github.com/opencv/opencv/archive/4.
 	-D OPENCV_ENABLE_NONFREE=ON \
 	-D OPENCV_EXTRA_MODULES_PATH=/home/rstudio/opencv_contrib-4.0.0/modules \
 	-D PYTHON_EXECUTABLE=/usr/bin/python \
-	-D BUILD_EXAMPLES=ON \
+	-D BUILD_EXAMPLES=ON .. \
 	&& make \
 	&& make install \
 	&& ldconfig 
