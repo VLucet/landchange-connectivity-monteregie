@@ -72,11 +72,11 @@ RUN mkdir /home/rstudio/syncrosim_2_10 \
   && curl -L https://github.com/ApexRMS/stsim/releases/download/3.2.17/stsim-3-2-17.ssimpkg --output /home/rstudio/syncrosim_packages/stsim-3-2-17.ssimpkg
 
 # OpenCV / python
-RUN wget -O /home/rstudio/opencv.zip https://github.com/opencv/opencv/archive/4.0.0.zip \
-  && wget -O /home/rstudio/opencv_contrib.zip https://github.com/opencv/opencv_contrib/archive/4.0.0.zip \
+RUN wget -O /home/rstudio/opencv.zip https://github.com/opencv/opencv/archive/4.3.0.zip \
+  && wget -O /home/rstudio/opencv_contrib.zip https://github.com/opencv/opencv_contrib/archive/4.3.0.zip \
   && unzip /home/rstudio/opencv.zip -d /home/rstudio/ \
   && unzip /home/rstudio/opencv_contrib.zip -d /home/rstudio/ \
-  && cd /home/rstudio/opencv-4.0.0 \
+  && cd /home/rstudio/opencv-4.3.0 \
   && mkdir build \
   && cd build \
   && cmake -D CMAKE_BUILD_TYPE=RELEASE \
@@ -84,7 +84,7 @@ RUN wget -O /home/rstudio/opencv.zip https://github.com/opencv/opencv/archive/4.
 	-D INSTALL_PYTHON_EXAMPLES=ON \
 	-D INSTALL_C_EXAMPLES=OFF \
 	-D OPENCV_ENABLE_NONFREE=ON \
-	-D OPENCV_EXTRA_MODULES_PATH=/home/rstudio/opencv_contrib-4.0.0/modules \
+	-D OPENCV_EXTRA_MODULES_PATH=/home/rstudio/opencv_contrib-4.3.0/modules \
 	-D PYTHON_EXECUTABLE=/usr/bin/python \
 	-D BUILD_EXAMPLES=ON .. \
 	&& make \
