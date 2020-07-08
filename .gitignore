@@ -37,3 +37,4 @@ temp.tif
 *.xz
 scripts/0.2_add_buffer_to_all.sh
 log.txt
+.idea

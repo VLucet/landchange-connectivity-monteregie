@@ -101,6 +101,8 @@ get_ts_template <- function(list_of_files, step_save) {
   
 }
 
+#-------------------------------------------------------------------------------
+
 final_df <- foreach(sce = sce_nb_vec, .combine = dplyr::bind_rows) %dopar% {
   
   library(tidyverse)
@@ -163,6 +165,59 @@ stopCluster(clust)
 print("LARGE FOREACH LOOP DONE")
 # Save final df
 saveRDS(final_df, "outputs/final/final_df_current_density.RDS")
+
+#-------------------------------------------------------------------------------
+
+n_cores = 10 # very important smaller number of cores!!
+clust <- makeCluster(n_cores, outfile="log.txt")
+registerDoParallel(cl = clust)
+
+foreach(sce = sce_nb_vec) %dopar% {
+  
+  library(tidyverse)
+  library(raster)
+  library(gtools)
+  library(assertthat)
+  
+  print(sce)
+  sub_list_files <- list_files[grepl(x = list_files, pattern = sce)]
+  templates <- get_ts_template(sub_list_files, STSIM_STEP_SAVE)
+  ts_template <- templates[[1]]
+  ts_vec <- templates[[2]]
+  
+  spe_list <- list() 
+  for (species in species_vec) {
+    print(species)
+    ts_list <- list()
+    for (timestep in ts_vec) {
+      print(timestep)
+      iter_list <- list()
+      
+      idx <- which(ts_vec == timestep)
+      
+      for (iter in iter_template) {
+        print(iter)
+        # Step 1 assemble NS and EW for each spe, ts, iter, sce
+        stack_files <- list_files[grepl(x = list_files, pattern = species) & 
+                                    grepl(x = list_files, pattern = timestep) & 
+                                    grepl(x = list_files, pattern = iter) &
+                                    grepl(x = list_files, pattern = sce)]
+        #print(length(stack_files))
+        print(stack_files)
+        assert_that(length(stack_files)==2)
+        # Step 2 multiply NS and EW
+        multiplied <- calc(crop(stack(lapply(stack_files, FUN = raster)), 
+                                mun_zonal), 
+                           function(x){x[[1]]*x[[2]]})
+        the_name <- paste0(sce,"_", timestep, iter, species,".tif")
+        print(the_name)
+        writeRaster(multiplied, file.path("outputs/current_density_sum/", the_name), 
+                    overwrite=T)
+      }
+    }
+  }
+  removeTmpFiles(h=0)
+}
 
 #-------------------------------------------------------------------------------
 

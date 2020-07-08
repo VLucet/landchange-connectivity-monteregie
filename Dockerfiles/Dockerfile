@@ -1,4 +1,4 @@
-# -----
+# ------------------------------------------------------------------------------
 ## To build:
 # docker build Dockerfiles -t vlucet/land_con_monteregie:3.6.2-1
 ## To run:
@@ -6,15 +6,9 @@
 # docker run -d -p 8787:8787 -e DISABLE_AUTH=true -e PATH="$PATH:/home/rstudio/julia-1.3.1/bin" vlucet/land_con_monteregie:3.6.2-1
 ## Interactive:
 # docker run -it -u rstudio -e DISABLE_AUTH=true vlucet/land_con_monteregie:3.6.2-1 /bin/bash && cd ~/land_con_monteregie
-## With renv cache, has not worked so far: 
-# RENV_PATHS_CACHE_HOST=/opt/local/renv/cache
-# RENV_PATHS_CACHE_CONTAINER=/renv/cache
-#  docker run -it -e DISABLE_AUTH=true -e "RENV_PATHS_CACHE=${RENV_PATHS_CACHE_CONTAINER}" -v "$(pwd)/config/:/home/rstudio/land_con_monteregie/config/" -v "$(pwd)/outputs:/home/rstudio/land_con_monteregie/outputs/" -v "$(pwd)/libraries:/home/rstudio/land_con_monteregie/libraries" -v "$(pwd)/data:/home/rstudio/land_con_monteregie/data" -v "${RENV_PATHS_CACHE_HOST}:${RENV_PATHS_CACHE_CONTAINER}" --shm-size 50G vlucet/land_con_monteregie:3.6.2-1 /bin/bash && cd ~/land_con_monteregie
-## For compute cloud 1:
-# docker run -it -e DISABLE_AUTH=true -v "$(pwd)/config/:/home/rstudio/land_con_monteregie/config/" -v "$(pwd)/outputs:/home/rstudio/land_con_monteregie/outputs/" -v "$(pwd)/libraries:/home/rstudio/land_con_monteregie/libraries" -v "$(pwd)/data:/home/rstudio/land_con_monteregie/data" -v "/home/ubuntu/data/val/current_density_dump:/home/rstudio/current_density_2" --shm-size 50G vlucet/land_con_monteregie:3.6.2-1 /bin/bash && cd ~/land_con_monteregie
-# ~~
+# For CC1:
 # docker run -it -e DISABLE_AUTH=true -v "$(pwd):/home/rstudio/land_con_monteregie/" -v "/home/ubuntu/data/val/current_density_dump:/home/rstudio/current_density_2" --shm-size 50G vlucet/land_con_monteregie:3.6.2-1 /bin/bash && cd ~/land_con_monteregie
-# -----
+# ------------------------------------------------------------------------------
 
 # Building on top of: rocker/geospatial:3.6.2
 FROM rocker/geospatial:3.6.2
@@ -38,7 +32,19 @@ RUN apt-get -y update -qq \
     python-gdal=2.4.0+dfsg-1+b1 \
     bc=1.07.1-2+b1 \
     nano=3.2-3 \
-    htop=2.2.0-1+b1
+    htop=2.2.0-1+b1 \
+    cmake \
+    unzip \
+    pkg-config \
+    libjpeg-dev \
+    libpng-dev \
+    libtiff-dev \
+    libavcodec-dev \
+    libavformat-dev \
+    libswscale-dev \
+    libv4l-dev \
+    libxvidcore-dev \
+    libx264-dev
     
 # Julia install
 ENV JULIA_DEPOT_PATH=/opt/julia
@@ -71,4 +77,16 @@ WORKDIR /home/rstudio/land_con_monteregie
 # Set up renv and Restore renv library
 RUN R -e "install.packages('remotes', repos = c(CRAN = 'https://cloud.r-project.org'))"
 RUN R -e "remotes::install_github('rstudio/renv@${RENV_VERSION}')"
-RUN R -e "renv::restore()"
+# RUN R -e "renv::restore()"
+
+# Python environment
+
+
+# ------------------------------------------------------------------------------
+## With renv cache, has not worked so far: 
+# RENV_PATHS_CACHE_HOST=/opt/local/renv/cache
+# RENV_PATHS_CACHE_CONTAINER=/renv/cache
+#  docker run -it -e DISABLE_AUTH=true -e "RENV_PATHS_CACHE=${RENV_PATHS_CACHE_CONTAINER}" -v "$(pwd)/config/:/home/rstudio/land_con_monteregie/config/" -v "$(pwd)/outputs:/home/rstudio/land_con_monteregie/outputs/" -v "$(pwd)/libraries:/home/rstudio/land_con_monteregie/libraries" -v "$(pwd)/data:/home/rstudio/land_con_monteregie/data" -v "${RENV_PATHS_CACHE_HOST}:${RENV_PATHS_CACHE_CONTAINER}" --shm-size 50G vlucet/land_con_monteregie:3.6.2-1 /bin/bash && cd ~/land_con_monteregie
+## For compute cloud 1:
+# docker run -it -e DISABLE_AUTH=true -v "$(pwd)/config/:/home/rstudio/land_con_monteregie/config/" -v "$(pwd)/outputs:/home/rstudio/land_con_monteregie/outputs/" -v "$(pwd)/libraries:/home/rstudio/land_con_monteregie/libraries" -v "$(pwd)/data:/home/rstudio/land_con_monteregie/data" -v "/home/ubuntu/data/val/current_density_dump:/home/rstudio/current_density_2" --shm-size 50G vlucet/land_con_monteregie:3.6.2-1 /bin/bash && cd ~/land_con_monteregie
+# ------------------------------------------------------------------------------
