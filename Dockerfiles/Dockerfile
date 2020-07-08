@@ -103,7 +103,7 @@ WORKDIR /home/rstudio/land_con_monteregie
 # Set up renv and Restore renv library
 RUN R -e "install.packages('remotes', repos = c(CRAN = 'https://cloud.r-project.org'))"
 RUN R -e "remotes::install_github('rstudio/renv@${RENV_VERSION}')"
-RUN R -e "renv::restore()"
+# RUN R -e "renv::restore()"
 
 # ------------------------------------------------------------------------------
 ## With renv cache, has not worked so far: 
