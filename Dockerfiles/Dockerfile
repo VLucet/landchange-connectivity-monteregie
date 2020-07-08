@@ -76,6 +76,12 @@ RUN wget -O /home/rstudio/opencv.zip https://github.com/opencv/opencv/archive/4.
   && wget -O /home/rstudio/opencv_contrib.zip https://github.com/opencv/opencv_contrib/archive/4.0.0.zip \
   && unzip /home/rstudio/opencv.zip -d /home/rstudio/opencv \
   && unzip /home/rstudio/opencv_contrib.zip -d /home/rstudio/opencv_contrib \
+  && pip install virtualenv virtualenvwrapper \
+  && rm -rf ~/get-pip.py ~/.cache/pip \
+  && echo -e "\n# virtualenv and virtualenvwrapper" >> ~/.bashrc \
+  && echo "export WORKON_HOME=$HOME/.virtualenvs" >> ~/.bashrc \
+  && echo "export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3" >> ~/.bashrc \
+  && echo "source /usr/local/bin/virtualenvwrapper.sh" >> ~/.bashrc
 
 # Download repo
 RUN mkdir /home/rstudio/land_con_monteregie \
