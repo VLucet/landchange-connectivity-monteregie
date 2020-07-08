@@ -81,7 +81,10 @@ RUN wget -O /home/rstudio/opencv.zip https://github.com/opencv/opencv/archive/4.
   && echo -e "\n# virtualenv and virtualenvwrapper" >> ~/.bashrc \
   && echo "export WORKON_HOME=$HOME/.virtualenvs" >> ~/.bashrc \
   && echo "export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3" >> ~/.bashrc \
-  && echo "source /usr/local/bin/virtualenvwrapper.sh" >> ~/.bashrc
+  && echo "source /usr/local/bin/virtualenvwrapper.sh" >> ~/.bashrc \
+  && source ~/.bashrc \
+  && mkvirtualenv home/rstudio/cv -p python3 \
+  && pip install numpy 
 
 # Download repo
 RUN mkdir /home/rstudio/land_con_monteregie \
