@@ -80,7 +80,7 @@ def process_img(img):
 
 
 # Customized version of SURF algorithm from cv2, returns an annotated image
-def surf_detect(img, h_threshold=20000, oct_layers=3, oct_nb=3, upright=False, verbose=False, kp_only=False):
+def surf_detect(img, h_threshold=30000, oct_layers=3, oct_nb=3, upright=False, verbose=False, kp_only=False):
     import cv2
     # Read image
     if isinstance(img, str):
