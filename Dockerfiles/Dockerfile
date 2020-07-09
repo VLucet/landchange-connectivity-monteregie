@@ -85,7 +85,7 @@ RUN cd /home/rstudio \
 	-D PYTHON_EXECUTABLE=/usr/bin/python3 .. \
 	&& make -j4 \
 	&& make install \
-	&& pip3 install numpy matplotlib pandas scikit-image
+	&& pip3 install numpy matplotlib pandas scikit-image scipy
 
 # Download repo
 RUN mkdir /home/rstudio/land_con_monteregie \
