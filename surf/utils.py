@@ -69,7 +69,7 @@ def surf_detect(img, h_threshold=1000, oct_layers=3, oct_nb=4, upright=False, ve
 
 
 # Process flow, combine all functions
-def process_flow(img, in_range=(2, 20), out_range=(0, 255), h_threshold=20000,
+def process_flow(img, in_range=(2, 20), out_range=(0, 255), h_threshold=50000,
                  oct_layers=5, oct_nb=1, upright=False, verbose=False, kp_only=False):
     img_processed = process_img(img, in_range, out_range)
     img_annotated = surf_detect(img_processed, h_threshold, oct_layers, oct_nb, upright, verbose, kp_only)
