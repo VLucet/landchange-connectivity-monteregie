@@ -80,7 +80,7 @@ def process_img(img):
 
 
 # Customized version of SURF algorithm from cv2, returns an annotated image
-def surf_detect(img, h_threshold=20000, oct_layers=3, oct_nb=3, upright=False, verbose=False, kp_only=False, bright_only=True):
+def surf_detect(img, use_mask=True, h_threshold=20000, oct_layers=3, oct_nb=3, upright=False, verbose=False, kp_only=False, bright_only=True):
     import cv2
     import numpy as np
 
@@ -93,8 +93,14 @@ def surf_detect(img, h_threshold=20000, oct_layers=3, oct_nb=3, upright=False, v
     surf_engine.setNOctaveLayers(oct_layers)
     surf_engine.setNOctaves(oct_nb)
     surf_engine.setUpright(upright)
+
     # Process image
-    kp, des = surf_engine.detectAndCompute(img, None)
+    if use_mask:
+        the_mask = cv2.imread("data/stsim/aggregated/primary_stratum_mont_or_not_or_PA.tif", -1).astype("uint8")
+        the_mask[the_mask == 2] = 1
+        kp, des = surf_engine.detectAndCompute(img, the_mask)
+    else:
+        kp, des = surf_engine.detectAndCompute(img, None)
 
     if bright_only:
         laplacian = [kp[idx].class_id for idx in range(0, len(kp))]
@@ -115,9 +121,9 @@ def surf_detect(img, h_threshold=20000, oct_layers=3, oct_nb=3, upright=False, v
 
 
 # Process flow, combine all functions
-def process_flow(img, h_threshold=30000, oct_layers=5, oct_nb=1, upright=False, verbose=False, kp_only=False, bright_only=True):
+def process_flow(img, use_mask=True, h_threshold=20000, oct_layers=5, oct_nb=1, upright=False, verbose=False, kp_only=False, bright_only=True):
     img_processed = process_img(img)
-    img_annotated = surf_detect(img_processed, h_threshold, oct_layers, oct_nb, upright, verbose, kp_only)
+    img_annotated = surf_detect(img_processed, use_mask, h_threshold, oct_layers, oct_nb, upright, verbose, kp_only, bright_only)
     return img_annotated
 
 
