@@ -80,8 +80,10 @@ def process_img(img):
 
 
 # Customized version of SURF algorithm from cv2, returns an annotated image
-def surf_detect(img, h_threshold=30000, oct_layers=3, oct_nb=3, upright=False, verbose=False, kp_only=False):
+def surf_detect(img, h_threshold=20000, oct_layers=3, oct_nb=3, upright=False, verbose=False, kp_only=False, bright_only=True):
     import cv2
+    import numpy as np
+
     # Read image
     if isinstance(img, str):
         img = cv2.imread(img, 0)
@@ -94,6 +96,11 @@ def surf_detect(img, h_threshold=30000, oct_layers=3, oct_nb=3, upright=False, v
     # Process image
     kp, des = surf_engine.detectAndCompute(img, None)
 
+    if bright_only:
+        laplacian = [kp[idx].class_id for idx in range(0, len(kp))]
+        indices = np.where(np.array(laplacian) < 0)[0]
+        kp_to_draw = [kp[idx] for idx in indices]
+
     if verbose:
         print("Keypoints:", len(kp))
         print("Descriptors:", len(des))
@@ -101,12 +108,12 @@ def surf_detect(img, h_threshold=30000, oct_layers=3, oct_nb=3, upright=False, v
     if kp_only:
         return kp, des
     else:
-        img2 = cv2.drawKeypoints(img, kp, None, (255, 0, 0), 4)
+        img2 = cv2.drawKeypoints(img, kp_to_draw, None, (255, 0, 0), 4)
         return Annotated(kp, des, img2)
 
 
 # Process flow, combine all functions
-def process_flow(img, h_threshold=20000, oct_layers=3, oct_nb=3, upright=False, verbose=False, kp_only=False):
+def process_flow(img, h_threshold=20000, oct_layers=3, oct_nb=3, upright=False, verbose=False, kp_only=False, bright_only=True):
     img_processed = process_img(img)
     img_annotated = surf_detect(img_processed, h_threshold, oct_layers, oct_nb, upright, verbose, kp_only)
     return img_annotated
