@@ -15,6 +15,23 @@ class Annotated:
         plt.show()
 
 
+class Raster:
+    def __init__(self, name, img):
+        self.name = name
+        self.img = img
+
+    def get_ts(self):
+        ts = self.name.split("ts_")[1].split("_")[0]
+        return int(ts)
+
+    def get_iter(self):
+        it = self.name.split("it_")[1].split("_")[0]
+        return int(it)
+
+    def get_spe(self):
+        spe = self.name.split("_")[-1].split(".")[0]
+        return str(spe)
+
 # ------ Image processing functions ------
 
 
@@ -25,10 +42,11 @@ def read_img(img):
         if isfile(img):
             # Read image as is
             print(img)
-            img = cv2.imread(img, -1)
+            img_array = cv2.imread(img, -1)
         else:
             print("Incorrect file path:", img)
             raise
+    img = Raster(img=img_array, name=img)
     return img
 
 
@@ -45,53 +63,47 @@ def transform_img(img):
     return img_db_pos
 
 
-def get_peak_img(img):
-    import numpy as np
-    from scipy import signal
-
-    data = img.flatten()
-    n, bins = np.histogram(data, 100)
-
-    # trim data
-    x = np.linspace(np.min(data), np.max(data), num=100)
-
-    # find index of minimum between two modes
-    ind_max = signal.argrelmax(n)
-    x_max = x[ind_max]
-    y_max = n[ind_max]
-
-    # plot
-    # plt.hist(data, bins=100, color='y')
-    # plt.scatter(x_max, y_max, color='b')
-    # plt.show()
-
-    y_main_peak = np.max(y_max)
-    x_main_peak = x_max[np.argmax(y_max)]
-
-    if x_main_peak == 0:
-        raise Exception("Error x is 0")
-
-    return x_main_peak, y_main_peak
+# def get_peak_img(img):
+#     import numpy as np
+#     from scipy import signal
+#
+#     data = img.flatten()
+#     n, bins = np.histogram(data, 100)
+#
+#     # trim data
+#     x = np.linspace(np.min(data), np.max(data), num=100)
+#
+#     # find index of minimum between two modes
+#     ind_max = signal.argrelmax(n)
+#     x_max = x[ind_max]
+#     y_max = n[ind_max]
+#
+#     # plot
+#     # plt.hist(data, bins=100, color='y')
+#     # plt.scatter(x_max, y_max, color='b')
+#     # plt.show()
+#
+#     y_main_peak = np.max(y_max)
+#     x_main_peak = x_max[np.argmax(y_max)]
+#
+#     if x_main_peak == 0:
+#         raise Exception("Error x is 0")
+#
+#     return x_main_peak, y_main_peak
 
 
 # Process image
-def process_img(img, use_mask=True):
+def process_img(img, mask=None):
     # from skimage.exposure import rescale_intensity
     import cv2
     from skimage.exposure import equalize_hist
-
-    if use_mask:
-        the_mask = cv2.imread("data/stsim/aggregated/primary_stratum_mont_or_not_or_PA.tif", -1).astype("uint8")
-        the_mask[the_mask == 2] = 1
-    else:
-        the_mask = None
 
     # img_scaled = scale_img(transform_img(read_img(img)))
     # x, y = get_peak_img(img_scaled)
     # img_processed = rescale_intensity(img_scaled, (x-30, x+30), (0, 255)).astype("uint8")
 
-    img_transformed = transform_img(read_img(img))
-    img_processed = scale_img(equalize_hist(img_transformed, mask=the_mask)).astype("uint8")
+    img_transformed = transform_img(read_img(img).img)
+    img_processed = scale_img(equalize_hist(img_transformed, mask=mask)).astype("uint8")
     return img_processed
 
 
@@ -136,7 +148,7 @@ def surf_detect(img, mask=None, h_threshold=8000, oct_layers=3, oct_nb=3, uprigh
 # Process flow, combine all functions
 def process_flow(img, mask=None, h_threshold=8000, oct_layers=3, oct_nb=3, upright=False, verbose=False,
                  kp_only=False, bright_only=True):
-    img_processed = process_img(img)
+    img_processed = process_img(img, mask)
     img_annotated = surf_detect(img_processed, mask, h_threshold, oct_layers, oct_nb, upright, verbose,
                                 kp_only, bright_only)
     return img_annotated
