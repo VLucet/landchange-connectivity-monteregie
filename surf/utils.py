@@ -99,17 +99,19 @@ def surf_detect(img, h_threshold=20000, oct_layers=3, oct_nb=3, upright=False, v
     if bright_only:
         laplacian = [kp[idx].class_id for idx in range(0, len(kp))]
         indices = np.where(np.array(laplacian) < 0)[0]
-        kp_to_draw = [kp[idx] for idx in indices]
+        kp_final = [kp[idx] for idx in indices]
+    else:
+        kp_final = kp
 
     if verbose:
-        print("Keypoints:", len(kp))
+        print("Keypoints:", len(kp_final))
         print("Descriptors:", len(des))
 
     if kp_only:
-        return kp, des
+        return kp_final, des
     else:
-        img2 = cv2.drawKeypoints(img, kp_to_draw, None, (255, 0, 0), 4)
-        return Annotated(kp, des, img2)
+        img2 = cv2.drawKeypoints(img, kp_final, None, (255, 0, 0), 4)
+        return Annotated(kp_final, des, img2)
 
 
 # Process flow, combine all functions
