@@ -5,8 +5,9 @@ print(head(surf))
 surf %>% 
   mutate(scenario = as.factor(scenario)) %>% 
   ggplot(aes(x = timestep, y = kp_nb, color=scenario)) +
-  geom_smooth(aes(group = scenario), alpha=0.5, method="gam")+
+  geom_smooth(aes(group = scenario), alpha=0.5, method="loess")+
   geom_point(aes(group=scenario))+
+  scale_y_log10()+
   facet_wrap(~species, scales = "free")
 
 surf %>% 

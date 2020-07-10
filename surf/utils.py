@@ -33,8 +33,8 @@ def read_img(img):
 
 
 # Scale the image
-def scale_img(img):
-    img_scaled = (img * 255.0 / img.max())
+def scale_img(img, the_max=255.0):
+    img_scaled = (img * the_max / img.max())
     return img_scaled
 
 
@@ -67,26 +67,44 @@ def get_peak_img(img):
 
     y_main_peak = np.max(y_max)
     x_main_peak = x_max[np.argmax(y_max)]
+
+    if x_main_peak == 0:
+        raise Exception("Error x is 0")
+
     return x_main_peak, y_main_peak
 
 
 # Process image
-def process_img(img):
-    from skimage.exposure import rescale_intensity
-    img_scaled = scale_img(transform_img(read_img(img)))
-    x, y = get_peak_img(img_scaled)
-    img_processed = rescale_intensity(img_scaled, (x-30, x+30), (0, 255)).astype("uint8")
+def process_img(img, use_mask=True):
+    # from skimage.exposure import rescale_intensity
+    import cv2
+    from skimage.exposure import equalize_hist
+
+    if use_mask:
+        the_mask = cv2.imread("data/stsim/aggregated/primary_stratum_mont_or_not_or_PA.tif", -1).astype("uint8")
+        the_mask[the_mask == 2] = 1
+    else:
+        the_mask = None
+
+    # img_scaled = scale_img(transform_img(read_img(img)))
+    # x, y = get_peak_img(img_scaled)
+    # img_processed = rescale_intensity(img_scaled, (x-30, x+30), (0, 255)).astype("uint8")
+
+    img_transformed = transform_img(read_img(img))
+    img_processed = scale_img(equalize_hist(img_transformed, mask=the_mask)).astype("uint8")
     return img_processed
 
 
 # Customized version of SURF algorithm from cv2, returns an annotated image
-def surf_detect(img, use_mask=True, h_threshold=20000, oct_layers=3, oct_nb=3, upright=False, verbose=False, kp_only=False, bright_only=True):
+def surf_detect(img, mask=None, h_threshold=8000, oct_layers=3, oct_nb=3, upright=False, verbose=False,
+                kp_only=False, bright_only=True):
     import cv2
     import numpy as np
 
     # Read image
     if isinstance(img, str):
         img = cv2.imread(img, 0)
+
     # Set up the SURF algorithm
     surf_engine = cv2.xfeatures2d.SURF_create()
     surf_engine.setHessianThreshold(h_threshold)
@@ -95,12 +113,7 @@ def surf_detect(img, use_mask=True, h_threshold=20000, oct_layers=3, oct_nb=3, u
     surf_engine.setUpright(upright)
 
     # Process image
-    if use_mask:
-        the_mask = cv2.imread("data/stsim/aggregated/primary_stratum_mont_or_not_or_PA.tif", -1).astype("uint8")
-        the_mask[the_mask == 2] = 1
-        kp, des = surf_engine.detectAndCompute(img, the_mask)
-    else:
-        kp, des = surf_engine.detectAndCompute(img, None)
+    kp, des = surf_engine.detectAndCompute(img, mask)
 
     if bright_only:
         laplacian = [kp[idx].class_id for idx in range(0, len(kp))]
@@ -121,16 +134,23 @@ def surf_detect(img, use_mask=True, h_threshold=20000, oct_layers=3, oct_nb=3, u
 
 
 # Process flow, combine all functions
-def process_flow(img, use_mask=True, h_threshold=20000, oct_layers=5, oct_nb=1, upright=False, verbose=False, kp_only=False, bright_only=True):
+def process_flow(img, mask=None, h_threshold=8000, oct_layers=3, oct_nb=3, upright=False, verbose=False,
+                 kp_only=False, bright_only=True):
     img_processed = process_img(img)
-    img_annotated = surf_detect(img_processed, use_mask, h_threshold, oct_layers, oct_nb, upright, verbose, kp_only, bright_only)
+    img_annotated = surf_detect(img_processed, mask, h_threshold, oct_layers, oct_nb, upright, verbose,
+                                kp_only, bright_only)
     return img_annotated
 
 
-def get_kp_lengths(img):
-    img_annotated = process_flow(img)
+def get_kp_lengths(img, mask=None):
+    img_annotated = process_flow(img, mask=mask)
     the_length = len(img_annotated.kp)
     return the_length
+
+
+def get_annotated(img, mask=None):
+    img_annotated = process_flow(img, mask=mask)
+    return img_annotated.img
 
 
 def process_and_plot(img):
@@ -142,7 +162,13 @@ def process_and_plot(img):
 
 
 # plot image with hist
-def plot_hist(img):
+def plot_hist(img, mask=None):
+
+    if mask is not None:
+        data = img[mask==1]
+    else:
+        data = img.flatten()
+
     import matplotlib.pyplot as plt
     # Display the image.
     fig, (ax1, ax2) = plt.subplots(1, 2,
@@ -152,7 +178,7 @@ def plot_hist(img):
     ax1.set_axis_off()
 
     # Display the histogram.
-    ax2.hist(img.ravel(), lw=0, bins=256)
+    ax2.hist(data, lw=0, bins=256)
     ax2.set_xlim(0, img.max())
     ax2.set_yticks([])
 
