@@ -99,7 +99,7 @@ def get_peak_img(img, mask=None):
 # Process image
 def process_img(img, mask=None):
     import cv2
-    from skimage.exposure import *
+    from skimage.exposure import equalize_adapthist, equalize_hist, rescale_intensity
 
     # img_scaled = scale_img(transform_img(read_img(img)))
     # x, y = get_peak_img(img_scaled)
