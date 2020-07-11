@@ -25,8 +25,11 @@ the_mask = cv2.imread("data/stsim/aggregated/primary_stratum_mont_or_not_or_PA.t
 the_mask[the_mask == 2] = 1
 
 workers = mp.Pool(processes=12)
-kp_lengths = workers.map(partial(utils.get_kp_lengths, mask=the_mask), list_of_files)
+#kp_lengths = workers.map(partial(utils.get_kp_lengths, mask=the_mask), list_of_files)
+kp_lengths = workers.map(utils.get_kp_lengths, list_of_files)
 workers.close()
+
+# ------------ Create CSV ------------ 
 
 # Split at ".", get first element, then split at "_"
 splitted = list(map(lambda x: x.split("_"), [i[0] for i in list(map(lambda x: x.split("."), base_files))]))

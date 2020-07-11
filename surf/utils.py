@@ -1,20 +1,6 @@
 # SURF Module.
 
 
-# Class of annotated images returned by surf
-class Annotated:
-    def __init__(self, kp, des, img):
-        self.kp = kp
-        self.des = des
-        self.img = img
-
-    def plot(self):
-        import matplotlib.pyplot as plt
-        fig = plt.figure()
-        plt.imshow(self.img)
-        plt.show()
-
-
 class Raster:
     def __init__(self, name, img):
         self.name = name
@@ -43,8 +29,8 @@ class Raster:
         return Raster(img=img_db_pos, name=self.name)
 
     def equalize(self):
-        from skimage.exposure import equalize_hist
-        eq_img = equalize_hist(self.img)
+        from skimage.exposure import equalize_adapthist
+        eq_img = equalize_adapthist(self.img)
         return Raster(img=eq_img, name=self.name)
 
     def cvt_uint8(self):
@@ -84,6 +70,25 @@ class Raster:
             img_annotated = cv2.drawKeypoints(self.img, kp_final, None, (255, 0, 0), 4)
             return Annotated(kp=kp_final, des=des, img=img_annotated)
 
+    def plot(self):
+        import matplotlib.pyplot as plt
+        fig = plt.figure()
+        plt.imshow(self.img)
+        plt.show()
+
+
+class Annotated:
+    def __init__(self, kp, des, img):
+        self.kp = kp
+        self.des = des
+        self.img = img
+
+    def plot(self):
+        import matplotlib.pyplot as plt
+        fig = plt.figure()
+        plt.imshow(self.img)
+        plt.show()
+
 
 # ------ Image processing functions ------
 
@@ -122,23 +127,32 @@ def process_flow(img, mask=None, h_threshold=8000, oct_layers=3, oct_nb=3, uprig
     return img_annotated
 
 
+def get_annotated(img, mask=None):
+    img_annotated = process_flow(img, mask=mask)
+    return img_annotated.img
+
+
 def get_kp_lengths(img, mask=None):
     img_annotated = process_flow(img, mask=mask)
     the_length = len(img_annotated.kp)
     return the_length
+
 
 # ------ Plotting functions ------
 
 
 # plot image with hist
 def plot_hist(img, mask=None, the_title=""):
+    import matplotlib.pyplot as plt
+
+    if isinstance(img, Raster) | isinstance(img, Annotated):
+        img = img.img
 
     if mask is not None:
         data = img[mask==1]
     else:
         data = img.flatten()
 
-    import matplotlib.pyplot as plt
     # Display the image.
     fig, (ax1, ax2) = plt.subplots(1, 2,
                                    figsize=(12, 3))
@@ -217,9 +231,6 @@ def plot(img):
 #
 #     return x_main_peak, y_main_peak
 
-# def get_annotated(img, mask=None):
-#     img_annotated = process_flow(img, mask=mask)
-#     return img_annotated.img
 #
 #
 # def process_and_plot(img):
