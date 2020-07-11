@@ -63,40 +63,43 @@ def transform_img(img):
     return img_db_pos
 
 
-# def get_peak_img(img):
-#     import numpy as np
-#     from scipy import signal
-#
-#     data = img.flatten()
-#     n, bins = np.histogram(data, 100)
-#
-#     # trim data
-#     x = np.linspace(np.min(data), np.max(data), num=100)
-#
-#     # find index of minimum between two modes
-#     ind_max = signal.argrelmax(n)
-#     x_max = x[ind_max]
-#     y_max = n[ind_max]
-#
-#     # plot
-#     # plt.hist(data, bins=100, color='y')
-#     # plt.scatter(x_max, y_max, color='b')
-#     # plt.show()
-#
-#     y_main_peak = np.max(y_max)
-#     x_main_peak = x_max[np.argmax(y_max)]
-#
-#     if x_main_peak == 0:
-#         raise Exception("Error x is 0")
-#
-#     return x_main_peak, y_main_peak
+def get_peak_img(img, mask=None):
+    import numpy as np
+    from scipy import signal
+
+    if mask is not None:
+        data = img[mask==1].flatten()
+    else:
+        data = img.flatten()
+
+    n, bins = np.histogram(data, 100)
+
+    # trim data
+    x = np.linspace(np.min(data), np.max(data), num=100)
+
+    # find index of minimum between two modes
+    ind_max = signal.argrelmax(n)
+    x_max = x[ind_max]
+    y_max = n[ind_max]
+
+    # plot
+    # plt.hist(data, bins=100, color='y')
+    # plt.scatter(x_max, y_max, color='b')
+    # plt.show()
+
+    y_main_peak = np.max(y_max)
+    x_main_peak = x_max[np.argmax(y_max)]
+
+    if x_main_peak == 0:
+        raise Exception("Error x is 0")
+
+    return x_main_peak, y_main_peak
 
 
 # Process image
 def process_img(img, mask=None):
-    # from skimage.exposure import rescale_intensity
     import cv2
-    from skimage.exposure import equalize_hist
+    from skimage.exposure import *
 
     # img_scaled = scale_img(transform_img(read_img(img)))
     # x, y = get_peak_img(img_scaled)
@@ -104,12 +107,13 @@ def process_img(img, mask=None):
 
     img_transformed = transform_img(read_img(img).img)
     #img_processed = scale_img(equalize_hist(img_transformed, mask=mask)).astype("uint8")
-    img_processed = scale_img(img_transformed).astype("uint8")
+    #img_processed = scale_img(img_transformed).astype("uint8")
+    img_processed = scale_img(equalize_adapthist(scale_img(img_transformed,1)), 255).astype("uint8")
     return img_processed
 
 
 # Customized version of SURF algorithm from cv2, returns an annotated image
-def surf_detect(img, mask=None, h_threshold=4000, oct_layers=3, oct_nb=3, upright=False, verbose=False,
+def surf_detect(img, mask=None, h_threshold=8000, oct_layers=3, oct_nb=3, upright=False, verbose=False,
                 kp_only=False, bright_only=True):
     import cv2
     import numpy as np
@@ -147,7 +151,7 @@ def surf_detect(img, mask=None, h_threshold=4000, oct_layers=3, oct_nb=3, uprigh
 
 
 # Process flow, combine all functions
-def process_flow(img, mask=None, h_threshold=4000, oct_layers=3, oct_nb=3, upright=False, verbose=False,
+def process_flow(img, mask=None, h_threshold=8000, oct_layers=3, oct_nb=3, upright=False, verbose=False,
                  kp_only=False, bright_only=True):
     img_processed = process_img(img, mask)
     img_annotated = surf_detect(img_processed, mask, h_threshold, oct_layers, oct_nb, upright, verbose,
@@ -186,14 +190,11 @@ def compute_and_save(files, mask):
             pass
 
 
-
-
-
 # ------ Plotting functions ------
 
 
 # plot image with hist
-def plot_hist(img, mask=None):
+def plot_hist(img, mask=None, the_title=""):
 
     if mask is not None:
         data = img[mask==1]
@@ -204,6 +205,7 @@ def plot_hist(img, mask=None):
     # Display the image.
     fig, (ax1, ax2) = plt.subplots(1, 2,
                                    figsize=(12, 3))
+    fig.suptitle(the_title, fontsize=16)
 
     ax1.imshow(img, cmap=plt.cm.gray)
     ax1.set_axis_off()
