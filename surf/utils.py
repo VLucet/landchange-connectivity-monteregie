@@ -41,7 +41,7 @@ def read_img(img):
     if isinstance(img, str):
         if isfile(img):
             # Read image as is
-            print(img)
+            # print(img)
             img_array = cv2.imread(img, -1)
         else:
             print("Incorrect file path:", img)
@@ -58,7 +58,7 @@ def scale_img(img, the_max=255.0):
 
 def transform_img(img):
     import numpy as np
-    img_db = 10 * np.log10(img)
+    img_db = 10 * np.log10(img.astype(float))
     img_db_pos = img_db + abs(np.min(img_db))
     return img_db_pos
 
