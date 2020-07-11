@@ -170,6 +170,24 @@ def process_and_plot(img):
     img_annotated.plot()
 
 
+def compute_and_save(files, mask):
+    import numpy as np
+    from matplotlib import pyplot as plt
+
+    for file in files:
+        raster = read_img(file)
+        if raster.get_ts() in [2, 11] & raster.get_iter() in [1, 10]:
+            img = process_flow(file, mask=mask)
+            fig = plt.figure()
+            plt.imshow(img)
+            plt.savefig("/outputs/figures/"+file+"_annotated.png")
+        else:
+            pass
+
+
+
+
+
 # ------ Plotting functions ------
 
 
