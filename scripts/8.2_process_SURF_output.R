@@ -59,7 +59,7 @@ joined %>%
   
   ggplot(aes(x = timestep, y = the_diff, color=climate)) +
   geom_smooth(aes(group = scenario, linetype=run), alpha=0.2, method="loess")+
-  #geom_point(aes(group=scenario))+
+  geom_point(aes(group=scenario))+
   #scale_y_log10()+
   facet_wrap(~species, scales = "free")+
   
