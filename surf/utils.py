@@ -109,7 +109,7 @@ def process_img(img, mask=None):
 
 
 # Customized version of SURF algorithm from cv2, returns an annotated image
-def surf_detect(img, mask=None, h_threshold=8000, oct_layers=3, oct_nb=3, upright=False, verbose=False,
+def surf_detect(img, mask=None, h_threshold=1000, oct_layers=3, oct_nb=3, upright=False, verbose=False,
                 kp_only=False, bright_only=True):
     import cv2
     import numpy as np
@@ -147,7 +147,7 @@ def surf_detect(img, mask=None, h_threshold=8000, oct_layers=3, oct_nb=3, uprigh
 
 
 # Process flow, combine all functions
-def process_flow(img, mask=None, h_threshold=8000, oct_layers=3, oct_nb=3, upright=False, verbose=False,
+def process_flow(img, mask=None, h_threshold=1000, oct_layers=3, oct_nb=3, upright=False, verbose=False,
                  kp_only=False, bright_only=True):
     img_processed = process_img(img, mask)
     img_annotated = surf_detect(img_processed, mask, h_threshold, oct_layers, oct_nb, upright, verbose,
