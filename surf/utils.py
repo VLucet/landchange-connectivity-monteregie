@@ -176,7 +176,7 @@ def compute_and_save(files, mask):
 
     for file in files:
         raster = read_img(file)
-        if raster.get_ts() in [2, 11] & raster.get_iter() in [1, 10]:
+        if (raster.get_ts() in [2, 11]) & (raster.get_iter() == 1):
             img = process_flow(file, mask=mask)
             fig = plt.figure()
             plt.imshow(img)
