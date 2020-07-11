@@ -31,131 +31,94 @@ class Raster:
     def get_spe(self):
         spe = self.name.split("_")[-1].split(".")[0]
         return str(spe)
+        
+    def scale(self, new_max=255.0):
+        new_img = (self.img * new_max / self.img.max())
+        return Raster(img=new_img, name=self.img)
+
+    def transform(self):
+        import numpy as np
+        img_db = 10 * np.log10(self.img.astype(float))
+        img_db_pos = img_db + abs(np.min(img_db))
+        return Raster(img=img_db_pos, name=self.name)
+
+    def equalize(self):
+        from skimage.exposure import equalize_hist
+        eq_img = equalize_hist(self.img)
+        return Raster(img=eq_img, name=self.name)
+
+    def cvt_uint8(self):
+        new_image = self.img.astype("uint8")
+        return Raster(img=new_image, name=self.name)
+
+    def detect_and_annotate(self, mask=None, h_threshold=8000, oct_layers=3, oct_nb=3,
+                    upright=False, verbose=False, kp_only=False, bright_only=True):
+        import cv2
+        import numpy as np
+
+        # Set up the SURF algorithm
+        surf_engine = cv2.xfeatures2d.SURF_create()
+        surf_engine.setHessianThreshold(h_threshold)
+        surf_engine.setNOctaveLayers(oct_layers)
+        surf_engine.setNOctaves(oct_nb)
+        surf_engine.setUpright(upright)
+
+        # Run detection
+        kp, des = surf_engine.detectAndCompute(self.img, mask)
+
+        # Only return bright spots
+        if bright_only:
+            laplacian = [kp[idx].class_id for idx in range(0, len(kp))]
+            indices = np.where(np.array(laplacian) < 0)[0]
+            kp_final = [kp[idx] for idx in indices]
+        else:
+            kp_final = kp
+
+        if verbose:
+            print("Keypoints:", len(kp_final))
+            print("Descriptors:", len(des))
+
+        if kp_only:
+            return kp_final, des
+        else:
+            img_annotated = cv2.drawKeypoints(self.img, kp_final, None, (255, 0, 0), 4)
+            return Annotated(kp=kp_final, des=des, img=img_annotated)
+
 
 # ------ Image processing functions ------
 
 
-def read_img(img):
+def read_img(img_path):
     import cv2
-    from os.path import isfile
-    if isinstance(img, str):
-        if isfile(img):
+    from os.path import isfile, basename
+    if isinstance(img_path, str):
+        if isfile(img_path):
             # Read image as is
-            # print(img)
-            img_array = cv2.imread(img, -1)
+            img_array = cv2.imread(img_path, -1)
         else:
-            print("Incorrect file path:", img)
+            print("Incorrect file path:", img_path)
             raise
-    img = Raster(img=img_array, name=img)
+    the_name = basename(img_path)
+    img = Raster(img=img_array, name=the_name)
     return img
 
 
-# Scale the image
-def scale_img(img, the_max=255.0):
-    img_scaled = (img * the_max / img.max())
-    return img_scaled
-
-
-def transform_img(img):
-    import numpy as np
-    img_db = 10 * np.log10(img.astype(float))
-    img_db_pos = img_db + abs(np.min(img_db))
-    return img_db_pos
-
-
-# def get_peak_img(img, mask=None):
-#     import numpy as np
-#     from scipy import signal
-#
-#     if mask is not None:
-#         data = img[mask==1].flatten()
-#     else:
-#         data = img.flatten()
-#
-#     n, bins = np.histogram(data, 100)
-#
-#     # trim data
-#     x = np.linspace(np.min(data), np.max(data), num=100)
-#
-#     # find index of minimum between two modes
-#     ind_max = signal.argrelmax(n)
-#     x_max = x[ind_max]
-#     y_max = n[ind_max]
-#
-#     # plot
-#     # plt.hist(data, bins=100, color='y')
-#     # plt.scatter(x_max, y_max, color='b')
-#     # plt.show()
-#
-#     y_main_peak = np.max(y_max)
-#     x_main_peak = x_max[np.argmax(y_max)]
-#
-#     if x_main_peak == 0:
-#         raise Exception("Error x is 0")
-#
-#     return x_main_peak, y_main_peak
-
-
 # Process image
-def process_img(img, mask=None):
-    import cv2
-    from skimage.exposure import equalize_adapthist, equalize_hist, rescale_intensity
+def process_img(img):
 
-    # img_scaled = scale_img(transform_img(read_img(img)))
-    # x, y = get_peak_img(img_scaled)
-    # img_processed = rescale_intensity(img_scaled, (x-30, x+30), (0, 255)).astype("uint8")
-    the_array = read_img(img).img
-    img_transformed = transform_img(the_array)
-    #img_processed = scale_img(equalize_hist(img_transformed, mask=mask)).astype("uint8")
-    #img_processed = scale_img(img_transformed).astype("uint8")
-    img_processed = scale_img(equalize_adapthist(scale_img(img_transformed, 1)), 255).astype("uint8")
-    return img_processed
-
-
-# Customized version of SURF algorithm from cv2, returns an annotated image
-def surf_detect(img, mask=None, h_threshold=8000, oct_layers=3, oct_nb=3, upright=False, verbose=False,
-                kp_only=False, bright_only=True):
-    import cv2
-    import numpy as np
-
-    # Read image
     if isinstance(img, str):
-        img = cv2.imread(img, 0)
+        img = read_img(img)
 
-    # Set up the SURF algorithm
-    surf_engine = cv2.xfeatures2d.SURF_create()
-    surf_engine.setHessianThreshold(h_threshold)
-    surf_engine.setNOctaveLayers(oct_layers)
-    surf_engine.setNOctaves(oct_nb)
-    surf_engine.setUpright(upright)
-
-    # Process image
-    kp, des = surf_engine.detectAndCompute(img, mask)
-
-    if bright_only:
-        laplacian = [kp[idx].class_id for idx in range(0, len(kp))]
-        indices = np.where(np.array(laplacian) < 0)[0]
-        kp_final = [kp[idx] for idx in indices]
-    else:
-        kp_final = kp
-
-    if verbose:
-        print("Keypoints:", len(kp_final))
-        print("Descriptors:", len(des))
-
-    if kp_only:
-        return kp_final, des
-    else:
-        img2 = cv2.drawKeypoints(img, kp_final, None, (255, 0, 0), 4)
-        return Annotated(kp_final, des, img2)
+    img_processed = img.transform().scale(1).equalize().scale(255).cvt_uint8()
+    return img_processed
 
 
 # Process flow, combine all functions
 def process_flow(img, mask=None, h_threshold=8000, oct_layers=3, oct_nb=3, upright=False, verbose=False,
                  kp_only=False, bright_only=True):
-    img_processed = process_img(img, mask)
-    img_annotated = surf_detect(img_processed, mask, h_threshold, oct_layers, oct_nb, upright, verbose,
-                                kp_only, bright_only)
+    img_processed = process_img(img)
+    img_annotated = img_processed.detect_and_annotate(mask, h_threshold, oct_layers, oct_nb,
+                                                      upright, verbose, kp_only, bright_only)
     return img_annotated
 
 
@@ -163,32 +126,6 @@ def get_kp_lengths(img, mask=None):
     img_annotated = process_flow(img, mask=mask)
     the_length = len(img_annotated.kp)
     return the_length
-
-
-def get_annotated(img, mask=None):
-    img_annotated = process_flow(img, mask=mask)
-    return img_annotated.img
-
-
-def process_and_plot(img):
-    img_annotated = process_flow(img)
-    img_annotated.plot()
-
-
-def compute_and_save(files, mask):
-    import numpy as np
-    from matplotlib import pyplot as plt
-
-    for file in files:
-        raster = read_img(file)
-        if (raster.get_ts() in [2, 11]) & (raster.get_iter() == 1):
-            img = process_flow(file, mask=mask)
-            fig = plt.figure()
-            plt.imshow(img)
-            plt.savefig("/outputs/figures/"+file+"_annotated.png")
-        else:
-            pass
-
 
 # ------ Plotting functions ------
 
@@ -224,3 +161,82 @@ def plot(img):
     fig = plt.figure()
     plt.imshow(img)
     plt.show()
+
+
+# -- Graveyard --
+
+# For process:
+    # img_scaled = scale_img(transform_img(read_img(img)))
+    # x, y = get_peak_img(img_scaled)
+    # img_processed = rescale_intensity(img_scaled, (x-30, x+30), (0, 255)).astype("uint8")
+    # img_processed = scale_img(equalize_hist(img_transformed, mask=mask)).astype("uint8")
+    # img_processed = scale_img(img_transformed).astype("uint8")
+
+# # Scale the image
+# def scale_img(img, the_max=255.0):
+#     img_scaled = (img * the_max / img.max())
+#     return img_scaled
+#
+#
+# def transform_img(img):
+#     import numpy as np
+#     img_db = 10 * np.log10(img.astype(float))
+#     img_db_pos = img_db + abs(np.min(img_db))
+#     return img_db_pos
+
+
+# def get_peak_img(img, mask=None):
+#     import numpy as np
+#     from scipy import signal
+#
+#     if mask is not None:
+#         data = img[mask==1].flatten()
+#     else:
+#         data = img.flatten()
+#
+#     n, bins = np.histogram(data, 100)
+#
+#     # trim data
+#     x = np.linspace(np.min(data), np.max(data), num=100)
+#
+#     # find index of minimum between two modes
+#     ind_max = signal.argrelmax(n)
+#     x_max = x[ind_max]
+#     y_max = n[ind_max]
+#
+#     # plot
+#     # plt.hist(data, bins=100, color='y')
+#     # plt.scatter(x_max, y_max, color='b')
+#     # plt.show()
+#
+#     y_main_peak = np.max(y_max)
+#     x_main_peak = x_max[np.argmax(y_max)]
+#
+#     if x_main_peak == 0:
+#         raise Exception("Error x is 0")
+#
+#     return x_main_peak, y_main_peak
+
+# def get_annotated(img, mask=None):
+#     img_annotated = process_flow(img, mask=mask)
+#     return img_annotated.img
+#
+#
+# def process_and_plot(img):
+#     img_annotated = process_flow(img)
+#     img_annotated.plot()
+#
+#
+# def compute_and_save(files, mask):
+#     import numpy as np
+#     from matplotlib import pyplot as plt
+#
+#     for file in files:
+#         raster = read_img(file)
+#         if (raster.get_ts() in [2, 11]) & (raster.get_iter() == 1):
+#             img = process_flow(file, mask=mask)
+#             fig = plt.figure()
+#             plt.imshow(img)
+#             plt.savefig("/outputs/figures/"+file+"_annotated.png")
+#         else:
+#             pass
