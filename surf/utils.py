@@ -34,7 +34,7 @@ class Raster:
         return Raster(img=eq_img, name=self.name)
     
     def equalize(self, mask):
-        from skimage.exposure import equalize_adapthist
+        from skimage.exposure import equalize_hist
         eq_img = equalize_hist(self.img, mask)
         return Raster(img=eq_img, name=self.name)
 
