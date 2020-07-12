@@ -35,7 +35,7 @@ class Raster:
     
     def equalize(self, mask):
         from skimage.exposure import equalize_hist
-        eq_img = equalize_hist(self.img, mask)
+        eq_img = equalize_hist(self.img, mask=mask)
         return Raster(img=eq_img, name=self.name)
 
     def cvt_uint8(self):
