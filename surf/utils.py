@@ -28,9 +28,14 @@ class Raster:
         img_db_pos = img_db + abs(np.min(img_db))
         return Raster(img=img_db_pos, name=self.name)
 
-    def equalize(self):
+    def equalize_a(self):
         from skimage.exposure import equalize_adapthist
         eq_img = equalize_adapthist(self.img)
+        return Raster(img=eq_img, name=self.name)
+    
+    def equalize(self, mask):
+        from skimage.exposure import equalize_adapthist
+        eq_img = equalize_hist(self.img, mask)
         return Raster(img=eq_img, name=self.name)
 
     def cvt_uint8(self):
@@ -109,19 +114,19 @@ def read_img(img_path):
 
 
 # Process image
-def process_img(img):
+def process_img(img, mask):
 
     if isinstance(img, str):
         img = read_img(img)
 
-    img_processed = img.transform().scale(1).equalize().scale(255).cvt_uint8()
+    img_processed = img.transform().scale(1).equalize(mask).scale(255).cvt_uint8()
     return img_processed
 
 
 # Process flow, combine all functions
 def process_flow(img, mask=None, h_threshold=8000, oct_layers=3, oct_nb=3, upright=False, verbose=False,
                  kp_only=False, bright_only=True):
-    img_processed = process_img(img)
+    img_processed = process_img(img, mask)
     img_annotated = img_processed.detect_and_annotate(mask, h_threshold, oct_layers, oct_nb,
                                                       upright, verbose, kp_only, bright_only)
     return img_annotated
