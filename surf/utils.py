@@ -48,7 +48,7 @@ class Raster:
         return Raster(img=new_image, name=self.name)
 
     def detect_and_annotate(self, mask=None, h_threshold=7000, oct_layers=3, oct_nb=3,
-                    upright=False, verbose=False, kp_only=False, bright_only=True):
+                    upright=False, extended=False, verbose=False, kp_only=False, bright_only=True):
         import cv2
         import numpy as np
 
@@ -58,6 +58,7 @@ class Raster:
         surf_engine.setNOctaveLayers(oct_layers)
         surf_engine.setNOctaves(oct_nb)
         surf_engine.setUpright(upright)
+        surf_engine.setExtended(extended)
 
         # Run detection
         kp, des = surf_engine.detectAndCompute(self.img, mask)
@@ -129,7 +130,7 @@ def process_img(img, mask):
 
 
 # Process flow, combine all functions
-def process_flow(img, mask=None, h_threshold=7000, oct_layers=3, oct_nb=3, upright=False, verbose=False,
+def process_flow(img, mask=None, h_threshold=7000, oct_layers=3, oct_nb=3, upright=False, extended=False, verbose=False,
                  kp_only=False, bright_only=True):
     img_processed = process_img(img, mask)
     img_annotated = img_processed.detect_and_annotate(mask, h_threshold, oct_layers, oct_nb,
@@ -137,14 +138,14 @@ def process_flow(img, mask=None, h_threshold=7000, oct_layers=3, oct_nb=3, uprig
     return img_annotated
 
 
-def get_annotated(img, mask=None, h_threshold=7000, oct_layers=3, oct_nb=3, upright=False, verbose=False,
+def get_annotated(img, mask=None, h_threshold=7000, oct_layers=3, oct_nb=3, upright=False, extended=False, verbose=False,
                   kp_only=False, bright_only=True):
     img_annotated = process_flow(img, mask=mask, h_threshold=7000, oct_layers=3, oct_nb=3, upright=False, verbose=False,
                                  kp_only=False, bright_only=True)
     return img_annotated.img
 
 
-def get_kp_lengths(img, mask=None, h_threshold=7000, oct_layers=3, oct_nb=3, upright=False, verbose=False,
+def get_kp_lengths(img, mask=None, h_threshold=7000, oct_layers=3, oct_nb=3, upright=False, extended=False, verbose=False,
                    kp_only=False, bright_only=True):
     img_annotated = process_flow(img, mask=mask, h_threshold=7000, oct_layers=3, oct_nb=3, upright=False, verbose=False,
                                  kp_only=False, bright_only=True)
