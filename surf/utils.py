@@ -42,7 +42,7 @@ class Raster:
         new_image = self.img.astype("uint8")
         return Raster(img=new_image, name=self.name)
 
-    def detect_and_annotate(self, mask=None, h_threshold=8000, oct_layers=3, oct_nb=3,
+    def detect_and_annotate(self, mask=None, h_threshold=7000, oct_layers=3, oct_nb=3,
                     upright=False, verbose=False, kp_only=False, bright_only=True):
         import cv2
         import numpy as np
