@@ -124,7 +124,7 @@ def process_img(img, mask):
 
 
 # Process flow, combine all functions
-def process_flow(img, mask=None, h_threshold=8000, oct_layers=3, oct_nb=3, upright=False, verbose=False,
+def process_flow(img, mask=None, h_threshold=7000, oct_layers=3, oct_nb=3, upright=False, verbose=False,
                  kp_only=False, bright_only=True):
     img_processed = process_img(img, mask)
     img_annotated = img_processed.detect_and_annotate(mask, h_threshold, oct_layers, oct_nb,
