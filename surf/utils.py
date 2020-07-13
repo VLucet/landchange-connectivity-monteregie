@@ -140,14 +140,14 @@ def process_flow(img, mask=None, h_threshold=7000, oct_layers=3, oct_nb=3, uprig
 
 def get_annotated(img, mask=None, h_threshold=7000, oct_layers=3, oct_nb=3, upright=False, extended=False, verbose=False,
                   kp_only=False, bright_only=True):
-    img_annotated = process_flow(img, mask=mask, h_threshold, oct_layers, oct_nb, upright, extended, verbose,
+    img_annotated = process_flow(img, mask, h_threshold, oct_layers, oct_nb, upright, extended, verbose,
                                  kp_only, bright_only)
     return img_annotated.img
 
 
 def get_kp_lengths(img, mask=None, h_threshold=7000, oct_layers=3, oct_nb=3, upright=False, extended=False, verbose=False,
                    kp_only=False, bright_only=True):
-    img_annotated = process_flow(img, mask=mask, h_threshold, oct_layers, oct_nb, upright, extended, verbose,
+    img_annotated = process_flow(img, mask, h_threshold, oct_layers, oct_nb, upright, extended, verbose,
                                  kp_only, bright_only)
     the_length = len(img_annotated.kp)
     return the_length
