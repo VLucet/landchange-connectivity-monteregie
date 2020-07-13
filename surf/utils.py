@@ -38,6 +38,11 @@ class Raster:
         eq_img = equalize_hist(self.img, mask=mask)
         return Raster(img=eq_img, name=self.name)
 
+    def rescale_intensity(self, in_range, out_range=(0, 1)):
+        from skimage.exposure import rescale_intensity
+        new_img = rescale_intensity(self.img, in_range=in_range, out_range=out_range)
+        return Raster(img=new_img, name=self.name)
+
     def cvt_uint8(self):
         new_image = self.img.astype("uint8")
         return Raster(img=new_image, name=self.name)
