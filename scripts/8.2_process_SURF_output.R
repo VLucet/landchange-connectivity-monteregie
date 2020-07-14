@@ -1,4 +1,6 @@
 library(tidyverse)
+library(ggradar)
+
 surf <- read_csv("surf/surf_output.csv") %>% 
   mutate(timestep = timestep*10+1990)
 print(head(surf))
@@ -69,3 +71,20 @@ joined %>%
                      labels = c("Historic", 
                                 "Baseline", 
                                 "RCP 8.5"))
+
+joined %>% 
+  filter(sce != "sce_0", name != "historic run") %>% 
+  group_by(timestep, species, sce) %>% 
+  summarise(kp_nb = mean(kp_nb)) %>% ungroup %>% 
+  pivot_wider(names_from = timestep, values_from = kp_nb) %>% 
+  mutate(diff = ((`2100`-`2010`)/`2010`)*100) %>% 
+  select(-c(`2010`:`2100`)) %>%  
+  pivot_wider(names_from = sce, values_from = diff)-> radar_data
+
+radar_data_2 <- radar_data %>% rename(group = species)
+radar_2 <- ggradar(radar_data_2, centre.y = -20, legend.position = "right",
+                   grid.min = -20, grid.max = 5, grid.mid = 0, 
+                   values.radar = c("-20 %", "0 %", "+2 %"), 
+                   gridline.label.offset	=5, legend.text.size= 12,
+                   group.line.width =0.8,
+                   background.circle.colour	= "#ffffff", group.point.size	=2)
