@@ -406,8 +406,8 @@ ggsave("outputs/figures/final_graph.png", all_facetted)
 library(tidymodels)
 library(patchwork)
 
-urb <- readRDS("test/fit/fit_rs_outcome_rf_urb_2")
-agex <- readRDS("test/fit/fit_rs_outcome_rf_agex_2")
+urb <- readRDS("test/july/fit/fit_rs_outcome_rf_urb_2.RDS")
+agex <- readRDS("test/july/fit/fit_rs_outcome_rf_agex_2.RDS")
 
 # urb_2 <- readRDS("test/fit/fit_rs_rf_urb_2")
 # roc_curve(data = urb[[1]], .pred, truth = outcome_fact) %>% 

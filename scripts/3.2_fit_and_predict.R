@@ -167,9 +167,9 @@ for (response in c("agex","urb")){
                                    response = response))
     
     saveRDS(mod_fit_rs, paste0("data/temp/fit_rs_", R_METHOD, 
-                               "_", response, "_", R_RATIO))
+                               "_", response, "_", R_RATIO, ".RDS"))
     saveRDS(mod_fit_rs_pred_with_outcome, paste0("data/temp/fit_rs_outcome_", R_METHOD, 
-                                                 "_", response, "_", R_RATIO))
+                                                 "_", response, "_", R_RATIO, ".RDS"))
     
     ## TEST ##
     pred <- 

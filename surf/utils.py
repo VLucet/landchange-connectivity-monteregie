@@ -192,6 +192,23 @@ def plot(img):
     plt.show()
 
 
+# ------ Plotting functions ------
+
+
+def get_ts(string):
+    ts = string.split("ts_")[1].split("_")[0]
+    return int(ts)
+
+
+def get_iter(string):
+    it = string.split("it_")[1].split("_")[0]
+    return int(it)
+
+
+def get_spe(string):
+    spe = string.split("_")[-1].split(".")[0]
+    return str(spe)
+
 # -- Graveyard --
 
 # For process:
