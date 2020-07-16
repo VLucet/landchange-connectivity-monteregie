@@ -47,7 +47,7 @@ if (aggregation$ag) {
 key <- read.csv("config/stsim/SecondaryStratum.csv")
 
 # For removing outside NAs
-template <- raster("outputs/reclassed_with_buffer/circuitscape_buffer.tif")
+# template <- raster("outputs/reclassed_with_buffer/circuitscape_buffer.tif")
 
 #-------------------------------------------------------------------------------
 
