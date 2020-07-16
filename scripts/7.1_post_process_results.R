@@ -151,7 +151,8 @@ final_df <- foreach(sce = sce_nb_vec, .combine = dplyr::bind_rows) %dopar% {
       print(head(df2))
       
       final <- df2 %>% 
-        pivot_longer(cols = contains("it"), names_to = "iteration", values_to = "current")
+        pivot_longer(cols = contains("it"), names_to = "iteration", 
+                     values_to = "current")
       
       ts_list[[which(ts_vec == timestep)]] <- final
     }
@@ -206,12 +207,12 @@ foreach(sce = sce_nb_vec) %dopar% {
         print(stack_files)
         assert_that(length(stack_files)==2)
         # Step 2 multiply NS and EW
-        multiplied <- calc(crop(stack(lapply(stack_files, FUN = raster)), 
+        calculated <- calc(crop(stack(lapply(stack_files, FUN = raster)), 
                                 mun_zonal), 
-                           function(x){x[[1]]*x[[2]]})
+                           function(x){x[[1]]+x[[2]]}) # * or + !!!
         the_name <- paste0(sce,"_", timestep, iter, species,".tif")
         print(the_name)
-        writeRaster(multiplied, file.path("outputs/current_density_sum/", the_name), 
+        writeRaster(calculated, file.path("outputs/current_density_sum/", the_name), 
                     overwrite=T)
       }
     }
