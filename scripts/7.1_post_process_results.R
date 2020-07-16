@@ -169,7 +169,7 @@ saveRDS(final_df, "outputs/final/final_df_current_density.RDS")
 
 #-------------------------------------------------------------------------------
 
-n_cores = 10 # very important smaller number of cores!!
+n_cores = 8 # very important smaller number of cores!!
 clust <- makeCluster(n_cores, outfile="log.txt")
 registerDoParallel(cl = clust)
 

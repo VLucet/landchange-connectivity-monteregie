@@ -30,7 +30,7 @@ kp_lengths = workers.map(partial(utils.get_kp_lengths, mask=the_mask, h_threshol
 #kp_lengths = workers.map(utils.get_kp_lengths, list_of_files)
 workers.close()
 
-# ------------ Create CSV ------------ 
+# ------------ Create surf CSV ------------
 
 # Split at ".", get first element, then split at "_"
 splitted = list(map(lambda x: x.split("_"), [i[0] for i in list(map(lambda x: x.split("."), base_files))]))
@@ -59,20 +59,8 @@ def Filter_any(string, substr):
             any(sub in str for sub in substr)]
 
 
-for sce in ["sce_" + str(nb) for nb in range(38, 53)]:
-    for spe in ['BLBR', 'PLCI', 'MAAM', 'URAM', 'RASY']:
-        res_1 = Filter_all(list_of_files, [spe, sce, 'it_1_', 'ts_2_'])
-        res_2 = Filter_all(list_of_files, [spe, sce, 'it_1_', 'ts_11_'])
-        print(res_1, res_2)
-        if len(res_1) is 1 & len(res_2) is 1:
-            start = utils.read_img(res_1[0]).transform().img[the_mask == 1].flatten()
-            end = utils.read_img(res_2[0]).transform().img[the_mask == 1].flatten()
-            fig = plt.figure();
-            plt.hist(start, 1000, alpha=0.5);
-            plt.hist(end, 1000, alpha=0.5);
-            plt.savefig("outputs/figures/" + sce + '_' + spe + "_hists.png");
-        else:
-            raise Exception("Length is not correct")
+
+# ------------ Create hist CSV ------------
 
 temp = []
 final = pd.DataFrame()
@@ -95,10 +83,32 @@ for sce in ["sce_" + str(nb) for nb in range(38, 53)]:
 
 final.to_csv("outputs/final/final_values_output.csv", index=False)
 
-n, bins = np.histogram(data, 100)
+for sce in ["sce_" + str(nb) for nb in range(38, 53)]:
+    for spe in ['BLBR', 'PLCI', 'MAAM', 'URAM', 'RASY']:
+        res_1 = Filter_all(list_of_files, [spe, sce, 'it_1_', 'ts_2_'])
+        res_2 = Filter_all(list_of_files, [spe, sce, 'it_1_', 'ts_11_'])
+        print(res_1, res_2)
+        if len(res_1) is 1 & len(res_2) is 1:
+            start = utils.read_img(res_1[0]).transform().img[the_mask == 1].flatten()
+            end = utils.read_img(res_2[0]).transform().img[the_mask == 1].flatten()
+            fig = plt.figure();
+            plt.hist(start, 1000, alpha=0.5);
+            plt.hist(end, 1000, alpha=0.5);
+            plt.savefig("outputs/figures/" + sce + '_' + spe + "_hists.png");
+        else:
+            raise Exception("Length is not correct")
+
+# ------- Slew of figures -------
 
 subset = Filter_any(Filter_all(list_of_files, ['it_1_']),  ['ts_2_', 'ts_11_'])
 for file in subset:
     fig = plt.figure();
     utils.read_img(file).transform().plot()
     plt.savefig("outputs/figures/" + os.path.basename(file) + "_simple_plot.png");
+
+for file in subset:
+    raster = utils.read_img(file)
+    img = utils.process_flow(file, mask=the_mask)
+    fig = plt.figure()
+    plt.imshow(img.img)
+    plt.savefig("outputs/figures/" + os.path.basename(file) + "_annotated.png")
