@@ -78,13 +78,14 @@ RUN cd /home/rstudio \
   && cd /home/rstudio/opencv \
   && mkdir build \
   && cd build \
-  && cmake -D CMAKE_BUILD_TYPE=RELEASE \
-	-D CMAKE_INSTALL_PREFIX=/usr/local \
-	-D OPENCV_ENABLE_NONFREE=ON \
-	-D OPENCV_EXTRA_MODULES_PATH=/home/rstudio/opencv_contrib/modules \
-	-D PYTHON_EXECUTABLE=/usr/bin/python3 .. \
+  && sudo cmake -D CMAKE_BUILD_TYPE=RELEASE \
+  -D CMAKE_INSTALL_PREFIX=/usr/local \
+  -D OPENCV_ENABLE_NONFREE=ON \
+  -D OPENCV_EXTRA_MODULES_PATH=/home/rstudio/opencv_contrib/modules \
+  -D PYTHON_INCLUDE_DIR=/usr/include/python3.7 \
+  -D PYTHON3_EXECUTABLE=/usr/bin/python3 .. \
 	&& make -j4 \
-	&& make install \
+	&& sudo make install \
 	&& pip3 install numpy matplotlib pandas scikit-image scipy
 
 # Download repo

@@ -8,11 +8,12 @@ import cv2
 
 import multiprocessing as mp
 import pandas as pd
+import numpy as np
 from functools import partial
 
 sys.path.append(".")
 from surf import utils
-
+from matplotlib import pyplot as plt
 # import matplotlib.pyplot as plt
 
 base_path = 'outputs/current_density_sum/'
@@ -46,3 +47,58 @@ results = pd.DataFrame(list(zip([i[1] for i in splitted],
                                 "kp_nb"])
 # print(results.head())
 results.to_csv("surf/surf_output.csv", index=False)
+
+
+def Filter_all(string, substr):
+    return [str for str in string if
+            all(sub in str for sub in substr)]
+
+
+def Filter_any(string, substr):
+    return [str for str in string if
+            any(sub in str for sub in substr)]
+
+
+for sce in ["sce_" + str(nb) for nb in range(38, 53)]:
+    for spe in ['BLBR', 'PLCI', 'MAAM', 'URAM', 'RASY']:
+        res_1 = Filter_all(list_of_files, [spe, sce, 'it_1_', 'ts_2_'])
+        res_2 = Filter_all(list_of_files, [spe, sce, 'it_1_', 'ts_11_'])
+        print(res_1, res_2)
+        if len(res_1) is 1 & len(res_2) is 1:
+            start = utils.read_img(res_1[0]).transform().img[the_mask == 1].flatten()
+            end = utils.read_img(res_2[0]).transform().img[the_mask == 1].flatten()
+            fig = plt.figure();
+            plt.hist(start, 1000, alpha=0.5);
+            plt.hist(end, 1000, alpha=0.5);
+            plt.savefig("outputs/figures/" + sce + '_' + spe + "_hists.png");
+        else:
+            raise Exception("Length is not correct")
+
+temp = []
+final = pd.DataFrame()
+for sce in ["sce_" + str(nb) for nb in range(38, 53)]:
+    for spe in ['BLBR', 'PLCI', 'MAAM', 'URAM', 'RASY']:
+        for iter in [5]: # list(range(1,11))
+            for ts in [2, 11]:
+                subs = [sce, spe, 'it_'+str(iter)+'_', 'ts_'+str(ts)+'_']
+                filtered = Filter_all(list_of_files, subs)
+                print(filtered)
+                if len(filtered) is 1:
+                    data = utils.read_img(filtered[0]).transform().img[the_mask == 1].flatten()
+                    n, bins = np.histogram(data, 1000)
+                    temp = {'sce': sce, 'species': spe, 'iter': iter, 'ts': ts, 'n': n, 'bins': bins[range(0, len(bins)-1)]}
+                    temp_df = pd.DataFrame(temp)
+                    temp_df.head()
+                    final = final.append(temp_df, ignore_index=True)
+                else:
+                    raise Exception("Error with length")
+
+final.to_csv("outputs/final/final_values_output.csv", index=False)
+
+n, bins = np.histogram(data, 100)
+
+subset = Filter_any(Filter_all(list_of_files, ['it_1_']),  ['ts_2_', 'ts_11_'])
+for file in subset:
+    fig = plt.figure();
+    utils.read_img(file).transform().plot()
+    plt.savefig("outputs/figures/" + os.path.basename(file) + "_simple_plot.png");

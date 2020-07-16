@@ -32,6 +32,8 @@ suppressPackageStartupMessages({
   library(RColorBrewer)
   library(scales)
   library(ggradar)
+  library(tidymodels)
+  library(patchwork)
   #library(caret)
 })
 
@@ -230,7 +232,7 @@ ggsave("outputs/figures/connectivit_change_mun.png", change)
 
 #-------------------------------------------------------------------------------
 
-## FUGURE 3 => radar charts
+## FIGURE 3 => radar charts
 
 joined %>% 
   filter(sce != "sce_0", name != "historic run") %>% 
@@ -272,6 +274,56 @@ radar_2 <- ggradar(radar_data_2, centre.y = -20, legend.position = "right",
                    group.line.width =0.8,
                    background.circle.colour	= "#ffffff", group.point.size	=2)
 ggsave("outputs/figures/radar_ggradar.png", radar_2)
+
+#-------------------------------------------------------------------------------
+
+## FIGURE 4 => roc curves
+
+urb <- readRDS("data/temp/fit_rs_outcome_rf_urb_2.RDS")
+agex <- readRDS("dayta/temp/fit_rs_outcome_rf_agex_2.RDS")
+
+# urb_2 <- readRDS("test/fit/fit_rs_rf_urb_2")
+# roc_curve(data = urb[[1]], .pred, truth = outcome_fact) %>% 
+#   autoplot()
+# roc_curve(data = urb[[2]], .pred, truth = outcome_fact) %>% 
+#   autoplot(add=T)
+
+p1 <- bind_rows(urb, .id = "fold") %>% 
+  mutate(fold = factor(fold, levels = as.character(1:10))) %>% 
+  group_by(fold) %>% 
+  roc_curve(.pred, truth = outcome_fact) %>% 
+  autoplot(add=T) +
+  ggtitle(paste("Urbanisation")) +
+  annotate(x = 0.75, y = 0.25, geom="label", 
+           label = as.character(paste("Av AUC = 0.938 +/- 0.002"))) +
+  theme(legend.position = "none") +
+  NULL
+
+p2 <- bind_rows(agex, .id = "fold") %>% 
+  mutate(fold = factor(fold, levels = as.character(1:10))) %>% 
+  group_by(fold) %>% 
+  roc_curve(.pred, truth = outcome_fact) %>% 
+  autoplot(add=T) +
+  ggtitle(paste("Agricultural Expansion")) +
+  annotate(x = 0.75, y = 0.25, geom="label", 
+           label = as.character(paste("Av AUC = 0.929 +/- 0.002"))) +
+  NULL
+
+full = p1 + p2
+ggsave("outputs/figures/double_roc_resample.png", full)
+
+#-------------------------------------------------------------------------------
+
+## FIGURE 5 => histograms
+
+histograms <- read_csv("outputs/final_values_output.csv")
+histograms %>% 
+  mutate(ts = as.factor(ts)) %>% 
+  #filter(sce %in% c('sce_38', 'sce_39', 'sce_40')) %>%  
+  ggplot(aes(x=bins, y=n, group=ts, colour=ts)) + 
+  geom_density(stat='identity', show.legend=F, aes(fill=factor(ts)), alpha=0.3)+
+  #geom_histogram(stat='identity', show.legend=F)# +
+  facet_grid(species~sce)
 
 #-------------------------------------------------------------------------------
 stop("Reviewed so far")
@@ -403,40 +455,7 @@ all_facetted <- ggplot(df_final) +
 ggsave("outputs/figures/final_graph.png", all_facetted)
 
 #-------------------------------------------------------------------------------
-library(tidymodels)
-library(patchwork)
 
-urb <- readRDS("test/july/fit/fit_rs_outcome_rf_urb_2.RDS")
-agex <- readRDS("test/july/fit/fit_rs_outcome_rf_agex_2.RDS")
-
-# urb_2 <- readRDS("test/fit/fit_rs_rf_urb_2")
-# roc_curve(data = urb[[1]], .pred, truth = outcome_fact) %>% 
-#   autoplot()
-# roc_curve(data = urb[[2]], .pred, truth = outcome_fact) %>% 
-#   autoplot(add=T)
-
-p1 <- bind_rows(urb, .id = "fold") %>% 
-  mutate(fold = factor(fold, levels = as.character(1:10))) %>% 
-  group_by(fold) %>% 
-  roc_curve(.pred, truth = outcome_fact) %>% 
-  autoplot(add=T) +
-  ggtitle(paste("Roc Curve for Urbanisation")) +
-  annotate(x = 0.75, y = 0.25, geom="label", 
-           label = as.character(paste("Av AUC = 0.938 +/- 0.002"))) +
-  theme(legend.position = "none") +
-  NULL
-
-p2 <- bind_rows(agex, .id = "fold") %>% 
-  mutate(fold = factor(fold, levels = as.character(1:10))) %>% 
-  group_by(fold) %>% 
-  roc_curve(.pred, truth = outcome_fact) %>% 
-  autoplot(add=T) +
-  ggtitle(paste("Roc Curve for Agricultural Expansion")) +
-  annotate(x = 0.75, y = 0.25, geom="label", 
-           label = as.character(paste("Av AUC = 0.929 +/- 0.002"))) +
-  NULL
-
-p1 + p2
 
 #-------------------------------------------------------------------------------
 # 
