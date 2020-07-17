@@ -50,6 +50,8 @@ results <- read_rds("data/temp/stsim_run_results.RDS") %>%
 results$name <- gsub(results$name, pattern = " \\(.+\\)", replacement = "")
 results$sce <- paste0("sce_",results$scenarioId)
 
+chap_vec = c("none", rep("chap_1", 6), rep("chap_2", 9))
+
 results_clean <- results %>% tibble() %>% 
   mutate(splitted = str_split(name, " \\| ")) %>% 
   mutate(climate = unlist(map(splitted, ~unlist(.x[2]))), 
@@ -316,7 +318,7 @@ ggsave("outputs/figures/double_roc_resample.png", full)
 
 ## FIGURE 5 => histograms
 
-histograms <- read_csv("outputs/final_values_output.csv")
+histograms <- read_csv("outputs/final/final_values_output.csv")
 histograms %>% 
   mutate(ts = as.factor(ts)) %>% 
   #filter(sce %in% c('sce_38', 'sce_39', 'sce_40')) %>%  

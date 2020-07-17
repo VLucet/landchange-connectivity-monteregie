@@ -1,0 +1,52 @@
+---
+title: "Msc Thesis Figures"
+author: "Valentin Lucet"
+date: "17/07/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+suppressPackageStartupMessages({
+  library(raster)
+  library(sf)
+  library(tidyverse)
+  library(ggplot2)
+  library(gganimate)
+  library(transformr)
+  library(animation)
+  library(rasterVis)
+  library(ggmap)
+  library(gifski)
+  library(gtools)
+  library(fmsb)
+  library(RColorBrewer)
+  library(scales)
+  library(ggradar)
+  library(tidymodels)
+  library(patchwork)
+})
+```
+
+#### Data preparation
+
+```{r data prep, include=FALSE}
+sce_dir_vec <- list.files("libraries/stsim/monteregie-conncons-scripted.ssim.output", 
+                          full.names = T)
+mun <- st_read("data/mun/munic_SHP_clean.shp", quiet = TRUE)
+
+results_clean <- read_rds("data/temp/stsim_run_results.RDS") %>% 
+  dplyr::select(scenarioId, name) %>% 
+  mutate(name =  gsub(results$name, pattern = " \\(.+\\)", replacement = "")) %>% 
+  mutate(sce =  paste0("sce_",results$scenarioId)) %>% 
+  mutate(chapter = c(NA, rep("chap_1", 6), rep("chap_2", 9))) %>% 
+  mutate(splitted = str_split(name, " \\| ")) %>% 
+  mutate(climate = unlist(map(splitted, ~unlist(.x[2])))) %>% 
+  mutate(run = unlist(map(splitted, ~unlist(.x[1])))) %>% 
+  dplyr::select(-splitted) 
+```
+
+
+```{r}
+```
+
