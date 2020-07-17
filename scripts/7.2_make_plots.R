@@ -57,6 +57,7 @@ results_clean <- results %>% tibble() %>%
   mutate(climate = unlist(map(splitted, ~unlist(.x[2]))), 
          run = unlist(map(splitted, ~unlist(.x[1])))) %>% 
   dplyr::select(-splitted) 
+
 #-------------------------------------------------------------------------------
 
 # Data prep
