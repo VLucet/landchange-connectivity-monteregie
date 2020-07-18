@@ -2,15 +2,18 @@
 title: "Msc Thesis Figures"
 author: "Valentin Lucet"
 date: "17/07/2020"
-output: 
+output:
+  pdf_document:
+    toc: yes
+    toc_depth: '5'
   html_document:
     df_print: paged
     code_folding: hide
-    toc: true
+    toc: yes
     toc_depth: 5
     toc_float:
-      collapsed: true
-      smooth_scroll: false
+      collapsed: yes
+      smooth_scroll: no
 ---
 
 ```{r setup, include=FALSE}
