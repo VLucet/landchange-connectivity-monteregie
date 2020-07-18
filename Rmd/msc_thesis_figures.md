@@ -1,58 +1,23 @@
----
-title: "Msc Thesis Figures"
-author: "Valentin Lucet"
-date: "17/07/2020"
-output: 
-  html_document:
-    df_print: paged
-    code_folding: hide
-    toc: true
-    toc_depth: 5
-    toc_float:
-      collapsed: true
-      smooth_scroll: false
----
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-# knitr::opts_knit$set(root.dir = normalizePath(".."))
-suppressPackageStartupMessages({
-  library(raster)
-  library(sf)
-  library(tidyverse)
-  library(ggplot2)
-  library(gganimate)
-  library(transformr)
-  library(animation)
-  library(rasterVis)
-  library(ggmap)
-  library(gifski)
-  library(gtools)
-  library(fmsb)
-  library(RColorBrewer)
-  library(scales)
-  library(ggradar)
-  library(tidymodels)
-  library(patchwork)
-})
-```
+Msc Thesis Figures
+================
+Valentin Lucet
+17/07/2020
 
 ### Data prep
 
 #### Cleaning and formatting
 
-We start by preparing the data from the outputs of scripts `7.1` and `8.1`. The results table shown as output is the key to read the figures. 
+We start by preparing the data from the outputs of scripts `7.1` and
+`8.1`. The results table shown as output is the key to read the figures.
 
-```{r data_prep, message=FALSE, warning=FALSE, paged.print=TRUE}
+``` r
 # Results dir + mun shapefile
 mun <- st_read("data/mun/munic_SHP_clean.shp", quiet = TRUE)
 
 # results key
 sce_code_vec <- 
-  as.vector(t(outer(c("BAU-", "R-", "CorPr-", "R-CorPr-", "R(T)-CorPr-"), 
+  as.vector(t(outer(c("BAU-", "R-", "CorPr-", "R-CorPr-", "R(T)-CoPr-"), 
                     c("Hist", "Base", "RCP8"), paste0)))
-sce_code_vec_run <- 
-  rep(c("BAU", "R", "CorPr", "R-CorPr", "R(T)-CorPr"), each=3)
 
 results_clean <- read_rds("data/temp/stsim_run_results.RDS") %>% 
   dplyr::select(scenarioId, name) %>% 
@@ -64,8 +29,7 @@ results_clean <- read_rds("data/temp/stsim_run_results.RDS") %>%
   mutate(run = unlist(map(splitted, ~unlist(.x[1])))) %>% 
   dplyr::select(-splitted) %>% 
   replace_na(list(climate = "none")) %>% 
-  mutate(code = c("Control", sce_code_vec)) %>% 
-  mutate(code_run = c("control", sce_code_vec_run))
+  mutate(code = c("Control", sce_code_vec))
 
 # Final extracted datasets
 df_final <- readRDS("outputs/final/final_df_current_density.RDS") %>%
@@ -120,9 +84,44 @@ surf <- read_csv("surf/surf_output.csv") %>%
 results_clean
 ```
 
+    ##    scenarioId                                                 name    sce
+    ## 1          37                                         historic run sce_37
+    ## 2          38                                   BAU run | historic sce_38
+    ## 3          39                                   BAU run | baseline sce_39
+    ## 4          40                                    BAU run | RCP 8.5 sce_40
+    ## 5          41                             BAU run + ref | historic sce_41
+    ## 6          42                             BAU run + ref | baseline sce_42
+    ## 7          43                              BAU run + ref | RCP 8.5 sce_43
+    ## 8          44                BAU run + corrs protection | historic sce_44
+    ## 9          45                BAU run + corrs protection | baseline sce_45
+    ## 10         46                 BAU run + corrs protection | RCP 8.5 sce_46
+    ## 11         47          BAU run + corrs protection + ref | historic sce_47
+    ## 12         48          BAU run + corrs protection + ref | baseline sce_48
+    ## 13         49           BAU run + corrs protection + ref | RCP 8.5 sce_49
+    ## 14         50 BAU run + corrs protection + ref TARGETED | historic sce_50
+    ## 15         51 BAU run + corrs protection + ref TARGETED | baseline sce_51
+    ## 16         52  BAU run + corrs protection + ref TARGETED | RCP 8.5 sce_52
+    ##    chapter  climate                                       run           code
+    ## 1     none     none                              historic run        Control
+    ## 2     both historic                                   BAU run       BAU-Hist
+    ## 3     both baseline                                   BAU run       BAU-Base
+    ## 4     both  RCP 8.5                                   BAU run       BAU-RCP8
+    ## 5   chap_1 historic                             BAU run + ref         R-Hist
+    ## 6   chap_1 baseline                             BAU run + ref         R-Base
+    ## 7   chap_1  RCP 8.5                             BAU run + ref         R-RCP8
+    ## 8   chap_2 historic                BAU run + corrs protection     CorPr-Hist
+    ## 9   chap_2 baseline                BAU run + corrs protection     CorPr-Base
+    ## 10  chap_2  RCP 8.5                BAU run + corrs protection     CorPr-RCP8
+    ## 11  chap_2 historic          BAU run + corrs protection + ref   R-CorPr-Hist
+    ## 12  chap_2 baseline          BAU run + corrs protection + ref   R-CorPr-Base
+    ## 13  chap_2  RCP 8.5          BAU run + corrs protection + ref   R-CorPr-RCP8
+    ## 14  chap_2 historic BAU run + corrs protection + ref TARGETED R(T)-CoPr-Hist
+    ## 15  chap_2 baseline BAU run + corrs protection + ref TARGETED R(T)-CoPr-Base
+    ## 16  chap_2  RCP 8.5 BAU run + corrs protection + ref TARGETED R(T)-CoPr-RCP8
+
 Preparing for spatial plotting (time consuming).
 
-```{r data_prep_spatial, eval=FALSE, message=FALSE, warning=FALSE}
+``` r
 # Pivoted dataset for mapping
 # df_final_fordiff_pivoted <- df_final %>% 
 #   left_join(results_clean, by = "sce")  %>% 
@@ -143,9 +142,10 @@ Preparing for spatial plotting (time consuming).
 
 #### Set the ggplot theme
 
-We see the ggplot theme to `theme_minimal()` and change the size of some plot elements.
+We see the ggplot theme to `theme_minimal()` and change the size of some
+plot elements.
 
-```{r set_ggplot_theme}
+``` r
 theme_set(theme_minimal())
 theme_update(legend.position = c(0.85, 0.20),
              #legend.justification = c(1, -0.2), # for inside plot
@@ -171,7 +171,7 @@ theme_update(legend.position = c(0.85, 0.20),
 
 #### Historic
 
-```{r fig_1_historic, message=FALSE, out.width="100%", fig.cap="Connectivity change for species through time, 1990-2010"}
+``` r
 fig_1_historic <- joined %>% 
   filter(climate == "none") %>% 
   group_by(scenarioId, species, iteration) %>% 
@@ -189,15 +189,31 @@ fig_1_historic <- joined %>%
        col = "Source") +
   NULL
 fig_1_historic
+```
+
+<div class="figure">
+
+<img src="msc_thesis_figures_files/figure-gfm/fig_1_historic-1.png" alt="Connectivity change for species through time, 1990-2010" width="100%" />
+
+<p class="caption">
+
+Connectivity change for species through time, 1990-2010
+
+</p>
+
+</div>
+
+``` r
 ggsave(fig_1_historic,
        filename = "outputs/figures/connectivity_decrease_x5species_historic.png",
        width = 15, height = 10)
 ```
+
 #### Chap 1
 
 ##### Line graph
 
-```{r figure_1_model_1, out.width="100%", fig.cap="Connectivity change for species through time, 2010-2100", message=FALSE}
+``` r
 fig_1_static_chap_1 <- joined %>% 
   filter(climate != "none", chapter %in% c("none", "both", "chap_1")) %>% 
   group_by(scenarioId, species, iteration) %>% 
@@ -206,7 +222,7 @@ fig_1_static_chap_1 <- joined %>%
   ggplot(aes(x=timestep, y=the_diff, col=climate)) +
   scale_color_manual(values=c('#ffe300', '#ff7a14', "#b31400"), 
                      labels = c("Historic", "Baseline", "RCP 8.5")) +
-  geom_smooth(aes(group = sce, linetype=code_run), alpha=0.5, method="loess") +
+  geom_smooth(aes(group = sce, linetype=run), alpha=0.5, method="loess") +
   scale_linetype_manual(values=c("solid", "twodash")) +
   facet_wrap(~species, scales = "fixed") +
   geom_hline(yintercept = 0, linetype = "dashed", alpha = 0.5) +
@@ -220,6 +236,21 @@ fig_1_static_chap_1 <- joined %>%
   theme(legend.position = c(0.85, 0.15))+
   NULL
 fig_1_static_chap_1
+```
+
+<div class="figure">
+
+<img src="msc_thesis_figures_files/figure-gfm/figure_1_model_1-1.png" alt="Connectivity change for species through time, 2010-2100" width="100%" />
+
+<p class="caption">
+
+Connectivity change for species through time, 2010-2100
+
+</p>
+
+</div>
+
+``` r
 ggsave(fig_1_static_chap_1, 
        filename = "outputs/figures/connectivity_decrease_x5species_chap1.png", 
        width = 15, height = 10)
@@ -227,7 +258,7 @@ ggsave(fig_1_static_chap_1,
 
 ##### Radar Graph
 
-```{r figure_1_model_1_radar, out.width="100%"}
+``` r
 radar_data_chap1 <- joined %>% 
   filter(climate != "none", chapter %in% c("none", "both", "chap_1")) %>% 
   group_by(timestep, species, code) %>% 
@@ -242,17 +273,22 @@ radar_chap1 <-
   ggradar(radar_data_chap1, centre.y = -20, legend.position = "right",
           grid.min = -20, grid.max = 3, grid.mid = 0, 
           values.radar = c("-20 %", "0 %", ""), 
-          gridline.label.offset	=5, legend.text.size= 12,
+          gridline.label.offset =5, legend.text.size= 12,
           group.line.width =0.8,
-          background.circle.colour	= "#ffffff", group.point.size	= 2, 
-          axis.label.size	=3)
+          background.circle.colour  = "#ffffff", group.point.size   = 2, 
+          axis.label.size   =3)
 radar_chap1
+```
+
+<img src="msc_thesis_figures_files/figure-gfm/figure_1_model_1_radar-1.png" width="100%" />
+
+``` r
 ggsave("outputs/figures/radar_ggradar_chap1.png", radar_chap1, width = 15, height = 10)
 ```
 
 #### Chap 2
 
-```{r figure_1_model_2, out.width="100%", fig.cap="Connectivity change for species through time, 2010-2100", message=FALSE}
+``` r
 fig_1_static_chap_2 <- joined %>% 
   filter(climate != "none", chapter %in% c("none", "both", "chap_2")) %>% 
   group_by(scenarioId, species, iteration) %>% 
@@ -261,7 +297,7 @@ fig_1_static_chap_2 <- joined %>%
   ggplot(aes(x=timestep, y=the_diff, col=climate)) +
   scale_color_manual(values=c('#ffe300', '#ff7a14', "#b31400"), 
                      labels = c("Historic", "Baseline", "RCP 8.5")) +
-  geom_smooth(aes(group = sce, linetype=code_run), alpha=0.5, method="loess") +
+  geom_smooth(aes(group = sce, linetype=run), alpha=0.5, method="loess") +
   scale_linetype_manual(values=c("solid", "dashed", "longdash", "dotted")) +
   facet_wrap(~species, scales = "fixed") +
   geom_hline(yintercept = 0, linetype = "dashed", alpha = 0.5) +
@@ -271,18 +307,34 @@ fig_1_static_chap_2 <- joined %>%
        col = "Climate",
        linetype = "Run") +
   guides(col = guide_legend(ncol = 2, nrow=2), 
-         linetype = guide_legend(nrow = 2, ncol=2, 
+         linetype = guide_legend(ncol=1, 
                                  override.aes = list(colour = 'black'))) +
   theme(legend.position = c(0.85, 0.15))+
   NULL
 fig_1_static_chap_2
+```
+
+<div class="figure">
+
+<img src="msc_thesis_figures_files/figure-gfm/figure_1_model_2-1.png" alt="Connectivity change for species through time, 2010-2100" width="100%" />
+
+<p class="caption">
+
+Connectivity change for species through time, 2010-2100
+
+</p>
+
+</div>
+
+``` r
 ggsave(fig_1_static_chap_2, 
        filename = "outputs/figures/connectivity_decrease_x5species_chap2.png", 
        width = 15, height = 10)
 ```
+
 ##### Radar Graph
 
-```{r figure_1_model_2_radar, out.width="100%"}
+``` r
 radar_data_chap2 <- joined %>% 
   filter(climate != "none", chapter %in% c("none", "both","chap_2")) %>% 
   group_by(timestep, species, code) %>% 
@@ -297,19 +349,24 @@ radar_chap2 <-
   ggradar(radar_data_chap2, centre.y = -20, legend.position = "right",
           grid.min = -20, grid.max = 3, grid.mid = 0, 
           values.radar = c("-20 %", "0 %", ""), 
-          gridline.label.offset	=5, legend.text.size= 12,
+          gridline.label.offset =5, legend.text.size= 12,
           group.line.width =0.8,
-          background.circle.colour	= "#ffffff", group.point.size	= 2, 
-          axis.label.size	=3)
+          background.circle.colour  = "#ffffff", group.point.size   = 2, 
+          axis.label.size   =3)
 radar_chap2
+```
+
+<img src="msc_thesis_figures_files/figure-gfm/figure_1_model_2_radar-1.png" width="100%" />
+
+``` r
 ggsave("outputs/figures/radar_ggradar_chap2.png", radar_chap2, width = 15, height = 10)
 ```
 
-#### Both 
+#### Both
 
 ##### Radar Graph
 
-```{r figure_1_model_both_radar, out.width="100%"}
+``` r
 radar_data_all <- joined %>% 
   filter(climate != "none") %>% 
   group_by(timestep, species, code) %>% 
@@ -324,11 +381,16 @@ radar_all <-
   ggradar(radar_data_all, centre.y = -20, legend.position = "right",
           grid.min = -20, grid.max = 3, grid.mid = 0, 
           values.radar = c("-20 %", "0 %", ""), 
-          gridline.label.offset	=5, legend.text.size= 12,
+          gridline.label.offset =5, legend.text.size= 12,
           group.line.width =0.8,
-          background.circle.colour	= "#ffffff", group.point.size	= 2, 
-          axis.label.size	=3)
+          background.circle.colour  = "#ffffff", group.point.size   = 2, 
+          axis.label.size   =3)
 radar_all
+```
+
+<img src="msc_thesis_figures_files/figure-gfm/figure_1_model_both_radar-1.png" width="100%" />
+
+``` r
 ggsave("outputs/figures/radar_ggradar_both.png", radar_all, width = 15, height = 10)
 ```
 
@@ -336,9 +398,9 @@ ggsave("outputs/figures/radar_ggradar_both.png", radar_all, width = 15, height =
 
 Mapping takes a lot of time, not knitted by default
 
-#### Chap 
+#### Chap
 
-```{r figure_2_chap1, eval=FALSE, message=FALSE, warning=FALSE}
+``` r
 # change_1 <- df_final_fordiff_pivoted %>% 
 #   filter(chapter %in% c("none", "both", "chap_1")) %>%
 #   filter(sce %in% c('sce_38', 'sce_39')) %>% 
@@ -355,7 +417,7 @@ Mapping takes a lot of time, not knitted by default
 
 #### Chap 2
 
-```{r figure_2_chap2, eval=FALSE, message=FALSE, warning=FALSE}
+``` r
 # change_2 <- df_final_fordiff_pivoted %>% 
 #   filter(chapter %in% c("none", "both", "chap_2")) %>%
 #   ggplot(aes(fill=change)) +
@@ -371,7 +433,7 @@ Mapping takes a lot of time, not knitted by default
 
 #### Both
 
-```{r figure_2_all, eval=FALSE, message=FALSE, warning=FALSE}
+``` r
 # change_both <- df_final_fordiff_pivoted %>% 
 #   ggplot(aes(fill=change)) +
 #   geom_sf(show.legend=T, lwd = 0)  + 
@@ -388,7 +450,7 @@ Mapping takes a lot of time, not knitted by default
 
 ROC curves from fitting both models, plotting with `patchwork` package.
 
-```{r roc_curves, message=FALSE, warning=FALSE, out.width="100%"}
+``` r
 p1 <- bind_rows(urb, .id = "fold") %>% 
   mutate(Fold = factor(fold, levels = as.character(1:10))) %>% 
   group_by(Fold) %>% 
@@ -413,6 +475,11 @@ p2 <- bind_rows(agex, .id = "fold") %>%
 full = p1 + p2
 
 full
+```
+
+<img src="msc_thesis_figures_files/figure-gfm/roc_curves-1.png" width="100%" />
+
+``` r
 ggsave("outputs/figures/double_roc_resample.png", full)
 ```
 
@@ -420,7 +487,7 @@ ggsave("outputs/figures/double_roc_resample.png", full)
 
 #### Chap 1
 
-```{r hist_plot_1, out.width="100%", out.height="150%"}
+``` r
 hist_plot_1 <- histograms %>% 
   mutate(ts = as.factor(ts)) %>% 
   filter(chapter %in% c('both', 'chap_1')) %>%  
@@ -438,15 +505,17 @@ hist_plot_1 <- histograms %>%
 hist_plot_1
 ```
 
+<img src="msc_thesis_figures_files/figure-gfm/hist_plot_1-1.png" width="100%" height="150%" />
+
 #### Chap 2
 
-```{r hist_plot_2, out.width="100%"}
+``` r
 hist_plot_2 <- histograms %>% 
   mutate(ts = as.factor(ts)) %>% 
   filter(chapter %in% c('both', 'chap_2')) %>%  
   ggplot(aes(x=bins, y=n, group=ts, colour=ts)) + 
   geom_density(stat='identity', show.legend=F, aes(fill=factor(ts)), alpha=0.3)+
-  facet_grid(code~species) +
+  facet_grid(code~species, labeller = label_wrap_gen(width = 5, multi_line = TRUE)) +
   labs(x = "Flow intensity distribution (log)", 
        y = "") +
   theme(strip.text.y = element_text(angle=360, size=10, hjust = 0), 
@@ -458,111 +527,17 @@ hist_plot_2 <- histograms %>%
 hist_plot_2
 ```
 
-### SURF Analysis
+<img src="msc_thesis_figures_files/figure-gfm/hist_plot_2-1.png" width="100%" />
+\#\#\# SURF Analysis
 
 #### Chap1
 
 ##### Linear Graph
 
-```{r surf_1, message=FALSE}
-surf_1 <- surf %>% 
-  mutate(scenario = as.factor(scenario)) %>% 
-  filter(climate != "none", chapter %in% c("none", "both", "chap_1")) %>% 
-  filter(climate != "none") %>% 
-  group_by(scenario, species, iter) %>% 
-  group_modify(~mutate(.x , baseline = subset(.x, timestep == 2010)$kp_nb, 
-                       the_diff = ((kp_nb-baseline)/baseline)*100 )) %>% ungroup %>% 
-  ggplot(aes(x = timestep, y = the_diff, color=climate)) +
-  geom_smooth(aes(group = scenario, linetype=code_run), alpha=0.2, method="loess")+
-  #geom_point(aes(group=scenario), alpha= 0.05, size = 0.5)+
-  facet_wrap(~species, scales = "free")+
-  scale_color_manual(values=c('#ffe300', '#ff7a14', "#b31400"), 
-                     labels = c("Historic", "Baseline", "RCP 8.5")) +
-  labs(y = "Change in nb of Keypoints detected (%)",
-       x = "Year",
-       col = "Climate",
-       linetype = "Run") +
-  guides(col = guide_legend(ncol = 2, nrow=2), 
-         linetype = guide_legend(nrow=1, override.aes = list(colour = 'black'))) +
-  NULL
-surf_1
-```
-
 ##### Radar Graph
-
-```{r surf_radar_1, message=FALSE}
-surf_radar_data_1 <- surf %>% 
-  filter(climate != "none", chapter %in% c("none", "both","chap_1")) %>% 
-  filter(sce != "sce_0", name != "historic run") %>% 
-  group_by(timestep, species, code) %>% 
-  summarise(kp_nb = mean(kp_nb)) %>% ungroup %>% 
-  pivot_wider(names_from = timestep, values_from = kp_nb) %>% 
-  mutate(diff = ((`2100`-`2010`)/`2010`)*100) %>% 
-  select(-c(`2010`:`2100`)) %>%  
-  pivot_wider(names_from = code, values_from = diff) %>% 
-  rename(group = species)
-
-surf_radar_1 <- 
-  ggradar(surf_radar_data_1, centre.y = -60, legend.position = "right",
-          grid.min = -60, grid.max = 5, grid.mid = 0, 
-          values.radar = c("-60 %", "0 %", ""), 
-          gridline.label.offset	=22, legend.text.size= 12,
-          group.line.width =0.8,
-          background.circle.colour	= "#ffffff", group.point.size	= 2, 
-          axis.label.size	=3)
-surf_radar_1
-```
 
 #### Chap 2
 
 ##### Linear Graph
 
-```{r surf_2, message=FALSE}
-surf_2 <- surf %>% 
-  mutate(scenario = as.factor(scenario)) %>% 
-  filter(climate != "none", chapter %in% c("none", "both", "chap_2")) %>% 
-  filter(climate != "none") %>% 
-  group_by(scenario, species, iter) %>% 
-  group_modify(~mutate(.x , baseline = subset(.x, timestep == 2010)$kp_nb, 
-                       the_diff = ((kp_nb-baseline)/baseline)*100 )) %>% ungroup %>% 
-  ggplot(aes(x = timestep, y = the_diff, color=climate)) +
-  geom_smooth(aes(group = scenario, linetype=code_run), alpha=0.2, method="loess")+
-  #geom_point(aes(group=scenario), alpha= 0.05, size = 0.5)+
-  facet_wrap(~species, scales = "free")+
-  scale_color_manual(values=c('#ffe300', '#ff7a14', "#b31400"), 
-                     labels = c("Historic", "Baseline", "RCP 8.5")) +
-  labs(y = "Change in nb of Keypoints detected (%)",
-       x = "Year",
-       col = "Climate",
-       linetype = "Run") +
-  guides(col = guide_legend(ncol = 2, nrow=2), 
-         linetype = guide_legend(nrow=2, ncol=2, 
-                                 override.aes = list(colour = 'black'))) +
-  NULL
-surf_2
-```
-
 ##### Radar Graph
-
-```{r surf_radar_2, message=FALSE}
-surf_radar_data_2 <- surf %>% 
-  filter(climate != "none", chapter %in% c("none", "both","chap_2")) %>% 
-  filter(sce != "sce_0", name != "historic run") %>% 
-  group_by(timestep, species, code) %>% 
-  summarise(kp_nb = mean(kp_nb)) %>% ungroup %>% 
-  pivot_wider(names_from = timestep, values_from = kp_nb) %>% 
-  mutate(diff = ((`2100`-`2010`)/`2010`)*100) %>% 
-  select(-c(`2010`:`2100`)) %>%  
-  pivot_wider(names_from = code, values_from = diff) %>% 
-  rename(group = species)
-
-surf_radar_2 <- 
-  ggradar(surf_radar_data_2, centre.y = -60, legend.position = "right",
-          grid.min = -60, grid.max = 5, grid.mid = 0, 
-          values.radar = c("-60 %", "0 %", ""), 
-          gridline.label.offset	=22, legend.text.size= 12,
-          group.line.width =0.8,
-          background.circle.colour	= "#ffffff", group.point.size	= 2, 
-          axis.label.size	=3)
-surf_radar_2
-```
