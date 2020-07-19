@@ -287,21 +287,19 @@ of some plot elements.
 \begin{Highlighting}[]
 \KeywordTok{theme_set}\NormalTok{(}\KeywordTok{theme_minimal}\NormalTok{())}
 \KeywordTok{theme_update}\NormalTok{(}\DataTypeTok{legend.position =} \KeywordTok{c}\NormalTok{(}\FloatTok{0.85}\NormalTok{, }\FloatTok{0.20}\NormalTok{),}
-             \CommentTok{#legend.justification = c(1, -0.2), # for inside plot}
-             \CommentTok{#legend.position = "none",}
              \DataTypeTok{legend.box =} \StringTok{"vertical"}\NormalTok{,}
              \DataTypeTok{legend.background =} \KeywordTok{element_blank}\NormalTok{(),}
              \DataTypeTok{legend.box.background =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{colour =} \StringTok{"black"}\NormalTok{),}
              \DataTypeTok{panel.border =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{fill =} \OtherTok{NA}\NormalTok{),}
-             \DataTypeTok{legend.title =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{size =} \DecValTok{10}\NormalTok{),}
-             \DataTypeTok{legend.text =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{size =} \DecValTok{8}\NormalTok{),}
+             \DataTypeTok{legend.title =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{size =} \DecValTok{15}\NormalTok{),}
+             \DataTypeTok{legend.text =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{size =} \DecValTok{13}\NormalTok{),}
              \DataTypeTok{plot.title =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{size=}\DecValTok{20}\NormalTok{),}
              \DataTypeTok{plot.subtitle =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{size=}\DecValTok{20}\NormalTok{),}
              \DataTypeTok{axis.text.x =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{angle=}\DecValTok{65}\NormalTok{, }\DataTypeTok{vjust=}\FloatTok{0.6}\NormalTok{, }\DataTypeTok{size =}\DecValTok{13}\NormalTok{),}
-             \DataTypeTok{axis.text.y =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{size =}\DecValTok{10}\NormalTok{),}
-             \DataTypeTok{strip.text.x =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{size =} \DecValTok{10}\NormalTok{),}
-             \DataTypeTok{strip.text.y =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{size =} \DecValTok{10}\NormalTok{),}
-             \DataTypeTok{axis.title=}\KeywordTok{element_text}\NormalTok{(}\DataTypeTok{size=}\DecValTok{15}\NormalTok{))}
+             \DataTypeTok{axis.text.y =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{size =}\DecValTok{13}\NormalTok{),}
+             \DataTypeTok{strip.text.x =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{size =} \DecValTok{13}\NormalTok{),}
+             \DataTypeTok{strip.text.y =} \KeywordTok{element_text}\NormalTok{(}\DecValTok{13}\NormalTok{),}
+             \DataTypeTok{axis.title=}\KeywordTok{element_text}\NormalTok{(}\DataTypeTok{size=}\DecValTok{18}\NormalTok{))}
 \end{Highlighting}
 \end{Shaded}
 
@@ -328,7 +326,7 @@ change}\label{mean-current-flow-change}}
 \StringTok{  }\KeywordTok{geom_smooth}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{group =}\NormalTok{ sce), }\DataTypeTok{method =} \StringTok{"glm"}\NormalTok{, }\DataTypeTok{se=}\OtherTok{FALSE}\NormalTok{) }\OperatorTok{+}
 \StringTok{  }\KeywordTok{scale_linetype_manual}\NormalTok{(}\DataTypeTok{values =} \KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{5}\NormalTok{))}\OperatorTok{+}
 \StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{group =}\NormalTok{ sce)) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{facet_wrap}\NormalTok{(}\OperatorTok{~}\NormalTok{species, }\DataTypeTok{scales =} \StringTok{"free"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{facet_wrap}\NormalTok{(}\OperatorTok{~}\NormalTok{species, }\DataTypeTok{scales =} \StringTok{"fixed"}\NormalTok{) }\OperatorTok{+}
 \StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{y =} \StringTok{"Current flow (% Change)"}\NormalTok{,}
        \DataTypeTok{x =} \StringTok{"Year"}\NormalTok{,}
        \DataTypeTok{col =} \StringTok{"Source"}\NormalTok{) }\OperatorTok{+}
@@ -336,6 +334,82 @@ change}\label{mean-current-flow-change}}
 \NormalTok{fig_}\DecValTok{1}\NormalTok{_historic}
 \end{Highlighting}
 \end{Shaded}
+
+\begin{verbatim}
+## Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): font family
+## '13' not found in PostScript font database
+
+## Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): font family
+## '13' not found in PostScript font database
+
+## Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): font family
+## '13' not found in PostScript font database
+
+## Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): font family
+## '13' not found in PostScript font database
+
+## Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): font family
+## '13' not found in PostScript font database
+
+## Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): font family
+## '13' not found in PostScript font database
+
+## Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): font family
+## '13' not found in PostScript font database
+
+## Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): font family
+## '13' not found in PostScript font database
+
+## Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): font family
+## '13' not found in PostScript font database
+
+## Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): font family
+## '13' not found in PostScript font database
+
+## Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): font family
+## '13' not found in PostScript font database
+
+## Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): font family
+## '13' not found in PostScript font database
+
+## Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): font family
+## '13' not found in PostScript font database
+
+## Warning in grid.Call(C_stringMetric, as.graphicsAnnot(x$label)): font family
+## '13' not found in PostScript font database
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+## family '13' not found in PostScript font database
+
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+## family '13' not found in PostScript font database
+
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+## family '13' not found in PostScript font database
+
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+## family '13' not found in PostScript font database
+
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+## family '13' not found in PostScript font database
+
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+## family '13' not found in PostScript font database
+
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+## family '13' not found in PostScript font database
+
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+## family '13' not found in PostScript font database
+
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+## family '13' not found in PostScript font database
+
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+## family '13' not found in PostScript font database
+\end{verbatim}
 
 \begin{figure}
 \includegraphics[width=1\linewidth]{msc_thesis_figures_files/figure-latex/fig_1_historic-1} \caption{Connectivity change for species through time, 1990-2010}\label{fig:fig_1_historic}
@@ -345,7 +419,7 @@ change}\label{mean-current-flow-change}}
 \begin{Highlighting}[]
 \KeywordTok{ggsave}\NormalTok{(fig_}\DecValTok{1}\NormalTok{_historic,}
        \DataTypeTok{filename =} \StringTok{"outputs/figures/connectivity_decrease_x5species_historic.png"}\NormalTok{,}
-       \DataTypeTok{width =} \DecValTok{15}\NormalTok{, }\DataTypeTok{height =} \DecValTok{10}\NormalTok{)}
+       \DataTypeTok{width =} \DecValTok{15}\NormalTok{, }\DataTypeTok{height =} \DecValTok{15}\NormalTok{, }\DataTypeTok{dpi =} \DecValTok{500}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -382,6 +456,41 @@ change}\label{mean-current-flow-change}}
 \end{Highlighting}
 \end{Shaded}
 
+\begin{verbatim}
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+## family '13' not found in PostScript font database
+
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+## family '13' not found in PostScript font database
+
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+## family '13' not found in PostScript font database
+
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+## family '13' not found in PostScript font database
+
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+## family '13' not found in PostScript font database
+
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+## family '13' not found in PostScript font database
+
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+## family '13' not found in PostScript font database
+
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+## family '13' not found in PostScript font database
+
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+## family '13' not found in PostScript font database
+
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+## family '13' not found in PostScript font database
+
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+## family '13' not found in PostScript font database
+\end{verbatim}
+
 \begin{figure}
 \includegraphics[width=1\linewidth]{msc_thesis_figures_files/figure-latex/figure_1_model_1-1} \caption{Connectivity change for species through time, 2010-2100}\label{fig:figure_1_model_1}
 \end{figure}
@@ -390,7 +499,7 @@ change}\label{mean-current-flow-change}}
 \begin{Highlighting}[]
 \KeywordTok{ggsave}\NormalTok{(fig_}\DecValTok{1}\NormalTok{_static_chap_}\DecValTok{1}\NormalTok{, }
        \DataTypeTok{filename =} \StringTok{"outputs/figures/connectivity_decrease_x5species_chap1.png"}\NormalTok{, }
-       \DataTypeTok{width =} \DecValTok{15}\NormalTok{, }\DataTypeTok{height =} \DecValTok{10}\NormalTok{)}
+       \DataTypeTok{width =} \DecValTok{15}\NormalTok{, }\DataTypeTok{height =} \DecValTok{15}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -416,7 +525,7 @@ change}\label{mean-current-flow-change}}
           \DataTypeTok{gridline.label.offset =}\DecValTok{5}\NormalTok{, }\DataTypeTok{legend.text.size=} \DecValTok{12}\NormalTok{,}
           \DataTypeTok{group.line.width =}\FloatTok{0.8}\NormalTok{,}
           \DataTypeTok{background.circle.colour  =} \StringTok{"#ffffff"}\NormalTok{, }\DataTypeTok{group.point.size   =} \DecValTok{2}\NormalTok{, }
-          \DataTypeTok{axis.label.size   =}\DecValTok{3}\NormalTok{)}
+          \DataTypeTok{axis.label.size=}\DecValTok{5}\NormalTok{)}
 \NormalTok{radar_chap1}
 \end{Highlighting}
 \end{Shaded}
@@ -460,6 +569,41 @@ change}\label{mean-current-flow-change}}
 \end{Highlighting}
 \end{Shaded}
 
+\begin{verbatim}
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+## family '13' not found in PostScript font database
+
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+## family '13' not found in PostScript font database
+
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+## family '13' not found in PostScript font database
+
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+## family '13' not found in PostScript font database
+
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+## family '13' not found in PostScript font database
+
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+## family '13' not found in PostScript font database
+
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+## family '13' not found in PostScript font database
+
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+## family '13' not found in PostScript font database
+
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+## family '13' not found in PostScript font database
+
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+## family '13' not found in PostScript font database
+
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+## family '13' not found in PostScript font database
+\end{verbatim}
+
 \begin{figure}
 \includegraphics[width=1\linewidth]{msc_thesis_figures_files/figure-latex/figure_1_model_2-1} \caption{Connectivity change for species through time, 2010-2100}\label{fig:figure_1_model_2}
 \end{figure}
@@ -468,7 +612,7 @@ change}\label{mean-current-flow-change}}
 \begin{Highlighting}[]
 \KeywordTok{ggsave}\NormalTok{(fig_}\DecValTok{1}\NormalTok{_static_chap_}\DecValTok{2}\NormalTok{, }
        \DataTypeTok{filename =} \StringTok{"outputs/figures/connectivity_decrease_x5species_chap2.png"}\NormalTok{, }
-       \DataTypeTok{width =} \DecValTok{15}\NormalTok{, }\DataTypeTok{height =} \DecValTok{10}\NormalTok{)}
+       \DataTypeTok{width =} \DecValTok{15}\NormalTok{, }\DataTypeTok{height =} \DecValTok{15}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -494,7 +638,7 @@ change}\label{mean-current-flow-change}}
           \DataTypeTok{gridline.label.offset =}\DecValTok{5}\NormalTok{, }\DataTypeTok{legend.text.size=} \DecValTok{12}\NormalTok{,}
           \DataTypeTok{group.line.width =}\FloatTok{0.8}\NormalTok{,}
           \DataTypeTok{background.circle.colour  =} \StringTok{"#ffffff"}\NormalTok{, }\DataTypeTok{group.point.size   =} \DecValTok{2}\NormalTok{, }
-          \DataTypeTok{axis.label.size   =}\DecValTok{3}\NormalTok{)}
+          \DataTypeTok{axis.label.size=}\DecValTok{5}\NormalTok{)}
 \NormalTok{radar_chap2}
 \end{Highlighting}
 \end{Shaded}
@@ -532,7 +676,7 @@ change}\label{mean-current-flow-change}}
           \DataTypeTok{gridline.label.offset =}\DecValTok{5}\NormalTok{, }\DataTypeTok{legend.text.size=} \DecValTok{12}\NormalTok{,}
           \DataTypeTok{group.line.width =}\FloatTok{0.8}\NormalTok{,}
           \DataTypeTok{background.circle.colour  =} \StringTok{"#ffffff"}\NormalTok{, }\DataTypeTok{group.point.size   =} \DecValTok{2}\NormalTok{, }
-          \DataTypeTok{axis.label.size   =}\DecValTok{3}\NormalTok{)}
+          \DataTypeTok{axis.label.size=}\DecValTok{5}\NormalTok{)}
 \NormalTok{radar_all}
 \end{Highlighting}
 \end{Shaded}
@@ -656,52 +800,8 @@ package.
 \hypertarget{chap-1-1}{%
 \paragraph{Chap 1}\label{chap-1-1}}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{hist_plot_}\DecValTok{1}\NormalTok{ <-}\StringTok{ }\NormalTok{histograms }\OperatorTok{%>%}\StringTok{ }
-\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{ts =} \KeywordTok{as.factor}\NormalTok{(ts)) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{  }\KeywordTok{filter}\NormalTok{(chapter }\OperatorTok{%in%}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{'both'}\NormalTok{, }\StringTok{'chap_1'}\NormalTok{)) }\OperatorTok{%>%}\StringTok{  }
-\StringTok{  }\KeywordTok{ggplot}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{bins, }\DataTypeTok{y=}\NormalTok{n, }\DataTypeTok{group=}\NormalTok{ts, }\DataTypeTok{colour=}\NormalTok{ts)) }\OperatorTok{+}\StringTok{ }
-\StringTok{  }\KeywordTok{geom_density}\NormalTok{(}\DataTypeTok{stat=}\StringTok{'identity'}\NormalTok{, }\DataTypeTok{show.legend=}\NormalTok{F, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{fill=}\KeywordTok{factor}\NormalTok{(ts)), }\DataTypeTok{alpha=}\FloatTok{0.3}\NormalTok{)}\OperatorTok{+}
-\StringTok{  }\KeywordTok{facet_grid}\NormalTok{(code}\OperatorTok{~}\NormalTok{species) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x =} \StringTok{"Flow intensity distribution (log)"}\NormalTok{, }
-       \DataTypeTok{y =} \StringTok{""}\NormalTok{)}\OperatorTok{+}
-\StringTok{  }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{strip.text.y =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{angle=}\DecValTok{360}\NormalTok{, }\DataTypeTok{size=}\DecValTok{10}\NormalTok{, }\DataTypeTok{hjust =} \DecValTok{0}\NormalTok{), }
-        \DataTypeTok{axis.text.x=}\KeywordTok{element_blank}\NormalTok{(),}
-        \DataTypeTok{axis.ticks.x=}\KeywordTok{element_blank}\NormalTok{(), }
-        \DataTypeTok{axis.text.y.left =} \KeywordTok{element_blank}\NormalTok{(),}
-        \DataTypeTok{axis.ticks.y.left =} \KeywordTok{element_blank}\NormalTok{()) }\OperatorTok{+}
-\StringTok{  }\OtherTok{NULL}
-\NormalTok{hist_plot_}\DecValTok{1}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics[width=1\linewidth,height=1.5\textheight]{msc_thesis_figures_files/figure-latex/hist_plot_1-1}
-
 \hypertarget{chap-2-2}{%
 \paragraph{Chap 2}\label{chap-2-2}}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{hist_plot_}\DecValTok{2}\NormalTok{ <-}\StringTok{ }\NormalTok{histograms }\OperatorTok{%>%}\StringTok{ }
-\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{ts =} \KeywordTok{as.factor}\NormalTok{(ts)) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{  }\KeywordTok{filter}\NormalTok{(chapter }\OperatorTok{%in%}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{'both'}\NormalTok{, }\StringTok{'chap_2'}\NormalTok{)) }\OperatorTok{%>%}\StringTok{  }
-\StringTok{  }\KeywordTok{ggplot}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{bins, }\DataTypeTok{y=}\NormalTok{n, }\DataTypeTok{group=}\NormalTok{ts, }\DataTypeTok{colour=}\NormalTok{ts)) }\OperatorTok{+}\StringTok{ }
-\StringTok{  }\KeywordTok{geom_density}\NormalTok{(}\DataTypeTok{stat=}\StringTok{'identity'}\NormalTok{, }\DataTypeTok{show.legend=}\NormalTok{F, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{fill=}\KeywordTok{factor}\NormalTok{(ts)), }\DataTypeTok{alpha=}\FloatTok{0.3}\NormalTok{)}\OperatorTok{+}
-\StringTok{  }\KeywordTok{facet_grid}\NormalTok{(code}\OperatorTok{~}\NormalTok{species) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x =} \StringTok{"Flow intensity distribution (log)"}\NormalTok{, }
-       \DataTypeTok{y =} \StringTok{""}\NormalTok{) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{strip.text.y =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{angle=}\DecValTok{360}\NormalTok{, }\DataTypeTok{size=}\DecValTok{10}\NormalTok{, }\DataTypeTok{hjust =} \DecValTok{0}\NormalTok{), }
-        \DataTypeTok{axis.text.x=}\KeywordTok{element_blank}\NormalTok{(),}
-        \DataTypeTok{axis.ticks.x=}\KeywordTok{element_blank}\NormalTok{(), }
-        \DataTypeTok{axis.text.y.left =} \KeywordTok{element_blank}\NormalTok{(),}
-        \DataTypeTok{axis.ticks.y.left =} \KeywordTok{element_blank}\NormalTok{()) }\OperatorTok{+}
-\StringTok{  }\OtherTok{NULL}
-\NormalTok{hist_plot_}\DecValTok{2}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics[width=1\linewidth]{msc_thesis_figures_files/figure-latex/hist_plot_2-1}
 
 \hypertarget{surf-analysis}{%
 \subsubsection{SURF Analysis}\label{surf-analysis}}
@@ -724,7 +824,7 @@ package.
 \StringTok{  }\KeywordTok{ggplot}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ timestep, }\DataTypeTok{y =}\NormalTok{ the_diff, }\DataTypeTok{color=}\NormalTok{climate)) }\OperatorTok{+}
 \StringTok{  }\KeywordTok{geom_smooth}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{group =}\NormalTok{ scenario, }\DataTypeTok{linetype=}\NormalTok{code_run), }\DataTypeTok{alpha=}\FloatTok{0.2}\NormalTok{, }\DataTypeTok{method=}\StringTok{"loess"}\NormalTok{)}\OperatorTok{+}
 \StringTok{  }\CommentTok{#geom_point(aes(group=scenario), alpha= 0.05, size = 0.5)+}
-\StringTok{  }\KeywordTok{facet_wrap}\NormalTok{(}\OperatorTok{~}\NormalTok{species, }\DataTypeTok{scales =} \StringTok{"free"}\NormalTok{)}\OperatorTok{+}
+\StringTok{  }\KeywordTok{facet_wrap}\NormalTok{(}\OperatorTok{~}\NormalTok{species, }\DataTypeTok{scales =} \StringTok{"fixed"}\NormalTok{)}\OperatorTok{+}
 \StringTok{  }\KeywordTok{scale_color_manual}\NormalTok{(}\DataTypeTok{values=}\KeywordTok{c}\NormalTok{(}\StringTok{'#ffe300'}\NormalTok{, }\StringTok{'#ff7a14'}\NormalTok{, }\StringTok{"#b31400"}\NormalTok{), }
                      \DataTypeTok{labels =} \KeywordTok{c}\NormalTok{(}\StringTok{"Historic"}\NormalTok{, }\StringTok{"Baseline"}\NormalTok{, }\StringTok{"RCP 8.5"}\NormalTok{)) }\OperatorTok{+}
 \StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{y =} \StringTok{"Change in nb of Keypoints detected (%)"}\NormalTok{,}
@@ -738,7 +838,48 @@ package.
 \end{Highlighting}
 \end{Shaded}
 
+\begin{verbatim}
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+## family '13' not found in PostScript font database
+
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+## family '13' not found in PostScript font database
+
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+## family '13' not found in PostScript font database
+
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+## family '13' not found in PostScript font database
+
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+## family '13' not found in PostScript font database
+
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+## family '13' not found in PostScript font database
+
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+## family '13' not found in PostScript font database
+
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+## family '13' not found in PostScript font database
+
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+## family '13' not found in PostScript font database
+
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+## family '13' not found in PostScript font database
+
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+## family '13' not found in PostScript font database
+\end{verbatim}
+
 \includegraphics{msc_thesis_figures_files/figure-latex/surf_1-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggsave}\NormalTok{(}\StringTok{"outputs/figures/surf_chap1.png"}\NormalTok{, surf_}\DecValTok{1}\NormalTok{, }\DataTypeTok{width =} \DecValTok{15}\NormalTok{, }\DataTypeTok{height =} \DecValTok{15}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
 \hypertarget{radar-graph-3}{%
 \subparagraph{Radar Graph}\label{radar-graph-3}}
@@ -763,12 +904,18 @@ package.
           \DataTypeTok{gridline.label.offset =}\DecValTok{22}\NormalTok{, }\DataTypeTok{legend.text.size=} \DecValTok{12}\NormalTok{,}
           \DataTypeTok{group.line.width =}\FloatTok{0.8}\NormalTok{,}
           \DataTypeTok{background.circle.colour  =} \StringTok{"#ffffff"}\NormalTok{, }\DataTypeTok{group.point.size   =} \DecValTok{2}\NormalTok{, }
-          \DataTypeTok{axis.label.size   =}\DecValTok{3}\NormalTok{)}
+          \DataTypeTok{axis.label.size=}\DecValTok{5}\NormalTok{)}
 \NormalTok{surf_radar_}\DecValTok{1}
 \end{Highlighting}
 \end{Shaded}
 
 \includegraphics{msc_thesis_figures_files/figure-latex/surf_radar_1-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggsave}\NormalTok{(}\StringTok{"outputs/figures/surf_radar_chap1.png"}\NormalTok{, surf_radar_}\DecValTok{1}\NormalTok{, }\DataTypeTok{width =} \DecValTok{15}\NormalTok{, }\DataTypeTok{height =} \DecValTok{10}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
 \hypertarget{chap-2-3}{%
 \paragraph{Chap 2}\label{chap-2-3}}
@@ -788,7 +935,7 @@ package.
 \StringTok{  }\KeywordTok{ggplot}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ timestep, }\DataTypeTok{y =}\NormalTok{ the_diff, }\DataTypeTok{color=}\NormalTok{climate)) }\OperatorTok{+}
 \StringTok{  }\KeywordTok{geom_smooth}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{group =}\NormalTok{ scenario, }\DataTypeTok{linetype=}\NormalTok{code_run), }\DataTypeTok{alpha=}\FloatTok{0.2}\NormalTok{, }\DataTypeTok{method=}\StringTok{"loess"}\NormalTok{)}\OperatorTok{+}
 \StringTok{  }\CommentTok{#geom_point(aes(group=scenario), alpha= 0.05, size = 0.5)+}
-\StringTok{  }\KeywordTok{facet_wrap}\NormalTok{(}\OperatorTok{~}\NormalTok{species, }\DataTypeTok{scales =} \StringTok{"free"}\NormalTok{)}\OperatorTok{+}
+\StringTok{  }\KeywordTok{facet_wrap}\NormalTok{(}\OperatorTok{~}\NormalTok{species, }\DataTypeTok{scales =} \StringTok{"fixed"}\NormalTok{)}\OperatorTok{+}
 \StringTok{  }\KeywordTok{scale_color_manual}\NormalTok{(}\DataTypeTok{values=}\KeywordTok{c}\NormalTok{(}\StringTok{'#ffe300'}\NormalTok{, }\StringTok{'#ff7a14'}\NormalTok{, }\StringTok{"#b31400"}\NormalTok{), }
                      \DataTypeTok{labels =} \KeywordTok{c}\NormalTok{(}\StringTok{"Historic"}\NormalTok{, }\StringTok{"Baseline"}\NormalTok{, }\StringTok{"RCP 8.5"}\NormalTok{)) }\OperatorTok{+}
 \StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{y =} \StringTok{"Change in nb of Keypoints detected (%)"}\NormalTok{,}
@@ -803,7 +950,48 @@ package.
 \end{Highlighting}
 \end{Shaded}
 
+\begin{verbatim}
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+## family '13' not found in PostScript font database
+
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+## family '13' not found in PostScript font database
+
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+## family '13' not found in PostScript font database
+
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+## family '13' not found in PostScript font database
+
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+## family '13' not found in PostScript font database
+
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+## family '13' not found in PostScript font database
+
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+## family '13' not found in PostScript font database
+
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+## family '13' not found in PostScript font database
+
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+## family '13' not found in PostScript font database
+
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+## family '13' not found in PostScript font database
+
+## Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, : font
+## family '13' not found in PostScript font database
+\end{verbatim}
+
 \includegraphics{msc_thesis_figures_files/figure-latex/surf_2-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggsave}\NormalTok{(}\StringTok{"outputs/figures/surf_chap2.png"}\NormalTok{, surf_}\DecValTok{2}\NormalTok{, }\DataTypeTok{width =} \DecValTok{15}\NormalTok{, }\DataTypeTok{height =} \DecValTok{15}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
 \hypertarget{radar-graph-4}{%
 \subparagraph{Radar Graph}\label{radar-graph-4}}
@@ -828,11 +1016,17 @@ package.
           \DataTypeTok{gridline.label.offset =}\DecValTok{22}\NormalTok{, }\DataTypeTok{legend.text.size=} \DecValTok{12}\NormalTok{,}
           \DataTypeTok{group.line.width =}\FloatTok{0.8}\NormalTok{,}
           \DataTypeTok{background.circle.colour  =} \StringTok{"#ffffff"}\NormalTok{, }\DataTypeTok{group.point.size   =} \DecValTok{2}\NormalTok{, }
-          \DataTypeTok{axis.label.size   =}\DecValTok{3}\NormalTok{)}
+          \DataTypeTok{axis.label.size=}\DecValTok{5}\NormalTok{)}
 \NormalTok{surf_radar_}\DecValTok{2}
 \end{Highlighting}
 \end{Shaded}
 
 \includegraphics{msc_thesis_figures_files/figure-latex/surf_radar_2-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggsave}\NormalTok{(}\StringTok{"outputs/figures/surf_radar_chap2.png"}\NormalTok{, surf_radar_}\DecValTok{2}\NormalTok{, }\DataTypeTok{width =} \DecValTok{15}\NormalTok{, }\DataTypeTok{height =} \DecValTok{10}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
 \end{document}

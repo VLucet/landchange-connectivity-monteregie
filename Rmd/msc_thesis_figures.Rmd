@@ -3,9 +3,6 @@ title: "Msc Thesis Figures"
 author: "Valentin Lucet"
 date: "17/07/2020"
 output:
-  pdf_document:
-    toc: yes
-    toc_depth: '5'
   html_document:
     df_print: paged
     code_folding: hide
@@ -14,6 +11,9 @@ output:
     toc_float:
       collapsed: yes
       smooth_scroll: no
+  pdf_document:
+    toc: yes
+    toc_depth: '5'
 ---
 
 ```{r setup, include=FALSE}
@@ -151,21 +151,19 @@ We see the ggplot theme to `theme_minimal()` and change the size of some plot el
 ```{r set_ggplot_theme}
 theme_set(theme_minimal())
 theme_update(legend.position = c(0.85, 0.20),
-             #legend.justification = c(1, -0.2), # for inside plot
-             #legend.position = "none",
              legend.box = "vertical",
              legend.background = element_blank(),
              legend.box.background = element_rect(colour = "black"),
              panel.border = element_rect(fill = NA),
-             legend.title = element_text(size = 10),
-             legend.text = element_text(size = 8),
+             legend.title = element_text(size = 15),
+             legend.text = element_text(size = 13),
              plot.title = element_text(size=20),
              plot.subtitle = element_text(size=20),
              axis.text.x = element_text(angle=65, vjust=0.6, size =13),
-             axis.text.y = element_text(size =10),
-             strip.text.x = element_text(size = 10),
-             strip.text.y = element_text(size = 10),
-             axis.title=element_text(size=15))
+             axis.text.y = element_text(size =13),
+             strip.text.x = element_text(size = 13),
+             strip.text.y = element_text(13),
+             axis.title=element_text(size=18))
 ```
 
 ### Figures
@@ -186,7 +184,7 @@ fig_1_historic <- joined %>%
   geom_smooth(aes(group = sce), method = "glm", se=FALSE) +
   scale_linetype_manual(values = c(1,3,2,5))+
   geom_point(aes(group = sce)) +
-  facet_wrap(~species, scales = "free") +
+  facet_wrap(~species, scales = "fixed") +
   labs(y = "Current flow (% Change)",
        x = "Year",
        col = "Source") +
@@ -194,7 +192,7 @@ fig_1_historic <- joined %>%
 fig_1_historic
 ggsave(fig_1_historic,
        filename = "outputs/figures/connectivity_decrease_x5species_historic.png",
-       width = 15, height = 10)
+       width = 15, height = 15, dpi = 500)
 ```
 #### Chap 1
 
@@ -210,10 +208,11 @@ fig_1_static_chap_1 <- joined %>%
   scale_color_manual(values=c('#ffe300', '#ff7a14', "#b31400"), 
                      labels = c("Historic", "Baseline", "RCP 8.5")) +
   geom_smooth(aes(group = sce, linetype=code_run), alpha=0.5, method="loess") +
+  #geom_point(aes(group = sce)) +
   scale_linetype_manual(values=c("solid", "twodash")) +
   facet_wrap(~species, scales = "fixed") +
   geom_hline(yintercept = 0, linetype = "dashed", alpha = 0.5) +
-  geom_vline(xintercept = 2020, linetype = "dashed", color = "darkGreen", alpha = 0.5) +
+  #geom_vline(xintercept = 2020, linetype = "dashed", color = "darkGreen", alpha = 0.5) +
   labs(y = "Current flow (% Change)",
        x = "Year",
        col = "Climate",
@@ -225,7 +224,7 @@ fig_1_static_chap_1 <- joined %>%
 fig_1_static_chap_1
 ggsave(fig_1_static_chap_1, 
        filename = "outputs/figures/connectivity_decrease_x5species_chap1.png", 
-       width = 15, height = 10)
+       width = 15, height = 15)
 ```
 
 ##### Radar Graph
@@ -248,7 +247,7 @@ radar_chap1 <-
           gridline.label.offset	=5, legend.text.size= 12,
           group.line.width =0.8,
           background.circle.colour	= "#ffffff", group.point.size	= 2, 
-          axis.label.size	=3)
+          axis.label.size=5)
 radar_chap1
 ggsave("outputs/figures/radar_ggradar_chap1.png", radar_chap1, width = 15, height = 10)
 ```
@@ -281,7 +280,7 @@ fig_1_static_chap_2 <- joined %>%
 fig_1_static_chap_2
 ggsave(fig_1_static_chap_2, 
        filename = "outputs/figures/connectivity_decrease_x5species_chap2.png", 
-       width = 15, height = 10)
+       width = 15, height = 15)
 ```
 ##### Radar Graph
 
@@ -303,7 +302,7 @@ radar_chap2 <-
           gridline.label.offset	=5, legend.text.size= 12,
           group.line.width =0.8,
           background.circle.colour	= "#ffffff", group.point.size	= 2, 
-          axis.label.size	=3)
+          axis.label.size=5)
 radar_chap2
 ggsave("outputs/figures/radar_ggradar_chap2.png", radar_chap2, width = 15, height = 10)
 ```
@@ -330,7 +329,7 @@ radar_all <-
           gridline.label.offset	=5, legend.text.size= 12,
           group.line.width =0.8,
           background.circle.colour	= "#ffffff", group.point.size	= 2, 
-          axis.label.size	=3)
+          axis.label.size=5)
 radar_all
 ggsave("outputs/figures/radar_ggradar_both.png", radar_all, width = 15, height = 10)
 ```
@@ -423,7 +422,7 @@ ggsave("outputs/figures/double_roc_resample.png", full)
 
 #### Chap 1
 
-```{r hist_plot_1, out.width="100%", out.height="150%"}
+```{r hist_plot_1, out.width="100%"}
 hist_plot_1 <- histograms %>% 
   mutate(ts = as.factor(ts)) %>% 
   filter(chapter %in% c('both', 'chap_1')) %>%  
@@ -439,6 +438,7 @@ hist_plot_1 <- histograms %>%
         axis.ticks.y.left = element_blank()) +
   NULL
 hist_plot_1
+ggsave("outputs/figures/hist_chap1.png", hist_plot_1, width = 15, height = 15)
 ```
 
 #### Chap 2
@@ -459,6 +459,7 @@ hist_plot_2 <- histograms %>%
         axis.ticks.y.left = element_blank()) +
   NULL
 hist_plot_2
+ggsave("outputs/figures/hist_chap2.png", hist_plot_2, width = 15, height = 20)
 ```
 
 ### SURF Analysis
@@ -478,7 +479,7 @@ surf_1 <- surf %>%
   ggplot(aes(x = timestep, y = the_diff, color=climate)) +
   geom_smooth(aes(group = scenario, linetype=code_run), alpha=0.2, method="loess")+
   #geom_point(aes(group=scenario), alpha= 0.05, size = 0.5)+
-  facet_wrap(~species, scales = "free")+
+  facet_wrap(~species, scales = "fixed")+
   scale_color_manual(values=c('#ffe300', '#ff7a14', "#b31400"), 
                      labels = c("Historic", "Baseline", "RCP 8.5")) +
   labs(y = "Change in nb of Keypoints detected (%)",
@@ -489,6 +490,7 @@ surf_1 <- surf %>%
          linetype = guide_legend(nrow=1, override.aes = list(colour = 'black'))) +
   NULL
 surf_1
+ggsave("outputs/figures/surf_chap1.png", surf_1, width = 15, height = 15)
 ```
 
 ##### Radar Graph
@@ -512,8 +514,9 @@ surf_radar_1 <-
           gridline.label.offset	=22, legend.text.size= 12,
           group.line.width =0.8,
           background.circle.colour	= "#ffffff", group.point.size	= 2, 
-          axis.label.size	=3)
+          axis.label.size=5)
 surf_radar_1
+ggsave("outputs/figures/surf_radar_chap1.png", surf_radar_1, width = 15, height = 10)
 ```
 
 #### Chap 2
@@ -531,7 +534,7 @@ surf_2 <- surf %>%
   ggplot(aes(x = timestep, y = the_diff, color=climate)) +
   geom_smooth(aes(group = scenario, linetype=code_run), alpha=0.2, method="loess")+
   #geom_point(aes(group=scenario), alpha= 0.05, size = 0.5)+
-  facet_wrap(~species, scales = "free")+
+  facet_wrap(~species, scales = "fixed")+
   scale_color_manual(values=c('#ffe300', '#ff7a14', "#b31400"), 
                      labels = c("Historic", "Baseline", "RCP 8.5")) +
   labs(y = "Change in nb of Keypoints detected (%)",
@@ -543,6 +546,7 @@ surf_2 <- surf %>%
                                  override.aes = list(colour = 'black'))) +
   NULL
 surf_2
+ggsave("outputs/figures/surf_chap2.png", surf_2, width = 15, height = 15)
 ```
 
 ##### Radar Graph
@@ -566,6 +570,64 @@ surf_radar_2 <-
           gridline.label.offset	=22, legend.text.size= 12,
           group.line.width =0.8,
           background.circle.colour	= "#ffffff", group.point.size	= 2, 
-          axis.label.size	=3)
+          axis.label.size=5)
 surf_radar_2
+ggsave("outputs/figures/surf_radar_chap2.png", surf_radar_2, width = 15, height = 10)
 ```
+
+```{r eval=FALSE, include=FALSE}
+class = 1
+
+# LOAD
+the_stack <- stack(lapply((list.files("test/july/sce_37_for_urb_prob/", full.names = T)), raster)) == class
+
+original <- raster("data/land_use/aggregated/aggregated_lu_buffered_1990_patched.tif") == class
+final <- raster("data/land_use/aggregated/aggregated_lu_buffered_2010_patched.tif") == class
+stratum <- raster("data/stsim/aggregated/primary_stratum_mont_or_not_or_PA.tif")
+
+# Ttransform, give names
+the_stack[original == 1] <- 0
+final[original == 1] <- 0
+the_stack[stratum==0] <- NA
+final[stratum==0] <- NA
+the_stack <- trim(the_stack)
+final <- trim(final)
+
+the_mean <-  mean(the_stack)
+names(the_mean) <- "mean"
+names(final) <- "observation"
+
+# test <- the_mean
+# test[(which(values(!is.na(final)) & values(is.na(the_mean))))] <- 100
+# plot(test)
+
+# Fill th "other" values
+the_mean[(which(values(!is.na(final)) & values(is.na(the_mean))))] <- 0
+
+# Analyze
+options(yardstick.event_first = T)
+crosstab(the_mean>0, final)
+
+names(the_stack) <- rep("model", length(names(the_stack)))
+
+aucs <- c()
+precs <- c()
+for (x in 1:nlayers(the_stack)){
+  the_df <- as.data.frame(stack(the_stack[[x]], final)) %>% 
+    drop_na() %>% 
+    rename(estimate = starts_with("model"), truth = "observation")
+  the_df_2 <- the_df %>% 
+    mutate(truth = factor(truth, ordered = F)) %>%
+    mutate(truth = relevel(.$truth, "1"))
+  auc <- the_df_2 %>% 
+    roc_auc(truth = truth, estimate) %>% 
+    pull(.estimate)
+  prec <- the_df_2 %>% 
+    average_precision(truth = truth, estimate) %>% 
+    pull(.estimate)
+  aucs <- c(aucs, auc)
+  precs <- c(precs, prec)
+}
+# plot(stack(the_mean, final))
+```
+
