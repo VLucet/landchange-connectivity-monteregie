@@ -38,6 +38,21 @@ suppressPackageStartupMessages({
   library(tidymodels)
   library(patchwork)
 })
+theme_set(theme_minimal())
+theme_update(legend.position = c(0.85, 0.20),
+             legend.box = "vertical",
+             legend.background = element_blank(),
+             legend.box.background = element_rect(colour = "black"),
+             panel.border = element_rect(fill = NA),
+             legend.title = element_text(size = 15),
+             legend.text = element_text(size = 13),
+             plot.title = element_text(size=20),
+             plot.subtitle = element_text(size=20),
+             axis.text.x = element_text(angle=65, vjust=0.6, size =13),
+             axis.text.y = element_text(size =13),
+             strip.text.x = element_text(size = 13),
+             strip.text.y = element_text(13),
+             axis.title=element_text(size=18))
 ```
 
 ### Data prep
@@ -49,6 +64,14 @@ We start by preparing the data from the outputs of scripts `7.1` and `8.1`. The 
 ```{r data_prep, message=FALSE, warning=FALSE, paged.print=TRUE}
 # Results dir + mun shapefile
 mun <- st_read("data/mun/munic_SHP_clean.shp", quiet = TRUE)
+
+# Classes
+classes <- read_csv("config/rcl_tables/land_use/recode_table.csv")
+forest_classes <- read_csv("config/rcl_tables/land_use/recode_table_forest.csv") %>% 
+  rename(new_code = "ID", new_class = "Name")
+
+classes_unique <- unique(classes[, c("new_code", "new_class")]) %>% 
+  bind_rows(forest_classes)
 
 # results key
 sce_code_vec <- 
@@ -112,8 +135,14 @@ urb <- readRDS("data/temp/fit_rs_outcome_rf_urb_2.RDS")
 agex <- readRDS("data/temp/fit_rs_outcome_rf_agex_2.RDS")
 
 # Histogram data 
+hist_original <- read_csv("outputs/final/final_values_output_original.csv")
+hist_true <- read_csv("outputs/final/final_values_output_TRUE.csv") %>% 
+  mutate(sce = "TRUE")
 histograms <- read_csv("outputs/final/final_values_output.csv") %>% 
-  left_join(results_clean, by="sce")
+  bind_rows(hist_original) %>% 
+  bind_rows(hist_true) %>% 
+  left_join(results_clean, by="sce") 
+
 
 # SURF Data
 surf <- read_csv("surf/surf_output.csv") %>% 
@@ -144,28 +173,6 @@ Preparing for spatial plotting (time consuming).
 #   st_transform(df_final_fordiff_pivoted, crs=4326)
 ```
 
-#### Set the ggplot theme
-
-We see the ggplot theme to `theme_minimal()` and change the size of some plot elements.
-
-```{r set_ggplot_theme}
-theme_set(theme_minimal())
-theme_update(legend.position = c(0.85, 0.20),
-             legend.box = "vertical",
-             legend.background = element_blank(),
-             legend.box.background = element_rect(colour = "black"),
-             panel.border = element_rect(fill = NA),
-             legend.title = element_text(size = 15),
-             legend.text = element_text(size = 13),
-             plot.title = element_text(size=20),
-             plot.subtitle = element_text(size=20),
-             axis.text.x = element_text(angle=65, vjust=0.6, size =13),
-             axis.text.y = element_text(size =13),
-             strip.text.x = element_text(size = 13),
-             strip.text.y = element_text(13),
-             axis.title=element_text(size=18))
-```
-
 ### Figures
 
 ### Mean current flow change
@@ -191,7 +198,7 @@ fig_1_historic <- joined %>%
   NULL
 fig_1_historic
 ggsave(fig_1_historic,
-       filename = "outputs/figures/connectivity_decrease_x5species_historic.png",
+       filename = "../msc-thesis-mcgill/figures/connectivity_decrease_x5species_historic.png",
        width = 15, height = 15, dpi = 500)
 ```
 #### Chap 1
@@ -223,7 +230,7 @@ fig_1_static_chap_1 <- joined %>%
   NULL
 fig_1_static_chap_1
 ggsave(fig_1_static_chap_1, 
-       filename = "outputs/figures/connectivity_decrease_x5species_chap1.png", 
+       filename = "../msc-thesis-mcgill/figures/connectivity_decrease_x5species_chap1.png", 
        width = 15, height = 15)
 ```
 
@@ -249,7 +256,7 @@ radar_chap1 <-
           background.circle.colour	= "#ffffff", group.point.size	= 2, 
           axis.label.size=5)
 radar_chap1
-ggsave("outputs/figures/radar_ggradar_chap1.png", radar_chap1, width = 15, height = 10)
+ggsave("../msc-thesis-mcgill/figures/radar_ggradar_chap1.png", radar_chap1, width = 15, height = 10)
 ```
 
 #### Chap 2
@@ -279,7 +286,7 @@ fig_1_static_chap_2 <- joined %>%
   NULL
 fig_1_static_chap_2
 ggsave(fig_1_static_chap_2, 
-       filename = "outputs/figures/connectivity_decrease_x5species_chap2.png", 
+       filename = "../msc-thesis-mcgill/figures/connectivity_decrease_x5species_chap2.png", 
        width = 15, height = 15)
 ```
 ##### Radar Graph
@@ -304,7 +311,7 @@ radar_chap2 <-
           background.circle.colour	= "#ffffff", group.point.size	= 2, 
           axis.label.size=5)
 radar_chap2
-ggsave("outputs/figures/radar_ggradar_chap2.png", radar_chap2, width = 15, height = 10)
+ggsave("../msc-thesis-mcgill/figures/radar_ggradar_chap2.png", radar_chap2, width = 15, height = 10)
 ```
 
 #### Both 
@@ -331,7 +338,7 @@ radar_all <-
           background.circle.colour	= "#ffffff", group.point.size	= 2, 
           axis.label.size=5)
 radar_all
-ggsave("outputs/figures/radar_ggradar_both.png", radar_all, width = 15, height = 10)
+ggsave("../msc-thesis-mcgill/figures/radar_ggradar_both.png", radar_all, width = 15, height = 10)
 ```
 
 ### Map of change
@@ -343,7 +350,7 @@ Mapping takes a lot of time, not knitted by default
 ```{r figure_2_chap1, eval=FALSE, message=FALSE, warning=FALSE}
 # change_1 <- df_final_fordiff_pivoted %>% 
 #   filter(chapter %in% c("none", "both", "chap_1")) %>%
-#   filter(sce %in% c('sce_38', 'sce_39')) %>% 
+#   filter(sce %in% c('sce_39', 'sce_39')) %>% 
 #   ggplot(aes(fill=change)) +
 #   geom_sf(show.legend=T, lwd = 0)  + 
 #   facet_wrap(~sce) + 
@@ -352,7 +359,7 @@ Mapping takes a lot of time, not knitted by default
 #   scale_fill_binned(low='#d13e11', high='#fff7bc', 
 #                     breaks=c(-50, -40, -30, -20, -10, 0, 10))
 # change_1
-#ggsave("outputs/figures/connectivit_change_mun_chap1.png", change_1)
+#ggsave("../msc-thesis-mcgill/figures/connectivit_change_mun_chap1.png", change_1)
 ```
 
 #### Chap 2
@@ -368,7 +375,7 @@ Mapping takes a lot of time, not knitted by default
 #   scale_fill_binned(low='#d13e11', high='#fff7bc', 
 #                     breaks=c(-50, -40, -30, -20, -10, 0, 10))
 # change_2
-#ggsave("outputs/figures/connectivit_change_mun_chap2.png", change_2)
+#ggsave("../msc-thesis-mcgill/figures/connectivit_change_mun_chap2.png", change_2)
 ```
 
 #### Both
@@ -383,7 +390,7 @@ Mapping takes a lot of time, not knitted by default
 #   scale_fill_binned(low='#d13e11', high='#fff7bc', 
 #                     breaks=c(-50, -40, -30, -20, -10, 0, 10))
 # change_both
-#ggsave("outputs/figures/connectivit_change_mun_both.png", change_both)
+#ggsave("../msc-thesis-mcgill/figures/connectivit_change_mun_both.png", change_both)
 ```
 
 ### ROC Curves
@@ -397,7 +404,7 @@ p1 <- bind_rows(urb, .id = "fold") %>%
   roc_curve(.pred, truth = outcome_fact) %>% 
   autoplot(add=T) +
   ggtitle(paste("Urbanisation")) +
-  annotate(x = 0.75, y = 0.25, geom="label", 
+  annotate(x = 0.75, y = 0.25, geom="label", size = 3,
            label = as.character(paste("Av AUC = 0.938 +/- 0.002"))) +
   theme(legend.position = "none") +
   NULL
@@ -408,14 +415,14 @@ p2 <- bind_rows(agex, .id = "fold") %>%
   roc_curve(.pred, truth = outcome_fact) %>% 
   autoplot(add=T) +
   ggtitle(paste("Agricultural Expansion")) +
-  annotate(x = 0.75, y = 0.25, geom="label", 
+  annotate(x = 0.75, y = 0.25, geom="label", size = 3,
            label = as.character(paste("Av AUC = 0.929 +/- 0.002"))) +
   NULL
 
 full = p1 + p2
 
 full
-ggsave("outputs/figures/double_roc_resample.png", full)
+ggsave("../msc-thesis-mcgill/figures/double_roc_resample.png", full)
 ```
 
 ### Histograms
@@ -438,7 +445,7 @@ hist_plot_1 <- histograms %>%
         axis.ticks.y.left = element_blank()) +
   NULL
 hist_plot_1
-ggsave("outputs/figures/hist_chap1.png", hist_plot_1, width = 15, height = 15)
+ggsave("../msc-thesis-mcgill/figures/hist_chap1.png", hist_plot_1, width = 15, height = 15)
 ```
 
 #### Chap 2
@@ -459,7 +466,7 @@ hist_plot_2 <- histograms %>%
         axis.ticks.y.left = element_blank()) +
   NULL
 hist_plot_2
-ggsave("outputs/figures/hist_chap2.png", hist_plot_2, width = 15, height = 20)
+ggsave("../msc-thesis-mcgill/figures/hist_chap2.png", hist_plot_2, width = 15, height = 20)
 ```
 
 ### SURF Analysis
@@ -490,7 +497,7 @@ surf_1 <- surf %>%
          linetype = guide_legend(nrow=1, override.aes = list(colour = 'black'))) +
   NULL
 surf_1
-ggsave("outputs/figures/surf_chap1.png", surf_1, width = 15, height = 15)
+ggsave("../msc-thesis-mcgill/figures/surf_chap1.png", surf_1, width = 15, height = 15)
 ```
 
 ##### Radar Graph
@@ -516,7 +523,7 @@ surf_radar_1 <-
           background.circle.colour	= "#ffffff", group.point.size	= 2, 
           axis.label.size=5)
 surf_radar_1
-ggsave("outputs/figures/surf_radar_chap1.png", surf_radar_1, width = 15, height = 10)
+ggsave("../msc-thesis-mcgill/figures/surf_radar_chap1.png", surf_radar_1, width = 15, height = 10)
 ```
 
 #### Chap 2
@@ -546,7 +553,7 @@ surf_2 <- surf %>%
                                  override.aes = list(colour = 'black'))) +
   NULL
 surf_2
-ggsave("outputs/figures/surf_chap2.png", surf_2, width = 15, height = 15)
+ggsave("../msc-thesis-mcgill/figures/surf_chap2.png", surf_2, width = 15, height = 15)
 ```
 
 ##### Radar Graph
@@ -572,11 +579,13 @@ surf_radar_2 <-
           background.circle.colour	= "#ffffff", group.point.size	= 2, 
           axis.label.size=5)
 surf_radar_2
-ggsave("outputs/figures/surf_radar_chap2.png", surf_radar_2, width = 15, height = 10)
+ggsave("../msc-thesis-mcgill/figures/surf_radar_chap2.png", surf_radar_2, width = 15, height = 10)
 ```
 
+### Maps
+
 ```{r eval=FALSE, include=FALSE}
-class = 1
+class = 2
 
 # LOAD
 the_stack <- stack(lapply((list.files("test/july/sce_37_for_urb_prob/", full.names = T)), raster)) == class
@@ -628,6 +637,208 @@ for (x in 1:nlayers(the_stack)){
   aucs <- c(aucs, auc)
   precs <- c(precs, prec)
 }
+mean(aucs);sd(aucs)
+mean(precs);sd(precs)
 # plot(stack(the_mean, final))
+```
+
+### Original hist
+
+```{r}
+hist_plot_origin <- histograms %>%
+  filter(sce %in% c("TRUE", "sce_37")) %>% 
+  filter(ts == 2) %>% 
+  mutate(ts = ts*10+1990) %>% 
+  mutate(ts = as.factor(ts)) %>% 
+  ggplot(aes(x=bins, y=n, fill=sce, colour =sce)) + 
+  geom_density(stat='identity', show.legend=T, alpha=0.3)+
+  scale_color_discrete(name="Source", labels=c("Model", "Observation")) +
+  scale_fill_discrete(name="Source", labels=c("Model", "Observation")) +
+  facet_wrap(~species) +
+  labs(x = "Flow intensity distribution (log)", 
+       y = "") +
+  theme(strip.text.y = element_text(angle=360, size=10, hjust = 0), 
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank(), 
+        axis.text.y.left = element_blank(),
+        axis.ticks.y.left = element_blank()) +
+  NULL
+hist_plot_origin
+ggsave("../msc-thesis-mcgill/figures/original_hists.png", hist_plot_origin, width = 15, height = 10)
+```
+
+### Bar charts
+
+```{r BAU, message=FALSE, warning=FALSE}
+sce_39 <- stack(lapply((list.files("test/july/sce_39_BAU/", full.names = T)), raster))
+stratum <- raster("data/stsim/aggregated/primary_stratum_mont_or_not_or_PA.tif")
+the_names <- names(sce_39)
+sce_39[stratum == 0] <- NA
+names(sce_39) <- the_names
+
+ts_2_39 <- sce_39[[which(stringr::str_detect(names(sce_39), "ts2"))]]
+ts_11_39 <- sce_39[[which(stringr::str_detect(names(sce_39), "ts11"))]]
+
+two_stack_39 <-  stack(sce_39$sc.it5.ts2, sce_39$sc.it5.ts11)
+names(two_stack_39) <- c("2010", "2100")
+# plot(trim(two_stack))
+
+ts_2_freq_39 <- freq(ts_2_39, useNA="no")
+ts_11_freq_39 <- freq(ts_11_39, useNA="no")
+
+full_df_2_39 <- data.frame()
+for (x in 1:length(ts_2_freq_39)){
+  temp_df_39 <- ts_2_freq_39[[x]] %>% 
+    as.data.frame() %>% 
+    mutate(iteration = paste0("iter_", x)) %>% 
+    mutate(timestep = 2010)
+  full_df_2_39 <- bind_rows(full_df_2_39, temp_df_39)
+}
+
+full_df_11_39 <- data.frame()
+for (x in 1:length(ts_11_freq_39)){
+  temp_df_39 <- ts_11_freq_39[[x]] %>% 
+    as.data.frame() %>% 
+    mutate(iteration = paste0("iter_", x)) %>% 
+    mutate(timestep = 2100)
+  full_df_11_39 <- bind_rows(full_df_11_39, temp_df_39)
+}
+
+full_df_39 <- bind_rows(full_df_2_39, full_df_11_39)
+
+mean_df_39 <- full_df_39 %>% 
+  group_by(timestep, value) %>% 
+  summarise(mean_count = mean(count)) %>% ungroup()
+
+sd_df_39 <- full_df_39 %>% 
+  group_by(timestep, value) %>% 
+  summarise(sd_count = sd(count)) %>% ungroup()
+
+final_df_39 <- left_join(mean_df_39, sd_df_39,  by = c("timestep", "value")) %>% 
+  left_join(classes_unique, 
+            by=c("value"="new_code")) %>% 
+  filter(!(value %in% c(4,5,6))) %>%
+  mutate(area = mean_count*((90*90)/10000)) 
+
+bar_plot_39 <- final_df_39 %>% 
+  #filter(value > 10) %>% 
+  mutate(value = as.factor(value), timestep = as.factor(timestep)) %>% 
+  ggplot(aes(fill=timestep, y=area, x=new_class)) + 
+  geom_bar(position="dodge", stat="identity") +
+  #geom_errorbar(aes(ymin=mean_count-sd_count, ymax=mean_count+sd_count), width=.2,
+  #               position=position_dodge(.9)) +
+  theme(legend.position = c(0.85, 0.7)) +
+  labs(x = "Land use Class", 
+       y = "Mean Area (hectare)", 
+       fill = "Year") +
+  NULL
+bar_plot_39
+#ggsave("../msc-thesis-mcgill/figures/bar_BAU.png", bar_plot_39, width = 15, height = 10)
+```
+
+```{r reforestation, message=FALSE, warning=FALSE}
+sce_42 <- stack(lapply((list.files("test/july/sce_42_Ref/", full.names = T)), raster))
+stratum <- raster("data/stsim/aggregated/primary_stratum_mont_or_not_or_PA.tif")
+the_names <- names(sce_42)
+sce_42[stratum == 0] <- NA
+names(sce_42) <- the_names
+
+ts_2_42 <- sce_42[[which(stringr::str_detect(names(sce_42), "ts2"))]]
+ts_11_42 <- sce_42[[which(stringr::str_detect(names(sce_42), "ts11"))]]
+
+two_stack_42 <-  stack(sce_42$sc.it5.ts2, sce_42$sc.it5.ts11)
+names(two_stack_42) <- c("2010", "2100")
+# plot(trim(two_stack))
+
+ts_2_freq_42 <- freq(ts_2_42, useNA="no")
+ts_11_freq_42 <- freq(ts_11_42, useNA="no")
+
+full_df_2_42 <- data.frame()
+for (x in 1:length(ts_2_freq_42)){
+  temp_df_42 <- ts_2_freq_42[[x]] %>% 
+    as.data.frame() %>% 
+    mutate(iteration = paste0("iter_", x)) %>% 
+    mutate(timestep = 2010)
+  full_df_2_42 <- bind_rows(full_df_2_42, temp_df_42)
+}
+
+full_df_11_42 <- data.frame()
+for (x in 1:length(ts_11_freq_42)){
+  temp_df_42 <- ts_11_freq_42[[x]] %>% 
+    as.data.frame() %>% 
+    mutate(iteration = paste0("iter_", x)) %>% 
+    mutate(timestep = 2100)
+  full_df_11_42 <- bind_rows(full_df_11_42, temp_df_42)
+}
+
+full_df_42 <- bind_rows(full_df_2_42, full_df_11_42)
+
+mean_df_42 <- full_df_42 %>% 
+  group_by(timestep, value) %>% 
+  summarise(mean_count = mean(count)) %>% ungroup()
+
+sd_df_42 <- full_df_42 %>% 
+  group_by(timestep, value) %>% 
+  summarise(sd_count = sd(count)) %>% ungroup()
+
+final_df_42 <- left_join(mean_df_42, sd_df_42,  by = c("timestep", "value")) %>% 
+  left_join(classes_unique, 
+            by=c("value"="new_code")) %>% 
+  filter(!(value %in% c(4,5,6))) %>%
+  mutate(area = mean_count*((90*90)/10000))
+
+bar_plot_42 <- final_df_42  %>% 
+  #filter(value > 10) %>% 
+  mutate(value = as.factor(value), timestep = as.factor(timestep)) %>% 
+  ggplot(aes(fill=timestep, y=area, x=new_class)) + 
+  geom_bar(position="dodge", stat="identity") +
+  #geom_errorbar(aes(ymin=mean_count-sd_count, ymax=mean_count+sd_count), width=.2,
+  #               position=position_dodge(.9)) +
+  theme(legend.position = c(0.85, 0.7)) +
+  labs(x = "Land use Class", 
+       y = "Mean Area (hectare)", 
+       fill = "Year") +
+  NULL
+bar_plot_42
+#ggsave("../msc-thesis-mcgill/figures/bar_Ref.png", bar_plot_42, width = 15, height = 10)
+```
+
+```{r}
+final_df_39 <- final_df_39 %>% 
+  mutate(sce = "BAU") %>% 
+  mutate(type = ifelse(value <10, "non_forest", "forest"))
+final_df_42 <- final_df_42 %>% 
+  mutate(sce = "Reforestation")  %>% 
+  mutate(type = ifelse(value <10, "non_forest", "forest"))
+
+final_all <- bind_rows(final_df_39, final_df_42)
+
+forest <- final_all %>% 
+  filter(type == "forest") %>% 
+  mutate(value = as.factor(value), timestep = as.factor(timestep)) %>% 
+  ggplot(aes(fill=timestep, y=area, x=new_class)) + 
+  geom_bar(position="dodge", stat="identity") +
+  theme(legend.position = "none") +
+  facet_grid(~sce) +
+  labs(x = "Land use Class", 
+       y = "Mean Area (hectare)", 
+       fill = "Year") +
+  NULL
+
+non_forest <- final_all %>% 
+  filter(type != "forest") %>% 
+  mutate(value = as.factor(value), timestep = as.factor(timestep)) %>% 
+  ggplot(aes(fill=timestep, y=area, x=new_class)) + 
+  geom_bar(position="dodge", stat="identity") +
+  theme(legend.position = "right") +
+  facet_grid(~sce) +
+  labs(x = "Land use Class", 
+       y = "Mean Area (hectare)", 
+       fill = "Year") +
+  NULL
+
+assembled <- wrap_plots(forest, non_forest, ncol=1, nrow=2)
+assembled
+ggsave("../msc-thesis-mcgill/figures/bar_both.png", assembled, width = 15, height = 20)
 ```
 

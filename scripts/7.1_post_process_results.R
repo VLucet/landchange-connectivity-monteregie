@@ -240,6 +240,14 @@ for (species in species_vec) {
     print(stack_files)
     sum.of.rasters <- sum(stack(lapply(stack_files, FUN = raster::raster)))
     
+    ## ALSO save sum here
+    the_name <- paste0("TRUE_", timestep, "_", species,".tif")
+    print(the_name)
+    writeRaster(crop(sum.of.rasters, mun_zonal), 
+                file.path("outputs/current_density_sum/", the_name), 
+                overwrite=T)
+    ##
+    
     df <- as.data.frame(zonal(x = crop(sum.of.rasters, mun_zonal), mun_zonal), 
                         z = mun_zonal, fun = "mean", na.rm = T)
     df$zone <- as.factor(df$zone)

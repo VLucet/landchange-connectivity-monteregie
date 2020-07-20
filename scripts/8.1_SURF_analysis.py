@@ -16,6 +16,17 @@ from surf import utils
 from matplotlib import pyplot as plt
 # import matplotlib.pyplot as plt
 
+
+def Filter_all(string, substr):
+    return [str for str in string if
+            all(sub in str for sub in substr)]
+
+
+def Filter_any(string, substr):
+    return [str for str in string if
+            any(sub in str for sub in substr)]
+
+
 base_path = 'outputs/current_density_sum/'
 base_files = os.listdir(base_path)
 list_of_files = [base_path + file for file in base_files]
@@ -24,6 +35,8 @@ print(len(list_of_files))
 
 the_mask = cv2.imread("data/stsim/aggregated/primary_stratum_mont_or_not_or_PA.tif", -1).astype("uint8")
 the_mask[the_mask == 2] = 1
+
+# ------------------------------------
 
 workers = mp.Pool(processes=8)
 kp_lengths = workers.map(partial(utils.get_kp_lengths, mask=the_mask, h_threshold=7000, oct_nb=1, oct_layers=2), list_of_files)
@@ -49,19 +62,10 @@ results = pd.DataFrame(list(zip([i[1] for i in splitted],
 results.to_csv("surf/surf_output.csv", index=False)
 
 
-def Filter_all(string, substr):
-    return [str for str in string if
-            all(sub in str for sub in substr)]
-
-
-def Filter_any(string, substr):
-    return [str for str in string if
-            any(sub in str for sub in substr)]
-
-
-
 # ------------ Create hist CSV ------------
 
+
+# scenarios
 temp = []
 final = pd.DataFrame()
 for sce in ["sce_" + str(nb) for nb in range(38, 53)]:
@@ -83,6 +87,51 @@ for sce in ["sce_" + str(nb) for nb in range(38, 53)]:
 
 final.to_csv("outputs/final/final_values_output.csv", index=False)
 
+temp = []
+final = pd.DataFrame()
+for sce in ["sce_" + str(nb) for nb in [37]]:
+    for spe in ['BLBR', 'PLCI', 'MAAM', 'URAM', 'RASY']:
+        for iter in [5]: # list(range(1,11))
+            for ts in [0, 2]:
+                subs = [sce, spe, 'it_'+str(iter)+'_', 'ts_'+str(ts)+'_']
+                filtered = Filter_all(list_of_files, subs)
+                print(filtered)
+                if len(filtered) is 1:
+                    data = utils.read_img(filtered[0]).transform().img[the_mask == 1].flatten()
+                    n, bins = np.histogram(data, 1000)
+                    temp = {'sce': sce, 'species': spe, 'iter': iter, 'ts': ts, 'n': n, 'bins': bins[range(0, len(bins)-1)]}
+                    temp_df = pd.DataFrame(temp)
+                    temp_df.head()
+                    final = final.append(temp_df, ignore_index=True)
+                else:
+                    raise Exception("Error with length")
+
+final.to_csv("outputs/final/final_values_output_original.csv", index=False)
+
+# True land use
+
+temp = []
+final = pd.DataFrame()
+for spe in ['BLBR', 'PLCI', 'MAAM', 'URAM', 'RASY']:
+    for ts in [0, 2]:
+        subs = [spe, 'TRUE_'+str(ts)+'_']
+        filtered = Filter_all(list_of_files, subs)
+        print(filtered)
+        if len(filtered) is 1:
+            data = utils.read_img(filtered[0]).transform().img[the_mask == 1].flatten()
+            n, bins = np.histogram(data, 1000)
+            temp = {'species': spe, 'ts': ts, 'n': n, 'bins': bins[range(0, len(bins)-1)]}
+            temp_df = pd.DataFrame(temp)
+            temp_df.head()
+            final = final.append(temp_df, ignore_index=True)
+        else:
+            raise Exception("Error with length")
+
+final.to_csv("outputs/final/final_values_output_TRUE.csv", index=False)
+
+# ------- Slew of figures -------
+
+
 for sce in ["sce_" + str(nb) for nb in range(38, 53)]:
     for spe in ['BLBR', 'PLCI', 'MAAM', 'URAM', 'RASY']:
         res_1 = Filter_all(list_of_files, [spe, sce, 'it_1_', 'ts_2_'])
@@ -98,7 +147,7 @@ for sce in ["sce_" + str(nb) for nb in range(38, 53)]:
         else:
             raise Exception("Length is not correct")
 
-# ------- Slew of figures -------
+
 
 subset = Filter_any(Filter_all(list_of_files, ['it_1_']),  ['ts_2_', 'ts_11_'])
 for file in subset:
