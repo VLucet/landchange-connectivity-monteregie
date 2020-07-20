@@ -147,7 +147,16 @@ histograms <- read_csv("outputs/final/final_values_output.csv") %>%
 # SURF Data
 surf <- read_csv("surf/surf_output.csv") %>% 
   mutate(timestep = timestep*10+1990) %>% 
-  left_join(results_clean, by=c("scenario"="scenarioId"))
+  left_join(results_clean, by=c("scenario"="scenarioId")) %>% 
+  replace_na(list(climate = "none", run = "historic run")) %>% 
+  # Make factors
+  mutate(sce = as.factor(sce), run = as.factor(run),
+         climate = factor(climate, levels = c("none", "historic",
+                                              "baseline", "RCP 8.5")),
+         run = factor(run, levels = c("historic run", "BAU run", 
+                                      "BAU run + corrs protection", "BAU run + ref", 
+                                      "BAU run + corrs protection + ref",
+                                      "BAU run + corrs protection + ref TARGETED")))
 
 results_clean
 ```
