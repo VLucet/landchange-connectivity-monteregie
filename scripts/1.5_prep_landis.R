@@ -126,7 +126,7 @@ baseline_combined <-
              lu.2010 = raster('data/land_use/aggregated/aggregated_lu_buffered_2010_patched.tif')))
 
 baseline_combined[is.na(baseline_combined) & 
-                    !is.na(lu.stack.buf.ag$aggregated_lu_buffered_2010)] <- 22 # misisng value replaced
+                    !is.na(lu.stack.buf.ag$aggregated_lu_buffered_2010)] <- 22 # missing value replaced
 
 # reproj and crop
 landis_stack <- stack(baseline_combined, landtypes_reproj)
