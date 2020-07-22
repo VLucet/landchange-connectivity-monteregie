@@ -14,21 +14,29 @@ suppressPackageStartupMessages({
   library(ggbiplot)
   library(tidyverse)
   library(sf)
-  library(mvpart)
+  #library(mvpart)
   library(spdep)
   library(ClustGeo)
-  library(const.clust)
+  #library(const.clust)
   library(ggnewscale)
 })
 ## Import 
 
-mun.sub.18.clean <- st_read(paste0(dataDir,"munic_SHP_clean/munic_SHP_clean.shp"))
-mrc <- st_read(paste0(dataDir, "mrc_SHP/mrc_polygone.shp"))
+mun.sub.18.clean <- st_read("data/mun/munic_SHP_clean.shp")
+mrc <- st_read("data/raw/vector/mrc_SHP/mrc_polygone.shp")
 mrc.mont <- mrc %>% filter(MRS_NM_REG=="Montérégie") 
 mrc.mont.reproj <- st_transform(mrc.mont, raster::crs(mun.sub.18.clean))
 
-TransTotal_saved.df <- readRDS("Part_B_landuseModel/LandUse_trans&vals/AllTransitions_df.rds")
-Values_saved.df <- readRDS("Part_B_landuseModel/LandUse_trans&vals/ValuesExtracted_df.rds")
+trans_and_vals <- readRDS("data/temp/vals_and_trans.RDS")
+
+TransTotal_saved.df <- data.frame()
+for (mun in names(trans_and_vals$Transitions)) {
+  trans.df <- trans_and_vals$Transitions[[mun]] %>%
+    mutate(Mun = mun)
+  TransTotal_saved.df <- bind_rows(TransTotal_saved.df, trans.df)
+}
+
+Values_saved.df <-
 
 trans_mat_1990to2000 <- 
   TransTotal_saved.df %>% 
