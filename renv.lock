@@ -16,6 +16,13 @@
       "Repository": "CRAN",
       "Hash": "8f9ce74c6417d61f0782cbae5fd2b7b0"
     },
+    "ClustGeo": {
+      "Package": "ClustGeo",
+      "Version": "2.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "76a39b1a27fe75fa9b7db5775f60a853"
+    },
     "DBI": {
       "Package": "DBI",
       "Version": "1.1.0",
@@ -57,6 +64,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "081f417f4d6d55b7e8981433e8404a22"
+    },
+    "LearnBayes": {
+      "Package": "LearnBayes",
+      "Version": "2.15.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "b2dd5e3f910f1ac390f847f35e8c2396"
     },
     "MASS": {
       "Package": "MASS",
@@ -378,6 +392,20 @@
       "Repository": "CRAN",
       "Hash": "08cf4045c149a0f0eaf405324c7495bd"
     },
+    "cluster": {
+      "Package": "cluster",
+      "Version": "2.1.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "db63a44aab5aadcb6bf2f129751d129a"
+    },
+    "coda": {
+      "Package": "coda",
+      "Version": "0.19-3",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "b177892d05d94358d282fcc303799593"
+    },
     "codetools": {
       "Package": "codetools",
       "Version": "0.2-16",
@@ -433,6 +461,20 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "81ae261735c247d9551126462db5a4b5"
+    },
+    "deldir": {
+      "Package": "deldir",
+      "Version": "0.1-28",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "0edc0c2f566b3aa0271f37314e2afe0f"
+    },
+    "dendextend": {
+      "Package": "dendextend",
+      "Version": "1.13.4",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "842396bdc603ee4a40d8039b5540f2e6"
     },
     "desc": {
       "Package": "desc",
@@ -496,6 +538,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "ec8ca05cffcc70569eaaad8469d2a3a7"
+    },
+    "expm": {
+      "Package": "expm",
+      "Version": "0.999-5",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "6da939036c445e851f7ef690e349cc2c"
     },
     "fansi": {
       "Package": "fansi",
@@ -630,6 +679,13 @@
       "Repository": "CRAN",
       "Hash": "4c90748844edfacbb4ad2f44335cd892"
     },
+    "ggnewscale": {
+      "Package": "ggnewscale",
+      "Version": "0.4.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "664760503b42cad5c056765596ba53ef"
+    },
     "ggplot2": {
       "Package": "ggplot2",
       "Version": "3.3.1",
@@ -676,6 +732,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "f43e0d5e85ccb0a4045670c0607ee504"
+    },
+    "gmodels": {
+      "Package": "gmodels",
+      "Version": "2.18.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "beb8ca96406a2828f25e49ab17001c39"
     },
     "gower": {
       "Package": "gower",
@@ -1104,6 +1167,13 @@
       "Repository": "CRAN",
       "Hash": "16eee5b5edc41eec5af1149ccdc6b2c9"
     },
+    "permute": {
+      "Package": "permute",
+      "Version": "0.9-5",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "e367efa1f0d52cb753bdb9163b63f528"
+    },
     "pillar": {
       "Package": "pillar",
       "Version": "1.4.4",
@@ -1501,6 +1571,20 @@
       "Repository": "CRAN",
       "Hash": "a44a3cebab900c0f77e16804f361468e"
     },
+    "spData": {
+      "Package": "spData",
+      "Version": "0.3.8",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "be5fc9cc13487505381071422d8346e2"
+    },
+    "spdep": {
+      "Package": "spdep",
+      "Version": "1.1-5",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "e220c93e8a62be165fb5b56983ca2339"
+    },
     "statmod": {
       "Package": "statmod",
       "Version": "1.4.34",
@@ -1696,6 +1780,20 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "fbf7ee297936697ec8404a22859da129"
+    },
+    "vegan": {
+      "Package": "vegan",
+      "Version": "2.5-6",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "cad9f1f47c6e710d08c22fb8673360de"
+    },
+    "viridis": {
+      "Package": "viridis",
+      "Version": "0.5.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "6f6b49e5b3b5ee5a6d0c28bf1b4b9eb3"
     },
     "viridisLite": {
       "Package": "viridisLite",
