@@ -1,5 +1,5 @@
 #-------------------------------------------------------------------------------
-## 1.0 Multivariate analysis of land use change patterns
+## 2.6 Multivariate analysis of land use change patterns
 ## 2020
 #-------------------------------------------------------------------------------
 
@@ -9,6 +9,7 @@ rm(list = ls())
 ## Load required packages ##
 
 suppressPackageStartupMessages({
+  library(raster)
   library(vegan)
   library(dendextend)
   library(ggbiplot)
@@ -20,23 +21,61 @@ suppressPackageStartupMessages({
   #library(const.clust)
   library(ggnewscale)
 })
-## Import 
+
+# Import ------------------------------------------------------------------
+
 
 mun.sub.18.clean <- st_read("data/mun/munic_SHP_clean.shp")
 mrc <- st_read("data/raw/vector/mrc_SHP/mrc_polygone.shp")
 mrc.mont <- mrc %>% filter(MRS_NM_REG=="Montérégie") 
 mrc.mont.reproj <- st_transform(mrc.mont, raster::crs(mun.sub.18.clean))
 
-trans_and_vals <- readRDS("data/temp/vals_and_trans.RDS")
+
+# Calculate ---------------------------------------------------------------
+
+source("scripts/functions/extract_vals_and_trans.R")
+lu.18 <- stack(raster("data/raw/land_use/LandUse_AAFC/Z18_1990/IMG_AAFC_LANDUSE_Z18_1990.tif"),
+               raster("data/raw/land_use/LandUse_AAFC/Z18_2000/IMG_AAFC_LANDUSE_Z18_2000.tif"),
+               raster("data/raw/land_use/LandUse_AAFC/Z18_2010/IMG_AAFC_LANDUSE_Z18_2010.tif"))
+
+names(lu.18) <- c("lu.1990.18", "lu.2000.18", "lu.2010.18")
+mun.sub.18.clean <- st_read("data/mun//munic_SHP_clean.shp", quiet = TRUE)
+mun.list <- as.character(unique((mun.sub.18.clean$MUS_NM_MUN)))
+classes <- read_csv2( "data/raw/land_use/LandUse_AAFC/landUse_class.csv")
+
+lu.18.sub <- mask(crop(lu.18, mun.sub.18.clean), mun.sub.18.clean)
+
+All.Mont <- ExtractValsAndTrans(
+  shape_vec = mun.list,
+  shape_sf = mun.sub.18.clean,
+  attribute = "MUS_NM_MUN",
+  landUse_stack = lu.18.sub,
+  classes = classes
+)
+
+
+# Transform ---------------------------------------------------------------
 
 TransTotal_saved.df <- data.frame()
-for (mun in names(trans_and_vals$Transitions)) {
-  trans.df <- trans_and_vals$Transitions[[mun]] %>%
-    mutate(Mun = mun)
+for (mun in names(All.Mont$Transitions)) {
+  trans.df <- All.Mont$Transitions[[mun]] %>%
+    mutate(Municipality = mun)
   TransTotal_saved.df <- bind_rows(TransTotal_saved.df, trans.df)
 }
 
-Values_saved.df <-
+Values_saved <- All.Mont$Values
+names(Values_saved) <- c("1990", "2000", "2010")
+Values_saved.df <- data.frame()
+for (ts in names(Values_saved)){
+  for (mun in names(Values_saved[[1]])) {
+    trans.df <- t(Values_saved[[ts]][[mun]]) %>% as.data.frame() %>% 
+      mutate(Year = ts, Municipality = mun) 
+    Values_saved.df <- bind_rows(Values_saved.df, trans.df)
+  }
+}
+Values_saved.df$Year <- as.numeric(Values_saved.df$Year)
+
+# ----
 
 trans_mat_1990to2000 <- 
   TransTotal_saved.df %>% 
@@ -47,7 +86,7 @@ trans_mat_1990to2000 <-
   spread(key=trans_type, value=Freq)
 trans_only_mat <- 
   Filter(function(x)!all(is.na(x)), trans_mat_1990to2000) %>% 
-  dplyr::select(-Mun)
+  dplyr::select(-Municipality)
 NameCode <- paste0(str_sub(trans_mat_1990to2000$Mun,1,3), 
                    1:length(trans_mat_1990to2000$Mun))
 rownames(trans_only_mat) <- NameCode
@@ -76,61 +115,24 @@ values_only_mat_noZero <-
 # Clust
 trans_dist <- dist(decostand(trans_only_mat_noZero[,1:4], "hel"))
 trans_clust <- hclust(trans_dist, method = "ward.D2")
-trans_kmeans <- cascadeKM(decostand(trans_only_mat_noZero[,1:4], "hel"), 1,4)
-trans_kmeans_memberships <- trans_kmeans$partition[,2] # 2groups
 
 values_dist <- dist(decostand(values_only_mat_noZero[,1:4], "hel"))
 values_clust <- hclust(values_dist, method = "ward.D2")
-values_kmeans <- cascadeKM(decostand(values_only_mat_noZero[,1:4], "hel"), 1,10)
-values_kmeans_memberships <- values_kmeans$partition[,8] # 2groups
-
-# Spatial 
-
-tbl.names <- table(mun.sub.18.clean$MUS_NM_MUN)
-more.than.one <- tbl.names[tbl.names>1]
-mun.sub.18.clean %>% 
-  select(MUS_NM_MUN) %>% 
-  group_by(MUS_NM_MUN) %>%
-  dplyr::summarise(MUS_NM_MUN_New = first(MUS_NM_MUN)) ->
-  mun.sub.18.clean.merged
-
-centroids <- st_centroid(mun.sub.18.clean.merged)
-mun.coords <- (st_coordinates(centroids))
-centroids.withCoords <- centroids %>% cbind(mun.coords) 
-st_geometry(centroids.withCoords) <- NULL
-
-listW <- nb2listw(graph2nb(gabrielneigh(mun.coords)), zero.policy=T)
-neighbors <- listw2sn(listW)[,1:2]
-
-# plot(mun.coords, type='n',asp=1)
-# title("Delaunay triangulation")
-# text(mun.coords, labels=1:16, pos=3)
-# for(i in 1:nrow(neighbors)) {
-#   lines(rbind(mun.coords[neighbors[i,1],], mun.coords[neighbors[i,2],]))
-# }
-
-links.mat.dat <- contiguity.mat(neighbors, 177)
-
-trans_spatial <- constrained.clust(trans_dist,links.mat.dat)
-trans_spatial_2 <- hclustgeo(D0=dist_1, D1=as.dist(links.mat.dat), alpha=0.1)
-
-values_spatial <- constrained.clust(values_dist,links.mat.dat)
 
 # Plotting
 
 trans_dendro <- as.dendrogram(trans_clust)
 trans_memberships <- cutree(trans_clust,4)
-#memberships <- kmeans_memberships
-#memberships <- replace(x=memberships, list=memberships==3, 2)
 
 trans_memberships_names <- c("Urb-Def","AgEx-Def",
                              "AgEx-DeTree","Urb-DeAg")[trans_memberships]
 labels_colors(trans_dendro) <- trans_memberships[trans_clust$order]
 plot(trans_dendro)
 
+# -----
+
 values_dendro <- as.dendrogram(values_clust)
 values_memberships <- cutree(values_clust,5)
-#values_memberships <- values_kmeans_memberships
 
 values_memberships_names <- c("Forest - Dominant","Forest - Agriculture",
                               "Agriculture - Dominant"," Urban - MD", 
@@ -235,55 +237,3 @@ ggplot() + geom_sf(data = mun.sub.18.clean.mod,
   theme_bw()
 
 #-------------------------------------------------------------------------------
-#-------------------------------------------------------------------------------
-
-## !
-
-# => Constrained on census data
-
-# Import census data 
-census <- st_read("Part_A_statModel/Model_Outputs/Multivar_CensusData.shp")
-setwd(wd)  
-
-st_geometry(census) <- NULL
-minim.mat_noZero.df <- c()
-minim.mat_noZero.df <- 
-  trans_only_mat_noZero %>% #not transformed
-  as.data.frame() %>% 
-  dplyr::mutate(NameCode = rownames(trans_only_mat_noZero))
-
-census[is.na(census)] <- 0
-
-# CANT TRUST INCOME 2011
-# Making new vars and saving outputs
-census %>% mutate(in_change = (Inc_01-Inc_91)) %>%
-  mutate(pop_change = (Pop_11-Pop_91)) %>% 
-  left_join(trans_member.table, by = "MUS_NM_MUN") %>% 
-  left_join(minim.mat_noZero.df, by = "NameCode")  ->
-  census.withChange
-
-saveRDS(census.withChange, "Part_A_statModel/Model_Data/CensusData/Data_gam/CensusDataWithChange.RDS")
-
-## For this analysis (older code)
-census.diff <- census[,9:15] - census[,2:8]
-names(census.diff) <- paste0("Diff_", names(census.diff))
-census.diff[census.diff == Inf] <- 0
-census.diff[apply(census.diff,2,is.nan)] <- 0
-census <- cbind(census, census.diff)
-
-census.withcode <- census %>% 
-  left_join(trans_member.table, by = "MUS_NM_MUN") %>% 
-  left_join(minim.mat_noZero.df, by = "NameCode") 
-
-rda.1 <- rda(decostand(census.withcode[,26:29], "normalize"),
-             decostand(census.withcode[,16:22], "normalize"))
-
-plot(rda.1, type = "n")
-adj.cols = trans_memberships[match(census.withcode$NameCode, names(trans_memberships))]
-adj.names = trans_memberships_names[match(census.withcode$NameCode, names(trans_memberships))]
-points(rda.1, display="sites", col = adj.cols)
-points(rda.1, display = 'species', pch = '+', cex = 3, col = 1)
-text(rda.1, display="bp", col=2)
-
-mvpart(Memberships_names~
-         Pop_91+Mob_91+Edu_0_91+Edu_1_91+LabF_91+TotDw_91+Inc_91, data=census.withcode)

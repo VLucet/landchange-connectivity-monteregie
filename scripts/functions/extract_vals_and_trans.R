@@ -40,7 +40,6 @@ ExtractValsAndTrans = function(shape_vec, # Vector of shape matched by names
     extracted = raster::extract(landUse_stack, tmp.shape)
     masked = stack(mask(crop(landUse_stack, tmp.shape),tmp.shape))
     
-    
     # VALUES - not hardcoded, flexible part
     for (step in 1:length(steps)){
       column = c()
@@ -50,9 +49,10 @@ ExtractValsAndTrans = function(shape_vec, # Vector of shape matched by names
       tmp.table = table(column)
       
       # Match to keep the same format 
-      tmp.matches = match(template[,1], names(tmp.table))
+      tmp.matches = base::match(purrr::as_vector(template[,1]), 
+                                as.numeric(names(tmp.table)))
       tmp.table = c(tmp.table)[tmp.matches]
-      names(tmp.table) = as.character(template[,2])
+      names(tmp.table) = as.character(purrr::as_vector(template[,2]))
       tmp.summurized[[steps[step]]] = tmp.table
     }
     
