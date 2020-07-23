@@ -757,7 +757,7 @@ assembled
 ggsave("../msc-thesis-mcgill/figures/bar_both.png", assembled, width = 15, height = 20)
 ```
 
-```{r BAU, message=FALSE, warning=FALSE}
+```{r, message=FALSE, warning=FALSE}
 # draw_scenario(42) ...
 
 all_chap2 <- draw_scenario(42, return_df = T) %>% 
