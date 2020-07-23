@@ -462,7 +462,7 @@ ggsave("../msc-thesis-mcgill/figures/hist_chap1.png", hist_plot_1, width = 15, h
 ```{r hist_plot_2, out.width="100%"}
 hist_plot_2 <- histograms %>% 
   mutate(ts = as.factor(ts)) %>% 
-  filter(chapter %in% c('both', 'chap_2')) %>%  
+  filter(chapter %in% c('chap_2')) %>%  
   ggplot(aes(x=bins, y=n, group=ts, colour=ts)) + 
   geom_density(stat='identity', show.legend=F, aes(fill=factor(ts)), alpha=0.3)+
   facet_grid(code~species) +
