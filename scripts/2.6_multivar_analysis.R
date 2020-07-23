@@ -53,7 +53,6 @@ All.Mont <- ExtractValsAndTrans(
   classes = classes
 )
 
-
 # Transform ---------------------------------------------------------------
 
 TransTotal_saved.df <- data.frame()
@@ -140,6 +139,11 @@ values_memberships_names <- c("Forest - Dominant","Forest - Agriculture",
 labels_colors(values_dendro) <- values_memberships[values_clust$order]
 plot(values_dendro)
 
+# Figure out % of urban land in smallest group
+
+grp <- as.numeric(names(sort(table(values_memberships))[1]))
+urb <- values_only_mat_noZero[which(values_memberships == 4),]
+
 # PCA
 trans_minim.mat_noZero <- decostand(trans_only_mat_noZero[,1:4], 
                                     "norm")
@@ -173,19 +177,27 @@ ggbiplot(Values_Pca, scale = 1,
   ggtitle("PCA of Municipality profiles")
 
 # with transition groups
-ggbiplot(Values_Pca, scale = 1,
-         obs.scale = 1, var.scale = 1,
-         groups =  trans_memberships_names,
-         ellipse = T, circle = TRUE) +
-  theme(panel.background = element_rect(fill = "white", colour = "grey50"),
-        legend.direction = 'horizontal', legend.position = 'top') +
-  ggtitle("PCA of Municipality profiles")
+# ggbiplot(Values_Pca, scale = 1,
+#          obs.scale = 1, var.scale = 1,
+#          groups =  trans_memberships_names,
+#          ellipse = T, circle = TRUE) +
+#   theme(panel.background = element_rect(fill = "white", colour = "grey50"),
+#         legend.direction = 'horizontal', legend.position = 'top') +
+#   ggtitle("PCA of Municipality profiles")
 
 values_member.table <- tibble(MUS_NM_MUN = sort(values_mat_1990to2000$Mun), 
                               NameCode = NameCode, Memberships = values_memberships, 
                               Memberships_names = values_memberships_names)
 
 ## Plot
+
+tbl.names <- table(mun.sub.18.clean$MUS_NM_MUN)
+more.than.one <- tbl.names[tbl.names>1]
+mun.sub.18.clean %>% 
+  select(MUS_NM_MUN) %>% 
+  group_by(MUS_NM_MUN) %>%
+  dplyr::summarise(MUS_NM_MUN_New = first(MUS_NM_MUN)) ->
+  mun.sub.18.clean.merged
 
 trans_mun.sub.18.clean.mod <- 
   left_join(mun.sub.18.clean.merged, trans_member.table, by="MUS_NM_MUN")

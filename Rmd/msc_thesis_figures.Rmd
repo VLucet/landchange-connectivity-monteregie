@@ -679,55 +679,8 @@ ggsave("../msc-thesis-mcgill/figures/original_hists.png", hist_plot_origin, widt
 ### Bar charts
 
 ```{r BAU, message=FALSE, warning=FALSE}
-sce_39 <- stack(lapply((list.files("test/july/sce_39_BAU/", full.names = T)), raster))
-stratum <- raster("data/stsim/aggregated/primary_stratum_mont_or_not_or_PA.tif")
-the_names <- names(sce_39)
-sce_39[stratum == 0] <- NA
-names(sce_39) <- the_names
-
-ts_2_39 <- sce_39[[which(stringr::str_detect(names(sce_39), "ts2"))]]
-ts_11_39 <- sce_39[[which(stringr::str_detect(names(sce_39), "ts11"))]]
-
-two_stack_39 <-  stack(sce_39$sc.it5.ts2, sce_39$sc.it5.ts11)
-names(two_stack_39) <- c("2010", "2100")
-# plot(trim(two_stack))
-
-ts_2_freq_39 <- freq(ts_2_39, useNA="no")
-ts_11_freq_39 <- freq(ts_11_39, useNA="no")
-
-full_df_2_39 <- data.frame()
-for (x in 1:length(ts_2_freq_39)){
-  temp_df_39 <- ts_2_freq_39[[x]] %>% 
-    as.data.frame() %>% 
-    mutate(iteration = paste0("iter_", x)) %>% 
-    mutate(timestep = 2010)
-  full_df_2_39 <- bind_rows(full_df_2_39, temp_df_39)
-}
-
-full_df_11_39 <- data.frame()
-for (x in 1:length(ts_11_freq_39)){
-  temp_df_39 <- ts_11_freq_39[[x]] %>% 
-    as.data.frame() %>% 
-    mutate(iteration = paste0("iter_", x)) %>% 
-    mutate(timestep = 2100)
-  full_df_11_39 <- bind_rows(full_df_11_39, temp_df_39)
-}
-
-full_df_39 <- bind_rows(full_df_2_39, full_df_11_39)
-
-mean_df_39 <- full_df_39 %>% 
-  group_by(timestep, value) %>% 
-  summarise(mean_count = mean(count)) %>% ungroup()
-
-sd_df_39 <- full_df_39 %>% 
-  group_by(timestep, value) %>% 
-  summarise(sd_count = sd(count)) %>% ungroup()
-
-final_df_39 <- left_join(mean_df_39, sd_df_39,  by = c("timestep", "value")) %>% 
-  left_join(classes_unique, 
-            by=c("value"="new_code")) %>% 
-  filter(!(value %in% c(4,5,6))) %>%
-  mutate(area = mean_count*((90*90)/10000)) 
+# draw_scenario(39)
+final_df_39 <- draw_scenario(39, return_df = T)
 
 bar_plot_39 <- final_df_39 %>% 
   #filter(value > 10) %>% 
@@ -746,55 +699,8 @@ bar_plot_39
 ```
 
 ```{r reforestation, message=FALSE, warning=FALSE}
-sce_42 <- stack(lapply((list.files("test/july/sce_42_Ref/", full.names = T)), raster))
-stratum <- raster("data/stsim/aggregated/primary_stratum_mont_or_not_or_PA.tif")
-the_names <- names(sce_42)
-sce_42[stratum == 0] <- NA
-names(sce_42) <- the_names
-
-ts_2_42 <- sce_42[[which(stringr::str_detect(names(sce_42), "ts2"))]]
-ts_11_42 <- sce_42[[which(stringr::str_detect(names(sce_42), "ts11"))]]
-
-two_stack_42 <-  stack(sce_42$sc.it5.ts2, sce_42$sc.it5.ts11)
-names(two_stack_42) <- c("2010", "2100")
-# plot(trim(two_stack))
-
-ts_2_freq_42 <- freq(ts_2_42, useNA="no")
-ts_11_freq_42 <- freq(ts_11_42, useNA="no")
-
-full_df_2_42 <- data.frame()
-for (x in 1:length(ts_2_freq_42)){
-  temp_df_42 <- ts_2_freq_42[[x]] %>% 
-    as.data.frame() %>% 
-    mutate(iteration = paste0("iter_", x)) %>% 
-    mutate(timestep = 2010)
-  full_df_2_42 <- bind_rows(full_df_2_42, temp_df_42)
-}
-
-full_df_11_42 <- data.frame()
-for (x in 1:length(ts_11_freq_42)){
-  temp_df_42 <- ts_11_freq_42[[x]] %>% 
-    as.data.frame() %>% 
-    mutate(iteration = paste0("iter_", x)) %>% 
-    mutate(timestep = 2100)
-  full_df_11_42 <- bind_rows(full_df_11_42, temp_df_42)
-}
-
-full_df_42 <- bind_rows(full_df_2_42, full_df_11_42)
-
-mean_df_42 <- full_df_42 %>% 
-  group_by(timestep, value) %>% 
-  summarise(mean_count = mean(count)) %>% ungroup()
-
-sd_df_42 <- full_df_42 %>% 
-  group_by(timestep, value) %>% 
-  summarise(sd_count = sd(count)) %>% ungroup()
-
-final_df_42 <- left_join(mean_df_42, sd_df_42,  by = c("timestep", "value")) %>% 
-  left_join(classes_unique, 
-            by=c("value"="new_code")) %>% 
-  filter(!(value %in% c(4,5,6))) %>%
-  mutate(area = mean_count*((90*90)/10000))
+# draw_scenario(42)
+final_df_42 <- draw_scenario(42, return_df = T)
 
 bar_plot_42 <- final_df_42  %>% 
   #filter(value > 10) %>% 
@@ -851,3 +757,32 @@ assembled
 ggsave("../msc-thesis-mcgill/figures/bar_both.png", assembled, width = 15, height = 20)
 ```
 
+```{r BAU, message=FALSE, warning=FALSE}
+# draw_scenario(42) ...
+
+all_chap2 <- draw_scenario(42, return_df = T) %>% 
+  bind_rows(draw_scenario(45, return_df = T)) %>% 
+  bind_rows(draw_scenario(48, return_df = T)) %>% 
+  bind_rows(draw_scenario(51, return_df = T))
+
+#forest <- 
+  
+bar_chap2 <- all_chap2 %>% 
+  mutate(value = ifelse(.$value>10, 10, .$value)) %>%
+  mutate(new_class = ifelse(.$value == 10, "forest", .$new_class)) %>% 
+  group_by(new_class, timestep, scenario, value) %>% 
+  summarise(area = sum(area)) %>% ungroup() %>% 
+  filter(value %in% c(1,2,10)) %>% 
+  left_join(results_clean, by = c("scenario"="scenarioId")) %>% 
+  mutate(value = as.factor(value), timestep = as.factor(timestep)) %>% 
+  ggplot(aes(fill=timestep, y=area, x=new_class)) + 
+  geom_bar(position="dodge", stat="identity") +
+  facet_wrap(~name, labeller = label_wrap_gen(width = 30)) +
+  theme(legend.position = c(0.85, 0.7)) +
+  labs(x = "Land use Class", 
+       y = "Mean Area (hectare)", 
+       fill = "Year") +
+  NULL
+bar_chap2
+ggsave("../msc-thesis-mcgill/figures/bar_chap2.png", bar_chap2, width = 15, height = 20)
+```
