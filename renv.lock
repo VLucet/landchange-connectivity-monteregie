@@ -665,6 +665,18 @@
       "Repository": "CRAN",
       "Hash": "4690554300d1ca4e0e89716d252512cc"
     },
+    "ggbiplot": {
+      "Package": "ggbiplot",
+      "Version": "0.55",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteUsername": "vqv",
+      "RemoteRepo": "ggbiplot",
+      "RemoteRef": "master",
+      "RemoteSha": "7325e880485bea4c07465a0304c470608fffb5d9",
+      "Hash": "72b58923c795a7fa482b285bb6427c0c"
+    },
     "ggforce": {
       "Package": "ggforce",
       "Version": "0.3.1",

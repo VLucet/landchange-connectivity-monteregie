@@ -493,6 +493,7 @@ surf_1 <- surf %>%
   group_modify(~mutate(.x , baseline = subset(.x, timestep == 2010)$kp_nb, 
                        the_diff = ((kp_nb-baseline)/baseline)*100 )) %>% ungroup %>% 
   ggplot(aes(x = timestep, y = the_diff, color=climate)) +
+  scale_linetype_manual(values=c("solid", "twodash")) +
   geom_smooth(aes(group = scenario, linetype=code_run), alpha=0.2, method="loess")+
   #geom_point(aes(group=scenario), alpha= 0.05, size = 0.5)+
   facet_wrap(~species, scales = "fixed")+
@@ -550,6 +551,7 @@ surf_2 <- surf %>%
   ggplot(aes(x = timestep, y = the_diff, color=climate)) +
   geom_smooth(aes(group = scenario, linetype=code_run), alpha=0.2, method="loess")+
   #geom_point(aes(group=scenario), alpha= 0.05, size = 0.5)+
+  scale_linetype_manual(values=c("solid", "dashed", "longdash", "dotted")) +
   facet_wrap(~species, scales = "fixed")+
   scale_color_manual(values=c('#ffe300', '#ff7a14', "#b31400"), 
                      labels = c("Historic", "Baseline", "RCP 8.5")) +
