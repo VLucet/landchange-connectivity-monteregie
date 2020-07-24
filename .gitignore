@@ -38,3 +38,5 @@ temp.tif
 scripts/0.2_add_buffer_to_all.sh
 log.txt
 .idea
+*.tif
+*.aux.xml
