@@ -24,7 +24,7 @@ showTmpFiles()
 
 #-------------------------------------------------------------------------------
 
-# Transition size ==> RERUN CODE IN script 1 with reclassed 120 by 120 raster
+# Transition size
 source("scripts/functions/extract_vals_and_trans.R")
 lu.18.sub <- stack(raster("data/land_use/LandUse_mont_aafc_30by30_1990.tif"),
                    raster("data/land_use/LandUse_mont_aafc_30by30_2000.tif"),
