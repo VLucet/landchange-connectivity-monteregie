@@ -63,12 +63,12 @@ lu.stack <- stack(raster("data/land_use/LandUse_mont_aafc_30by30_1990.tif"),
 lu.stack.buf <- stack(raster("data/land_use/LandUse_mont_aafc_buffered_30by30_1990.tif"), 
                       raster("data/land_use/LandUse_mont_aafc_buffered_30by30_2000.tif"),
                       raster("data/land_use/LandUse_mont_aafc_buffered_30by30_2010.tif"))
-lu.stack.ag <- stack(raster("data/land_use/aggregated/aggregated_lu_1990.tif"), 
-                     raster("data/land_use/aggregated/aggregated_lu_2000.tif"),
-                     raster("data/land_use/aggregated/aggregated_lu_2010.tif"))
-lu.stack.buf.ag <- stack(raster("data/land_use/aggregated/aggregated_lu_buffered_1990.tif"), 
-                         raster("data/land_use/aggregated/aggregated_lu_buffered_2000.tif"),
-                         raster("data/land_use/aggregated/aggregated_lu_buffered_2010.tif"))
+lu.stack.ag <- stack(raster("data/land_use/aggregated/aggregated_lu_new_roads_1990.tif"), 
+                     raster("data/land_use/aggregated/aggregated_lu_new_roads_2000.tif"),
+                     raster("data/land_use/aggregated/aggregated_lu_new_roads_2010.tif"))
+lu.stack.buf.ag <- stack(raster("data/land_use/aggregated/aggregated_lu_buffered_new_roads_1990.tif"), 
+                         raster("data/land_use/aggregated/aggregated_lu_buffered_new_roads_2000.tif"),
+                         raster("data/land_use/aggregated/aggregated_lu_buffered_new_roads_2010.tif"))
 
 names(lu.stack) <- c("lu_1990", "lu_2000", "lu_2010")
 names(lu.stack.buf) <- c("lu_1990", "lu_2000", "lu_2010")
@@ -242,7 +242,7 @@ raster_base <- list()
 # Forest and ag to Urb
 raster_base[["urb"]] <- prepare_transition_data(lu.stack = lu.stack, 
                                                 class_tr = 2, 
-                                                from = c(1,3), 
+                                                from = c(0,1,3), 
                                                 only_from = T, 
                                                 aggregation = R_AGGR$ag,
                                                 agfactor = R_AGGR$factor)
