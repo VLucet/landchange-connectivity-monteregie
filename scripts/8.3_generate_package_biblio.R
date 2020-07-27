@@ -4,8 +4,3 @@ renvLock <- jsonlite::read_json("renv.lock")
 sink("../msc-thesis-mcgill/r_packages.bib")
 knitr::write_bib(names(renvLock$Packages))
 sink()
-
-renvLock <- jsonlite::read_json("renv.lock")
-sink("/r_packages.bib")
-knitr::write_bib(names(renvLock$Packages))
-sink()
