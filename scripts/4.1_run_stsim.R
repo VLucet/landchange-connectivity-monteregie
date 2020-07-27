@@ -434,24 +434,24 @@ if (STSIM_RUN){
       historic_run, #38
       
       BAU_run_historic, #39 
-      BAU_run_baseline, #40
+      #BAU_run_baseline, #40
       BAU_run_8.5, #41
       
       BAU_run_ref_historic, #42 
-      BAU_run_ref_baseline, #43
-      BAU_run_ref_8.5, #44
+      #BAU_run_ref_baseline, #43
+      BAU_run_ref_8.5#, #44
       
-      BAU_corr_protected_historic, #45 
-      BAU_corr_protected_baseline, #46
-      BAU_corr_protected_8.5, #47
+      #BAU_corr_protected_historic, #45 
+      #BAU_corr_protected_baseline, #46
+      #BAU_corr_protected_8.5, #47
       
-      REF_corr_protected_ref_historic, #48 
-      REF_corr_protected_ref_baseline, #49
-      REF_corr_protected_ref_8.5, #50
+      #REF_corr_protected_ref_historic, #48 
+      #REF_corr_protected_ref_baseline, #49
+      #REF_corr_protected_ref_8.5, #50
       
-      REF_corr_protected_ref_targeted_historic, #51 
-      REF_corr_protected_ref_targeted_baseline, #52
-      REF_corr_protected_ref_targeted_8.5 #53
+      #REF_corr_protected_ref_targeted_historic, #51 
+      #REF_corr_protected_ref_targeted_baseline, #52
+      #REF_corr_protected_ref_targeted_8.5 #53
     )
   
   for(sce in all_sce){
