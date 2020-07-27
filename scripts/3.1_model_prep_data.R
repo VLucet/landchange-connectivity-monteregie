@@ -242,7 +242,7 @@ raster_base <- list()
 # Forest and ag to Urb
 raster_base[["urb"]] <- prepare_transition_data(lu.stack = lu.stack, 
                                                 class_tr = 2, 
-                                                from = c(0,1,3), 
+                                                from = c(1,3), 
                                                 only_from = T, 
                                                 aggregation = R_AGGR$ag,
                                                 agfactor = R_AGGR$factor)
