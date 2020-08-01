@@ -174,7 +174,7 @@ post_process(){
 
 
 make_figures(){
-  Rscript scripts/7.2_make_plots.R
+  Rscript -e "rmarkdown::render('Rmd/msc_thesis_figures.Rmd')"
 }
 ### BUNDLE FUNCTIONS
 

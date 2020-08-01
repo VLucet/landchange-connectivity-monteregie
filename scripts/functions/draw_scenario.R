@@ -1,10 +1,10 @@
 ## Useful function for drawing side by side maps
 
 draw_scenario <- function(sce = NULL, ts_start = 2, ts_end = 11, 
-                          sce_folder = "test/july", iter=5, 
+                          sce_folder = "../test/july", iter=5, 
                           plot_raw=TRUE, return_df=FALSE){
   
-  stratum <- raster("data/stsim/aggregated/primary_stratum_mont_or_not_or_PA.tif")
+  stratum <- raster("../data/stsim/aggregated/primary_stratum_mont_or_not_or_PA.tif")
   
   sce_dirs <- unlist(lapply(list.dirs(sce_folder), FUN = grep, pattern="sce", value=T))
   sce_index <- grep(x=sce_dirs, pattern = as.character(sce))

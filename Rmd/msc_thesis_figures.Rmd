@@ -64,11 +64,11 @@ We start by preparing the data from the outputs of scripts `7.1` and `8.1`. The 
 
 ```{r data_prep, message=FALSE, warning=FALSE, paged.print=TRUE}
 # Results dir + mun shapefile
-mun <- st_read("data/mun/munic_SHP_clean.shp", quiet = TRUE)
+mun <- st_read("../data/mun/munic_SHP_clean.shp", quiet = TRUE)
 
 # Classes
-classes <- read_csv("config/rcl_tables/land_use/recode_table.csv")
-forest_classes <- read_csv("config/rcl_tables/land_use/recode_table_forest.csv") %>% 
+classes <- read_csv("../config/rcl_tables/land_use/recode_table.csv")
+forest_classes <- read_csv("../config/rcl_tables/land_use/recode_table_forest.csv") %>% 
   rename(new_code = "ID", new_class = "Name")
 
 classes_unique <- unique(classes[, c("new_code", "new_class")]) %>% 
@@ -81,7 +81,7 @@ sce_code_vec <-
 sce_code_vec_run <- 
   rep(c("BAU", "R", "CorPr", "R-CorPr", "R(T)-CorPr"), each=3)
 
-results_clean <- read_rds("data/temp/stsim_run_results.RDS") %>% 
+results_clean <- read_rds("../data/temp/stsim_run_results.RDS") %>% 
   dplyr::select(scenarioId, name) %>% 
   mutate(name =  gsub(.$name, pattern = " \\(.+\\)", replacement = "")) %>% 
   mutate(sce =  paste0("sce_", .$scenarioId)) %>% 
@@ -95,13 +95,13 @@ results_clean <- read_rds("data/temp/stsim_run_results.RDS") %>%
   mutate(code_run = c("control", sce_code_vec_run))
 
 # Final extracted datasets
-df_final <- readRDS("outputs/final/final_df_current_density.RDS") %>%
+df_final <- readRDS("../outputs/final/final_df_current_density.RDS") %>%
   mutate(timestep = (timestep*10)+1990, source = "model")
-df_final_origin <- readRDS("outputs/final/final_df_origin_current_density.RDS") %>%
+df_final_origin <- readRDS("../outputs/final/final_df_origin_current_density.RDS") %>%
   mutate(timestep = timestep*10+1990, source = "model")
 
 # Stratum key
-stratum_key <- read_csv("config/stsim/SecondaryStratum.csv") %>%
+stratum_key <- read_csv("../config/stsim/SecondaryStratum.csv") %>%
   mutate(ID = as.factor(ID)) %>%
   rename(zone=ID, MUS_NM_MUN=Name) %>%
   left_join(df_final, by="zone") %>%
@@ -132,21 +132,21 @@ joined <- full_join(df_summarised, df_origin_summarised,
                                       "BAU run + corrs protection + ref TARGETED")))
 
 # Roc curves data
-urb <- readRDS("data/temp/fit_rs_outcome_rf_urb_2.RDS")
-agex <- readRDS("data/temp/fit_rs_outcome_rf_agex_2.RDS")
+urb <- readRDS("../data/temp/fit_rs_outcome_rf_urb_2.RDS")
+agex <- readRDS("../data/temp/fit_rs_outcome_rf_agex_2.RDS")
 
 # Histogram data 
-hist_original <- read_csv("outputs/final/final_values_output_original.csv")
-hist_true <- read_csv("outputs/final/final_values_output_TRUE.csv") %>% 
+hist_original <- read_csv("../outputs/final/final_values_output_original.csv")
+hist_true <- read_csv("../outputs/final/final_values_output_TRUE.csv") %>% 
   mutate(sce = "TRUE")
-histograms <- read_csv("outputs/final/final_values_output.csv") %>% 
+histograms <- read_csv("../outputs/final/final_values_output.csv") %>% 
   bind_rows(hist_original) %>% 
   bind_rows(hist_true) %>% 
   left_join(results_clean, by="sce") 
 
 
 # SURF Data
-surf <- read_csv("surf/surf_output.csv") %>% 
+surf <- read_csv("../surf/surf_output.csv") %>% 
   mutate(timestep = timestep*10+1990) %>% 
   left_join(results_clean, by=c("scenario"="scenarioId")) %>% 
   replace_na(list(climate = "none", run = "historic run")) %>% 
@@ -208,7 +208,7 @@ fig_1_historic <- joined %>%
   NULL
 fig_1_historic
 ggsave(fig_1_historic,
-       filename = "../msc-thesis-mcgill/figures/connectivity_decrease_x5species_historic.png",
+       filename = "../thesis/figures/connectivity_decrease_x5species_historic.png",
        width = 15, height = 15, dpi = 500)
 ```
 #### Chap 1
@@ -240,7 +240,7 @@ fig_1_static_chap_1 <- joined %>%
   NULL
 fig_1_static_chap_1
 ggsave(fig_1_static_chap_1, 
-       filename = "../msc-thesis-mcgill/figures/connectivity_decrease_x5species_chap1.png", 
+       filename = "../thesis/figures/connectivity_decrease_x5species_chap1.png", 
        width = 15, height = 15)
 ```
 
@@ -266,7 +266,7 @@ radar_chap1 <-
           background.circle.colour	= "#ffffff", group.point.size	= 2, 
           axis.label.size=5)
 radar_chap1
-ggsave("../msc-thesis-mcgill/figures/radar_ggradar_chap1.png", radar_chap1, width = 15, height = 10)
+ggsave("../thesis/figures/radar_ggradar_chap1.png", radar_chap1, width = 15, height = 10)
 ```
 
 #### Chap 2
@@ -296,7 +296,7 @@ fig_1_static_chap_2 <- joined %>%
   NULL
 fig_1_static_chap_2
 ggsave(fig_1_static_chap_2, 
-       filename = "../msc-thesis-mcgill/figures/connectivity_decrease_x5species_chap2.png", 
+       filename = "../thesis/figures/connectivity_decrease_x5species_chap2.png", 
        width = 15, height = 15)
 ```
 ##### Radar Graph
@@ -321,7 +321,7 @@ radar_chap2 <-
           background.circle.colour	= "#ffffff", group.point.size	= 2, 
           axis.label.size=5)
 radar_chap2
-ggsave("../msc-thesis-mcgill/figures/radar_ggradar_chap2.png", radar_chap2, width = 15, height = 10)
+ggsave("../thesis/figures/radar_ggradar_chap2.png", radar_chap2, width = 15, height = 10)
 ```
 
 #### Both 
@@ -348,7 +348,7 @@ radar_all <-
           background.circle.colour	= "#ffffff", group.point.size	= 2, 
           axis.label.size=5)
 radar_all
-ggsave("../msc-thesis-mcgill/figures/radar_ggradar_both.png", radar_all, width = 15, height = 10)
+ggsave("../thesis/figures/radar_ggradar_both.png", radar_all, width = 15, height = 10)
 ```
 
 ### Map of change
@@ -369,7 +369,7 @@ Mapping takes a lot of time, not knitted by default
 #   scale_fill_binned(low='#d13e11', high='#fff7bc', 
 #                     breaks=c(-50, -40, -30, -20, -10, 0, 10))
 # change_1
-#ggsave("../msc-thesis-mcgill/figures/connectivit_change_mun_chap1.png", change_1)
+#ggsave("../thesis/figures/connectivit_change_mun_chap1.png", change_1)
 ```
 
 #### Chap 2
@@ -385,7 +385,7 @@ Mapping takes a lot of time, not knitted by default
 #   scale_fill_binned(low='#d13e11', high='#fff7bc', 
 #                     breaks=c(-50, -40, -30, -20, -10, 0, 10))
 # change_2
-#ggsave("../msc-thesis-mcgill/figures/connectivit_change_mun_chap2.png", change_2)
+#ggsave("../thesis/figures/connectivit_change_mun_chap2.png", change_2)
 ```
 
 #### Both
@@ -400,7 +400,7 @@ Mapping takes a lot of time, not knitted by default
 #   scale_fill_binned(low='#d13e11', high='#fff7bc', 
 #                     breaks=c(-50, -40, -30, -20, -10, 0, 10))
 # change_both
-#ggsave("../msc-thesis-mcgill/figures/connectivit_change_mun_both.png", change_both)
+#ggsave("../thesis/figures/connectivit_change_mun_both.png", change_both)
 ```
 
 ### ROC Curves
@@ -432,7 +432,7 @@ p2 <- bind_rows(agex, .id = "fold") %>%
 full = p1 + p2
 
 full
-ggsave("../msc-thesis-mcgill/figures/double_roc_resample.png", full)
+ggsave("../thesis/figures/double_roc_resample.png", full)
 ```
 
 ### Histograms
@@ -455,7 +455,7 @@ hist_plot_1 <- histograms %>%
         axis.ticks.y.left = element_blank()) +
   NULL
 hist_plot_1
-ggsave("../msc-thesis-mcgill/figures/hist_chap1.png", hist_plot_1, width = 15, height = 15)
+ggsave("../thesis/figures/hist_chap1.png", hist_plot_1, width = 15, height = 15)
 ```
 
 #### Chap 2
@@ -476,7 +476,7 @@ hist_plot_2 <- histograms %>%
         axis.ticks.y.left = element_blank()) +
   NULL
 hist_plot_2
-ggsave("../msc-thesis-mcgill/figures/hist_chap2.png", hist_plot_2, width = 15, height = 20)
+ggsave("../thesis/figures/hist_chap2.png", hist_plot_2, width = 15, height = 20)
 ```
 
 ### SURF Analysis
@@ -508,7 +508,7 @@ surf_1 <- surf %>%
          linetype = guide_legend(nrow=1, override.aes = list(colour = 'black'))) +
   NULL
 surf_1
-ggsave("../msc-thesis-mcgill/figures/surf_chap1.png", surf_1, width = 15, height = 15)
+ggsave("../thesis/figures/surf_chap1.png", surf_1, width = 15, height = 15)
 ```
 
 ##### Radar Graph
@@ -534,7 +534,7 @@ surf_radar_1 <-
           background.circle.colour	= "#ffffff", group.point.size	= 2, 
           axis.label.size=5)
 surf_radar_1
-ggsave("../msc-thesis-mcgill/figures/surf_radar_chap1.png", surf_radar_1, width = 15, height = 10)
+ggsave("../thesis/figures/surf_radar_chap1.png", surf_radar_1, width = 15, height = 10)
 ```
 
 #### Chap 2
@@ -565,7 +565,7 @@ surf_2 <- surf %>%
                                  override.aes = list(colour = 'black'))) +
   NULL
 surf_2
-ggsave("../msc-thesis-mcgill/figures/surf_chap2.png", surf_2, width = 15, height = 15)
+ggsave("../thesis/figures/surf_chap2.png", surf_2, width = 15, height = 15)
 ```
 
 ##### Radar Graph
@@ -591,7 +591,7 @@ surf_radar_2 <-
           background.circle.colour	= "#ffffff", group.point.size	= 2, 
           axis.label.size=5)
 surf_radar_2
-ggsave("../msc-thesis-mcgill/figures/surf_radar_chap2.png", surf_radar_2, width = 15, height = 10)
+ggsave("../thesis/figures/surf_radar_chap2.png", surf_radar_2, width = 15, height = 10)
 ```
 
 ### Maps
@@ -600,11 +600,11 @@ ggsave("../msc-thesis-mcgill/figures/surf_radar_chap2.png", surf_radar_2, width 
 class = 2
 
 # LOAD
-the_stack <- stack(lapply((list.files("test/july/sce_37_for_urb_prob/", full.names = T)), raster)) == class
+the_stack <- stack(lapply((list.files("../test/july/sce_37_for_urb_prob/", full.names = T)), raster)) == class
 
-original <- raster("data/land_use/aggregated/aggregated_lu_buffered_1990_patched.tif") == class
-final <- raster("data/land_use/aggregated/aggregated_lu_buffered_2010_patched.tif") == class
-stratum <- raster("data/stsim/aggregated/primary_stratum_mont_or_not_or_PA.tif")
+original <- raster("../data/land_use/aggregated/aggregated_lu_buffered_1990_patched.tif") == class
+final <- raster("../data/land_use/aggregated/aggregated_lu_buffered_2010_patched.tif") == class
+stratum <- raster("../data/stsim/aggregated/primary_stratum_mont_or_not_or_PA.tif")
 
 # Ttransform, give names
 the_stack[original == 1] <- 0
@@ -656,7 +656,7 @@ mean(precs);sd(precs)
 
 ### Original hist
 
-```{r}
+```{r original_hists}
 hist_plot_origin <- histograms %>%
   filter(sce %in% c("TRUE", "sce_37")) %>% 
   filter(ts == 2) %>% 
@@ -676,12 +676,14 @@ hist_plot_origin <- histograms %>%
         axis.ticks.y.left = element_blank()) +
   NULL
 hist_plot_origin
-ggsave("../msc-thesis-mcgill/figures/original_hists.png", hist_plot_origin, width = 15, height = 10)
+ggsave("../thesis/figures/original_hists.png", hist_plot_origin, width = 15, height = 10)
 ```
 
 ### Bar charts
 
-```{r BAU, message=FALSE, warning=FALSE}
+#### Sce 39
+
+```{r BAU, eval=FALSE, include=FALSE, message=FALSE, warning=FALSE}
 # draw_scenario(39)
 final_df_39 <- draw_scenario(39, return_df = T)
 
@@ -698,10 +700,12 @@ bar_plot_39 <- final_df_39 %>%
        fill = "Year") +
   NULL
 bar_plot_39
-#ggsave("../msc-thesis-mcgill/figures/bar_BAU.png", bar_plot_39, width = 15, height = 10)
+#ggsave("../thesis/figures/bar_BAU.png", bar_plot_39, width = 15, height = 10)
 ```
 
-```{r reforestation, message=FALSE, warning=FALSE}
+##### Sce 42
+
+```{r reforestation, eval=FALSE, include=FALSE, message=FALSE, warning=FALSE}
 # draw_scenario(42)
 final_df_42 <- draw_scenario(42, return_df = T)
 
@@ -718,10 +722,12 @@ bar_plot_42 <- final_df_42  %>%
        fill = "Year") +
   NULL
 bar_plot_42
-#ggsave("../msc-thesis-mcgill/figures/bar_Ref.png", bar_plot_42, width = 15, height = 10)
+#ggsave("../thesis/figures/bar_Ref.png", bar_plot_42, width = 15, height = 10)
 ```
 
-```{r}
+##### Both
+
+```{r bar_boths, eval=FALSE, include=FALSE}
 final_df_39 <- final_df_39 %>% 
   mutate(sce = "BAU") %>% 
   mutate(type = ifelse(value <10, "non_forest", "forest"))
@@ -757,10 +763,10 @@ non_forest <- final_all %>%
 
 assembled <- wrap_plots(forest, non_forest, ncol=1, nrow=2)
 assembled
-ggsave("../msc-thesis-mcgill/figures/bar_both.png", assembled, width = 15, height = 20)
+ggsave("../thesis/figures/bar_both.png", assembled, width = 15, height = 20)
 ```
 
-```{r, message=FALSE, warning=FALSE}
+```{r eval=FALSE, include=FALSE, message=FALSE, warning=FALSE}
 # draw_scenario(42) ...
 
 all_chap2 <- draw_scenario(42, return_df = T) %>% 
@@ -787,5 +793,5 @@ bar_chap2 <- all_chap2 %>%
        fill = "Year") +
   NULL
 bar_chap2
-ggsave("../msc-thesis-mcgill/figures/bar_chap2.png", bar_chap2, width = 15, height = 20)
+ggsave("../thesis/figures/bar_chap2.png", bar_chap2, width = 15, height = 20)
 ```
