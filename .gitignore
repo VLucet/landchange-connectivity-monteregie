@@ -4,9 +4,6 @@
 .RData
 .Ruserdata
 *.Rproj
-# Circuitscape
-*.ini
-!ini_template.ini
 # Figures
 *.pdf
 *.png
@@ -27,16 +24,11 @@ libraries/grass/**
 !libraries/stsim/
 libraries/stsim/**
 !libraries/stsim/readme.md
-# output folder
-outputs/*
-!outputs/readme.md
 # test and temp folder
 test/
-temp.tif
 # Don't track these
 *.xz
-scripts/0.2_add_buffer_to_all.sh
-log.txt
+*.txt
 .idea
 *.tif
 *.aux.xml

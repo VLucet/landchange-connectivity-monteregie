@@ -30,7 +30,7 @@ addprocs(cores, exeflags="--project")
 
 # META-PARALLELIZATION => Call to pmap, batch_size size in question
 
-@time pmap(compute, ini_list, batch_size=3)
+pmap(compute, ini_list, batch_size=3)
 
 # -----------------------------------------------------------------------------
 # Mask # if stopped and needs a mask
