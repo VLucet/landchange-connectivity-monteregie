@@ -22,10 +22,6 @@
 *.mtc1
 *.out
 *.synctex.gz
-thesis.fdb_latexmk
 *.xml
 *.bcf
-thesis-blx.bib
-figures/
 scrap
-appendix/
