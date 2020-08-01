@@ -2,6 +2,7 @@
 title: "Msc Thesis Figures"
 author: "Valentin Lucet"
 date: "17/07/2020"
+knit: (function(inputFile, encoding) { rmarkdown::render(inputFile, encoding = encoding, output_file = file.path(dirname(inputFile), 'index.html')) })
 output:
   html_document:
     df_print: paged
