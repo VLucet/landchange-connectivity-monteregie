@@ -101,6 +101,10 @@ RUN R -e "install.packages('remotes', repos = c(CRAN = 'https://cloud.r-project.
 RUN R -e "remotes::install_github('rstudio/renv@${RENV_VERSION}')"
 RUN R -e "renv::restore()"
 
+# Set up links
+chmod +x landcon.sh
+sudo ln -s /home/rstudio/land_con_monteregie/landcon.sh /usr/bin/
+
 # ------------------------------------------------------------------------------
 ## With renv cache, has not worked so far: 
 # RENV_PATHS_CACHE_HOST=/opt/local/renv/cache
