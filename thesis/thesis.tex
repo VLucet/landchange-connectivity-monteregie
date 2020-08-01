@@ -1,0 +1,277 @@
+\documentclass[12pt,Bold,TexShade]{thesis/mcgilletdclass}
+\usepackage{graphicx}
+\usepackage{times}
+\usepackage{subfig}
+\usepackage{longtable}
+\usepackage{float}
+\usepackage{setspace}
+\usepackage{multirow} % allows multiple rows in table
+\usepackage{adjustbox}
+\usepackage{enumitem}
+\usepackage{rotating}
+\usepackage{lipsum,lineno} % for placeholder text
+\usepackage{hyperref} % for hyperlink accross the document
+\usepackage{array} % for sizing of tables
+\usepackage{lscape} % for landscape tables
+\usepackage{pdfpages}
+
+% Bib style
+% \bibliographystyle{unsrt}
+%\setcitestyle{authoryear,open={((},close={))}}
+  \usepackage[
+    style=authoryear,
+    maxnames = 2,
+    backend=biber,
+    natbib=true %, 
+    %refsection=chapter
+  ]{biblatex}
+
+\addbibresource{thesis/mcgilletd.bib}
+\addbibresource{thesis/software.bib}
+
+% remove section numbering without using section* (keeps in TOC)
+\setcounter{secnumdepth}{4}
+
+% % for PDF/A
+% \usepackage{hyperref}
+% \hypersetup{
+%     colorlinks=true,
+%     linkcolor=black,
+%     filecolor=black,
+%     urlcolor=blue,
+%     citecolor=black
+% }
+% \usepackage[a-1b]{pdfx}
+
+% Reduce number of words breaking over lines
+\hyphenpenalty=1000
+
+% Cross-referencing
+\usepackage{xr}
+\externaldocument{"thesis/chap_1"}
+\externaldocument{"thesis/chap_2"}
+\externaldocument{"thesis/appendix_1"}
+
+% May or may not be necessary to have separate bibliographies per chapter
+% McGill requirements ask for it, but others did not do so
+% https://engineering.purdue.edu/~mark/puthesis/faq/chapter-bibliographies/
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Have you configured your TeX system for proper  %%
+%% page alignment? See the McGillETD documentation %%
+%% for two methods that can be used to control     %%
+%% page alignment. One method is demonstrated      %%
+%% below. See documentation and the ufalign.tex    %%
+%% file for instructions on how to adjust these    %%
+%% parameters.                                     %%
+\addtolength{\hoffset}{0pt}                        %%
+\addtolength{\voffset}{0pt}                        %%
+%%                                                 %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%       Define student-specific info
+
+\SetTitle{\huge{Integrating land use and land cover change simulations and connectivity modelling: a case study in the Montérégie region in southern Quebec}}%
+
+\SetAuthor{\large{\textit{Valentin Lucet}}}%
+\SetDegreeType{Master of Science\vspace{0cm}}%
+\SetDepartment{Department of Biology\vspace{-2.1cm}}%
+\SetUniversity{McGill University}%
+\SetUniversityAddr{Montreal, Quebec}%
+\SetThesisDate{August 2020}%
+\SetRequirements{A thesis submitted to McGill University in partial fulfillment \\of the requirements of the degree of Master of Science}%
+
+\SetCopyright{\textcopyright Valentin Lucet, 2020 \\ All rights reserved}%
+
+%% Input any special commands below
+\listfiles
+\begin{document}
+
+\maketitle
+
+\frontmatter
+
+\begin{romanPagenumber}{2}%
+\TOCHeading{\MakeUppercase{Table of Contents}}%
+\LOTHeading{{List of Tables}}%
+\LOFHeading{{List of Figures}}%
+\tableofcontents %
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%         Dedication                         %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\SetDedicationName{{Dedication}}%
+\SetDedicationText{To be completed.}%
+\Dedication%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%         English Abstract                        %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\SetAbstractEnName{{Abstract}}%
+\SetAbstractEnText{Connectivity conservation science, whose goal is to preserve the continuity of habitat throughout a given landscape, proceeds by identifying priority areas given the current configuration of the landscape. However, current connectivity conservation planning methods often do not take into account risks associated with future land use change, and might not go as far as to confront the results of the prioritization with the priorities perceived by stakeholders. In this thesis, we attempted to remedy those two issues in an ongoing effort of connectivity conservation planning for the region of Montérégie in Southern Quebec, Canada. In the first chapter, we built on past work of connectivity modelling using circuit theory in the region and complemented it with land use and climate change modelling that uses a combination of statistical modelling and MCMC-based simulations. Models trained on past land use data were used to project future land use changes and estimate future changes in potential functional connectivity for 5 different umbrella species. In a second chapter, we compare those results with the perceived conservation priorities in the region. We conducted a day-long workshop with stakeholders involved in the ongoing connectivity conservation planning effort in the region and collected information on landscape features considered “core” and “linkages” priority areas. We showed the importance of considering land use changes to produce a resilient network of protected areas and highlight the need for a multi- stakeholder approach in the definition of conservation scenarios and the identification of regional priorities.}
+
+\AbstractEn%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%         French Abstract                         %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\SetAbstractFrName{{Abr\'{e}g\'{e}}}%
+\SetAbstractFrText{La science de la conservation de la connectivité, dont le but est de préserver la continuité de l'habitat dans un paysage donné, procède par l'identification des zones prioritaires compte tenu de la configuration actuelle du paysage. Toutefois, les méthodes actuelles de planification de la conservation de la connectivité ne tiennent souvent pas compte des risques associés aux changements futurs d'utilisation des terres, et vont rarement jusqu'à confronter les résultats de la priorisation avec les priorités perçues par les parties prenantes. Dans cette thèse, nous avons tenté de remédier à ces deux problèmes dans le cadre d'un effort continu de planification de la conservation de la connectivité pour la région de la Montérégie, dans le sud du Québec, au Canada. Dans le premier chapitre, nous nous sommes appuyés sur les travaux antérieurs de modélisation de la connectivité basés sur la théorie des circuits dans la région et nous les avons complétés par une modélisation de l'utilisation des terres et du changement climatique qui utilise une combinaison de modélisation statistique et de simulations à base de chaînes Markov Monte Carlo. Le modèle construit à partir des données d'utilisation des terres passées ont été utilisés pour projeter les changements futurs d'utilisation des terres et estimer les changements futurs de la connectivité fonctionnelle potentielle pour 5 espèces de parapluie différentes. Dans un deuxième chapitre, nous comparons ces résultats avec les priorités de conservation perçues dans la région. Nous avons organisé un atelier d'une journée avec les parties prenantes impliquées dans l'effort continu de planification de la conservation de la connectivité dans la région et nous avons recueilli des informations sur les caractéristiques du paysage considérées comme des zones prioritaires "centrales" et "de liaison". Nous avons montré l'importance de prendre en compte les changements d'utilisation des terres pour produire un réseau de zones protégées résilient et avons souligné la nécessité d'une approche multipartite dans la définition des scénarios de conservation et l'identification des priorités régionales.}%
+\AbstractFr%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%         Acknowledgements                   %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\SetAcknowledgeName{{Acknowledgements}}%
+% Among other acknowledgements, the student is required to declare the extent to which assistance (paid or unpaid) has been given by members of staff, fellow students, research assistants, technicians, or others in the collection of materials and data, the design and construction of apparatus, the performance of experiments, the analysis of data, and the preparation of the thesis (including editorial help).
+% In addition, it is appropriate to recognize the supervision and advice given by the thesis supervisor(s) and advisors.
+\SetAcknowledgeText{%
+\noindent To be completed.
+}%
+\Acknowledge%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%       THESIS FORMAT AND STYLE       %% => UNSURE SO FAR
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\SetLinkName{{Thesis Format}}%
+%\SetLinkText{This thesis is written in a manuscript-based format.
+%\\
+%\\
+%\textbf{Chapter 1:} Student, A. Supervisor, B. (2013), My First Chapter Title \textit{Journal of %Ecographic Informatics} 10 (1), 878887.
+%\\
+%\\
+%}
+%\Link%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%        Contribution of Authors                 %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% A doctoral thesis must clearly state the elements of the thesis that are considered original scholarship and distinct contributions to knowledge.
+% Contributions of the student to each chapter must be explicitly stated.
+% Contributions of any co-authors to each chapter must be explicitly stated.
+\SetContribAuthorsName{{Contribution of Authors}}
+\SetContribAuthorsText{\noindent
+I am the first author for all chapters and the appendix in this
+thesis.
+\\
+\\
+\textbf{Chapter 1:} %TODO mention bronwyn for parts of the code, Guillaume and Bronwyn for parts of the code and for providing LANDIS summary for out model inputs. + Yanna and NRCAN.
+I wrote the manuscript with input from my supervisor.
+\\
+\\
+\textbf{Chapter 2:} %TODO mention NGOs, + Aurelie + Facilitators + Ministries
+I wrote the manuscript with input from my supervisor.
+\\
+\\
+}%
+\ContribAuthors%
+\listoffigures %
+\listoftables %
+
+\end{romanPagenumber}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%        General Introduction                     %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Clearly state the rationale and objectives of the research.
+\newcommand*{\SetIntroName}[1]{\renewcommand*{\ETDIntroName}{#1}}%
+\newcommand*{\ETDIntroName}{IntroMENTS}%
+
+\newcommand{\SetIntroText}[1]{\renewcommand*{\ETDIntroText}{#1}}%
+\newcommand*{\ETDIntroText}{Intro text goes here!}%
+
+\newcommand{\Intro}{%
+    \begin{simpleenv}{}{}{}{}%
+    \pagestyle{plain}%
+  \setboolean{SetDSpace}{false}%
+    \GoSingle%
+    \begin{QZ@Cent}%
+          \bfseries{\ETDIntroName}
+      \end{QZ@Cent}%
+    \vspace*{0.5in}
+      \par%
+      \GoDouble%
+      \setlength{\parskip}{-2em}
+      %\chapter*{\ETDIntroName}%
+      \addcontentsline{toc}{extrachapter}{\ETDIntroName}%
+      \ETDIntroText%
+    \end{simpleenv}%
+    \setboolean{SetDSpace}{true}}%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Introduction
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\SetIntroName{{General Introduction}} % To review
+
+\SetIntroText{
+%Space is a finite resource. How we, as a community, manage and govern space is a reflection of the trade-offs and choices made by different people and organizations at different spatial and temporal scales. Those choices determine and regulate land use: if and how the resources held on the land are exploited, transformed or conserved.  The results of those choices, referred to as land use and land cover change, is an important threat to the biodiversity and ecosystem function.\\
+%
+%One example of ecosystem function affected by land use that is of crucial importance to biodiversity is ecological connectivity. Ecological connectivity is the extent to which the landscape supports the movements of organisms \citep{gonzalez_spatial_2017}, and is paramount for the resilience of both populations and ecosystem services \citep{mitchell_monteregie_2015} in heterogeneous and fragmented landscapes. Land use changes such as urban sprawl can cause deforestation, fragmenting habitats, and slowly eroding ecological connectivity. Many urban landscapes are experiencing uncontrolled urban sprawl and have suffered losses in connectivity and ecosystem services in consequence. Examples include cities like Barcelona \citep{marulli_gis_2005}, New York City \citep{mcphearson_urban_2014}, and also Montreal \citep{dupras_urban_2015}.  The forces behind those land use changes are complex and understanding them is an obstacle to conservation planning  \citep{worboys_connectivity_2010}.  Because land use change is a social process with consequences of both social and ecological nature, it is best understood within the concept of social-ecological system \citep{ostrom_general_2009}. A social-ecological system (SES) can be understood as the set of human and non-human actors, the set of natural habitats they inhabit and resources and use, and the set of interactions that are maintained between all the components of the system. SESs thus form complex and integrated aggregates of interactions \citep{hinkel_enhancing_2014}. Those interactions also impact governance, the process by which actors in power establish rules and laws \citep{bissonnette_comparing_2018}.\\
+%
+%Connectivity conservation planning refers to the enterprise that engages multiple actors such as academics, NGOs, governmental bodies at different scales and in a common goal to conserve the ecological connectivity of the landscape. Connectivity conservation methods usually entails modelling connectivity of the landscape of interest and using a prioritization method to determine conservation priorities. However, current connectivity conservation planning methods have at least two major limitations: their prioritization process fails to take into account risks associated with future land use change, and also fails to confront the results of the prioritization with the priorities perceived by stakeholders. Not taking into account risks of land use change would in theory lead to ill-informed conservation planned that would be over-optimistic with regard to their probability of success. In addition, failing to integrate the perceptions of stakeholders is detrimental to conservation for two reasons: first, it most likely mean that conservation will fail to gather enough local momentum to lead to actual policy change, and second, it means that the only tool for decision making will be the model results, whereas these are incomplete representation of the landscape and would benefit from inputs from stakeholders. This is especially true in landscapes where a considerable effort of connectivity modelling has already been conducted, like in the landscape of interest in this thesis, the southern Quebec region of Montérégie.\\
+%
+%Montérégie is situated southeast of the city of Montreal, and contains parts of the Greater Montreal Area (GMA). The ecological connectivity of the GMA and its benefits as a provider of ecosystem services has recently been assessed in a report to the Quebec ministry of the environment (Rayfield 2018, unpublished). This study focused on identifying regions of highest connectivity, and therefore of highest priority for the conservation of biodiversity and ecosystem services. Other work by Rayfield et al. (2019, unpublished) has extended the analysis of connectivity to the whole of the Saint Lawrence Lowlands.\\
+%
+%Although the map produced by this analysis is a snapshot of the current state of connectivity in the region, methods are available for including future land use and climate change impacts \citep{albert_applying_2017}. Those methods rely on established the use of land use and land cover change models whose complexity has increased from simple probabilistic state transition models to more advanced approaches using targets, discrete events and accounting for the time elapsed since the last transition \citep{verburg_combining_2009, daniel_state-and-transition_2016}.\\
+%
+%Methods are also available to include stakeholder’s input in connectivity conservation planning. Some of those methods have been developed through the methodology of participatory modelling, which can be defined as a modelling framework that can integrate knowledge from multiple sources, even if this knowledge is generated by different processes. For instance, it is possible landscape perceptions by different actors and quantitative modelling. Those methods often rely on collecting data through a community-driven process during workshops. Those methods are time consuming and require a long term engagement with a given community over many years. Other workshop-based methods are less involved, and allow researchers to simply collect data to be confronted with the results of traditional modelling techniques.\\
+%
+%In this thesis, we show an attempt to remedy the two issues we identified above,  in an ongoing effort of connectivity conservation planning for the region of Montérégie in Southern Quebec, Canada. In the first chapter, we built on past work of connectivity modelling using circuit theory in the region and complemented it with land use change modelling that uses a combination of statistical modelling and MCMC-based simulations. In the second chapter, we compare those results with the perceived conservation priorities in the landscape, using data collected during a day-long workshop with stakeholders. The Montérégie is relevant for our questions given the recent political momentum gained by connectivity conservation. There is a strong political will in the region for the conservation of ecological connectivity.
+
+%\subsubsection*{\textit{A hybrid land use change model}}
+%[what is land use change modelling]
+A classic spatially defined land use change model is what can be called a “state change model”, where the landscape is divided in a grid and each grid element (pixel) is assigned a state that changes in discrete time \citep{daniel_state-and-transition_2016}. The difficulty of land use change modelling resides in setting the transition probabilities that define the probability of a pixel transitioning to another state (or to remain as is), given its current state and given a set of conditions both intrinsic and extrinsic to that pixel. \\
+
+%[phenomenological models]
+A simple land use change model will assume that the rules of state changes obey markovian laws: i.e. that the next state will always only depend on the current timestep and not previous timesteps. This is a simplification: in real landscapes, the history of the pixel (beyond its present state) can play a large role in the rules governing state change. Probably due to their simplicity, markovian models such as cellular automata have a long history in land use change models \citep{agarwal_review_2002}. They have been shown to deliver accurate results, notably in urban spread modelling \citep{soares-filho_dinamicastochastic_2002, jokar_arsanjani_integration_2013, iacono_markov_2015}. They are yet another application of markov chains, and are fairly easy to set up and to run. Markov chain models represent a phenomenological approach to land use change, because the model applies the rules of transition without encoding the mechanisms underlying the  change. For example, the model defines that the state “forest” has a probability of 0.23 to transition into urban if it contains at least 2 urban pixels in a 4 pixel radius (this is an adjacency rule), but it is oblivious to the drivers of land use change. \\
+
+%[mechanistic models]
+In comparison to the phenomenological approach of cellular automata, a mechanistic approach to land use change modelling would consider that land change happens because of multi-scale decision making, and attempts to model those processes directly. Agent-Based Models (ABMs) are probably the best example of a mechanistic approach to land use change modelling. ABMs simulate the behavior of individuals in a network of decision processes whose effects are designed to sum up to the observed change \citep{parker_agent-based_2002, filatova_spatial_2013}. Those models are promising for the future of land use change modelling, but tend to be applied at smaller spatial scales, and tend to rely on expert knowledge or on a rather involved data collection procedure (such as interviews with actors, \cite{taylor_agent-based_2016}). This makes the modelling process more difficult (albeit rewarding) as it requires a deeper understanding of the specific drivers of change in the region. \\
+
+%[no guidelines, choice of model]
+In the absence of a solid body of methodological comparisons between statistical frameworks in land use change modelling, it is difficult to decide on the best framework for raster-based (i.e. based on grids) models. The RF-CA model presented in this chapter is a  hybrid approach in which a statistical approach is taken (statistical modelling through random forest) and combined with a more mechanistic approach (a cellular automaton with transition targets and spatial dependency rules, CA). The RF-CA model is similar to other popular approaches like the CLUE family of models (Conversion of Land Use and its Effects \cite{verburg_modeling_2002, verburg_combining_2009}), which are some of the most commonly used models in land system science. However, in CLUE, the allocation is determined by the local and regional “demand” for each land use. This demand is a latent variable for the complex and multi-scalar social-environmental processes that determine land use change, and which more mechanistic models attempt to simulate \citep{verburg_combining_2009}. \\
+
+% [2 steps but there are other better integrated alternatives]
+We choose here to present the two steps of probability modelling and allocation as separate because they are methodologically distinct in our model. But it is worthwhile to note that recent efforts in land use change modelling have managed to integrate those steps. Those recent methods can integrate suitability and allocation because the model is capable of encoding both processes at the same time. We can mention important work on modelling land use change with machine learning techniques such as Neural Networks (NNs) \citep{tayyebi_simulating_2013} or exploiting the potential of non frequentist statistics in the case of Belief Networks (BBNs, see \cite{celio_modeling_2014} for a great example). BBNs, like ABMs are promising methods but tend to be applied at smaller spatial scales. \\
+
+%\subsubsection*{\textit{A scenario-based approach}}
+% [scenarios]
+Scenarios are a flexible approach to forecasting the range of possible futures in landscapes \citep{peterson_scenario_2003}. We integrate land use change and connectivity modelling under two “warming” scenarios (Baseline and RCP 8.5) and one “control” scenario (Historic).
+Depending on the scenario, the model generates different forest change dynamics. The Historic scenario assumes no change in forest composition and stands as our control. While the baseline scenario assumes no further warming and status quo forest change dynamics, the RCP 8.5 scenario is one of the most severe climate change scenarios, and the trends observed the in the baseline scenario are exacerbated \cite{IPCC}. We also derive two simple land use change scenarios: Business as usual (BAU) and Reforestation. Those two scenarios are meant to represent two extremes in land use change, and it is likely that the most probable trajectories for our landscape will be within those two boundaries. In combination with the climate scenarios, this brings our total scenario number to 6. \\
+
+What predictions can be made as to how connectivity will be affected under our model? There has been a significant research effort to study and predict forest dynamics under climate change in Quebec. It has been shown that the distributions of many of the most abundant trees occurring in the region are out of equilibrium with climate at the margin of their range \citep{talluto_extinction_2017}. Some papers points to existing and expected lags in the response of forest to climate change \citep{savage_elevational_2015,}, and others have commented on how disturbances and forest management practices are likely to fasten and facilitate range shifts \citep{leithead_northward_2010, boulanger_climate_2019, vieira_paying_2020}. A major prediction that can be made is that although boreal type (coniferous) forest is likely to respond more slowly to climate range than deciduous type, both coniferous and mixed population types in southern Quebec are likely to become more rarer, and be replaced by deciduous stands. \\
+
+We can therefore derive different predictions as to how connectivity will be affected for each species under our model. Three main predictions can be made. First, under the BAU scenario, we can expect that our land use change model will simulate an decrease in connectivity change for our focal species. We can also expect connectivity to maintain itself under the Reforestation scenario. Finally. We can expect climate change to impact more strongly species that prefer coniferous  and mixed forest types. \\
+}%
+\Intro
+
+%  Chapter I
+\include{thesis/chap_1}
+
+\SetLinkName{Linking Statement}
+\SetLinkText{In Chapter I, we integrated a land use model and a climate change model with a habitat suitability and connectivity model. We then explored outcomes under different scenarios for land use and climate change. We showed how different species might react to changes in land use and climate by analyzing the resulting flow surfaces. We provided  a reproducible yet perfectible methodology that takes into account important drivers like land use and climate change. We applied these methods to the case of the Montérégie in Québec.. We demonstrate the power of simple scenarios to identify the boundaries of the prediction space for potential functional connectivity. However, we recognize the need for scenarios that take into account the needs and perceptions of stakeholders of the region. In Chapter 2, we take a first step toward deriving the basis for such community-driven scenarios by presenting the results of a community workshop organized between multiple stakeholders in Montérégie. We use those results to derive simple land use change scenarios and use those scenarios to constrain the integrated model from Chapter 1. These scenarios can serve as a basis with which to iterate a community-driven process of conservation scenario building. We derive the same analysis for the species described in Chapter 1 and compare and contrast the results between scenarios.} %TODO Conclusion statement needed here...something like: This integrated approach has the potential to support ongoing connectivity conservation planning in the south of Québec [ANDY]
+\Link
+
+%  Chapter 2
+\include{thesis/chap_2}
+
+% General Discussion
+% \include{discussion}
+\SetLinkName{{General Discussion \& Conclusion}}%
+% In case of a manuscript-based thesis the comprehensive discussion should encompass all of the chapters of the thesis and should not be a repetition of the individual chapters.
+\SetLinkText{TEST ---- A classic spatially defined land use change model is what can be called a “state change model”, where the landscape is divided in a grid and each grid element (pixel) is assigned a state that changes in discrete time \citep{frazer_model_1984}. The difficulty of land use change modelling resides in setting the transition probabilities that define the probability of a pixel transitioning to another state (or to remain as is), given its current state and given a set of conditions both intrinsic and extrinsic to that pixel. --- TEST}%
+\Link%
+
+% Appendix
+%\ETDAppendix{Chapter I Supplementary Material}{
+%\input{appendix_1}
+%}
+\include{thesis/appendix_1}
+\include{thesis/appendix_2}
+
+%\ETDAppendix{References}{
+%\printbibliography
+%}
+\printbibliography[heading=bibintoc, section=0, title={General Bibliography \hspace{1em}}]
+
+\end{document}
