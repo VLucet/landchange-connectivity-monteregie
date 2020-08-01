@@ -7,13 +7,6 @@
 # Figures
 *.pdf
 *.png
-# data folders
-!data/
-data/**
-!data/readme.md
-!data/raw/
-data/raw/**
-!data/raw/readme.md
 # test and temp folder
 test/
 # Don't track these
