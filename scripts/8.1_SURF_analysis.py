@@ -1,6 +1,13 @@
 #!/usr/bin/python3
 # 8.1 Analysis via SURF algorithm
 
+#-------------------------------------------------------------------------------
+## 8.2 Feature dectection, guessed from Pelletier et al.
+## 2020
+## Inputs: Outputs from Circuitscape runs
+## Outputs: Detected features
+#-------------------------------------------------------------------------------
+
 # Import local SURF module
 import sys
 import os

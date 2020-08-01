@@ -1,7 +1,11 @@
 #!/bin/sh
 
-# Base file (and bash wizardry) by Guillaume,
-# Modestly modified by Val to work on mac os
+#-------------------------------------------------------------------------------
+## 0.1 Accessory tool for thesis
+#-------------------------------------------------------------------------------
+
+# Base file (and bash wizardry) by Guillaume L.,
+# Modestly modified by Valentin L. to work on mac os 
 # reviewed in 2020 - no change
 
 #input=../Resistances/resMap_X2030_iter1.tif
