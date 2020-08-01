@@ -63,12 +63,12 @@ lu.stack <- stack(raster("data/land_use/LandUse_mont_aafc_30by30_1990.tif"),
 lu.stack.buf <- stack(raster("data/land_use/LandUse_mont_aafc_buffered_30by30_1990.tif"), 
                       raster("data/land_use/LandUse_mont_aafc_buffered_30by30_2000.tif"),
                       raster("data/land_use/LandUse_mont_aafc_buffered_30by30_2010.tif"))
-lu.stack.ag <- stack(raster("data/land_use/aggregated/aggregated_lu_1990.tif"), 
-                     raster("data/land_use/aggregated/aggregated_lu_2000.tif"),
-                     raster("data/land_use/aggregated/aggregated_lu_2010.tif"))
-lu.stack.buf.ag <- stack(raster("data/land_use/aggregated/aggregated_lu_buffered_1990.tif"), 
-                         raster("data/land_use/aggregated/aggregated_lu_buffered_2000.tif"),
-                         raster("data/land_use/aggregated/aggregated_lu_buffered_2010.tif"))
+lu.stack.ag <- stack(raster("data/land_use/aggregated/aggregated_lu_new_roads_1990.tif"), 
+                     raster("data/land_use/aggregated/aggregated_lu_new_roads_2000.tif"),
+                     raster("data/land_use/aggregated/aggregated_lu_new_roads_2010.tif"))
+lu.stack.buf.ag <- stack(raster("data/land_use/aggregated/aggregated_lu_buffered_new_roads_1990.tif"), 
+                         raster("data/land_use/aggregated/aggregated_lu_buffered_new_roads_2000.tif"),
+                         raster("data/land_use/aggregated/aggregated_lu_buffered_new_roads_2010.tif"))
 
 names(lu.stack) <- c("lu_1990", "lu_2000", "lu_2010")
 names(lu.stack.buf) <- c("lu_1990", "lu_2000", "lu_2010")

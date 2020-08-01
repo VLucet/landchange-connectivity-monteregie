@@ -16,6 +16,7 @@ suppressPackageStartupMessages({
   library(raster)
   library(sf)
   library(rgrass7)
+  library(fasterize)
 })
 # Reset Raster tmp files
 removeTmpFiles(0)
@@ -65,11 +66,84 @@ writeRaster(lu.mont.aafc.buf.r, "data/land_use/LandUse_mont_aafc_buffered_30by30
             bylayer=T, suffix=c(1990,2000,2010), overwrite = T)
 
 # Aggregation 
-lu.mont.aafc.r.ag <- aggregate(lu.mont.aafc.r, fun=modal_custom_first, R_AGGR$factor)
-lu.mont.aafc.buf.r.ag <- aggregate(lu.mont.aafc.buf.r, fun=modal_custom_first, R_AGGR$factor)
+# lu.mont.aafc.r.ag <- 
+#   aggregate(lu.mont.aafc.r, fun=modal_custom_first, R_AGGR$factor)
+# lu.mont.aafc.buf.r.ag <- 
+#   aggregate(lu.mont.aafc.buf.r, fun=modal_custom_first, R_AGGR$factor)
 
-writeRaster(lu.mont.aafc.r.ag, "data/land_use/aggregated/aggregated_lu.tif", 
+lu.mont.aafc.r.ag.noroads <- 
+  aggregate(lu.mont.aafc.r, fun=modal_custom_first_no_roads, R_AGGR$factor)
+lu.mont.aafc.buf.r.ag.noroads <- 
+  aggregate(lu.mont.aafc.buf.r, fun=modal_custom_first_no_roads, R_AGGR$factor)
+
+# Injection of roads
+
+# Import roads and mun 
+roads <- st_read("data/raw/roads/AQ_ROUTES.shp")
+mun <- st_read("data/mun/munic_SHP_clean.shp")
+
+# rast_1990_no_roads <- lu.mont.aafc.buf.r.ag.noroads$AAFC_zone18_mont_mask_buffered_1990_rcl
+# rast_1990_no_roads[rast_1990_no_roads == 4] <- NA
+
+roads_reproj <- st_transform(roads, raster::crs(mun))
+roads_sub <- st_crop(roads_reproj, rast)
+
+roads_sub_major <- subset(roads_sub, ClsRte %in% c("Autoroute", "Nationale", "Régionale", 
+                                                   "Collectrice municipale", "Collectrice de transit"))
+roads_sub_major$new_id <- 4
+#plot(roads_sub_major$geometry)
+
+if (!file.exists("data/roads/roads_sub_major_rast.tif")){
+  roads_sub_major_rast <- rasterize(roads_sub_major,
+                                    y = rast_1990,
+                                    field = "new_id",
+                                    fun = "first",
+                                    update = FALSE)
+  writeRaster(roads_sub_major_rast, "data/roads/roads_sub_major_rast.tif", overwrite=T)
+}
+
+# test <- merge(roads_sub_major_rast, rast_1990, overlap=T)
+# test_2 <- merge(roads_sub_major_rast, rast_1990_no_roads, overlap=T)
+# writeRaster(test, "test.tif", overwrite=T)
+# writeRaster(test_2, "test_2.tif", overwrite =T)
+
+roads <- raster("data/roads/roads_sub_major_rast.tif")
+roads_cropped <- crop(roads, lu.mont.aafc.r.ag.noroads$AAFC_zone18_mont_mask_1990_rcl)
+extent(roads_cropped) <- extent(lu.mont.aafc.r.ag.noroads$AAFC_zone18_mont_mask_1990_rcl)
+
+# idx_urban <-
+#   unique(unlist(lapply(as.list(lu.mont.aafc.r.ag), 
+#                        function(x){which(values(x)==2)})))
+# roads_cropped[idx_urban] <- NA
+
+lu.mont.aafc.r.ag.noroads.m <- vector("list", 3)
+for (idx in 1:3){
+  lu.mont.aafc.r.ag.noroads.m[[idx]] <- 
+    mask(raster::merge(roads_cropped, lu.mont.aafc.r.ag.noroads[[idx]]),
+         lu.mont.aafc.r.ag.noroads[[idx]])
+}
+lu.mont.aafc.r.ag.noroads.m <- stack(lu.mont.aafc.r.ag.noroads.m)
+names(lu.mont.aafc.r.ag.noroads.m) <- names(lu.mont.aafc.r.ag.noroads)
+
+lu.mont.aafc.buf.r.ag.noroads.m <- vector("list", 3)
+for (idx in 1:3){
+  lu.mont.aafc.buf.r.ag.noroads.m[[idx]] <- 
+    mask(raster::merge(roads, lu.mont.aafc.buf.r.ag.noroads[[idx]]),
+         lu.mont.aafc.buf.r.ag.noroads[[idx]])
+}
+lu.mont.aafc.buf.r.ag.noroads.m <- stack(lu.mont.aafc.buf.r.ag.noroads.m)
+names(lu.mont.aafc.buf.r.ag.noroads.m) <- names(lu.mont.aafc.buf.r.ag.noroads)
+
+# Write it out
+
+writeRaster(lu.mont.aafc.r.ag.noroads, "data/land_use/aggregated/aggregated_lu.tif", 
             bylayer=T, suffix=c(1990,2000,2010), overwrite = T)
 
-writeRaster(lu.mont.aafc.buf.r.ag, "data/land_use/aggregated/aggregated_lu_buffered.tif", 
+writeRaster(lu.mont.aafc.buf.r.ag.noroads, "data/land_use/aggregated/aggregated_lu_buffered.tif", 
+            bylayer=T, suffix=c(1990,2000,2010), overwrite = T)
+
+writeRaster(lu.mont.aafc.r.ag.noroads.m, "data/land_use/aggregated/aggregated_lu_new_roads.tif", 
+            bylayer=T, suffix=c(1990,2000,2010), overwrite = T)
+
+writeRaster(lu.mont.aafc.buf.r.ag.noroads.m, "data/land_use/aggregated/aggregated_lu_buffered_new_roads.tif", 
             bylayer=T, suffix=c(1990,2000,2010), overwrite = T)
