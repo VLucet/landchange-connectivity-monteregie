@@ -102,8 +102,8 @@ RUN R -e "remotes::install_github('rstudio/renv@${RENV_VERSION}')"
 RUN R -e "renv::restore()"
 
 # Set up links
-chmod +x landcon.sh
-sudo ln -s /home/rstudio/land_con_monteregie/landcon.sh /usr/bin/
+RUN chmod +x landcon.sh \
+  && ln -s /home/rstudio/land_con_monteregie/landcon.sh /usr/bin/
 
 # ------------------------------------------------------------------------------
 ## With renv cache, has not worked so far: 
