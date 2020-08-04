@@ -8,6 +8,9 @@
       }
     ]
   },
+  "Bioconductor": {
+    "Version": "3.10"
+  },
   "Packages": {
     "BH": {
       "Package": "BH",
@@ -15,6 +18,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "8f9ce74c6417d61f0782cbae5fd2b7b0"
+    },
+    "BiocManager": {
+      "Package": "BiocManager",
+      "Version": "1.30.10",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "db75371846625725e221470b310da1d5"
     },
     "ClustGeo": {
       "Package": "ClustGeo",
@@ -705,6 +715,13 @@
       "Repository": "CRAN",
       "Hash": "dd6dc5b9ef202cef18c5200d76e1634c"
     },
+    "ggplotify": {
+      "Package": "ggplotify",
+      "Version": "0.0.5",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "01f6ad9ce2c4a474974dac7482e4c19f"
+    },
     "ggradar": {
       "Package": "ggradar",
       "Version": "0.2",
@@ -772,6 +789,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "7d7f283939f563670a697165b2cf5560"
+    },
+    "gridGraphics": {
+      "Package": "gridGraphics",
+      "Version": "0.5-0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "83c2c0812de7b6e04c2ff471b4d7f920"
     },
     "gtable": {
       "Package": "gtable",
@@ -1505,6 +1529,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "327eb20caa069ac2f63f9dc586b02577"
+    },
+    "rvcheck": {
+      "Package": "rvcheck",
+      "Version": "0.1.8",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "11ebf2d3d4990e8bb9f28d5ab0c204fc"
     },
     "rvest": {
       "Package": "rvest",
