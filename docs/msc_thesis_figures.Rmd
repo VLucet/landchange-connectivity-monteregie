@@ -145,7 +145,6 @@ histograms <- read_csv("../outputs/final/final_values_output.csv") %>%
   bind_rows(hist_true) %>% 
   left_join(results_clean, by="sce") 
 
-
 # SURF Data
 surf <- read_csv("../surf/surf_output.csv") %>% 
   mutate(timestep = timestep*10+1990) %>% 
@@ -159,6 +158,9 @@ surf <- read_csv("../surf/surf_output.csv") %>%
                                       "BAU run + corrs protection", "BAU run + ref", 
                                       "BAU run + corrs protection + ref",
                                       "BAU run + corrs protection + ref TARGETED")))
+
+# Bar plot data
+bar_data <- read_csv("../outputs/final/final_bar_plot_data.csv")
 
 results_clean
 ```
@@ -710,7 +712,7 @@ for (class in c(1:2)){
   
   the_stack <- stack(lapply(list_of_files, raster)) == class
   original <- raster("../data/land_use/aggregated/aggregated_lu_buffered_1990_patched.tif") == class
-final <- raster("../data/land_use/aggregated/aggregated_lu_buffered_2010_patched.tif") == class
+  final <- raster("../data/land_use/aggregated/aggregated_lu_buffered_2010_patched.tif") == class
   
   # Ttransform, give names
   the_stack[original == 1] <- 0
@@ -799,10 +801,10 @@ mean(precs);sd(precs)
 
 #### Sce 39
 
-```{r BAU, eval=FALSE, include=FALSE, message=FALSE, warning=FALSE}
-the_folder <- "../test/july/all/monteregie-conncons-scripted.ssim.output"
-# draw_scenario(39)
-final_df_39 <- draw_scenario(sce = 39, return_df = T, sce_folder=the_folder)
+```{r BAU, message=FALSE, warning=FALSE}
+
+final_df_39 <- bar_data %>% 
+  filter(scenario == 39)
 
 bar_plot_39 <- final_df_39 %>% 
   #filter(value > 10) %>% 
@@ -811,6 +813,7 @@ bar_plot_39 <- final_df_39 %>%
   geom_bar(position="dodge", stat="identity") +
   #geom_errorbar(aes(ymin=mean_count-sd_count, ymax=mean_count+sd_count), width=.2,
   #               position=position_dodge(.9)) +
+  scale_fill_manual(values = bi_colors) +
   theme(legend.position = c(0.85, 0.7)) +
   labs(x = "Land use Class", 
        y = "Mean Area (hectare)", 
@@ -822,15 +825,17 @@ bar_plot_39
 
 ##### Sce 42
 
-```{r reforestation, eval=FALSE, include=FALSE, message=FALSE, warning=FALSE}
+```{r reforestation, message=FALSE, warning=FALSE}
 # draw_scenario(42)
-final_df_42 <- draw_scenario(42, return_df = T)
+final_df_42 <- bar_data %>% 
+  filter(scenario == 42)
 
 bar_plot_42 <- final_df_42  %>% 
   #filter(value > 10) %>% 
   mutate(value = as.factor(value), timestep = as.factor(timestep)) %>% 
   ggplot(aes(fill=timestep, y=area, x=new_class)) + 
   geom_bar(position="dodge", stat="identity") +
+  scale_fill_manual(values = bi_colors) +
   #geom_errorbar(aes(ymin=mean_count-sd_count, ymax=mean_count+sd_count), width=.2,
   #               position=position_dodge(.9)) +
   theme(legend.position = c(0.85, 0.7)) +
@@ -844,7 +849,7 @@ bar_plot_42
 
 ##### Both
 
-```{r bar_boths, eval=FALSE, include=FALSE}
+```{r bar_boths}
 final_df_39 <- final_df_39 %>% 
   mutate(sce = "BAU") %>% 
   mutate(type = ifelse(value <10, "non_forest", "forest"))
@@ -859,6 +864,7 @@ forest <- final_all %>%
   mutate(value = as.factor(value), timestep = as.factor(timestep)) %>% 
   ggplot(aes(fill=timestep, y=area, x=new_class)) + 
   geom_bar(position="dodge", stat="identity") +
+  scale_fill_manual(values = bi_colors) +
   theme(legend.position = "none") +
   facet_grid(~sce) +
   labs(x = "Land use Class", 
@@ -871,6 +877,7 @@ non_forest <- final_all %>%
   mutate(value = as.factor(value), timestep = as.factor(timestep)) %>% 
   ggplot(aes(fill=timestep, y=area, x=new_class)) + 
   geom_bar(position="dodge", stat="identity") +
+  scale_fill_manual(values = bi_colors) +
   theme(legend.position = "right") +
   facet_grid(~sce) +
   labs(x = "Land use Class", 
@@ -880,16 +887,15 @@ non_forest <- final_all %>%
 
 assembled <- wrap_plots(forest, non_forest, ncol=1, nrow=2)
 assembled
-ggsave("../thesis/figures/bar_both.png", assembled, width = 15, height = 20)
+ggsave("../thesis/figures/bar_both.png", assembled,
+       width = the_width, height = 20, dpi = the_dpi)
 ```
 
 ```{r eval=FALSE, include=FALSE, message=FALSE, warning=FALSE}
 # draw_scenario(42) ...
 
-all_chap2 <- draw_scenario(42, return_df = T) %>% 
-  bind_rows(draw_scenario(45, return_df = T)) %>% 
-  bind_rows(draw_scenario(48, return_df = T)) %>% 
-  bind_rows(draw_scenario(51, return_df = T))
+all_chap2 <- bar_data %>% 
+  filter(scenario %in% c(42, 45, 48, 51))
 
 #forest <- 
 
@@ -903,6 +909,7 @@ bar_chap2 <- all_chap2 %>%
   mutate(value = as.factor(value), timestep = as.factor(timestep)) %>% 
   ggplot(aes(fill=timestep, y=area, x=new_class)) + 
   geom_bar(position="dodge", stat="identity") +
+  scale_fill_manual(values = bi_colors) +
   facet_wrap(~name, labeller = label_wrap_gen(width = 30)) +
   theme(legend.position = c(0.85, 0.7)) +
   labs(x = "Land use Class", 
@@ -910,5 +917,6 @@ bar_chap2 <- all_chap2 %>%
        fill = "Year") +
   NULL
 bar_chap2
-ggsave("../thesis/figures/bar_chap2.png", bar_chap2, width = 15, height = 20)
+ggsave("../thesis/figures/bar_chap2.png", bar_chap2, 
+       width = the_width, height = 20, dpi = the_dpi)
 ```
