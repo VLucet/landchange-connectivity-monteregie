@@ -34,6 +34,8 @@ suppressPackageStartupMessages({
 
 # Source functions and remove temp files
 source("scripts/functions/rescale_raster_layer.R")
+source("scripts/functions/get_bar_df.R")
+
 removeTmpFiles(h = 0)
 showTmpFiles()
 rasterOptions(tmpdir = "data/temp/raster_tmp")
@@ -265,6 +267,13 @@ final_df_origin <- bind_rows(unlist(assembled_list_T, recursive = F))
 
 final_df_origin$timestep <- as.numeric(final_df_origin$timestep)
 saveRDS(final_df_origin, "outputs/final/final_df_origin_current_density.RDS")
+
+#-------------------------------------------------------------------------------
+# BAR PLOT DATA 
+
+output <- 
+  get_bar_df(sce_folder="libraries/stsim/monteregie-conncons-scripted.ssim.output/")
+write_csv(output, "outputs/final/final_bar_plot_data.csv")
 
 #-------------------------------------------------------------------------------
 

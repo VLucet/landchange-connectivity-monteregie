@@ -37,6 +37,7 @@ suppressPackageStartupMessages({
   library(ggradar)
   library(tidymodels)
   library(patchwork)
+  library(ggplotify)
 })
 
 theme_set(theme_minimal())
@@ -54,8 +55,6 @@ theme_update(legend.position = c(0.85, 0.20),
              strip.text.x = element_text(size = 22),
              strip.text.y = element_text(22),
              axis.title=element_text(size=22))
-
-source("../scripts/functions/draw_scenario.R")
 ```
 
 ### Data prep
@@ -628,7 +627,7 @@ surf_radar_1 <-
           axis.label.size = axis.label.size)
 surf_radar_1
 ggsave("../thesis/figures/surf_radar_chap1.png", surf_radar_1,
-        width = the_width, height = the_height, dpi = the_dpi)
+       width = the_width, height = the_height, dpi = the_dpi)
 ```
 
 #### Chap 2
@@ -696,34 +695,76 @@ ggsave("../thesis/figures/surf_radar_chap2.png", surf_radar_2,
 
 ### Maps
 
-```{r eval=FALSE, include=FALSE}
-class = 2
+No outputs for github page
 
-# LOAD
-the_stack <- stack(lapply((list.files("../test/july/sce_37_for_urb_prob/", full.names = T)), raster)) == class
-
-original <- raster("../data/land_use/aggregated/aggregated_lu_buffered_1990_patched.tif") == class
-final <- raster("../data/land_use/aggregated/aggregated_lu_buffered_2010_patched.tif") == class
+```{r 2010_compare_prep, include=FALSE}
+list_of_files <-  list.files("../libraries/stsim/monteregie-conncons-scripted.ssim.output/Scenario-37/stsim_OutputSpatialState", full.names = T)
+list_of_files <- list_of_files[grep(x=list_of_files, "ts2")]
 stratum <- raster("../data/stsim/aggregated/primary_stratum_mont_or_not_or_PA.tif")
+```
 
-# Ttransform, give names
-the_stack[original == 1] <- 0
-final[original == 1] <- 0
-the_stack[stratum==0] <- NA
-final[stratum==0] <- NA
-the_stack <- trim(the_stack)
-final <- trim(final)
+```{r 2010_compare_urb, include=FALSE}
+names <- paste0(c("historic_compare_agex", "historic_compare_urb"), ".png")
 
-the_mean <-  mean(the_stack)
-names(the_mean) <- "mean"
-names(final) <- "observation"
+for (class in c(1:2)){
+  
+  the_stack <- stack(lapply(list_of_files, raster)) == class
+  original <- raster("../data/land_use/aggregated/aggregated_lu_buffered_1990_patched.tif") == class
+final <- raster("../data/land_use/aggregated/aggregated_lu_buffered_2010_patched.tif") == class
+  
+  # Ttransform, give names
+  the_stack[original == 1] <- 0
+  final[original == 1] <- 0
+  the_stack[stratum==0] <- NA
+  final[stratum==0] <- NA
+  the_stack <- trim(the_stack)
+  final <- trim(final)
+  
+  the_mean <-  mean(the_stack)
+  names(the_mean) <- "mean"
+  names(final) <- "observation"
+  
+  # test <- the_mean
+  # test[(which(values(!is.na(final)) & values(is.na(the_mean))))] <- 100
+  # plot(test)
+  
+  # Fill the "other" values
+  the_mean[(which(values(!is.na(final)) & values(is.na(the_mean))))] <- 0
+  
+  stack_to_plot <- stack(the_mean, final) 
+  names(stack_to_plot) <- c("Model", "Observations")
+  
+  mxp <- 1e1000 # 10000
+  
+  myPal <- RColorBrewer::brewer.pal('OrRd', n=9)
+  myTheme <- rasterTheme(region = myPal)
+  probs <- levelplot(stack_to_plot$Model, scales=list(draw=FALSE),
+                     maxpixels = mxp, 
+                     par.settings = myTheme,
+                     margin=FALSE, auto.key=FALSE, 
+                     colorkey=list(space="bottom"), 
+                     main = "A)")
+  probs <- as.ggplot(probs) 
+  
+  stack_to_plot$Observations <- ratify(stack_to_plot$Observations)
+  rat <- levels(stack_to_plot$Observations)[[1]]
+  rat$Urbanised <- c("Not Observed", "Observed")
+  levels(stack_to_plot$Observations) <- rat
+  bin <- levelplot(stack_to_plot$Observations, col.regions=c('grey', 'indianred4'), 
+                   scales=list(draw=FALSE), 
+                   maxpixels = mxp, 
+                   colorkey=list(space="bottom", height=0.3), 
+                   main = "B)")
+  bin <- as.ggplot(bin)
+  
+  final_plot <- probs + bin
+  
+  ggsave(plot = final_plot, filename = paste0("../thesis/figures/",names[class]), width = the_width, height = the_height, dpi = the_dpi)
+}
+```
 
-# test <- the_mean
-# test[(which(values(!is.na(final)) & values(is.na(the_mean))))] <- 100
-# plot(test)
-
-# Fill th "other" values
-the_mean[(which(values(!is.na(final)) & values(is.na(the_mean))))] <- 0
+<!--
+```{r eval=FALSE, include=FALSE}
 
 # Analyze
 options(yardstick.event_first = T)
@@ -734,33 +775,34 @@ names(the_stack) <- rep("model", length(names(the_stack)))
 aucs <- c()
 precs <- c()
 for (x in 1:nlayers(the_stack)){
-  the_df <- as.data.frame(stack(the_stack[[x]], final)) %>% 
-    drop_na() %>% 
-    rename(estimate = starts_with("model"), truth = "observation")
-  the_df_2 <- the_df %>% 
-    mutate(truth = factor(truth, ordered = F)) %>%
-    mutate(truth = relevel(.$truth, "1"))
-  auc <- the_df_2 %>% 
-    roc_auc(truth = truth, estimate) %>% 
-    pull(.estimate)
-  prec <- the_df_2 %>% 
-    average_precision(truth = truth, estimate) %>% 
-    pull(.estimate)
-  aucs <- c(aucs, auc)
-  precs <- c(precs, prec)
+the_df <- as.data.frame(stack(the_stack[[x]], final)) %>% 
+drop_na() %>% 
+rename(estimate = starts_with("model"), truth = "observation")
+the_df_2 <- the_df %>% 
+mutate(truth = factor(truth, ordered = F)) %>%
+mutate(truth = relevel(.$truth, "1"))
+auc <- the_df_2 %>% 
+roc_auc(truth = truth, estimate) %>% 
+pull(.estimate)
+prec <- the_df_2 %>% 
+average_precision(truth = truth, estimate) %>% 
+pull(.estimate)
+aucs <- c(aucs, auc)
+precs <- c(precs, prec)
 }
 mean(aucs);sd(aucs)
 mean(precs);sd(precs)
-# plot(stack(the_mean, final))
 ```
+-->
 
 ### Bar charts
 
 #### Sce 39
 
 ```{r BAU, eval=FALSE, include=FALSE, message=FALSE, warning=FALSE}
+the_folder <- "../test/july/all/monteregie-conncons-scripted.ssim.output"
 # draw_scenario(39)
-final_df_39 <- draw_scenario(39, return_df = T)
+final_df_39 <- draw_scenario(sce = 39, return_df = T, sce_folder=the_folder)
 
 bar_plot_39 <- final_df_39 %>% 
   #filter(value > 10) %>% 
