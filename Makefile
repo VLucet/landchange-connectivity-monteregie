@@ -1,9 +1,9 @@
-all: thesis.pdf
+all: thesis/build/thesis.pdf
 
-docs/index.html: outputs/final/*
+docs/index.html: docs/msc_thesis_figures.Rmd outputs/final/*.csv outputs/final/*.RDS
 	sh landcon.sh -g
 
-thesis.pdf: thesis/thesis.tex thesis/chap_1.tex thesis/chap_2.tex thesis/appendix_1.tex thesis/figures/* docs/index.html
+thesis/build/thesis.pdf: thesis/*.tex thesis/figures/*.png docs/index.html
 	pdflatex -output-directory thesis/build thesis/thesis.tex \
 	&& biber --output-directory thesis/build thesis \
 	&& pdflatex -output-directory thesis/build thesis/thesis.tex
