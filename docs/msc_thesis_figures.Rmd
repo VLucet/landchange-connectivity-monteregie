@@ -38,21 +38,23 @@ suppressPackageStartupMessages({
   library(tidymodels)
   library(patchwork)
 })
+
 theme_set(theme_minimal())
 theme_update(legend.position = c(0.85, 0.20),
              legend.box = "vertical",
              legend.background = element_blank(),
              legend.box.background = element_rect(colour = "black"),
              panel.border = element_rect(fill = NA),
-             legend.title = element_text(size = 15),
-             legend.text = element_text(size = 13),
+             legend.title = element_text(size = 20),
+             legend.text = element_text(size = 20),
              plot.title = element_text(size=20),
              plot.subtitle = element_text(size=20),
-             axis.text.x = element_text(angle=65, vjust=0.6, size =13),
-             axis.text.y = element_text(size =13),
-             strip.text.x = element_text(size = 13),
-             strip.text.y = element_text(13),
-             axis.title=element_text(size=18))
+             axis.text.x = element_text(angle=65, vjust=0.6, size =20),
+             axis.text.y = element_text(size =20),
+             strip.text.x = element_text(size = 20),
+             strip.text.y = element_text(20),
+             axis.title=element_text(size=20))
+
 source("../scripts/functions/draw_scenario.R")
 ```
 
@@ -162,7 +164,7 @@ surf <- read_csv("../surf/surf_output.csv") %>%
 results_clean
 ```
 
-Preparing for spatial plotting (time consuming).
+<!-- Preparing for spatial plotting (time consuming).
 
 ```{r data_prep_spatial, eval=FALSE, message=FALSE, warning=FALSE}
 # Pivoted dataset for mapping
@@ -183,6 +185,8 @@ Preparing for spatial plotting (time consuming).
 #   st_transform(df_final_fordiff_pivoted, crs=4326)
 ```
 
+-->
+
 ### Figures
 
 ### Mean current flow change
@@ -190,6 +194,11 @@ Preparing for spatial plotting (time consuming).
 #### Historic
 
 ```{r fig_1_historic, message=FALSE, out.width="100%", fig.cap="Connectivity change for species through time, 1990-2010"}
+
+the_width = 18 
+the_height = 15
+the_dpi = 500
+
 fig_1_historic <- joined %>% 
   filter(climate == "none") %>% 
   group_by(scenarioId, species, iteration) %>% 
@@ -209,20 +218,25 @@ fig_1_historic <- joined %>%
 fig_1_historic
 ggsave(fig_1_historic,
        filename = "../thesis/figures/connectivity_decrease_x5species_historic.png",
-       width = 15, height = 15, dpi = 500)
+       width = the_width, height = the_height, dpi = the_dpi)
 ```
+
 #### Chap 1
 
 ##### Line graph
 
 ```{r figure_1_model_1, out.width="100%", fig.cap="Connectivity change for species through time, 2010-2100", message=FALSE}
+colors_sce <- 
+  data.frame(sce = c("Hist", "Baseline", "RCP85"), 
+             color = c("#8DA0CB", "#FC4E2A", "#800026"), stringsAsFactors = F)
+
 fig_1_static_chap_1 <- joined %>% 
   filter(climate != "none", chapter %in% c("none", "both", "chap_1")) %>% 
   group_by(scenarioId, species, iteration) %>% 
   group_modify(~mutate(.x , baseline = subset(.x, timestep == 2010)$sum_cur, 
                        the_diff = ((sum_cur-baseline)/baseline)*100 )) %>% 
   ggplot(aes(x=timestep, y=the_diff, col=climate)) +
-  scale_color_manual(values=c('#ffe300', '#ff7a14', "#b31400"), 
+  scale_color_manual(values = colors_sce$color, 
                      labels = c("Historic", "Baseline", "RCP 8.5")) +
   geom_smooth(aes(group = sce, linetype=code_run), alpha=0.5, method="loess") +
   #geom_point(aes(group = sce)) +
@@ -241,12 +255,24 @@ fig_1_static_chap_1 <- joined %>%
 fig_1_static_chap_1
 ggsave(fig_1_static_chap_1, 
        filename = "../thesis/figures/connectivity_decrease_x5species_chap1.png", 
-       width = 15, height = 15)
+       width = the_width, height = the_height, dpi = the_dpi)
 ```
 
 ##### Radar Graph
 
 ```{r figure_1_model_1_radar, out.width="100%"}
+
+# Default size
+gridline.label.offset	= 4
+legend.text.size = 20
+group.line.width = 0.9
+grid.label.size = 10
+background.circle.colour	= "#ffffff"
+group.point.size	= 5
+axis.label.size = 8
+group.colours = RColorBrewer::brewer.pal(name = "Paired",n=10)[c(2,4,6,8,10)]
+
+
 radar_data_chap1 <- joined %>% 
   filter(climate != "none", chapter %in% c("none", "both", "chap_1")) %>% 
   group_by(timestep, species, code) %>% 
@@ -261,12 +287,17 @@ radar_chap1 <-
   ggradar(radar_data_chap1, centre.y = -20, legend.position = "right",
           grid.min = -20, grid.max = 3, grid.mid = 0, 
           values.radar = c("-20 %", "0 %", ""), 
-          gridline.label.offset	=5, legend.text.size= 12,
-          group.line.width =0.8,
-          background.circle.colour	= "#ffffff", group.point.size	= 2, 
-          axis.label.size=5)
+          group.colours = group.colours,
+          gridline.label.offset	= gridline.label.offset, 
+          legend.text.size = legend.text.size,
+          group.line.width = group.line.width, 
+          grid.label.size = grid.label.size,
+          background.circle.colour = background.circle.colour, 
+          group.point.size	= group.point.size, 
+          axis.label.size = axis.label.size)
 radar_chap1
-ggsave("../thesis/figures/radar_ggradar_chap1.png", radar_chap1, width = 15, height = 10)
+ggsave("../thesis/figures/radar_ggradar_chap1.png", radar_chap1,
+       width = the_width, height = the_height, dpi = the_dpi)
 ```
 
 #### Chap 2
@@ -278,7 +309,7 @@ fig_1_static_chap_2 <- joined %>%
   group_modify(~mutate(.x , baseline = subset(.x, timestep == 2010)$sum_cur, 
                        the_diff = ((sum_cur-baseline)/baseline)*100 )) %>% 
   ggplot(aes(x=timestep, y=the_diff, col=climate)) +
-  scale_color_manual(values=c('#ffe300', '#ff7a14', "#b31400"), 
+  scale_color_manual(values = colors_sce$color,
                      labels = c("Historic", "Baseline", "RCP 8.5")) +
   geom_smooth(aes(group = sce, linetype=code_run), alpha=0.5, method="loess") +
   scale_linetype_manual(values=c("solid", "dashed", "longdash", "dotted")) +
@@ -297,7 +328,7 @@ fig_1_static_chap_2 <- joined %>%
 fig_1_static_chap_2
 ggsave(fig_1_static_chap_2, 
        filename = "../thesis/figures/connectivity_decrease_x5species_chap2.png", 
-       width = 15, height = 15)
+       width = the_width, height = the_height, dpi = the_dpi)
 ```
 ##### Radar Graph
 
@@ -316,12 +347,17 @@ radar_chap2 <-
   ggradar(radar_data_chap2, centre.y = -20, legend.position = "right",
           grid.min = -20, grid.max = 3, grid.mid = 0, 
           values.radar = c("-20 %", "0 %", ""), 
-          gridline.label.offset	=5, legend.text.size= 12,
-          group.line.width =0.8,
-          background.circle.colour	= "#ffffff", group.point.size	= 2, 
-          axis.label.size=5)
+          group.colours = group.colours,
+          gridline.label.offset	= gridline.label.offset, 
+          legend.text.size = legend.text.size,
+          group.line.width = group.line.width, 
+          grid.label.size = grid.label.size,
+          background.circle.colour = background.circle.colour, 
+          group.point.size	= group.point.size, 
+          axis.label.size = axis.label.size-2)
 radar_chap2
-ggsave("../thesis/figures/radar_ggradar_chap2.png", radar_chap2, width = 15, height = 10)
+ggsave("../thesis/figures/radar_ggradar_chap2.png", radar_chap2,
+       width = the_width, height = the_height, dpi = the_dpi)
 ```
 
 #### Both 
@@ -343,15 +379,21 @@ radar_all <-
   ggradar(radar_data_all, centre.y = -20, legend.position = "right",
           grid.min = -20, grid.max = 3, grid.mid = 0, 
           values.radar = c("-20 %", "0 %", ""), 
-          gridline.label.offset	=5, legend.text.size= 12,
-          group.line.width =0.8,
-          background.circle.colour	= "#ffffff", group.point.size	= 2, 
-          axis.label.size=5)
+          group.colours = group.colours,
+          gridline.label.offset	= gridline.label.offset, 
+          legend.text.size = legend.text.size,
+          group.line.width = group.line.width, 
+          grid.label.size = grid.label.size,
+          background.circle.colour = background.circle.colour, 
+          group.point.size	= group.point.size, 
+          axis.label.size = axis.label.size-2)
 radar_all
-ggsave("../thesis/figures/radar_ggradar_both.png", radar_all, width = 15, height = 10)
+ggsave("../thesis/figures/radar_ggradar_both.png", radar_all,
+       width = the_width, height = the_height, dpi = the_dpi)
 ```
 
-### Map of change
+
+<!-- ### Map of change
 
 Mapping takes a lot of time, not knitted by default
 
@@ -403,6 +445,8 @@ Mapping takes a lot of time, not knitted by default
 #ggsave("../thesis/figures/connectivit_change_mun_both.png", change_both)
 ```
 
+-->
+
 ### ROC Curves
 
 ROC curves from fitting both models, plotting with `patchwork` package.
@@ -437,36 +481,22 @@ ggsave("../thesis/figures/double_roc_resample.png", full)
 
 ### Histograms
 
-#### Chap 1
+#### Original
 
-```{r hist_plot_1, out.width="100%"}
-hist_plot_1 <- histograms %>% 
+```{r original_hists}
+
+bi_colors <- c("#67a9cf", "#ef8a62")
+
+hist_plot_origin <- histograms %>%
+  filter(sce %in% c("TRUE", "sce_37")) %>% 
+  filter(ts == 2) %>% 
+  mutate(ts = ts*10+1990) %>% 
   mutate(ts = as.factor(ts)) %>% 
-  filter(chapter %in% c('both', 'chap_1')) %>%  
-  ggplot(aes(x=bins, y=n, group=ts, colour=ts)) + 
-  geom_density(stat='identity', show.legend=F, aes(fill=factor(ts)), alpha=0.3)+
-  facet_grid(code~species) +
-  labs(x = "Flow intensity distribution (log)", 
-       y = "")+
-  theme(strip.text.y = element_text(angle=360, size=10, hjust = 0), 
-        axis.text.x=element_blank(),
-        axis.ticks.x=element_blank(), 
-        axis.text.y.left = element_blank(),
-        axis.ticks.y.left = element_blank()) +
-  NULL
-hist_plot_1
-ggsave("../thesis/figures/hist_chap1.png", hist_plot_1, width = 15, height = 15)
-```
-
-#### Chap 2
-
-```{r hist_plot_2, out.width="100%"}
-hist_plot_2 <- histograms %>% 
-  mutate(ts = as.factor(ts)) %>% 
-  filter(chapter %in% c('chap_2')) %>%  
-  ggplot(aes(x=bins, y=n, group=ts, colour=ts)) + 
-  geom_density(stat='identity', show.legend=F, aes(fill=factor(ts)), alpha=0.3)+
-  facet_grid(code~species) +
+  ggplot(aes(x=bins, y=n, fill=sce, colour =sce)) + 
+  geom_density(stat='identity', show.legend=T, alpha=0.3)+
+  scale_fill_manual(values = bi_colors, name="Source", labels=c("Model", "Observation")) +
+  scale_color_manual(values = bi_colors, name="Source", labels=c("Model", "Observation")) +
+  facet_wrap(~species) +
   labs(x = "Flow intensity distribution (log)", 
        y = "") +
   theme(strip.text.y = element_text(angle=360, size=10, hjust = 0), 
@@ -475,8 +505,66 @@ hist_plot_2 <- histograms %>%
         axis.text.y.left = element_blank(),
         axis.ticks.y.left = element_blank()) +
   NULL
+hist_plot_origin
+ggsave("../thesis/figures/original_hists.png", hist_plot_origin,
+       width = the_width, height = the_height, dpi = the_dpi)
+```
+
+#### Chap 1
+
+```{r hist_plot_1, out.width="100%"}
+
+bi_colors <- c("#67a9cf", "#ef8a62")
+
+hist_plot_1 <- histograms %>% 
+  mutate(ts = as.factor(ts)) %>% 
+  filter(chapter %in% c('both', 'chap_1')) %>%  
+  ggplot(aes(x=bins, y=n, group=ts)) + 
+  geom_density(stat='identity', show.legend=T, aes(fill=factor(ts), color=factor(ts)), alpha=0.3)+
+  facet_grid(code~species) +
+  scale_fill_manual(values = bi_colors, 
+                    labels = c("2010", "2100")) +
+  scale_color_manual(values = bi_colors, 
+                     labels = c("2010", "2100")) +
+  labs(x = "Flow intensity distribution (log)", 
+       y = "")+
+  theme(strip.text.y = element_text(angle=360, size=10, hjust = 0), 
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank(), 
+        axis.text.y.left = element_blank(),
+        axis.ticks.y.left = element_blank(), 
+        legend.position = c(0.95, 0.96)) +
+  labs(color="Timestep", fill="Timestep") +
+  NULL
+hist_plot_1
+ggsave("../thesis/figures/hist_chap1.png", hist_plot_1, width = 18, height = 15)
+```
+
+#### Chap 2
+
+```{r hist_plot_2, out.width="100%"}
+hist_plot_2 <- histograms %>% 
+  mutate(ts = as.factor(ts)) %>% 
+  filter(chapter %in% c('chap_2')) %>%  
+  ggplot(aes(x=bins, y=n, group=ts)) + 
+  geom_density(stat='identity', aes(fill=factor(ts),  colour=factor(ts)), alpha=0.3)+
+  facet_grid(code~species) +
+  scale_fill_manual(values = bi_colors, 
+                    labels = c("2010", "2100")) +
+  scale_color_manual(values = bi_colors, 
+                     labels = c("2010", "2100")) +
+  labs(x = "Flow intensity distribution (log)", 
+       y = "") +
+  theme(strip.text.y = element_text(angle=360, size=10, hjust = 0), 
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank(), 
+        axis.text.y.left = element_blank(),
+        axis.ticks.y.left = element_blank(),
+        legend.position = c(0.95, 0.96)) +
+  labs(color="Timestep", fill="Timestep") +
+  NULL
 hist_plot_2
-ggsave("../thesis/figures/hist_chap2.png", hist_plot_2, width = 15, height = 20)
+ggsave("../thesis/figures/hist_chap2.png", hist_plot_2, width = 18, height = 20)
 ```
 
 ### SURF Analysis
@@ -498,7 +586,7 @@ surf_1 <- surf %>%
   geom_smooth(aes(group = scenario, linetype=code_run), alpha=0.2, method="loess")+
   #geom_point(aes(group=scenario), alpha= 0.05, size = 0.5)+
   facet_wrap(~species, scales = "fixed")+
-  scale_color_manual(values=c('#ffe300', '#ff7a14', "#b31400"), 
+  scale_color_manual(values = colors_sce$color,
                      labels = c("Historic", "Baseline", "RCP 8.5")) +
   labs(y = "Change in nb of Keypoints detected (%)",
        x = "Year",
@@ -508,7 +596,8 @@ surf_1 <- surf %>%
          linetype = guide_legend(nrow=1, override.aes = list(colour = 'black'))) +
   NULL
 surf_1
-ggsave("../thesis/figures/surf_chap1.png", surf_1, width = 15, height = 15)
+ggsave("../thesis/figures/surf_chap1.png", surf_1,
+       width = the_width, height = the_height, dpi = the_dpi)
 ```
 
 ##### Radar Graph
@@ -529,12 +618,17 @@ surf_radar_1 <-
   ggradar(surf_radar_data_1, centre.y = -60, legend.position = "right",
           grid.min = -60, grid.max = 5, grid.mid = 0, 
           values.radar = c("-60 %", "0 %", ""), 
-          gridline.label.offset	=22, legend.text.size= 12,
-          group.line.width =0.8,
-          background.circle.colour	= "#ffffff", group.point.size	= 2, 
-          axis.label.size=5)
+          group.colours = group.colours,
+          gridline.label.offset	= 20, 
+          legend.text.size = legend.text.size,
+          group.line.width = group.line.width, 
+          grid.label.size = grid.label.size,
+          background.circle.colour = background.circle.colour, 
+          group.point.size	= group.point.size, 
+          axis.label.size = axis.label.size)
 surf_radar_1
-ggsave("../thesis/figures/surf_radar_chap1.png", surf_radar_1, width = 15, height = 10)
+ggsave("../thesis/figures/surf_radar_chap1.png", surf_radar_1,
+        width = the_width, height = the_height, dpi = the_dpi)
 ```
 
 #### Chap 2
@@ -554,7 +648,7 @@ surf_2 <- surf %>%
   #geom_point(aes(group=scenario), alpha= 0.05, size = 0.5)+
   scale_linetype_manual(values=c("solid", "dashed", "longdash", "dotted")) +
   facet_wrap(~species, scales = "fixed")+
-  scale_color_manual(values=c('#ffe300', '#ff7a14', "#b31400"), 
+  scale_color_manual(values = colors_sce$color,
                      labels = c("Historic", "Baseline", "RCP 8.5")) +
   labs(y = "Change in nb of Keypoints detected (%)",
        x = "Year",
@@ -565,7 +659,8 @@ surf_2 <- surf %>%
                                  override.aes = list(colour = 'black'))) +
   NULL
 surf_2
-ggsave("../thesis/figures/surf_chap2.png", surf_2, width = 15, height = 15)
+ggsave("../thesis/figures/surf_chap2.png", surf_2,
+       width = the_width, height = the_height, dpi = the_dpi)
 ```
 
 ##### Radar Graph
@@ -586,12 +681,17 @@ surf_radar_2 <-
   ggradar(surf_radar_data_2, centre.y = -60, legend.position = "right",
           grid.min = -60, grid.max = 5, grid.mid = 0, 
           values.radar = c("-60 %", "0 %", ""), 
-          gridline.label.offset	=22, legend.text.size= 12,
-          group.line.width =0.8,
-          background.circle.colour	= "#ffffff", group.point.size	= 2, 
-          axis.label.size=5)
+          group.colours = group.colours,
+          gridline.label.offset	= 22, 
+          legend.text.size = legend.text.size,
+          group.line.width = group.line.width, 
+          grid.label.size = grid.label.size,
+          background.circle.colour = background.circle.colour, 
+          group.point.size	= group.point.size, 
+          axis.label.size = axis.label.size-2)
 surf_radar_2
-ggsave("../thesis/figures/surf_radar_chap2.png", surf_radar_2, width = 15, height = 10)
+ggsave("../thesis/figures/surf_radar_chap2.png", surf_radar_2, 
+       width = the_width, height = the_height, dpi = the_dpi)
 ```
 
 ### Maps
@@ -652,31 +752,6 @@ for (x in 1:nlayers(the_stack)){
 mean(aucs);sd(aucs)
 mean(precs);sd(precs)
 # plot(stack(the_mean, final))
-```
-
-### Original hist
-
-```{r original_hists}
-hist_plot_origin <- histograms %>%
-  filter(sce %in% c("TRUE", "sce_37")) %>% 
-  filter(ts == 2) %>% 
-  mutate(ts = ts*10+1990) %>% 
-  mutate(ts = as.factor(ts)) %>% 
-  ggplot(aes(x=bins, y=n, fill=sce, colour =sce)) + 
-  geom_density(stat='identity', show.legend=T, alpha=0.3)+
-  scale_color_discrete(name="Source", labels=c("Model", "Observation")) +
-  scale_fill_discrete(name="Source", labels=c("Model", "Observation")) +
-  facet_wrap(~species) +
-  labs(x = "Flow intensity distribution (log)", 
-       y = "") +
-  theme(strip.text.y = element_text(angle=360, size=10, hjust = 0), 
-        axis.text.x=element_blank(),
-        axis.ticks.x=element_blank(), 
-        axis.text.y.left = element_blank(),
-        axis.ticks.y.left = element_blank()) +
-  NULL
-hist_plot_origin
-ggsave("../thesis/figures/original_hists.png", hist_plot_origin, width = 15, height = 10)
 ```
 
 ### Bar charts
@@ -775,7 +850,7 @@ all_chap2 <- draw_scenario(42, return_df = T) %>%
   bind_rows(draw_scenario(51, return_df = T))
 
 #forest <- 
-  
+
 bar_chap2 <- all_chap2 %>% 
   mutate(value = ifelse(.$value>10, 10, .$value)) %>%
   mutate(new_class = ifelse(.$value == 10, "forest", .$new_class)) %>% 
