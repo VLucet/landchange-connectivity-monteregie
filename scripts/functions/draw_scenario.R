@@ -67,10 +67,11 @@ draw_scenario <- function(sce = NULL,
                         scales=list(draw=FALSE),
                         maxpixels = mxp,
                         colorkey=list(space="right"),
+                        labels = list(cex = 5),
                         main = "2100")
   ALT_plot <- as.ggplot(ALT_plot)
   
-  final_plot <- BAU_plot + ALT_plot  + plot_layout(widths = c(1, 1.10))
+  final_plot <- BAU_plot + ALT_plot  + plot_layout(widths = c(1, 1.08))
   
   return(final_plot)
 }
