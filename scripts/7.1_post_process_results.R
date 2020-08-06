@@ -168,6 +168,7 @@ stopCluster(clust)
 print("LARGE FOREACH LOOP DONE")
 # Save final df
 saveRDS(final_df, "outputs/final/final_df_current_density.RDS")
+write_csv(final_df, "outputs/final/final_df_current_density.csv")
 
 #-------------------------------------------------------------------------------
 
@@ -267,6 +268,7 @@ final_df_origin <- bind_rows(unlist(assembled_list_T, recursive = F))
 
 final_df_origin$timestep <- as.numeric(final_df_origin$timestep)
 saveRDS(final_df_origin, "outputs/final/final_df_origin_current_density.RDS")
+write_csv(final_df_origin, "outputs/final/final_df_origin_current_density.csv")
 
 #-------------------------------------------------------------------------------
 # BAR PLOT DATA 
