@@ -886,7 +886,7 @@ forest <- final_all %>%
 
 non_forest <- final_all %>% 
   filter(type != "forest") %>% 
-  filter(!(type %in% c("Water", "Wetlands", "Roads"))) %>% 
+  filter(!(new_class %in% c("Water", "Wetlands", "Roads"))) %>% 
   mutate(value = as.factor(value), timestep = as.factor(timestep)) %>% 
   ggplot(aes(fill=timestep, y=area, x=new_class)) + 
   geom_bar(position="dodge", stat="identity") +
