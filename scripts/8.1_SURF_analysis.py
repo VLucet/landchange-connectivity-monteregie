@@ -34,9 +34,18 @@ def Filter_any(string, substr):
             any(sub in str for sub in substr)]
 
 
+def Filter_all_not(string, substr):
+    return [str for str in string if
+            all(sub not in str for sub in substr)]
+
+
 base_path = 'outputs/current_density_sum/'
 base_files = os.listdir(base_path)
 list_of_files = [base_path + file for file in base_files]
+
+list_of_files = Filter_all_not(list_of_files, ".gitignore")
+list_of_files = Filter_all_not(list_of_files, "TRUE")
+
 print(len(list_of_files))
 # print(list_of_files)
 
@@ -47,8 +56,14 @@ the_mask[the_mask == 2] = 1
 
 workers = mp.Pool(processes=8)
 kp_lengths = workers.map(partial(utils.get_kp_lengths, mask=the_mask, h_threshold=7000, oct_nb=1, oct_layers=2), list_of_files)
-#kp_lengths = workers.map(utils.get_kp_lengths, list_of_files)
+# kp_lengths = workers.map(utils.get_kp_lengths, list_of_files)
 workers.close()
+
+# i = 0
+# kp_lengths = [0] * len(list_of_files)
+# for file in list_of_files:
+#     kp_lengths[i] = utils.get_kp_lengths(file, mask=the_mask, h_threshold=7000, oct_nb=1, oct_layers=2)
+#     i += i
 
 # ------------ Create surf CSV ------------
 
