@@ -36,8 +36,9 @@ def Filter_any(string, substr):
 
 base_path = 'outputs/current_density_sum/'
 base_files = os.listdir(base_path)
+base_files = [str for str in base_files if 'sce' in str]
 list_of_files = [base_path + file for file in base_files]
-list_of_files = [str for str in list_of_files if 'sce' in str]
+
 
 print(len(list_of_files))
 # print(list_of_files)
@@ -124,6 +125,13 @@ for sce in ["sce_" + str(nb) for nb in [37]]:
 final.to_csv("outputs/final/final_values_output_original.csv", index=False)
 
 # True land use
+
+
+base_path = 'outputs/current_density_sum/'
+base_files = os.listdir(base_path)
+base_files = [str for str in base_files if 'TRUE' in str]
+list_of_files = [base_path + file for file in base_files]
+
 
 temp = []
 final = pd.DataFrame()

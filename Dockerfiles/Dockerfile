@@ -104,6 +104,11 @@ RUN R -e "renv::restore()"
 # Set up links
 RUN chmod +x landcon.sh \
   && ln -s /home/rstudio/land_con_monteregie/landcon.sh /usr/bin/
+  
+# Set up git lfs 
+RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash \
+  && apt-get install git-lfs \
+  && git lfs install
 
 # ------------------------------------------------------------------------------
 ## With renv cache, has not worked so far: 
