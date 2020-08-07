@@ -172,6 +172,10 @@ post_process(){
   Rscript scripts/7.1_post_process_results.R
 }
 
+run_surf(){
+  python3 scripts/8.1_SURF_analysis.py
+  Rscript scripts/8.2_process_SURF_output.R
+}
 
 make_figures(){
   Rscript -e "rmarkdown::render('docs/msc_thesis_figures.Rmd', output_file='index.html')"
@@ -190,6 +194,7 @@ run_all(){
   reclassify
   run_circuitscape
   post_process
+  run_surf
   make_figures
 }
 
@@ -202,6 +207,7 @@ run_model_no_prep(){
   reclassify
   run_circuitscape
   post_process
+  run_surf
   make_figures
 }
 
@@ -216,7 +222,7 @@ run_prep(){
 
 ### Arguments matching
 
-while getopts ":pmafsrcdg" opt; do
+while getopts ":pmafsrcdgp" opt; do
   case ${opt} in
     p )
       run_prep
@@ -251,6 +257,9 @@ while getopts ":pmafsrcdg" opt; do
       ;;
     g )
       make_figures 
+      ;;
+    p )
+      run_surf
       ;;
     * )
       print_main_usage
