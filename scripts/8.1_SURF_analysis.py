@@ -34,17 +34,10 @@ def Filter_any(string, substr):
             any(sub in str for sub in substr)]
 
 
-def Filter_all_not(string, substr):
-    return [str for str in string if
-            all(sub not in str for sub in substr)]
-
-
 base_path = 'outputs/current_density_sum/'
 base_files = os.listdir(base_path)
 list_of_files = [base_path + file for file in base_files]
-
-list_of_files = Filter_all_not(list_of_files, ".gitignore")
-list_of_files = Filter_all_not(list_of_files, "TRUE")
+list_of_files = [str for str in list_of_files if 'sce' in str]
 
 print(len(list_of_files))
 # print(list_of_files)
