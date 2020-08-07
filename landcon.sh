@@ -222,7 +222,7 @@ run_prep(){
 
 ### Arguments matching
 
-while getopts ":pmafsrcdgp" opt; do
+while getopts ":pmafsrcdgy" opt; do
   case ${opt} in
     p )
       run_prep
@@ -258,7 +258,7 @@ while getopts ":pmafsrcdgp" opt; do
     g )
       make_figures 
       ;;
-    p )
+    y )
       run_surf
       ;;
     * )
