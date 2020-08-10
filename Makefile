@@ -7,3 +7,7 @@ thesis/build/thesis.pdf: thesis/*.tex thesis/figures/*.png docs/index.html
 	pdflatex -output-directory thesis/build thesis/thesis.tex \
 	&& biber --output-directory thesis/build thesis \
 	&& pdflatex -output-directory thesis/build thesis/thesis.tex
+
+clean: 
+	cd thesis/build/ \
+	&& rm *.aux *.bbl *.bcf *.blg *.lof *.log *.lot *.out *.xml *.toc
