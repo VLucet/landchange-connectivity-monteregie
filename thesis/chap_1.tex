@@ -383,15 +383,13 @@ We successfully integrated a potential functional connectivity model for 5 umbre
 \begin{figure}[h!]
   \centering
     \includegraphics[width=0.9\textwidth]{thesis/figures/PCA_data_profiles.png}
-  \caption{Ordination of land use data (proportions) for municipalities. Groups are derived from clustering in \ref{fig:clustervals}}
+  \caption{Ordination of land use data (proportions) for municipalities. Groups are derived from clustering in figure \ref{fig:clustervals}.}
   \label{fig:PCAvals}
-\end{figure}
 
 % MAP
-\begin{figure}[h!]
   \centering
     \includegraphics[width=\textwidth]{thesis/figures/profiles_land_use.png}
-  \caption{Geographical distribution of the 5 profiles identified in \ref{fig:clustervals} and \ref{fig:PCAvals}.}
+  \caption{Geographical distribution of the 5 profiles identified in figures \ref{fig:clustervals} and \ref{fig:PCAvals}.}
   \label{fig:mapvals}
 \end{figure}
 
@@ -401,15 +399,13 @@ We successfully integrated a potential functional connectivity model for 5 umbre
 \begin{figure}[h!]
   \centering
     \includegraphics[width=0.9\textwidth]{thesis/figures/PCA_trans_profiles.png}
-  \caption{Ordination of land use transition data for municipalities. Groups are derived from clustering \ref{fig:clustertrans}}
+  \caption{Ordination of land use transition data for municipalities. Groups are derived from clustering in figure \ref{fig:clustertrans}.}
   \label{fig:PCAtrans}
-\end{figure}
 
 %MAP
-\begin{figure}[h!]
   \centering
     \includegraphics[width=\textwidth]{thesis/figures/transition_prof_map.png}
-  \caption{Geographical distribution of the 4 change profiles identified in \ref{fig:clustertrans} and \ref{fig:PCAtrans}.}
+  \caption{Geographical distribution of the 4 change profiles identified in figures \ref{fig:clustertrans} and \ref{fig:PCAtrans}.}
   \label{fig:maptrans}
 \end{figure}
 
@@ -422,7 +418,7 @@ We successfully integrated a potential functional connectivity model for 5 umbre
 
 \begin{table}[h!]
 \centering
-\caption{Variable importance (gini impurity index) for both models - non-categorical variables only}
+\caption{Variable importance (gini impurity index) for both random forest models - non-categorical variables only.}
 \label{tab:varimp}
 \begin{tabular}{lcc}
 \hline
@@ -436,12 +432,12 @@ Population change & 447.1120 & 1138.319 \\
 Income & 390.5668 & 1108.612 \\ 
 \hline
 \end{tabular}
-\end{table}
+%\end{table}
 
 % R squares and AUC
 
-\begin{table}[!htbp] \centering 
-  \caption{$R^{2}$, AUC, and average precision values for both models and both validation sets.} 
+%\begin{table}[!htbp] \centering 
+  \caption[$R^{2}$, AUC, and average precision values for both models and both validation sets.]{$R^{2}$, AUC, and average precision values for both models and both validation sets - The spatial validation set corresponds to the testing partition for the 1990-2000 timestep, whereas the temporal validation set corresponds to the entire data of the 2000-2010 timestep.} 
   \label{tab:R_squares_AUC} 
 \begin{tabular}{@{\extracolsep{5pt}} ccccc} 
 \\[-1.8ex]\hline 
@@ -454,11 +450,11 @@ Urbanization & Spatial & $0.573$ & $0.939$ & $0.234$ \\
 Urbanization & Temporal & $0.573$ & $0.921$ & $0.250$ \\ 
 \hline \\[-1.8ex] 
 \end{tabular} 
-\end{table} 
+%\end{table} 
 
 % R square resample
 
-\begin{table}[!htbp] \centering 
+%\begin{table}[!htbp] \centering 
 \caption{AUC values for both models in resampled 10 folds CCV.} 
 \label{tab:R_squares_resample} 
 \begin{tabular}{@{\extracolsep{5pt}} cccccc} 
@@ -469,12 +465,12 @@ Model & Mean AUC +/- Std \\
 Agricultural Expansion & $0.929 \pm 0.002$ \\ 
 Urbanisation & $0.938 \pm 0.002$ \\ 
 \hline \\[-1.8ex] 
-\end{tabular} 
-\end{table} 
+\end{tabular}
+%\end{table} 
 
 % Historic model metrics
 
-\begin{table}[!htbp] \centering
+%\begin{table}[!htbp] \centering
 \caption{AUC and average precision values for the predictions of the land use change model.} 
 \label{tab:historic_metrics} 
 \begin{tabular}{lcccc}
@@ -491,17 +487,17 @@ Urbanisation & $0.784$ & $0.287$ & $0.618 \pm 0.001$ & $0.102 \pm 0.001$ \\ \hli
 
 \begin{figure}[h!]
 \makebox[\textwidth]{
-  \includegraphics[width=\textwidth]{thesis/figures/historic_compare_urb.png}
+  \includegraphics[width=1.3\textwidth]{thesis/figures/historic_compare_urb.png}
 }
- \caption{Comparison between mean probability of urbanization and actual urbanization observed between 1990 and 2010.}
+ \caption[Predicted probability of urbanization vs observed urbanization between 1990 and 2010.]{Predicted probability of urbanization (left) vs observed urbanization (right) between 1990 and 2010.}
  \label{fig:compare_urb}
-\end{figure}
+%\end{figure}
 
-\begin{figure}[h!]
+%\begin{figure}[h!]
 \makebox[\textwidth]{
-  \includegraphics[width=\textwidth]{thesis/figures/historic_compare_agex.png}
+  \includegraphics[width=1.3\textwidth]{thesis/figures/historic_compare_agex.png}
 }
- \caption{Comparison between mean probability of agricultural expansion and actual agricultural expansion observed between 1990 and 2010.}
+ \caption[Predicted probability of agricultural expansion vs observed agricultural expansion between 1990 and 2010.]{Predicted probability of agricultural expansion (left) vs observed agricultural expansion (right) between 1990 and 2010.}
  \label{fig:compare_agex}
 \end{figure}
 
@@ -510,9 +506,9 @@ Urbanisation & $0.784$ & $0.287$ & $0.618 \pm 0.001$ & $0.102 \pm 0.001$ \\ \hli
 
 \begin{figure}[h!]
 \makebox[\textwidth]{
-  \includegraphics[width=\textwidth]{thesis/figures/bar_both.png}
+  \includegraphics[width=1.3\textwidth]{thesis/figures/bar_both.png}
 }
- \caption{Comparison land use class frequencies in 2010, and 2100 for both the BAU and Reforestation scenarios.}
+ \caption{Land use class frequencies in 2010 (observed) and 2100 (predicted) for the BAU and Reforestation scenarios (under baseline climate scenario).}
  \label{fig:bar_both}
 \end{figure}
 
@@ -521,9 +517,9 @@ Urbanisation & $0.784$ & $0.287$ & $0.618 \pm 0.001$ & $0.102 \pm 0.001$ \\ \hli
 
 \begin{figure}[h!]
 \makebox[\textwidth]{
-  \includegraphics[width=\textwidth]{thesis/figures/original_hists.png}
+  \includegraphics[width=1.3\textwidth]{thesis/figures/original_hists.png}
 }
- \caption{Histograms of flow values for the year 2010 comparing the historic model run with observations.}
+ \caption{Histograms of flow values for the year 2010 comparing the historic model run (1990-2010) with observations.}
  \label{fig:hist_historic}
 \end{figure}
 
@@ -534,9 +530,9 @@ Urbanisation & $0.784$ & $0.287$ & $0.618 \pm 0.001$ & $0.102 \pm 0.001$ \\ \hli
 
 \begin{figure}[h!]
 \makebox[\textwidth]{
-  \includegraphics[width=\textwidth]{thesis/figures/connectivity_decrease_x5species_historic.png}
+  \includegraphics[width=1.3\textwidth]{thesis/figures/connectivity_decrease_x5species_historic.png}
 }
- \caption{Change in mean flow (in \% of the the 1990 flow) between 1990 and 2010, contrasting observed change and simulated chnage.}
+ \caption{Change in mean flow (in \% of the the 1990 flow) between 1990 and 2010, contrasting observed historic change (1990-2010) and simulated change from historic model run.}
  \label{fig:flow_historic}
 \end{figure}
 
@@ -544,9 +540,9 @@ Urbanisation & $0.784$ & $0.287$ & $0.618 \pm 0.001$ & $0.102 \pm 0.001$ \\ \hli
 
 \begin{figure}[h!]
 \makebox[\textwidth]{
-  \includegraphics[width=\textwidth]{thesis/figures/connectivity_decrease_x5species_chap1.png}
+  \includegraphics[width=1.3\textwidth]{thesis/figures/connectivity_decrease_x5species_chap1.png}
 }
- \caption{Change in mean flow (in \% of the the 2010 flow) between 2010 and 2100, contrasting BAU scenario (solid line) with other land use change scenarios.}
+ \caption{Change in mean flow (in \% of the the 2010 flow) between 2010 (observed) and 2100 (predicted), contrasting BAU scenario (solid line) with other land use change scenarios - linear graph.}
  \label{fig:flow_linear_1}
 \end{figure}
 
@@ -554,9 +550,9 @@ Urbanisation & $0.784$ & $0.287$ & $0.618 \pm 0.001$ & $0.102 \pm 0.001$ \\ \hli
 
 \begin{figure}[h!]
 \makebox[\textwidth]{
-  \includegraphics[width=\textwidth]{thesis/figures/radar_ggradar_chap1.png}
+  \includegraphics[width=1.3\textwidth]{thesis/figures/radar_ggradar_chap1.png}
 }
- \caption{Change in mean flow (in \% of the the 2010 flow) between 2010 and 2100, contrasting BAU scenario (solid line) with other land use change scenarios.}
+ \caption{Change in mean flow (in \% of the the 2010 flow) between 2010 (observed) and 2100 (predicted), contrasting BAU scenario with other land use change scenarios - radar graph.}
  \label{fig:flow_radar_1}
 \end{figure}
 
@@ -564,9 +560,9 @@ Urbanisation & $0.784$ & $0.287$ & $0.618 \pm 0.001$ & $0.102 \pm 0.001$ \\ \hli
 
 \begin{figure}[h!]
 \makebox[\textwidth]{
-  \includegraphics[width=\textwidth]{thesis/figures/hist_chap1.png}
+  \includegraphics[width=1.3\textwidth]{thesis/figures/hist_chap1.png}
 }
- \caption{Histograms of flow values change.}
+ \caption{Histograms of flow values for all species and scenarios, for 2010 (observed) and 2100 (predicted).}
  \label{fig:hist_1}
 \end{figure}
 
@@ -577,9 +573,9 @@ Urbanisation & $0.784$ & $0.287$ & $0.618 \pm 0.001$ & $0.102 \pm 0.001$ \\ \hli
 
 \begin{figure}[h!]
 \makebox[\textwidth]{
-  \includegraphics[width=\textwidth]{thesis/figures/surf_chap1.png}
+  \includegraphics[width=1.3\textwidth]{thesis/figures/surf_chap1.png}
 }
- \caption{Change in identified features (partly pinch-points).}
+ \caption{Change in the number of features (in \% of the the 2010 flow) identified by the SURF analyssis between 2010 (observed) and 2100 (predicted), contrasting BAU scenario with other land use change scenarios - linear graph.}
  \label{fig:surf_linear_1}
 \end{figure}
 
@@ -587,9 +583,9 @@ Urbanisation & $0.784$ & $0.287$ & $0.618 \pm 0.001$ & $0.102 \pm 0.001$ \\ \hli
 
 \begin{figure}[h!]
 \makebox[\textwidth]{
-  \includegraphics[width=\textwidth]{thesis/figures/surf_radar_chap1.png}
+  \includegraphics[width=1.3\textwidth]{thesis/figures/surf_radar_chap1.png}
 }
- \caption{Change in identified features (partly pinch-points.}
+ \caption{Change in the number of features (in \% of the the 2010 flow) identified by the SURF analyssis between 2010 (observed) and 2100 (predicted), contrasting BAU scenario with other land use change scenarios - radar graph.}
  \label{fig:surf_radar_1}
 \end{figure}
 
