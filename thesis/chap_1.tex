@@ -108,7 +108,7 @@ In order to reduce run time as well as memory requirements, we ran the entire si
 
 \subsubsection{Preliminary analysis of past land use change}
 
-To better understand land use patterns in the region, we ran some preliminary analysis on land use change data at the municipality level. Montérégie is made up of 177 different municipalities. We generated land use matrices (amount of each land use category) and land cover transition matrices (1990 to 2010) for each municipality and for the land use categories corresponding to our model. We then performed multivariate analyses by running a first ordination using PCA (Principal Component Analysis), and then using Ward clustering % TODO add ref to Legendre.
+To better understand land use patterns in the region, we ran some preliminary analysis on land use change data at the municipality level. Montérégie is made up of 177 different municipalities. We generated land use matrices (amount of each land use category) and land cover transition matrices (1990 to 2010) for each municipality and for the land use categories corresponding to our model. We then performed multivariate analyses by running a first ordination using PCA (Principal Component Analysis), and then using Ward clustering \citep{legendre_ordination_2012}.
 Because municipalities in Montérégie have variable size, the amount of change in each municipality needs to be standardized. The data was normalized prior to the ordination to reflect relative amounts of change in each municipality. We used the vegan package in R to produce such plots.\\
 
 \subsubsection{Model Execution}
@@ -126,7 +126,7 @@ The RF model was calibrated on a training partition (70\% of the down-sampled da
 There are a number of ways to evaluate model performance in the context of land use change predictions. We used three different approaches:
 \begin{itemize}
 \item We report the $R^{2}$ resulting from the random forest model, as well as variable importance (evaluated as gini impurity score).
-\item We used a ROC curve with Area Under the Curve (AUC) to compare true observed change with the predicted probabilities of transition. This method is widely used in land use change modeling. %TODO add ref (ANDY)
+\item We used a ROC curve with Area Under the Curve (AUC) to compare true observed change with the predicted probabilities of transition. This method is often used in landscape ecology and land use change modeling \citep{pontius_recommendations_2014}
 \item We used a Conventional Cross Validation (CCV) method for the reporting of AUC values, with 10 folds, for which we also produce a measure of AUC with ROC curves.\\
 \end{itemize}
 
