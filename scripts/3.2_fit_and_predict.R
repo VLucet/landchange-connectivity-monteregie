@@ -10,7 +10,7 @@ set.seed(77)
 
 #-------------------------------------------------------------------------------
 # Set parameters 
-OMP_NUM_THREADS <- as.numeric(Sys.getenv("OMP_NUM_THREADS", unset = 4))-1
+OMP_NUM_THREADS <- as.numeric(Sys.getenv("OMP_NUM_THREADS", unset = 10))
 options(mc.cores=OMP_NUM_THREADS)
 
 R_METHOD <- Sys.getenv("R_METHOD", unset = "rf")
@@ -88,6 +88,7 @@ full_set <- list(urb = urb_set, agex = agex_set)
 
 methics_df <- data.frame()
 rs_metrics <- data.frame()
+var_imp <- data.frame()
 
 cls_metrics <- metric_set(roc_auc, sens, spec)
 #-------------------------------------------------------------------------------
@@ -129,8 +130,8 @@ for (response in c("agex","urb")){
       mod <- 
         rand_forest(trees = R_N_TREES, mode = "regression") %>% 
         set_engine("ranger", 
-                   num.threads = OMP_NUM_THREADS)
-      #importance = "impurity_corrected")
+                   num.threads = OMP_NUM_THREADS,
+                   importance = "impurity")
     } else {
       stop("Method not implemented")
     }
@@ -146,6 +147,13 @@ for (response in c("agex","urb")){
     mod_fit <- 
       wflow %>% 
       fit(data = train_data)
+    
+    # Var Imp
+    var_imp_temp <- 
+      data.frame(var = names(mod_fit$fit$fit$fit$variable.importance[1:5]), 
+                 importance = mod_fit$fit$fit$fit$variable.importance[1:5], 
+                 response = response)
+    var_imp <- bind_rows(var_imp, var_imp_temp)
     
     # Resample
     mod_fit_rs <- 
@@ -255,6 +263,7 @@ for (response in c("agex","urb")){
 
 write.csv(methics_df, "outputs/metrics/metrics_table.csv")
 write.csv(rs_metrics, "outputs/metrics/metrics_table_resample.csv")
+write.csv(var_imp, "outputs/metrics/var_imp_table.csv")
 
 #-------------------------------------------------------------------------------
 
