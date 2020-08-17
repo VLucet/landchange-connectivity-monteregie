@@ -304,3 +304,19 @@ ggsave(plot = map_vals, "thesis/figures/profiles_land_use.png",
 #   theme(panel.background = element_rect(fill = "white", colour = "grey50"),
 #         legend.direction = 'horizontal', legend.position = 'top') +
 #   ggtitle("PCA of Municipality profiles")
+
+
+#####
+
+# trans_mat_1990to2000 <-
+#   TransTotal_saved.df %>%
+#   group_by(Municipality, From, To) %>%
+#   summarise(Freq=sum(Freq)) %>%
+#   ungroup() %>% 
+#   dplyr::filter(From!=To) %>%
+#   mutate(trans_type = paste0(From,"to", To)) %>%
+#   dplyr::select(-From, -To) %>%
+#   spread(key=trans_type, value=Freq) %>%
+#   rename(Mun=Municipality) %>%
+#   arrange(Mun) %>% 
+#   as.data.frame()
