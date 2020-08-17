@@ -108,7 +108,7 @@ In order to reduce run time as well as memory requirements, we ran the entire si
 
 \subsubsection{Preliminary analysis of past land use change}
 
-To better understand land use patterns in the region, we ran some preliminary analysis on land use change data at the municipality level. Montérégie is made up of 177 different municipalities. We generated land use matrices (amount of each land use category) and land cover transition matrices (1990 to 2010) for each municipality and for the land use categories corresponding to our model. We then performed multivariate analyses by running a first ordination using PCA (Principal Component Analysis), and then using Ward clustering \citep{legendre_ordination_2012}.
+To better understand land use patterns in the region, we ran some preliminary analysis on land use change data at the municipality level. Montérégie is made up of 177 different municipalities. We generated land use matrices (amount of each land use category) and land cover transition matrices for the first timestep of our dataset (1990 to 2000) for each municipality and for the land use categories corresponding to our model. We then performed multivariate analyses by running a first ordination using PCA (Principal Component Analysis), and then using Ward clustering \citep{legendre_ordination_2012}.
 Because municipalities in Montérégie have variable size, the amount of change in each municipality needs to be standardized. The data was normalized prior to the ordination to reflect relative amounts of change in each municipality. We used the vegan package in R to produce such plots.\\
 
 \subsubsection{Model Execution}
