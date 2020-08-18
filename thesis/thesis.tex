@@ -10,7 +10,6 @@
 \usepackage{enumitem}
 \usepackage{rotating}
 \usepackage{lipsum,lineno} % for placeholder text
-\usepackage{hyperref} % for hyperlink accross the document
 \usepackage{array} % for sizing of tables
 \usepackage{lscape} % for landscape tables
 \usepackage{pdfpages} % to add pdf appendix
@@ -53,6 +52,8 @@
 \externaldocument{"thesis/chap_2"}
 \externaldocument{"thesis/appendix_1"}
 
+\usepackage{hyperref} % for hyperlink accross the document
+
 % May or may not be necessary to have separate bibliographies per chapter
 % McGill requirements ask for it, but others did not do so
 % https://engineering.purdue.edu/~mark/puthesis/faq/chapter-bibliographies/
@@ -85,6 +86,9 @@
 
 %% Input any special commands below
 \listfiles
+
+% Has to be loaded LAST
+
 \begin{document}
 
 \maketitle
@@ -167,7 +171,7 @@ I wrote the manuscript with input from my supervisor.
 \\
 \\
 }%
-\ContribAuthors%
+\ContribAuthors %
 \listoffigures %
 \listoftables %
 
@@ -178,7 +182,7 @@ I wrote the manuscript with input from my supervisor.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Clearly state the rationale and objectives of the research.
 \newcommand*{\SetIntroName}[1]{\renewcommand*{\ETDIntroName}{#1}}%
-\newcommand*{\ETDIntroName}{IntroMENTS}%
+\newcommand*{\ETDIntroName}{Intro}%
 
 \newcommand{\SetIntroText}[1]{\renewcommand*{\ETDIntroText}{#1}}%
 \newcommand*{\ETDIntroText}{Intro text goes here!}%
@@ -196,6 +200,7 @@ I wrote the manuscript with input from my supervisor.
       \GoDouble%
       \setlength{\parskip}{-2em}
       %\chapter*{\ETDIntroName}%
+      \phantomsection\section*{}
       \addcontentsline{toc}{extrachapter}{\ETDIntroName}%
       \ETDIntroText%
     \end{simpleenv}%
@@ -204,7 +209,7 @@ I wrote the manuscript with input from my supervisor.
 
 % Introduction
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\SetIntroName{{General Introduction}}
+\SetIntroName{General Introduction}
 
 \SetIntroText{
 
@@ -289,7 +294,7 @@ We can therefore derive different predictions as to how connectivity will be aff
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Clearly state the rationale and objectives of the research.
 \newcommand*{\SetDiscName}[1]{\renewcommand*{\ETDDiscName}{#1}}%
-\newcommand*{\ETDDiscName}{DiscMENTS}%
+\newcommand*{\ETDDiscName}{Disc}%
 
 \newcommand{\SetDiscText}[1]{\renewcommand*{\ETDDiscText}{#1}}%
 \newcommand*{\ETDDiscText}{Disc text goes here!}%
@@ -307,6 +312,7 @@ We can therefore derive different predictions as to how connectivity will be aff
       \GoDouble%
       \setlength{\parskip}{-2em}
       %\chapter*{\ETDDiscName}%
+      \phantomsection\section*{}
       \addcontentsline{toc}{extrachapter}{\ETDDiscName}%
       \ETDDiscText%
     \end{simpleenv}%
@@ -318,6 +324,7 @@ We can therefore derive different predictions as to how connectivity will be aff
 \SetDiscName{General Discussion \& Conclusion}%
 
 \SetDiscText{
+
 The two chapters of this thesis each provide parts of a strategy for addressing the two limitations to Connectivity Conservation Planning methods identified in the general introduction: the lack of methodological integration between connectivity, land use change and climate change models ; and the need for stakeholder inputs in the planning process. \\
 
 In chapter 1, we integrated circuit-theory based connectivity models with a simple land use and climate change model based on habitat suitability for 5 umbrella species. We also showed patterns of land use change in our study region for the 1990-2010 period, and demonstrated that our land use change model is a generalization of these patterns across the landscape. We analysed changes in connectivity under simple land use and climate change scenarios, and showed that different species have different responses, depending on the forest type they depend on, and on whether this forest type is under threat by land use change, climate change or both. The american marten showed the most complex response because it is dependent on coniferous forest type which is the most at risk under both drivers. We also used a pattern-detection method (SURF) to identify pinch-points and salient connectivity flow features. Although the number of features detected is species-specific, we showed a mostly consistent pattern of change over time: reforestation seems to simplify the flow. More research to understand the links between flow complexity and SURF measures is needed. \\
@@ -348,6 +355,7 @@ But, as we quoted from \cite{williamson_spatially_2018} above, this view tends t
 
 The integration of models of multiple drivers of changes in ecological connectivity with stakeholder inputs into connectivity models will contribute to the design of better connectivity conservation planning tools. In this thesis, we contributed some design elements for those tools, such as a philosophy to account for uncertainty and to confront models with the priorities of local stakeholders. Future research will need to engage with an iterative process of stakeholder engagement, possibly a scenario building exercise. This process will be all the more successful if it is made within a coherent framework that addresses the social-ecological complexity of fragmented landscapes, such as SpaSES and Bright spots. These frameworks will guide discussion and facilitate visualizing positive alternative scenarios to business as usual.
 }%
+
 \Disc%
 
 % Appendix
