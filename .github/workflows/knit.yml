@@ -22,3 +22,9 @@ jobs:
       
     - name: knit rmd
       run: docker run vlucet/land_con_monteregie:3.6.2-1 /bin/bash && cd ~/land_con_monteregie && ./landcon.sh -g
+    
+    - name: push changes
+      run: | 
+          git add docs/** \\
+          git commit -m "CI gh page" 
+          git push
