@@ -6,8 +6,8 @@ on:
   push:
     branches: [ master ]
     paths: 
-      - "Dockerfiles/**"
-      - ".github/workflows/**"
+      - "Dockerfiles/Dockerfile"
+      - ".github/workflows/build_and_push.yml"
       - "renv.lock"
   schedule:
     - cron: "0 1 * * *"
