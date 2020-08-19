@@ -5,10 +5,8 @@ name: CI
 on:
   push:
     branches: [ master ]
-    paths: 
-      - "Dockerfiles/Dockerfile"
-      - ".github/workflows/build_and_push.yml"
-      - "renv.lock"
+    paths:
+      - ".github/workflows/knit.yml"
   schedule: # Runs at 01:00 UTC every day
     - cron: "0 1 * * *"
 
