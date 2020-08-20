@@ -267,7 +267,8 @@ while getopts ":pmafsrcdgy" opt; do
       ;;
     g )
       export REPRO_FIGS_ONLY='TRUE'
-      make_figures 
+      make_figures
+      echo "test"
       ;;
     y )
       run_surf
