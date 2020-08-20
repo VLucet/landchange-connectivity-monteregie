@@ -78,33 +78,36 @@ print_main_usage(){
 # STEP FUNCTIONS
 
 prep_raw_data(){
-  print_vars
-  ## Process raw data
-  echo "Prep raw data"
-  Rscript scripts/1.1_prep_land_use_and_mun.R
-  Rscript scripts/1.2_prep_census_data.R
-  Rscript scripts/1.3_prep_env_vars.R
-  Rscript scripts/1.4_reclass_land_use.R
-  Rscript scripts/1.5_prep_landis.R
-  # Rscript scripts/1.6_prep_neighbors.R
+  # print_vars
+  # ## Process raw data
+  # echo "Prep raw data"
+  # Rscript scripts/1.1_prep_land_use_and_mun.R
+  # Rscript scripts/1.2_prep_census_data.R
+  # Rscript scripts/1.3_prep_env_vars.R
+  # Rscript scripts/1.4_reclass_land_use.R
+  # Rscript scripts/1.5_prep_landis.R
+  # # Rscript scripts/1.6_prep_neighbors.R
+  echo "p1"
 }
 
 prep_stsim_data(){
-  print_vars
-  # Prepare data for stsim
-  echo "Prep stsim data"
-  Rscript scripts/2.1_prep_stsim_stratums.R
-  Rscript scripts/2.2_prep_stsim_transition_targets.R
-  Rscript scripts/2.3_prep_stsim_transition_size_distribution.R
-  Rscript scripts/2.4_prep_stsim_spatial_multipliers.R
-  Rscript scripts/2.5_prep_stsim_datasheets.R
+  # print_vars
+  # # Prepare data for stsim
+  # echo "Prep stsim data"
+  # Rscript scripts/2.1_prep_stsim_stratums.R
+  # Rscript scripts/2.2_prep_stsim_transition_targets.R
+  # Rscript scripts/2.3_prep_stsim_transition_size_distribution.R
+  # Rscript scripts/2.4_prep_stsim_spatial_multipliers.R
+  # Rscript scripts/2.5_prep_stsim_datasheets.R
+  echo "p2"
 }
 
 prep_model_data(){
-  print_vars
-  ## Run the preparation of data
-  echo "Prep model data"
-  Rscript scripts/3.1_model_prep_data.R
+  # print_vars
+  # ## Run the preparation of data
+  # echo "Prep model data"
+  # Rscript scripts/3.1_model_prep_data.R
+  echo "p3"
 }
 
 fit_predict_model(){
@@ -314,11 +317,13 @@ case "$subcommand" in
     ;;
   
   fitpred)
+    
     if [[ $# -eq 0 ]] ; then
       echo "Usage: fitpred <string nb trees>"
       echo "" 1>&2
       exit 0
     fi
+    
     export R_N_TREES=$1
     fit_predict_model
     ;;
