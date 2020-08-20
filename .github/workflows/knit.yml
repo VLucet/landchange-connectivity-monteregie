@@ -30,9 +30,9 @@ jobs:
         docker run -e BIG_FIGS='FALSE' -v "$(pwd)/docs/:/home/rstudio/land_con_monteregie/docs/" \
         vlucet/land_con_monteregie:3.6.2-1 /bin/bash -c "git pull && git lfs fetch && git lfs checkout && ./landcon.sh -g"
         
-    # - name: push changes
-    #   run: | 
-    #     git status
-    #     git add docs/**
-    #     git commit -m "CI gh page" 
-    #     git push
+    - name: push changes
+      run: |
+        git status
+        git add docs/**
+        git commit -m "CI gh page"
+        git push
