@@ -99,7 +99,8 @@ results_clean <- read_csv("../outputs/final/stsim_run_results.csv") %>%
   mutate(code_run = c("control", sce_code_vec_run))
 
 # Final extracted datasets
-df_final <- read_csv("../outputs/final/final_df_current_density.csv") %>%
+df_final <- read_csv("../outputs/final/final_df_current_density_part1.csv") %>%
+  bind_rows(read_csv("../outputs/final/final_df_current_density_part2.csv")) %>% 
   mutate(timestep = (timestep*10)+1990, source = "model", zone = as.factor(zone))
 df_final_origin <- read_csv("../outputs/final/final_df_origin_current_density.csv") %>%
   mutate(timestep = timestep*10+1990, source = "model")
