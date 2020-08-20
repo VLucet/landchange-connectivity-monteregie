@@ -29,7 +29,8 @@ export R_BUFF='TRUE'
 export R_METHOD='rf'
 export R_RATIO='2'
 export R_METHOD_STSIM='rf'
-export R_SAMPLING_METHOD="bal"
+export R_SAMPLING_METHOD='bal'
+export OMP_NUM_THREADS='16' # six on thinkpad, 16 on cluster
 # Variables for STSIM
 export STSIM_ITER='10'
 export STSIM_TS_START='0'
@@ -38,14 +39,16 @@ export STSIM_STEP_SAVE='1'
 export STSIM_STEP_COMPUTE='10'
 # Variables for CS
 export CS_CORES='12' # 2 on thinkpad, 12 on cluster
+# Variabled for figure making script
+export REPRO_FIGS_ONLY='TRUE'
 
 echo ""
 echo "LAND USE CHANGE AND CON MODEL - 2020"
 echo "Valentin Lucet - Thesis McGill University"
-export OMP_NUM_THREADS='16' # six on thinkpad, 16 on cluster
 echo ""
 
 print_vars(){
+  echo ""
   echo "Variables for R: R_crop = $R_CROP, R_AGGR = $R_AGGR"
   echo "                 R_AGGR_FACT = $R_AGGR_FACT, R_PART = $R_PART"
   echo "                 R_BUFF = $R_BUFF, R_METHOD = $R_METHOD"
@@ -64,8 +67,12 @@ print_vars(){
 }
 
 print_main_usage(){
-  echo "Usage: [-p prep] [-m model no prep] [-a run all] [-f fit & predict]"
-  echo "       [-s stsim] [-r reclassify] [-c circuitscape] [-d post process] [-g make figures]"
+  echo ""
+  echo "Usage: landcon.sh [-a run all] [-p prep] [-m model no prep] [-f fit & predict]"
+  echo "                  [-s stsim] [-r reclassify] [-c circuitscape] [-d post process] [-g make figures]"
+  echo ""
+  echo "Subcommands: prep, fitpred, stsim, cs (use -h to see usage on each subcommand)" 
+  echo ""
 }
 
 # STEP FUNCTIONS
@@ -118,7 +125,7 @@ run_stsim(){
     then
       Rscript scripts/4.2_validate_stsim_results.R
     else
-      echo "STSIM not run"
+      echo "STSIM not run as STSIM_RUN is set to $STSIM_RUN"
   fi
 }
 
@@ -179,7 +186,8 @@ run_surf(){
 
 make_figures(){
   Rscript -e "rmarkdown::render('docs/msc_thesis_figures.Rmd', 
-  params = list(big_figures = as.logical(Sys.getenv('BIG_FIGS', unset = TRUE))), 
+  params = list(REPRO_FIGS_ONLY = as.logical(Sys.getenv('REPRO_FIGS_ONLY', 
+  unset = TRUE))), 
   output_file='index.html')"
 }
 ### BUNDLE FUNCTIONS
@@ -229,7 +237,7 @@ while getopts ":pmafsrcdgy" opt; do
     p )
       run_prep
       ;;
-    m) 
+    m ) 
       run_model_no_prep
       ;;
     a )
@@ -258,26 +266,26 @@ while getopts ":pmafsrcdgy" opt; do
       post_process 
       ;;
     g )
+      export REPRO_FIGS_ONLY='TRUE'
       make_figures 
       ;;
     y )
       run_surf
       ;;
-    * )
+    \? )
       print_main_usage
       echo "" 1>&2
       exit 1
       ;;
   esac
 done
-shift $((OPTIND -1))
 
-subcommand=$1;
+shift $((OPTIND-1))
+
+subcommand=$1; shift # remove subcommand from the argument list
 case "$subcommand" in
   
   prep)
-    shift # Remove `prep` from the argument list
-    
     echo "prep - prepare inputs from raw data"
     echo ""
 
@@ -292,10 +300,7 @@ case "$subcommand" in
         m )
           prep_model_data
           ;;
-        : ) 
-          echo "test"
-          ;;
-        * )
+        \? )
           echo "Usage: prep [-r raw data] [-s stsim data] [-m model data]"
           echo "" 1>&2
           exit 1
@@ -306,45 +311,16 @@ case "$subcommand" in
     ;;
   
   fitpred)
-    shift
-    
-    echo "fitpred - fit and predict using random forest model"
-    echo ""
-    
-    while getopts ":gar:n" opt; do
-      case ${opt} in
-        l )
-          export R_METHOD='glm'
-          fit_predict_model
-          ;; 
-        g )
-          export R_METHOD='gam'
-          fit_predict_model
-          ;; 
-        r )
-          export R_METHOD='rf'
-          export R_N_TREES=$OPTARG
-          fit_predict_model
-          ;; 
-        n )
-          export R_METHOD='nn'
-          fit_predict_model
-          ;;
-        : )
-        echo "Invalid option: $OPTARG requires an argument" 1>&2
-          ;;
-        * )
-        echo "Usage: fit [-l glm] [-g gam] [-r rf <string nb trees>] [-n neural network]"
-        echo "" 1>&2
-        exit 1
-          ;;
-      esac
-    done
+    if [[ $# -eq 0 ]] ; then
+      echo "Usage: fitpred <string nb trees>"
+      echo "" 1>&2
+      exit 0
+    fi
+    export R_N_TREES=$1
+    fit_predict_model
     ;;
     
   stsim)
-    shift
-    
     echo "stsim - prepare stsim library and run all scenarios"
     echo ""
     
@@ -358,8 +334,8 @@ case "$subcommand" in
           export STSIM_RUN='TRUE'
           run_stsim
           ;; 
-        * )
-          echo "Usage: fit [-l library only] [-r run stsim]"
+        \? )
+          echo "Usage: stsim [-l library only] [-r run stsim]"
           echo "" 1>&2
           exit 1
           ;;
@@ -368,8 +344,6 @@ case "$subcommand" in
     ;;
     
   cs)
-    shift
-    
     echo "cs - prepare circuitscape inputs and run julia script"
     echo ""
     
@@ -386,8 +360,37 @@ case "$subcommand" in
           prep_circuitscape
           run_circuitscape
           ;;
-        * )
+        \? )
           echo "Usage: cs [-p prep] [-r run <cores, numeric>] [-a all]"
+          echo "" 1>&2
+          exit 1
+          ;;
+      esac
+    done
+    ;;
+    
+  figs)
+    echo "figs - reproduce thesis figures"
+    echo ""
+    
+    if [ $# -eq 0 ]; then
+      echo "Reproducing out-of-the-box reproducible figures only"
+      echo "" 1>&2
+      export REPRO_FIGS_ONLY='TRUE'
+      make_figures
+      exit 0
+    fi
+    
+    while getopts ":a" opt; do
+      case ${opt} in
+        a )
+          echo "Reproducing ALL figures"
+          export REPRO_FIGS_ONLY='FALSE'
+          make_figures
+          ;;
+        \? )
+          echo "Usage: default (no options) to out-of-the-box reproducible figures only"
+          echo "       [-a for ALL figures]"
           echo "" 1>&2
           exit 1
           ;;

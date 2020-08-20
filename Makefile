@@ -1,7 +1,7 @@
 all: thesis/build/thesis.pdf
 
 docs/index.html: docs/msc_thesis_figures.Rmd outputs/final/*.csv outputs/final/*.RDS
-	sh landcon.sh -g
+	sh landcon.sh figs -a
 
 thesis/build/thesis.pdf: thesis/*.tex thesis/figures/*.png docs/index.html
 	pdflatex -output-directory thesis/build thesis/thesis.tex \
