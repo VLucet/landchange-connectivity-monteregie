@@ -16,6 +16,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+      with:
+        lfs: true
 
     - name: pull docker image
       run: docker pull vlucet/land_con_monteregie:3.6.2-1 

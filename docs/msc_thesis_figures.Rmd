@@ -396,7 +396,7 @@ ggsave("../thesis/figures/radar_ggradar_both.png", radar_all,
 
 ROC curves from fitting both models, plotting with `patchwork` package.
 
-```{r roc_curves, eval=big_figures, message=FALSE, warning=FALSE, warning=FALSE}
+```{r roc_curves, eval=params$big_figures, message=FALSE, warning=FALSE, out.width="100%"}
 # Roc curves data
 urb <- readRDS("../data/temp/fit_rs_outcome_rf_urb_2.RDS")
 agex <- readRDS("../data/temp/fit_rs_outcome_rf_agex_2.RDS")
@@ -432,7 +432,7 @@ ggsave("../thesis/figures/double_roc_resample.png", full)
 
 #### Original
 
-```{r original_hists, message=FALSE, warning=FALSE, warning=FALSE}
+```{r original_hists, message=FALSE, warning=FALSE, out.width="100%"}
 
 bi_colors <- c("#67a9cf", "#ef8a62")
 
@@ -461,7 +461,7 @@ ggsave("../thesis/figures/original_hists.png", hist_plot_origin,
 
 #### Chap 1
 
-```{r hist_plot_1, message=FALSE, warning=FALSE, warning=FALSE}
+```{r hist_plot_1, message=FALSE, warning=FALSE, out.width="100%"}
 
 bi_colors <- c("#67a9cf", "#ef8a62")
 
@@ -491,7 +491,7 @@ ggsave("../thesis/figures/hist_chap1.png", hist_plot_1, width = 18, height = 15)
 
 #### Chap 2
 
-```{r hist_plot_2, message=FALSE, warning=FALSE, warning=FALSE}
+```{r hist_plot_2, message=FALSE, warning=FALSE, out.width="100%"}
 hist_plot_2 <- histograms %>% 
   mutate(ts = as.factor(ts)) %>% 
   filter(chapter %in% c('chap_2')) %>%  
@@ -522,7 +522,7 @@ ggsave("../thesis/figures/hist_chap2.png", hist_plot_2, width = 18, height = 20)
 
 ##### Linear Graph
 
-```{r surf_1, message=FALSE}
+```{r surf_1, message=FALSE, warning=FALSE, out.width="100%"}
 surf_1 <- surf %>% 
   mutate(scenario = as.factor(scenario)) %>% 
   filter(climate != "none", chapter %in% c("none", "both", "chap_1")) %>% 
@@ -551,7 +551,7 @@ ggsave("../thesis/figures/surf_chap1.png", surf_1,
 
 ##### Radar Graph
 
-```{r surf_radar_1, message=FALSE}
+```{r surf_radar_1, message=FALSE, warning=FALSE, out.width="100%"}
 surf_radar_data_1 <- surf %>% 
   filter(climate != "none", chapter %in% c("none", "both","chap_1")) %>% 
   filter(sce != "sce_0", name != "historic run") %>% 
@@ -584,7 +584,7 @@ ggsave("../thesis/figures/surf_radar_chap1.png", surf_radar_1,
 
 ##### Linear Graph
 
-```{r surf_2, message=FALSE}
+```{r surf_2, message=FALSE, warning=FALSE, out.width="100%"}
 surf_2 <- surf %>% 
   mutate(scenario = as.factor(scenario)) %>% 
   filter(climate != "none", chapter %in% c("none", "both", "chap_2")) %>% 
@@ -614,7 +614,7 @@ ggsave("../thesis/figures/surf_chap2.png", surf_2,
 
 ##### Radar Graph
 
-```{r surf_radar_2, message=FALSE}
+```{r surf_radar_2, message=FALSE, warning=FALSE, out.width="100%"}
 surf_radar_data_2 <- surf %>% 
   filter(climate != "none", chapter %in% c("none", "both","chap_2")) %>% 
   filter(sce != "sce_0", name != "historic run") %>% 
@@ -645,13 +645,13 @@ ggsave("../thesis/figures/surf_radar_chap2.png", surf_radar_2,
 
 ### Maps
 
-```{r 2010_compare_prep, include=FALSE}
+```{r 2010_compare_prep, eval=params$big_figures, message=FALSE, warning=FALSE, out.width="100%"}
 list_of_files <-  list.files("../libraries/stsim/monteregie-conncons-scripted.ssim.output/Scenario-37/stsim_OutputSpatialState", full.names = T)
 list_of_files <- list_of_files[grep(x=list_of_files, "ts2")]
 stratum <- raster("../data/stsim/aggregated/primary_stratum_mont_or_not_or_PA.tif")
 ```
 
-```{r 2010_compare_urb, include=FALSE}
+```{r 2010_compare_urb, eval=params$big_figures, message=FALSE, warning=FALSE, out.width="100%"}
 names <- paste0(c("historic_compare_agex", "historic_compare_urb"), ".png")
 
 for (class in c(1:2)){
@@ -713,7 +713,7 @@ for (class in c(1:2)){
 
 ### Land use maps
 
-```{r message=FALSE, warning=FALSE}
+```{r compare, eval=params$big_figures, message=FALSE, warning=FALSE, out.width="100%"}
 source('../scripts/functions/draw_scenario.R')
 for (scenario in c(39, 42, 45, 48, 51)){
   the_plot <- draw_scenario(scenario, mxp = mxp)
@@ -721,7 +721,6 @@ for (scenario in c(39, 42, 45, 48, 51)){
   ggsave(plot = the_plot, 
          filename = paste0("../thesis/figures/",the_name), width = 30, height = 12, dpi = the_dpi)
 }
-
 ```
 
 Compute auc / precision on predictions.
@@ -786,9 +785,9 @@ summary_vals
 
 ### Bar charts
 
-#### Sce 39
+#### Scenario BAU
 
-```{r BAU, message=FALSE, warning=FALSE}
+```{r BAU, message=FALSE, warning=FALSE, out.width="100%"}
 
 final_df_39 <- bar_data %>% 
   filter(scenario == 39)
@@ -810,9 +809,9 @@ bar_plot_39
 #ggsave("../thesis/figures/bar_BAU.png", bar_plot_39, width = 15, height = 10)
 ```
 
-##### Sce 42
+##### Scenario Reforestation
 
-```{r reforestation, message=FALSE, warning=FALSE}
+```{r reforestation,  message=FALSE, warning=FALSE, out.width="100%"}
 # draw_scenario(42)
 final_df_42 <- bar_data %>% 
   filter(scenario == 42)
@@ -834,7 +833,7 @@ bar_plot_42
 #ggsave("../thesis/figures/bar_Ref.png", bar_plot_42, width = 15, height = 10)
 ```
 
-##### Both
+##### Both scenarios
 
 ```{r bar_boths}
 final_df_39 <- final_df_39 %>% 
