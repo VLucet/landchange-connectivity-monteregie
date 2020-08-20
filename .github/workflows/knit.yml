@@ -20,7 +20,9 @@ jobs:
         lfs: true
     
     - name: fetch lfs
-      run: git lfs fetch
+      run: |
+        git lfs fetch
+        git lfs checkout
 
     - name: pull docker image
       run: docker pull vlucet/land_con_monteregie:3.6.2-1 
@@ -30,6 +32,6 @@ jobs:
     
     - name: push changes
       run: | 
-          git add docs/** \\
+          git add docs/**
           git commit -m "CI gh page" 
           git push
