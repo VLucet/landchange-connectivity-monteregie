@@ -403,4 +403,5 @@ case "$subcommand" in
     
 esac
 
+echo "end"
 echo $?
