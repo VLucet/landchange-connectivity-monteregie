@@ -20,7 +20,7 @@ jobs:
         lfs: true
     
     - name: test
-      run: pwd
+      run: pwd && ls
 
     - name: pull docker image
       run: docker pull vlucet/land_con_monteregie:3.6.2-1 
