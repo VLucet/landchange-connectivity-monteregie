@@ -109,7 +109,8 @@ RUN chmod +x landcon.sh \
 RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash \
   && apt-get install git-lfs \
   && git lfs install \
-  && git lfs fetch
+  && git lfs fetch \
+  && git lfs checkout
 
 # ------------------------------------------------------------------------------
 ## With renv cache, has not worked so far: 
