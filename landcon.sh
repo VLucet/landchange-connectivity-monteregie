@@ -4,9 +4,6 @@
 ## 0.0 Main thesis utility
 #-------------------------------------------------------------------------------
 
-# exit when any command fails
-set -e
-
 # -- for HPC env
 #SBATCH --account=def-gonzalez
 #SBATCH --time=2:30:00
@@ -78,36 +75,33 @@ print_main_usage(){
 # STEP FUNCTIONS
 
 prep_raw_data(){
-  # print_vars
-  # ## Process raw data
-  # echo "Prep raw data"
-  # Rscript scripts/1.1_prep_land_use_and_mun.R
-  # Rscript scripts/1.2_prep_census_data.R
-  # Rscript scripts/1.3_prep_env_vars.R
-  # Rscript scripts/1.4_reclass_land_use.R
-  # Rscript scripts/1.5_prep_landis.R
-  # # Rscript scripts/1.6_prep_neighbors.R
-  echo "p1"
+  print_vars
+  ## Process raw data
+  echo "Prep raw data"
+  Rscript scripts/1.1_prep_land_use_and_mun.R
+  Rscript scripts/1.2_prep_census_data.R
+  Rscript scripts/1.3_prep_env_vars.R
+  Rscript scripts/1.4_reclass_land_use.R
+  Rscript scripts/1.5_prep_landis.R
+  # Rscript scripts/1.6_prep_neighbors.R
 }
 
 prep_stsim_data(){
-  # print_vars
-  # # Prepare data for stsim
-  # echo "Prep stsim data"
-  # Rscript scripts/2.1_prep_stsim_stratums.R
-  # Rscript scripts/2.2_prep_stsim_transition_targets.R
-  # Rscript scripts/2.3_prep_stsim_transition_size_distribution.R
-  # Rscript scripts/2.4_prep_stsim_spatial_multipliers.R
-  # Rscript scripts/2.5_prep_stsim_datasheets.R
-  echo "p2"
+  print_vars
+  # Prepare data for stsim
+  echo "Prep stsim data"
+  Rscript scripts/2.1_prep_stsim_stratums.R
+  Rscript scripts/2.2_prep_stsim_transition_targets.R
+  Rscript scripts/2.3_prep_stsim_transition_size_distribution.R
+  Rscript scripts/2.4_prep_stsim_spatial_multipliers.R
+  Rscript scripts/2.5_prep_stsim_datasheets.R
 }
 
 prep_model_data(){
-  # print_vars
-  # ## Run the preparation of data
-  # echo "Prep model data"
-  # Rscript scripts/3.1_model_prep_data.R
-  echo "p3"
+  print_vars
+  ## Run the preparation of data
+  echo "Prep model data"
+  Rscript scripts/3.1_model_prep_data.R
 }
 
 fit_predict_model(){
@@ -188,10 +182,10 @@ run_surf(){
 }
 
 make_figures(){
-  #Rscript -e "rmarkdown::render('docs/msc_thesis_figures.Rmd', 
-  #params = list(REPRO_FIGS_ONLY = as.logical(Sys.getenv('REPRO_FIGS_ONLY', 
+  #Rscript -e "rmarkdown::render('docs/msc_thesis_figures.Rmd',
+  #params = list(REPRO_FIGS_ONLY = as.logical(Sys.getenv('REPRO_FIGS_ONLY',
   #unset = TRUE))), output_file='index.html')"
-  echo "placeholder"
+  echo "test"
 }
 
 ### BUNDLE FUNCTIONS
@@ -236,20 +230,24 @@ run_prep(){
 
 ### Arguments matching
 
-while getopts ":pmafsrcdgy" opt; do
+while getopts ":aepmfsrcdgy" opt; do
   case ${opt} in
+    a )
+      #export R_METHOD='all'
+      export R_N_TREES='500'
+      export STSIM_RUN='TRUE'
+      run_all
+      ;;
+    e )
+      # Fails the whole pipeline if error happens, but not GA safe
+      set -e
+      ;;
     p )
       run_prep
       echo $?
       ;;
     m ) 
       run_model_no_prep
-      ;;
-    a )
-      #export R_METHOD='all'
-      export R_N_TREES='500'
-      export STSIM_RUN='TRUE'
-      run_all
       ;;
     f )
       #export R_METHOD='all'
@@ -417,7 +415,3 @@ case "$subcommand" in
     ;;
 
 esac
-
-echo $?
-echo "end"
-echo $?
