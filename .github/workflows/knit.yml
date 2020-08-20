@@ -26,7 +26,7 @@ jobs:
       run: docker pull vlucet/land_con_monteregie:3.6.2-1 
       
     - name: test
-      run: docker run -e BIG_FIGS='FALSE' -v "$(pwd):/home/rstudio/land_con_monteregie/" vlucet/land_con_monteregie:3.6.2-1 R -e "renv::diagnostics()"
+      run: docker run -e BIG_FIGS='FALSE' -v "$(pwd):/home/rstudio/land_con_monteregie/" vlucet/land_con_monteregie:3.6.2-1 /bin/bash -c "git pull && git lfs fetch && git lfs checkout && ./landcon.sh -g"
       
     # - name: knit rmd
     #   run: |
