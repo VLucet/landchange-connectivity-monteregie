@@ -83,7 +83,7 @@ Subcommands: prep, fitpred, stsim, cs, figs (use -h to see usage on each subcomm
 **In order to reproduce the main figures of the thesis**, simply run:
 
 ```{}
-./landcon.sh -g
+./landcon.sh figs
 ```
 
 #### Detailed thesis workflow

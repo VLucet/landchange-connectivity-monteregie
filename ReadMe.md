@@ -115,7 +115,7 @@ thesis analysis. Help can be acessed with `landcon.sh -h`
 
 **In order to reproduce the main figures of the thesis**, simply run:
 
-    ./landcon.sh -g
+    ./landcon.sh figs
 
 #### Detailed thesis workflow
 
