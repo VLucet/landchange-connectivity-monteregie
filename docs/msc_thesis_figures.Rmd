@@ -16,6 +16,8 @@ output:
   pdf_document:
     toc: yes
     toc_depth: '5'
+params:
+  raster_map: TRUE
 ---
 
 ```{r setup, include=FALSE}
@@ -83,7 +85,7 @@ sce_code_vec <-
 sce_code_vec_run <- 
   rep(c("BAU", "R", "CorPr", "R-CorPr", "R(T)-CorPr"), each=3)
 
-results_clean <- read_rds("../data/temp/stsim_run_results.RDS") %>% 
+results_clean <- read_rds("../outputs/final/stsim_run_results.csv") %>% 
   dplyr::select(scenarioId, name) %>% 
   mutate(name =  gsub(.$name, pattern = " \\(.+\\)", replacement = "")) %>% 
   mutate(sce =  paste0("sce_", .$scenarioId)) %>% 
@@ -97,9 +99,9 @@ results_clean <- read_rds("../data/temp/stsim_run_results.RDS") %>%
   mutate(code_run = c("control", sce_code_vec_run))
 
 # Final extracted datasets
-df_final <- readRDS("../outputs/final/final_df_current_density.RDS") %>%
+df_final <- readRDS("../outputs/final/final_df_current_density.csv") %>%
   mutate(timestep = (timestep*10)+1990, source = "model")
-df_final_origin <- readRDS("../outputs/final/final_df_origin_current_density.RDS") %>%
+df_final_origin <- readRDS("../outputs/final/final_df_origin_current_density.csv") %>%
   mutate(timestep = timestep*10+1990, source = "model")
 
 # Stratum key
@@ -132,10 +134,6 @@ joined <- full_join(df_summarised, df_origin_summarised,
                                       "BAU run + corrs protection", "BAU run + ref", 
                                       "BAU run + corrs protection + ref",
                                       "BAU run + corrs protection + ref TARGETED")))
-
-# Roc curves data
-urb <- readRDS("../data/temp/fit_rs_outcome_rf_urb_2.RDS")
-agex <- readRDS("../data/temp/fit_rs_outcome_rf_agex_2.RDS")
 
 # Histogram data 
 hist_original <- read_csv("../outputs/final/final_values_output_original.csv")
@@ -454,6 +452,10 @@ Mapping takes a lot of time, not knitted by default
 ROC curves from fitting both models, plotting with `patchwork` package.
 
 ```{r roc_curves, message=FALSE, warning=FALSE, out.width="100%"}
+# Roc curves data
+urb <- readRDS("../data/temp/fit_rs_outcome_rf_urb_2.RDS")
+agex <- readRDS("../data/temp/fit_rs_outcome_rf_agex_2.RDS")
+
 p1 <- bind_rows(urb, .id = "fold") %>% 
   mutate(Fold = factor(fold, levels = as.character(1:10))) %>% 
   group_by(Fold) %>% 
