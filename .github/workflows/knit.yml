@@ -23,7 +23,9 @@ jobs:
       run: docker pull vlucet/land_con_monteregie:3.6.2-1 
       
     - name: knit rmd
-      run: docker run vlucet/land_con_monteregie:3.6.2-1 /bin/bash -c "git pull && git lfs fetch && git lfs checkout && ./landcon.sh -g"
+      run: |
+        docker run vlucet/land_con_monteregie:3.6.2-1 -e BIG_FIGS=FALSE \
+        /bin/bash -c "git pull && git lfs fetch && git lfs checkout && ./landcon.sh -g"
     
     - name: push changes
       run: | 
