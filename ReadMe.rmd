@@ -29,7 +29,7 @@ The goal of this repository is to allow future users to rerun the analysis and b
 *****
 #### How to reproduce this thesis
 
-*Disclaimer 1: Although all the code for the thesis is archived here, parts of the analysis are not reproducible, as some of the data used is not in open access.* 
+*Disclaimer 1: Although all the code for the thesis is archived here, parts of the analysis are not reproducible, as some of the data used is not in open access.*
 
 *Disclaimer 2: The simulation code is designed to be paralellized on a large linux machine (not an HPC environment) of the type [Arbutus Compute Cloud](https://docs.computecanada.ca/wiki/Cloud_resources) from Compute Canada. However, the final steps (analysis, figure making) can be ran on computer of a much more modest size.*
 
