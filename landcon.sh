@@ -240,6 +240,7 @@ while getopts ":pmafsrcdgy" opt; do
   case ${opt} in
     p )
       run_prep
+      echo $?
       ;;
     m ) 
       run_model_no_prep
@@ -272,6 +273,7 @@ while getopts ":pmafsrcdgy" opt; do
     g )
       export REPRO_FIGS_ONLY='TRUE'
       make_figures
+      echo $?
       echo "after g"
       echo $?
       ;;
