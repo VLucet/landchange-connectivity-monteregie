@@ -5,8 +5,8 @@ name: CI
 on:
   push:
     branches: [ master ]
-    paths:
-      - ".github/workflows/knit.yml"
+    #paths:
+    #  - ".github/workflows/knit.yml"
   schedule: # Runs at 06:00 UTC every day
     - cron: "0 6 * * *"
 
@@ -21,7 +21,7 @@ jobs:
       run: docker pull vlucet/land_con_monteregie:3.6.2-1 
       
     - name: knit rmd
-      run: docker run vlucet/land_con_monteregie:3.6.2-1 /bin/bash ./landcon.sh -g
+      run: docker run -e DISABLE_AUTH=true -v "$GITHUB_WORKSPACE:/home/rstudio/land_con_monteregie/" vlucet/land_con_monteregie:3.6.2-1 /bin/bash ./landcon.sh -g
     
     - name: push changes
       run: | 
