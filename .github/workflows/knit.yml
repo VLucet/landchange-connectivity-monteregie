@@ -19,20 +19,23 @@ jobs:
       with:
         lfs: true
     
-    - name: test
-      run: pwd && ls
+    # - name: test
+    #   run: pwd && ls
 
     - name: pull docker image
       run: docker pull vlucet/land_con_monteregie:3.6.2-1 
       
-    - name: knit rmd
-      run: |
-        docker run -e BIG_FIGS='FALSE' -v "$(pwd):/home/rstudio/land_con_monteregie/" \
-        vlucet/land_con_monteregie:3.6.2-1 /bin/bash -c "git pull && git lfs fetch && git lfs checkout && ./landcon.sh -g"
-    
-    - name: push changes
-      run: | 
-        git status
-        git add docs/**
-        git commit -m "CI gh page" 
-        git push
+    - name: test
+      run: docker run -e BIG_FIGS='FALSE' -v "$(pwd):/home/rstudio/land_con_monteregie/" vlucet/land_con_monteregie:3.6.2-1 R -e "renv::diagnostics()"
+      
+    # - name: knit rmd
+    #   run: |
+    #     docker run -e BIG_FIGS='FALSE' -v "$(pwd):/home/rstudio/land_con_monteregie/" \
+    #     vlucet/land_con_monteregie:3.6.2-1 /bin/bash -c "git pull && git lfs fetch && git lfs checkout && ./landcon.sh -g"
+    # 
+    # - name: push changes
+    #   run: | 
+    #     git status
+    #     git add docs/**
+    #     git commit -m "CI gh page" 
+    #     git push
