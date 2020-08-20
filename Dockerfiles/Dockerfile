@@ -5,7 +5,7 @@
 ## Within Rstudio:
 # docker run -d -p 8787:8787 -e DISABLE_AUTH=true vlucet/land_con_monteregie:3.6.2-1
 ## Interactive:
-# docker run -it -u rstudio -e DISABLE_AUTH=true vlucet/land_con_monteregie:3.6.2-1 /bin/bash && cd ~/land_con_monteregie
+# docker run -it -e DISABLE_AUTH=true vlucet/land_con_monteregie:3.6.2-1 /bin/bash && cd ~/land_con_monteregie
 # For CC1:
 # docker run -it -e DISABLE_AUTH=true -v "$(pwd):/home/rstudio/land_con_monteregie/" -v "/home/ubuntu/data/val/current_density_dump:/home/rstudio/current_density_2" --shm-size 50G vlucet/land_con_monteregie:3.6.2-1 /bin/bash && cd ~/land_con_monteregie
 # ------------------------------------------------------------------------------
@@ -108,7 +108,8 @@ RUN chmod +x landcon.sh \
 # Set up git lfs 
 RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash \
   && apt-get install git-lfs \
-  && git lfs install
+  && git lfs install \
+  && git lfs fetch
 
 # ------------------------------------------------------------------------------
 ## With renv cache, has not worked so far: 
