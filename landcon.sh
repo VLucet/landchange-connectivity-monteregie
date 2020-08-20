@@ -378,7 +378,6 @@ case "$subcommand" in
       echo "" 1>&2
       export REPRO_FIGS_ONLY='TRUE'
       make_figures
-      exit 0
     fi
     
     while getopts ":a" opt; do
