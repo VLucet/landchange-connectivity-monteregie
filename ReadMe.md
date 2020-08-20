@@ -4,6 +4,9 @@
 ![Docker image
 build](https://github.com/VLucet/landchange-connectivity-monteregie/workflows/Build%20/%20Push%20Docker%20image/badge.svg)
 
+![CI - All
+Figures](https://github.com/VLucet/landchange-connectivity-monteregie/workflows/CI%20-%20All%20Figures/badge.svg)
+
 -----
 
 [GitHub page
