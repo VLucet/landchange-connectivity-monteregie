@@ -402,3 +402,5 @@ case "$subcommand" in
     ;;
     
 esac
+
+echo $?
