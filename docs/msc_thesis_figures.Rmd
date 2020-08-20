@@ -109,6 +109,7 @@ df_final_origin <- read_csv("../outputs/final/final_df_origin_current_density.cs
 stratum_key <- read_csv("../config/stsim/SecondaryStratum.csv") %>%
   mutate(ID = as.factor(ID)) %>%
   rename(zone=ID, MUS_NM_MUN=Name) %>%
+  mutate(zone = as.character(zone)) %>% 
   left_join(df_final, by="zone") %>%
   filter(MUS_NM_MUN!="Not Monteregie")
 
