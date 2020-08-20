@@ -185,9 +185,9 @@ run_surf(){
 }
 
 make_figures(){
-  Rscript -e "rmarkdown::render('docs/msc_thesis_figures.Rmd', 
-  params = list(REPRO_FIGS_ONLY = as.logical(Sys.getenv('REPRO_FIGS_ONLY', 
-  unset = TRUE))), output_file='index.html')"
+  #Rscript -e "rmarkdown::render('docs/msc_thesis_figures.Rmd', 
+  #params = list(REPRO_FIGS_ONLY = as.logical(Sys.getenv('REPRO_FIGS_ONLY', 
+  #unset = TRUE))), output_file='index.html')"
 }
 
 ### BUNDLE FUNCTIONS
@@ -268,7 +268,7 @@ while getopts ":pmafsrcdgy" opt; do
     g )
       export REPRO_FIGS_ONLY='TRUE'
       make_figures
-      echo "test"
+      echo "after g"
       ;;
     y )
       run_surf
@@ -379,6 +379,7 @@ case "$subcommand" in
       echo "" 1>&2
       export REPRO_FIGS_ONLY='TRUE'
       make_figures
+       echo "after figs"
     fi
     
     while getopts ":a" opt; do
