@@ -71,7 +71,7 @@ print_main_usage(){
   echo "Usage: landcon.sh [-a run all] [-p prep] [-m model no prep] [-f fit & predict]"
   echo "                  [-s stsim] [-r reclassify] [-c circuitscape] [-d post process] [-g make figures]"
   echo ""
-  echo "Subcommands: prep, fitpred, stsim, cs (use -h to see usage on each subcommand)" 
+  echo "Subcommands: prep, fitpred, stsim, cs, figs (use -h to see usage on each subcommand)" 
   echo ""
 }
 

@@ -31,9 +31,9 @@ writing of the publication that will come out of the thesis by enforcing
 good reproducibility practices early on in the publication process.
 
 **Most of the figures in the thesis are reproducible**. This repo is set
-up for continuous deployment of a [github
+up for continuous (daily) deployment of a [github
 page](https://vlucet.github.io/landchange-connectivity-monteregie/) that
-contains the main figures in the thesis.
+contains the main figures of the thesis.
 
 -----
 
@@ -73,7 +73,7 @@ options are possible. For simulation code, it is important to increase
 the access to shared memory for the container with the option
 `--shm-size` (give as much as you can afford, I usually use `50G`).
 
-  - Run docker image (`docker run [options]
+  - **Run docker image interactively** (`docker run [options]
     vlucet/land_con_monteregie:3.6.2-1 /bin/bash && cd
     ~/land_con_monteregie`), executing a command that starts bash and
     move to the repo directory (`/bin/bash && cd
@@ -84,7 +84,7 @@ the access to shared memory for the container with the option
 
     docker run -it -u rstudio -e DISABLE_AUTH=true vlucet/land_con_monteregie:3.6.2-1 /bin/bash && cd ~/land_con_monteregie
 
-  - Run docker image with rstudio in your browser (see [this
+  - **Run docker image with rstudio in your browser** (see [this
     post](https://ropenscilabs.github.io/r-docker-tutorial/02-Launching-Docker.html)
     for another example). Here you run the container in a detached mode
     (`-d`) on a local port (`-p 8787:8787`). Then, go to
@@ -94,12 +94,12 @@ the access to shared memory for the container with the option
 
     docker run -d -p 8787:8787 -e DISABLE_AUTH=true vlucet/land_con_monteregie:3.6.2-1
 
-#### Detailed workflow
+Note that with docker, you have the option to [link a local
+volume](https://docs.docker.com/storage/volumes/).
 
-The workflow of the thesis is made up mainly of `R` scripts, but also
-makes use of a few `Julia`and `Python` scripts. The entire thesis
-analysis and be easily re-run (providing that you have all the necessary
-data) with the help of the main bash utility
+#### Reproducing figures
+
+The workflow is controlled with the help of the main bash utility
 [`landcon.sh`](https://github.com/VLucet/landchange-connectivity-monteregie/blob/master/landcon.sh)
 in the top directory. This utility is used to run all the steps in the
 thesis analysis. Help can be acessed with `landcon.sh -h`
@@ -107,8 +107,17 @@ thesis analysis. Help can be acessed with `landcon.sh -h`
     LAND USE CHANGE AND CON MODEL - 2020
     Valentin Lucet - Thesis McGill University
     
-    Usage: [-p prep] [-m model no prep] [-a run all] [-f fit & predict]
-           [-s stsim] [-r reclassify] [-c circuitscape] [-d post process] [-g make figures]
+    
+    Usage: landcon.sh [-a run all] [-p prep] [-m model no prep] [-f fit & predict]
+                      [-s stsim] [-r reclassify] [-c circuitscape] [-d post process] [-g make figures]
+    
+    Subcommands: prep, fitpred, stsim, cs, figs (use -h to see usage on each subcommand)
+
+**In order to reproduce the main figures of the thesis**, simply run:
+
+    ./landcon.sh -g
+
+#### Detailed thesis workflow
 
 The first steps cover data preparation and Land Use change modeling (see
 figure below):
