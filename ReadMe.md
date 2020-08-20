@@ -26,9 +26,9 @@ makes use of the
 [`renv`](https://rstudio.github.io/renv/articles/renv.html) package.
 
 The goal of this repository is to allow future users to rerun the
-analysis and build on it if necessary, but also to facilitate the
-writing of the publication that will come out of the thesis by enforcing
-good reproducibility practices early on in the publication process.
+analysis and build on it if necessary, but also to enforce good
+reproducibility practices as early as possible in the publication
+process.
 
 **Most of the figures in the thesis are reproducible**. This repo is set
 up for continuous (daily) deployment of a [github
@@ -39,15 +39,14 @@ contains the main figures of the thesis.
 
 ### Reproducibility
 
-*Disclaimer 1: Although all the code for the thesis is archived here,
+*Disclaimer: Although all the code for the thesis is archived here,
 parts of the analysis are not reproducible, as some of the data used is
-not in open access.*
-
-*Disclaimer 2: The simulation code is designed to be paralellized on a
-large linux machine (not an HPC environment) of the type [Arbutus
-Compute Cloud](https://docs.computecanada.ca/wiki/Cloud_resources) from
-Compute Canada. However, the final steps (analysis, figure making) can
-be ran on computer of a much more modest size.*
+not in open access. The simulation code is designed to be paralellized
+on a remote linux machine (not an HPC or local environment) of the type
+[Arbutus Compute
+Cloud](https://docs.computecanada.ca/wiki/Cloud_resources) from Compute
+Canada. However, the final steps (analysis, figure making) can be ran on
+computer of a much more modest size.*
 
 ##### 1\. Install Docker
 
@@ -68,13 +67,13 @@ library.
 
 ##### 3\. Run the Docker image
 
-Once the image is downloaded, you can run it in a container. Multiple
-options are possible. For simulation code, it is important to increase
-the access to shared memory for the container with the option
+Once the image is downloaded, you can run it in a container. **Two
+options are available**. For simulation code, it is important to
+increase the access to shared memory for the container with the option
 `--shm-size` (give as much as you can afford, I usually use `50G`).
 
-  - **Run docker image interactively** (`docker run [options]
-    vlucet/land_con_monteregie:3.6.2-1 /bin/bash && cd
+  - **Run docker image interactively *(recommended)* ** (`docker run
+    [options] vlucet/land_con_monteregie:3.6.2-1 /bin/bash && cd
     ~/land_con_monteregie`), executing a command that starts bash and
     move to the repo directory (`/bin/bash && cd
     ~/land_con_monteregie`), with options to run an interactive terminal
@@ -82,7 +81,8 @@ the access to shared memory for the container with the option
 
 <!-- end list -->
 
-    docker run -it -u rstudio -e DISABLE_AUTH=true vlucet/land_con_monteregie:3.6.2-1 /bin/bash && cd ~/land_con_monteregie
+    docker run -it -u rstudio -e DISABLE_AUTH=true vlucet/land_con_monteregie:3.6.2-1 \
+      /bin/bash && cd ~/land_con_monteregie
 
   - **Run docker image with rstudio in your browser** (see [this
     post](https://ropenscilabs.github.io/r-docker-tutorial/02-Launching-Docker.html)
@@ -117,10 +117,13 @@ thesis analysis. Help can be acessed with `landcon.sh -h`
 
     ./landcon.sh figs
 
+-----
+
 #### Detailed thesis workflow
 
-The first steps cover data preparation and Land Use change modeling (see
-figure below):
+The utility has multiple options, each one to run a separate step of the
+analysis. The first steps cover data preparation and Land Use change
+modeling (see figure below):
 
   - `-p` Prepare the model data by transforming all raw data in
     processed model spatial (and some non-spatial) inputs.
