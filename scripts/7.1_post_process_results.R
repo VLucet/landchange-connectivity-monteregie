@@ -168,7 +168,12 @@ stopCluster(clust)
 print("LARGE FOREACH LOOP DONE")
 # Save final df
 saveRDS(final_df, "outputs/final/final_df_current_density.RDS")
-write_csv(final_df, "outputs/final/final_df_current_density.csv")
+
+rows <- dim(final_df)[1]
+limit <- round(rows/2)
+
+write_csv(final_df[1:limit,], "outputs/final/final_df_current_density_part1.csv")
+write_csv(final_df[limit:rows,], "outputs/final/final_df_current_density_part2.csv")
 
 #-------------------------------------------------------------------------------
 
