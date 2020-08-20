@@ -74,8 +74,7 @@ the access to shared memory for the container with the option
     ~/land_con_monteregie`), executing a command that starts bash and
     move to the repo directory (`/bin/bash && cd
     ~/land_con_monteregie`), with options to run an interactive terminal
-    (`-it`) with the rstudio user (needed, `-u rstudio`) with
-    authentification disabled (`DISABLE_AUTH=true`).
+    (`-it`) with authentification disabled (`DISABLE_AUTH=true`).
 
 <!-- end list -->
 

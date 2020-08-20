@@ -47,7 +47,7 @@ docker pull vlucet/land_con_monteregie:3.6.2-1
 
 Once the image is downloaded, you can run it in a container. Multiple options are possible. For simulation code, it is important to increase the access to shared memory for the container with the option `--shm-size` (give as much as you can afford, I usually use `50G`).
 
-  - Run docker image (`docker run [options] vlucet/land_con_monteregie:3.6.2-1 /bin/bash && cd ~/land_con_monteregie`), executing a command that starts bash and move to the repo directory (`/bin/bash && cd ~/land_con_monteregie`), with options to run an interactive terminal (`-it`) with the rstudio user (needed, `-u rstudio`) with authentification disabled (` DISABLE_AUTH=true`).
+  - Run docker image (`docker run [options] vlucet/land_con_monteregie:3.6.2-1 /bin/bash && cd ~/land_con_monteregie`), executing a command that starts bash and move to the repo directory (`/bin/bash && cd ~/land_con_monteregie`), with options to run an interactive terminal (`-it`) with authentification disabled (` DISABLE_AUTH=true`).
   
 ```{}
 docker run -it -u rstudio -e DISABLE_AUTH=true vlucet/land_con_monteregie:3.6.2-1 /bin/bash && cd ~/land_con_monteregie
