@@ -60,7 +60,7 @@ See further below for a detailed breakdown of the docker image.
 *Warning:* the image is voluminous as it contains a custom (and large) R
 library.
 
-    docker push vlucet/land_con_monteregie:3.6.2-1
+    docker pull vlucet/land_con_monteregie:3.6.2-1
 
 ##### 3\. Run the Docker image
 

@@ -40,7 +40,7 @@ You will need to install [Docker](https://docs.docker.com/get-docker/) for runni
 Open a terminal and pull the image. The tag `3.6.2-1` corresponds to the version of R the image contains. The image is built on top of `[rocker/geospatial:3.6.2](https://github.com/rocker-org/geospatial)`. See further below for a detailed breakdown of the docker image. *Warning:* the image is voluminous as it contains a custom (and large) R library.
 
 ```{}
-docker push vlucet/land_con_monteregie:3.6.2-1
+docker pull vlucet/land_con_monteregie:3.6.2-1
 ```
 
 ##### 3. Run the Docker image
