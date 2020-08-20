@@ -416,5 +416,6 @@ case "$subcommand" in
 
 esac
 
+echo $?
 echo "end"
 echo $?
