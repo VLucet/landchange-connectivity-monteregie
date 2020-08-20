@@ -270,6 +270,7 @@ while getopts ":pmafsrcdgy" opt; do
       export REPRO_FIGS_ONLY='TRUE'
       make_figures
       echo "after g"
+      echo $?
       ;;
     y )
       run_surf
