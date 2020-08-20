@@ -188,6 +188,7 @@ make_figures(){
   #Rscript -e "rmarkdown::render('docs/msc_thesis_figures.Rmd', 
   #params = list(REPRO_FIGS_ONLY = as.logical(Sys.getenv('REPRO_FIGS_ONLY', 
   #unset = TRUE))), output_file='index.html')"
+  echo "placeholder"
 }
 
 ### BUNDLE FUNCTIONS
