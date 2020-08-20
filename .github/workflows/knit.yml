@@ -29,6 +29,7 @@ jobs:
     
     - name: push changes
       run: | 
-          git add docs/**
-          git commit -m "CI gh page" 
-          git push
+        git status
+        git add docs/**
+        git commit -m "CI gh page" 
+        git push
