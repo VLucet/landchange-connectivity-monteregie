@@ -29,7 +29,7 @@ jobs:
     - name: knit rmd
       run: |
         docker run -e BIG_FIGS='FALSE' -v "$(pwd)/docs/:/home/rstudio/land_con_monteregie/docs/" \
-        vlucet/land_con_monteregie:3.6.2-1 /bin/bash -c "git checkout * && git pull && git lfs fetch && git lfs checkout && ./landcon.sh -g"
+        vlucet/land_con_monteregie:3.6.2-1 /bin/bash -c "git checkout * && git pull && ./landcon.sh -g"
     
     - name: check for changes
       uses: UnicornGlobal/has-changes-action@v1.0.11
