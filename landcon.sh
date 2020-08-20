@@ -326,6 +326,8 @@ case "$subcommand" in
     
     export R_N_TREES=$1
     fit_predict_model
+    
+    shift $((OPTIND -1))
     ;;
     
   stsim)
@@ -349,6 +351,8 @@ case "$subcommand" in
           ;;
       esac
     done
+    
+    shift $((OPTIND -1))
     ;;
     
   cs)
@@ -375,6 +379,8 @@ case "$subcommand" in
           ;;
       esac
     done
+    
+    shift $((OPTIND -1))
     ;;
     
   figs)
@@ -404,8 +410,10 @@ case "$subcommand" in
           ;;
       esac
     done
-    ;;
     
+    shift $((OPTIND -1))
+    ;;
+
 esac
 
 echo "end"
