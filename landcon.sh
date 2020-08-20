@@ -179,7 +179,7 @@ run_surf(){
 
 make_figures(){
   Rscript -e "rmarkdown::render('docs/msc_thesis_figures.Rmd', 
-  params = list(big_figures = Sys.getenv('BIG_FIGS', unset = TRUE)), 
+  params = list(big_figures = as.logical(Sys.getenv('BIG_FIGS', unset = TRUE))), 
   output_file='index.html')"
 }
 ### BUNDLE FUNCTIONS
