@@ -37,7 +37,7 @@ jobs:
         git config --local user.name "GitHub Action"
         git add docs/**
         git commit -m "CI - figures"
-    
+
     - name: Push changes
       uses: ad-m/github-push-action@master
       with:
