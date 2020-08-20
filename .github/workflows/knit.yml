@@ -18,17 +18,12 @@ jobs:
     - uses: actions/checkout@v2
       with:
         lfs: true
-    
-    - name: fetch lfs
-      run: |
-        git lfs fetch
-        git lfs checkout
 
     - name: pull docker image
       run: docker pull vlucet/land_con_monteregie:3.6.2-1 
       
     - name: knit rmd
-      run: docker run vlucet/land_con_monteregie:3.6.2-1 /bin/bash -c "git pull && ./landcon.sh -g"
+      run: docker run vlucet/land_con_monteregie:3.6.2-1 /bin/bash -c "git pull && git lfs fetch && git lfs checkout && ./landcon.sh -g"
     
     - name: push changes
       run: | 
