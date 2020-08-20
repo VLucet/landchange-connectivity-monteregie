@@ -85,7 +85,7 @@ sce_code_vec <-
 sce_code_vec_run <- 
   rep(c("BAU", "R", "CorPr", "R-CorPr", "R(T)-CorPr"), each=3)
 
-results_clean <- read_rds("../outputs/final/stsim_run_results.csv") %>% 
+results_clean <- read_csv("../outputs/final/stsim_run_results.csv") %>% 
   dplyr::select(scenarioId, name) %>% 
   mutate(name =  gsub(.$name, pattern = " \\(.+\\)", replacement = "")) %>% 
   mutate(sce =  paste0("sce_", .$scenarioId)) %>% 
@@ -99,9 +99,9 @@ results_clean <- read_rds("../outputs/final/stsim_run_results.csv") %>%
   mutate(code_run = c("control", sce_code_vec_run))
 
 # Final extracted datasets
-df_final <- readRDS("../outputs/final/final_df_current_density.csv") %>%
+df_final <- read_csv("../outputs/final/final_df_current_density.csv") %>%
   mutate(timestep = (timestep*10)+1990, source = "model")
-df_final_origin <- readRDS("../outputs/final/final_df_origin_current_density.csv") %>%
+df_final_origin <- read_csv("../outputs/final/final_df_origin_current_density.csv") %>%
   mutate(timestep = timestep*10+1990, source = "model")
 
 # Stratum key
