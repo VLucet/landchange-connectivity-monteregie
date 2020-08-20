@@ -5,8 +5,9 @@ name: CI
 on:
   push:
     branches: [ master ]
-    #paths:
-    #  - ".github/workflows/knit.yml"
+    paths:
+      - ".github/workflows/knit.yml"
+      - "thesis/**"
   schedule: # Runs at 06:00 UTC every day
     - cron: "0 6 * * *"
 
@@ -30,9 +31,14 @@ jobs:
         docker run -e BIG_FIGS='FALSE' -v "$(pwd)/docs/:/home/rstudio/land_con_monteregie/docs/" \
         vlucet/land_con_monteregie:3.6.2-1 /bin/bash -c "git pull && git lfs fetch && git lfs checkout && ./landcon.sh -g"
         
-    - name: push changes
+    - name: Commit files
       run: |
-        git status
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
         git add docs/**
-        git commit -m "CI gh page"
-        git push
+        git commit -m "Add changes"
+    
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
