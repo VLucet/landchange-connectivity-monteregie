@@ -106,14 +106,12 @@ RUN chmod +x landcon.sh \
   && ln -s /home/rstudio/land_con_monteregie/landcon.sh /usr/bin/
   
 # ------------------------------------------------------------------------------
-
 # Set up git lfs 
 #RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash \
 #  && apt-get install git-lfs \
 #  && git lfs install \
 #  && git lfs fetch \
 #  && git lfs checkout
-
 # ------------------------------------------------------------------------------
 ## With renv cache, has not worked so far: 
 # RENV_PATHS_CACHE_HOST=/opt/local/renv/cache
