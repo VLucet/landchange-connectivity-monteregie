@@ -17,7 +17,7 @@ output:
     toc: yes
     toc_depth: '5'
 params:
-  raster_map: TRUE
+  big_figures: TRUE
 ---
 
 ```{r setup, include=FALSE}
@@ -260,7 +260,7 @@ ggsave(fig_1_static_chap_1,
 
 ##### Radar Graph
 
-```{r figure_1_model_1_radar, out.width="100%"}
+```{r figure_1_model_1_radar, message=FALSE, warning=FALSE, out.width="100%"}
 
 # Default size
 gridline.label.offset	= 4
@@ -302,7 +302,7 @@ ggsave("../thesis/figures/radar_ggradar_chap1.png", radar_chap1,
 
 #### Chap 2
 
-```{r figure_1_model_2, out.width="100%", fig.cap="Connectivity change for species through time, 2010-2100", message=FALSE}
+```{r figure_1_model_2, message=FALSE, warning=FALSE, out.width="100%", fig.cap="Connectivity change for species through time, 2010-2100"}
 fig_1_static_chap_2 <- joined %>% 
   filter(climate != "none", chapter %in% c("none", "both", "chap_2")) %>% 
   group_by(scenarioId, species, iteration) %>% 
@@ -332,7 +332,7 @@ ggsave(fig_1_static_chap_2,
 ```
 ##### Radar Graph
 
-```{r figure_1_model_2_radar, out.width="100%"}
+```{r figure_1_model_2_radar, message=FALSE, warning=FALSE, out.width="100%"}
 radar_data_chap2 <- joined %>% 
   filter(climate != "none", chapter %in% c("none", "both","chap_2")) %>% 
   group_by(timestep, species, code) %>% 
@@ -364,7 +364,7 @@ ggsave("../thesis/figures/radar_ggradar_chap2.png", radar_chap2,
 
 ##### Radar Graph
 
-```{r figure_1_model_both_radar, out.width="100%"}
+```{r figure_1_model_both_radar, message=FALSE, warning=FALSE, out.width="100%"}
 radar_data_all <- joined %>% 
   filter(climate != "none") %>% 
   group_by(timestep, species, code) %>% 
@@ -392,66 +392,11 @@ ggsave("../thesis/figures/radar_ggradar_both.png", radar_all,
        width = the_width, height = the_height, dpi = the_dpi)
 ```
 
-
-<!-- ### Map of change
-
-Mapping takes a lot of time, not knitted by default
-
-#### Chap 
-
-```{r figure_2_chap1, eval=FALSE, message=FALSE, warning=FALSE}
-# change_1 <- df_final_fordiff_pivoted %>% 
-#   filter(chapter %in% c("none", "both", "chap_1")) %>%
-#   filter(sce %in% c('sce_39', 'sce_39')) %>% 
-#   ggplot(aes(fill=change)) +
-#   geom_sf(show.legend=T, lwd = 0)  + 
-#   facet_wrap(~sce) + 
-#   ggtitle("Connectivity change in %", 
-#           subtitle = "2010-2100") +
-#   scale_fill_binned(low='#d13e11', high='#fff7bc', 
-#                     breaks=c(-50, -40, -30, -20, -10, 0, 10))
-# change_1
-#ggsave("../thesis/figures/connectivit_change_mun_chap1.png", change_1)
-```
-
-#### Chap 2
-
-```{r figure_2_chap2, eval=FALSE, message=FALSE, warning=FALSE}
-# change_2 <- df_final_fordiff_pivoted %>% 
-#   filter(chapter %in% c("none", "both", "chap_2")) %>%
-#   ggplot(aes(fill=change)) +
-#   geom_sf(show.legend=T, lwd = 0)  + 
-#   facet_wrap(~sce) + 
-#   ggtitle("Connectivity change in %", 
-#           subtitle = "2010-2100") +
-#   scale_fill_binned(low='#d13e11', high='#fff7bc', 
-#                     breaks=c(-50, -40, -30, -20, -10, 0, 10))
-# change_2
-#ggsave("../thesis/figures/connectivit_change_mun_chap2.png", change_2)
-```
-
-#### Both
-
-```{r figure_2_all, eval=FALSE, message=FALSE, warning=FALSE}
-# change_both <- df_final_fordiff_pivoted %>% 
-#   ggplot(aes(fill=change)) +
-#   geom_sf(show.legend=T, lwd = 0)  + 
-#   facet_wrap(~sce) + 
-#   ggtitle("Connectivity change in %", 
-#           subtitle = "2010-2100") +
-#   scale_fill_binned(low='#d13e11', high='#fff7bc', 
-#                     breaks=c(-50, -40, -30, -20, -10, 0, 10))
-# change_both
-#ggsave("../thesis/figures/connectivit_change_mun_both.png", change_both)
-```
-
--->
-
 ### ROC Curves
 
 ROC curves from fitting both models, plotting with `patchwork` package.
 
-```{r roc_curves, message=FALSE, warning=FALSE, out.width="100%"}
+```{r roc_curves, eval=big_figures, message=FALSE, warning=FALSE, warning=FALSE}
 # Roc curves data
 urb <- readRDS("../data/temp/fit_rs_outcome_rf_urb_2.RDS")
 agex <- readRDS("../data/temp/fit_rs_outcome_rf_agex_2.RDS")
@@ -487,7 +432,7 @@ ggsave("../thesis/figures/double_roc_resample.png", full)
 
 #### Original
 
-```{r original_hists}
+```{r original_hists, message=FALSE, warning=FALSE, warning=FALSE}
 
 bi_colors <- c("#67a9cf", "#ef8a62")
 
@@ -516,7 +461,7 @@ ggsave("../thesis/figures/original_hists.png", hist_plot_origin,
 
 #### Chap 1
 
-```{r hist_plot_1, out.width="100%"}
+```{r hist_plot_1, message=FALSE, warning=FALSE, warning=FALSE}
 
 bi_colors <- c("#67a9cf", "#ef8a62")
 
@@ -546,7 +491,7 @@ ggsave("../thesis/figures/hist_chap1.png", hist_plot_1, width = 18, height = 15)
 
 #### Chap 2
 
-```{r hist_plot_2, out.width="100%"}
+```{r hist_plot_2, message=FALSE, warning=FALSE, warning=FALSE}
 hist_plot_2 <- histograms %>% 
   mutate(ts = as.factor(ts)) %>% 
   filter(chapter %in% c('chap_2')) %>%  
@@ -963,3 +908,57 @@ bar_chap2
 ggsave("../thesis/figures/bar_chap2.png", bar_chap2, 
        width = the_width, height = 20, dpi = the_dpi)
 ```
+
+<!-- ### Map of change
+
+Mapping takes a lot of time, not knitted by default
+
+#### Chap 
+
+```{r figure_2_chap1, eval=FALSE, message=FALSE, warning=FALSE}
+# change_1 <- df_final_fordiff_pivoted %>% 
+#   filter(chapter %in% c("none", "both", "chap_1")) %>%
+#   filter(sce %in% c('sce_39', 'sce_39')) %>% 
+#   ggplot(aes(fill=change)) +
+#   geom_sf(show.legend=T, lwd = 0)  + 
+#   facet_wrap(~sce) + 
+#   ggtitle("Connectivity change in %", 
+#           subtitle = "2010-2100") +
+#   scale_fill_binned(low='#d13e11', high='#fff7bc', 
+#                     breaks=c(-50, -40, -30, -20, -10, 0, 10))
+# change_1
+#ggsave("../thesis/figures/connectivit_change_mun_chap1.png", change_1)
+```
+
+#### Chap 2
+
+```{r figure_2_chap2, eval=FALSE, message=FALSE, warning=FALSE}
+# change_2 <- df_final_fordiff_pivoted %>% 
+#   filter(chapter %in% c("none", "both", "chap_2")) %>%
+#   ggplot(aes(fill=change)) +
+#   geom_sf(show.legend=T, lwd = 0)  + 
+#   facet_wrap(~sce) + 
+#   ggtitle("Connectivity change in %", 
+#           subtitle = "2010-2100") +
+#   scale_fill_binned(low='#d13e11', high='#fff7bc', 
+#                     breaks=c(-50, -40, -30, -20, -10, 0, 10))
+# change_2
+#ggsave("../thesis/figures/connectivit_change_mun_chap2.png", change_2)
+```
+
+#### Both
+
+```{r figure_2_all, eval=FALSE, message=FALSE, warning=FALSE}
+# change_both <- df_final_fordiff_pivoted %>% 
+#   ggplot(aes(fill=change)) +
+#   geom_sf(show.legend=T, lwd = 0)  + 
+#   facet_wrap(~sce) + 
+#   ggtitle("Connectivity change in %", 
+#           subtitle = "2010-2100") +
+#   scale_fill_binned(low='#d13e11', high='#fff7bc', 
+#                     breaks=c(-50, -40, -30, -20, -10, 0, 10))
+# change_both
+#ggsave("../thesis/figures/connectivit_change_mun_both.png", change_both)
+```
+
+-->
