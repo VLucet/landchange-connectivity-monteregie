@@ -464,4 +464,5 @@ if (STSIM_RUN){
   
   print(results)
   saveRDS(results, "data/temp/stsim_run_results.RDS")
+  write_csv(results, "outputs/final/stsim_run_results.csv")
 }
