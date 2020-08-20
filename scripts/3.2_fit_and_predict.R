@@ -190,7 +190,7 @@ for (response in c("agex","urb")){
                     roc_auc(truth = outcome_fact, .pred))$.estimate, 4)
     
     saveRDS(mod_fit, paste0("data/temp/fit_", R_METHOD, 
-                            "_", response, "_", R_RATIO))
+                            "_", response, "_", R_RATIO, ".RDS"))
     
     plot <- pred %>% 
       roc_curve(truth = outcome_fact, .pred) %>% 
