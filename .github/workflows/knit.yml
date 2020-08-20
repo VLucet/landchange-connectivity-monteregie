@@ -5,8 +5,8 @@ name: CI
 on:
   push:
     branches: [ master ]
-    paths:
-      - ".github/workflows/knit.yml"
+    #paths:
+    #  - ".github/workflows/knit.yml"
   schedule: # Runs at 06:00 UTC every day
     - cron: "0 6 * * *"
 
