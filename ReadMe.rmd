@@ -9,25 +9,27 @@ knitr::opts_chunk$set(echo = TRUE)
 ### M.Sc. Thesis 2018-2020
 
 ![Docker image build](https://github.com/VLucet/landchange-connectivity-monteregie/workflows/Build%20/%20Push%20Docker%20image/badge.svg)
-
 ![CI - All Figures](https://github.com/VLucet/landchange-connectivity-monteregie/workflows/CI%20-%20All%20Figures/badge.svg)
 
 *****
 
-[GitHub page (latest)](https://vlucet.github.io/landchange-connectivity-monteregie/)
-
-[Thesis PDF (latest)](https://github.com/VLucet/landchange-connectivity-monteregie/blob/master/thesis/build/thesis.pdf)
-
-[Initial submission release](https://github.com/VLucet/landchange-connectivity-monteregie/)
+| [GitHub page (latest)](https://vlucet.github.io/landchange-connectivity-monteregie/) | [Thesis PDF (latest)](https://github.com/VLucet/landchange-connectivity-monteregie/blob/master/thesis/build/thesis.pdf) | [Initial submission release](https://github.com/VLucet/landchange-connectivity-monteregie/)
+|:-------------:|:-------------:|:-----:|
 
 *****
 
-This repository contains all the code and some of the data that is needed to reproduce the work of my MSc Thesis titled: **Integrating land use and land cover change simulations and connectivity modeling: a case study in the Montérégie region in southern Québec.** It is package under the form of a [Docker image](https://docs.docker.com/engine/reference/commandline/image/) and makes use of the [`renv`](https://rstudio.github.io/renv/articles/renv.html) package. 
+This repository contains all the code and some of the data that is needed to reproduce the work of my MSc Thesis titled: 
+
+> **Integrating land use and land cover change simulations and connectivity modeling: a case study in the Montérégie region in southern Québec.**
+
+It is packaged under the form of a [Docker image](https://docs.docker.com/engine/reference/commandline/image/) and makes use of the [`renv`](https://rstudio.github.io/renv/articles/renv.html) package. 
 
 The goal of this repository is to allow future users to rerun the analysis and build on it if necessary, but also to facilitate the writing of the publication that will come out of the thesis by enforcing good reproducibility practices early on in the publication process. 
 
+**Most of the figures in the thesis are reproducible**. This repo is set up for continuous deployment of a [github page](https://vlucet.github.io/landchange-connectivity-monteregie/) that contains the main figures in the thesis.
+
 *****
-#### How to reproduce this thesis
+### Reproducibility
 
 *Disclaimer 1: Although all the code for the thesis is archived here, parts of the analysis are not reproducible, as some of the data used is not in open access.*
 
@@ -96,10 +98,10 @@ Finally you can also do:
   
 *****
 
-#### Docker image detailed breakdwon
+<!-- #### Docker image detailed breakdwon -->
 
-*****
+<!-- ***** -->
 
-#### renv lockfile breakdown
+<!-- #### renv lockfile breakdown -->
 
-*****
+<!-- ***** -->
