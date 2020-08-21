@@ -248,6 +248,8 @@ rownames(values_only_mat_noZero) <- values_only_mat$Mun
 
 ```
 
+<!--
+
 Clustering for land use change transitions
 
 ```{r land_use_trends_clust, message=FALSE,  warning=FALSE, out.width="100%"}
@@ -285,6 +287,8 @@ plot(values_dendro)
 # grp <- as.numeric(names(sort(table(values_memberships))[1]))
 # urb <- values_only_mat_noZero[which(values_memberships == 4),]
 ```
+
+-->
 
 PCA and map for land use change transitions
 
