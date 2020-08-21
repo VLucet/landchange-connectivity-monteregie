@@ -19,6 +19,8 @@ params:
   REPRO_FIGS_ONLY: TRUE
 ---
 
+**This regroups most of the figures in the thesis (appendix figures are not included, except for the ROC resample figures and BAU simulated land use change).**
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 suppressPackageStartupMessages({
@@ -203,7 +205,7 @@ results_clean
 
 ### Land use trends
 
-We prepare the data for ordination, and plot the results.
+We prepare the data for ordination and compute clustering (figures not displayed here).
 
 ```{r land_use_trends_prep, message=FALSE,  warning=FALSE, out.width="100%"}
 
@@ -248,9 +250,7 @@ rownames(values_only_mat_noZero) <- values_only_mat$Mun
 
 ```
 
-<!--
-
-Clustering for land use change transitions
+Clustering for land use change transitions.
 
 ```{r land_use_trends_clust, message=FALSE,  warning=FALSE, out.width="100%"}
 # Trans
@@ -263,10 +263,10 @@ trans_memberships <- cutree(trans_clust,4)
 # trans_memberships_names <- c("Urb-Def","AgEx-Def",
 #                              "AgEx-DeTree","Urb-DeAg")[trans_memberships]
 labels_colors(trans_dendro) <- trans_memberships[trans_clust$order]
-plot(trans_dendro)
+#plot(trans_dendro)
 ```
 
-Clustering for land use values
+Clustering for land use values.
 
 ```{r land_use_trends_clust_2, message=FALSE,  warning=FALSE, out.width="100%"}
 # Vals
@@ -280,7 +280,7 @@ values_memberships <- cutree(values_clust,5)
 #                               "Agriculture - Dominant"," Urban - MD", 
 #                               "Urban - HD")[values_memberships]
 labels_colors(values_dendro) <- values_memberships[values_clust$order]
-plot(values_dendro)
+#plot(values_dendro)
 
 # Figure out % of urban land in smallest group
 
@@ -288,9 +288,7 @@ plot(values_dendro)
 # urb <- values_only_mat_noZero[which(values_memberships == 4),]
 ```
 
--->
-
-PCA and map for land use change transitions
+Ordination of land use data (proportions) for municipalities
 
 ```{r land_use_trends_PCA, message=FALSE,  warning=FALSE, out.width="100%"}
 
@@ -327,7 +325,10 @@ ggsave(plot = trans_biplot, "../thesis/figures/PCA_trans_profiles.png",
 
 # trans_biplot
 ```
+
 ![](../thesis/figures/PCA_trans_profiles.png)
+
+Geographical distribution of the 5 profiles identified.
 
 ```{r land_use_trends_map, message=FALSE,  warning=FALSE, out.width="100%"}
 
@@ -367,7 +368,7 @@ ggsave(plot = map_trans, "../thesis/figures/transition_prof_map.png",
 
 ![](../thesis/figures/transition_prof_map.png)
 
-PCA and map for land use values
+Ordination of land use transition data for municipalities.
 
 ```{r land_use_trends_PCA_2, message=FALSE,  warning=FALSE, out.width="100%"}
 
@@ -401,6 +402,9 @@ ggsave(plot = vals_biplot, "../thesis/figures/PCA_data_profiles.png",
 ```
 
 ![](../thesis/figures/PCA_data_profiles.png)
+
+Geographical distribution of the 4 change profiles identified
+
 ```{r land_use_trends_map_2, message=FALSE,  warning=FALSE, out.width="100%"}
 
 values_member.table <- data.frame(MUS_NM_MUN = rownames(values_mat_1990to2000)) %>% 
@@ -435,6 +439,8 @@ ggsave(plot = map_vals, "../thesis/figures/profiles_land_use.png",
 
 #### Historic
 
+Change in mean flow (in \% of the the 1990 flow) between 1990 and 2010, contrasting observed historic change (1990-2010) and simulated change from historic model run.
+
 ```{r fig_1_historic, message=FALSE, out.width="100%", fig.cap="Connectivity change for species through time, 1990-2010"}
 
 the_width = 18 
@@ -468,6 +474,8 @@ ggsave(fig_1_historic,
 #### Chap 1
 
 ##### Line graph
+
+Change in mean flow (in \% of the the 2010 flow) between 2010 (observed) and 2100 (predicted), contrasting BAU scenario (solid line) with other land use change scenarios - linear graph.
 
 ```{r figure_1_model_1, message=FALSE,  warning=FALSE, out.width="100%", fig.cap="Connectivity change for species through time, 2010-2100"}
 colors_sce <- 
@@ -505,6 +513,8 @@ ggsave(fig_1_static_chap_1,
 ![](../thesis/figures/connectivity_decrease_x5species_chap1.png)
 
 ##### Radar Graph
+
+Change in mean flow (in \% of the the 2010 flow) between 2010 (observed) and 2100 (predicted), contrasting BAU scenario with other land use change scenarios - radar graph.
 
 ```{r figure_1_model_1_radar, message=FALSE, warning=FALSE, out.width="100%"}
 
@@ -550,6 +560,8 @@ ggsave("../thesis/figures/radar_ggradar_chap1.png", radar_chap1,
 
 #### Chap 2
 
+Change in mean flow (in \% of the the 2010 flow) between 2010 (observed) and 2100 (predicted), contrasting BAU scenario (solid line) with other conservation scenarios - linear graph.
+
 ```{r figure_1_model_2, message=FALSE, warning=FALSE, out.width="100%", fig.cap="Connectivity change for species through time, 2010-2100"}
 fig_1_static_chap_2 <- joined %>% 
   filter(climate != "none", chapter %in% c("none", "both", "chap_2")) %>% 
@@ -582,6 +594,8 @@ ggsave(fig_1_static_chap_2,
 ![](../thesis/figures/connectivity_decrease_x5species_chap2.png)
 
 ##### Radar Graph
+
+Change in mean flow (in \% of the the 2010 flow) between 2010 (observed) and 2100 (predicted), contrasting BAU scenario (solid line) with other conservation scenarios - radar graph.
 
 ```{r figure_1_model_2_radar, message=FALSE, warning=FALSE, out.width="100%"}
 radar_data_chap2 <- joined %>% 
@@ -649,7 +663,7 @@ ggsave("../thesis/figures/radar_ggradar_both.png", radar_all,
 
 ### ROC Curves
 
-ROC curves from fitting both models, plotting with `patchwork` package.
+ROC curves from fitting both models, plotted with the `patchwork` package.
 
 ```{r roc_curves, eval=!(params$REPRO_FIGS_ONLY), message=FALSE, warning=FALSE, out.width="100%"}
 # Roc curves data
@@ -687,7 +701,9 @@ ggsave("../thesis/figures/double_roc_resample.png", full)
 
 ### Histograms
 
-#### Original
+#### Historic
+
+Histograms of flow values for the year 2010 comparing the historic model run (1990-2010) with observations.
 
 ```{r original_hists, message=FALSE, warning=FALSE, out.width="100%"}
 
@@ -720,6 +736,8 @@ ggsave("../thesis/figures/original_hists.png", hist_plot_origin,
 
 #### Chap 1
 
+Histograms of flow values for all species and scenarios, for 2010 (observed) and 2100 (predicted).
+
 ```{r hist_plot_1, message=FALSE, warning=FALSE, out.width="100%"}
 
 bi_colors <- c("#67a9cf", "#ef8a62")
@@ -751,6 +769,8 @@ ggsave("../thesis/figures/hist_chap1.png", hist_plot_1, width = 18, height = 15)
 ![](../thesis/figures/hist_chap1.png)
 
 #### Chap 2
+
+Histograms of flow values for all species and scenarios, for 2010 (observed) and 2100 (predicted).
 
 ```{r hist_plot_2, message=FALSE, warning=FALSE, out.width="100%"}
 hist_plot_2 <- histograms %>% 
@@ -785,6 +805,8 @@ ggsave("../thesis/figures/hist_chap2.png", hist_plot_2, width = 18, height = 20)
 
 ##### Linear Graph
 
+Change in the number of features (in \% of the the 2010 flow) identified by the SURF analyssis between 2010 (observed) and 2100 (predicted), contrasting BAU scenario with other land use change scenarios - linear graph.
+
 ```{r surf_1, message=FALSE, warning=FALSE, out.width="100%"}
 surf_1 <- surf %>% 
   mutate(scenario = as.factor(scenario)) %>% 
@@ -815,6 +837,8 @@ ggsave("../thesis/figures/surf_chap1.png", surf_1,
 ![](../thesis/figures/surf_chap1.png)
 
 ##### Radar Graph
+
+Change in the number of features (in \% of the the 2010 flow) identified by the SURF analyssis between 2010 (observed) and 2100 (predicted), contrasting BAU scenario with other land use change scenarios - radar graph.
 
 ```{r surf_radar_1, message=FALSE, warning=FALSE, out.width="100%"}
 surf_radar_data_1 <- surf %>% 
@@ -851,6 +875,8 @@ ggsave("../thesis/figures/surf_radar_chap1.png", surf_radar_1,
 
 ##### Linear Graph
 
+Change in the number of features (in \% of the the 2010 flow) identified by the SURF analyssis between 2010 (observed) and 2100 (predicted), contrasting BAU scenario with other conservation scenarios - linear graph.
+
 ```{r surf_2, message=FALSE, warning=FALSE, out.width="100%"}
 surf_2 <- surf %>% 
   mutate(scenario = as.factor(scenario)) %>% 
@@ -883,6 +909,8 @@ ggsave("../thesis/figures/surf_chap2.png", surf_2,
 
 ##### Radar Graph
 
+Change in the number of features (in \% of the the 2010 flow) identified by the SURF analyssis between 2010 (observed) and 2100 (predicted), contrasting BAU scenario with other conservation scenarios - radar graph.
+
 ```{r surf_radar_2, message=FALSE, warning=FALSE, out.width="100%"}
 surf_radar_data_2 <- surf %>% 
   filter(climate != "none", chapter %in% c("none", "both","chap_2")) %>% 
@@ -914,13 +942,15 @@ ggsave("../thesis/figures/surf_radar_chap2.png", surf_radar_2,
 
 ![](../thesis/figures/surf_radar_chap2.png)
 
-### Maps
+### Prediction maps
 
 ```{r 2010_compare_prep, eval=!(params$REPRO_FIGS_ONLY), message=FALSE, warning=FALSE, out.width="100%"}
 list_of_files <-  list.files("../libraries/stsim/monteregie-conncons-scripted.ssim.output/Scenario-37/stsim_OutputSpatialState", full.names = T)
 list_of_files <- list_of_files[grep(x=list_of_files, "ts2")]
 stratum <- raster("../data/stsim/aggregated/primary_stratum_mont_or_not_or_PA.tif")
 ```
+
+Predicted probability of urbanization (left) vs observed urbanization (right) between 1990 and 2010.
 
 ```{r 2010_compare_urb, eval=!(params$REPRO_FIGS_ONLY), message=FALSE, warning=FALSE, out.width="100%"}
 names <- paste0(c("historic_compare_agex", "historic_compare_urb"), ".png")
@@ -983,9 +1013,14 @@ for (class in c(1:2)){
 ```
 
 ![](../thesis/figures/historic_compare_urb.png)
+
+Predicted probability of agricultural expansion (left) vs observed agricultural expansion (right) between 1990 and 2010.
+
 ![](../thesis/figures/historic_compare_agex.png)
 
 ### Land use maps
+
+Land use maps showing predictions of land use changes (Only BAU is displayed below).
 
 ```{r compare, eval=!(params$REPRO_FIGS_ONLY), message=FALSE, warning=FALSE, out.width="100%"}
 source('../scripts/functions/draw_scenario.R')
@@ -997,11 +1032,15 @@ for (scenario in c(39, 42, 45, 48, 51)){
 }
 ```
 
+Comparison of Monteregie at the beginning of the BAU scenario in 2010, and at the end in 2100 (under baseline climate scenario).
+
 ![](../thesis/figures/scenario_39_compare.png)
+<!--
 ![](../thesis/figures/scenario_42_compare.png)
 ![](../thesis/figures/scenario_45_compare.png)
 ![](../thesis/figures/scenario_48_compare.png)
 ![](../thesis/figures/scenario_51_compare.png)
+-->
 
 ### Bar charts
 
@@ -1057,6 +1096,8 @@ bar_plot_42 <- final_df_42  %>%
 
 ##### Both scenarios
 
+Land use class frequencies in 2010 (observed) and 2100 (predicted) for the BAU and Reforestation scenarios (under baseline climate scenario).
+
 ```{r bar_boths}
 final_df_39 <- final_df_39 %>% 
   mutate(sce = "BAU") %>% 
@@ -1102,6 +1143,8 @@ ggsave("../thesis/figures/bar_both.png", assembled,
 
 ![](../thesis/figures/bar_both.png)
 
+Land use class frequencies in 2010 (observed) and 2100 (predicted) for the BAU and conservation scenarios (under baseline climate scenario).
+
 ```{r eval=FALSE, include=FALSE, message=FALSE, warning=FALSE}
 # draw_scenario(42) ...
 
@@ -1134,7 +1177,7 @@ ggsave("../thesis/figures/bar_chap2.png", bar_chap2,
 
 ![](../thesis/figures/bar_chap2.png)
 
-##### Other calculations
+##### Other code for calculation
 
 Compute auc / precision on predictions.
 
