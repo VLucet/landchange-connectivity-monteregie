@@ -18,9 +18,6 @@ suppressPackageStartupMessages({
 
 
 mun.sub.18.clean <- st_read("data/mun/munic_SHP_clean.shp")
-mrc <- st_read("data/raw/vector/mrc_SHP/mrc_polygone.shp")
-mrc.mont <- mrc %>% filter(MRS_NM_REG=="Montérégie") 
-mrc.mont.reproj <- st_transform(mrc.mont, raster::crs(mun.sub.18.clean))
 
 
 # Calculate ---------------------------------------------------------------
