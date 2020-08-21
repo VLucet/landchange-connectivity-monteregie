@@ -25,7 +25,7 @@ jobs:
 
     - name: pull docker image
       run: docker pull vlucet/land_con_monteregie:3.6.2-1 
-    
+  
     - name: knit rmd
       run: |
         docker run -e REPRO_FIGS_ONLY='FALSE' -v "$(pwd)/docs/:/home/rstudio/land_con_monteregie/docs/" \
