@@ -28,8 +28,11 @@ jobs:
   
     - name: knit rmd
       run: |
-        docker run -e REPRO_FIGS_ONLY='FALSE' -v "$(pwd)/docs/:/home/rstudio/land_con_monteregie/docs/" \
+        docker run -e REPRO_FIGS_ONLY='TRUE' -v "$(pwd)/docs/:/home/rstudio/land_con_monteregie/docs/" \
         vlucet/land_con_monteregie:3.6.2-1 /bin/bash -c "git checkout * && git pull && ./landcon.sh -g"
+        
+    - name: print git status
+      run: git status
 
     - name: check for changes
       uses: UnicornGlobal/has-changes-action@v1.0.11
