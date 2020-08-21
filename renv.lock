@@ -26,13 +26,6 @@
       "Repository": "CRAN",
       "Hash": "db75371846625725e221470b310da1d5"
     },
-    "ClustGeo": {
-      "Package": "ClustGeo",
-      "Version": "2.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "76a39b1a27fe75fa9b7db5775f60a853"
-    },
     "DBI": {
       "Package": "DBI",
       "Version": "1.1.0",
@@ -74,13 +67,6 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "081f417f4d6d55b7e8981433e8404a22"
-    },
-    "LearnBayes": {
-      "Package": "LearnBayes",
-      "Version": "2.15.1",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "b2dd5e3f910f1ac390f847f35e8c2396"
     },
     "MASS": {
       "Package": "MASS",
@@ -409,13 +395,6 @@
       "Repository": "CRAN",
       "Hash": "db63a44aab5aadcb6bf2f129751d129a"
     },
-    "coda": {
-      "Package": "coda",
-      "Version": "0.19-3",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "b177892d05d94358d282fcc303799593"
-    },
     "codetools": {
       "Package": "codetools",
       "Version": "0.2-16",
@@ -471,13 +450,6 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "81ae261735c247d9551126462db5a4b5"
-    },
-    "deldir": {
-      "Package": "deldir",
-      "Version": "0.1-28",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "0edc0c2f566b3aa0271f37314e2afe0f"
     },
     "dendextend": {
       "Package": "dendextend",
@@ -548,13 +520,6 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "ec8ca05cffcc70569eaaad8469d2a3a7"
-    },
-    "expm": {
-      "Package": "expm",
-      "Version": "0.999-5",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "6da939036c445e851f7ef690e349cc2c"
     },
     "fansi": {
       "Package": "fansi",
@@ -761,13 +726,6 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "f43e0d5e85ccb0a4045670c0607ee504"
-    },
-    "gmodels": {
-      "Package": "gmodels",
-      "Version": "2.18.1",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "beb8ca96406a2828f25e49ab17001c39"
     },
     "gower": {
       "Package": "gower",
@@ -1613,20 +1571,6 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "a44a3cebab900c0f77e16804f361468e"
-    },
-    "spData": {
-      "Package": "spData",
-      "Version": "0.3.8",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "be5fc9cc13487505381071422d8346e2"
-    },
-    "spdep": {
-      "Package": "spdep",
-      "Version": "1.1-5",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "e220c93e8a62be165fb5b56983ca2339"
     },
     "statmod": {
       "Package": "statmod",
