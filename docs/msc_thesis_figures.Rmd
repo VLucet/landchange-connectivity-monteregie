@@ -435,7 +435,7 @@ fig_1_historic <- joined %>%
   scale_color_manual(values=c('#d8b365','#5ab4ac'), 
                      labels = c("Model", "Observation")) +
   geom_smooth(aes(group = sce), method = "glm", se=FALSE) +
-  scale_linetype_manual(values = c(1,3,2,5))+
+  scale_linetype_manual(values = c(2,3,2,5))+
   geom_point(aes(group = sce)) +
   facet_wrap(~species, scales = "fixed") +
   labs(y = "Current flow (% Change)",
