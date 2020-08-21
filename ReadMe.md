@@ -14,7 +14,7 @@ Figures](https://github.com/VLucet/landchange-connectivity-monteregie/workflows/
 -----
 
 This repository contains all the code and some of the data that is
-needed to reproduce the work of my MSc Thesis titled:
+needed to reproduce the work of my M.Sc. Thesis titled:
 
 > **Integrating land use and land cover change simulations and
 > connectivity modeling: a case study in the Montérégie region in
@@ -81,10 +81,10 @@ increase the access to shared memory for the container with the option
 
 <!-- end list -->
 
-    docker run -it -u rstudio -e DISABLE_AUTH=true vlucet/land_con_monteregie:3.6.2-1 \
+    docker run -it -e DISABLE_AUTH=true vlucet/land_con_monteregie:3.6.2-1 \
       /bin/bash && cd ~/land_con_monteregie
 
-  - **Run docker image with rstudio in your browser** (see [this
+  - **Run docker image with Rstudio in your browser** (see [this
     post](https://ropenscilabs.github.io/r-docker-tutorial/02-Launching-Docker.html)
     for another example). Here you run the container in a detached mode
     (`-d`) on a local port (`-p 8787:8787`). Then, go to
@@ -102,7 +102,7 @@ volume](https://docs.docker.com/storage/volumes/).
 The workflow is controlled with the help of the main bash utility
 [`landcon.sh`](https://github.com/VLucet/landchange-connectivity-monteregie/blob/master/landcon.sh)
 in the top directory. This utility is used to run all the steps in the
-thesis analysis. Help can be acessed with `landcon.sh -h`
+thesis analysis. Help can be accessed with `landcon.sh -h`
 
     LAND USE CHANGE AND CON MODEL - 2020
     Valentin Lucet - Thesis McGill University
@@ -140,22 +140,21 @@ modeling (see figure below):
 The rest of the steps cover habitat suitability analysis and
 connectivity analysis (see second figure below):
 
+  - `-a` Run ALL steps (again, provided data is provided)
   - `-r` Reclassify all STSIM outputs into Circuitscape inputs
     (resistance maps)
   - `-c` Run Circuitscape ([Julia
     package](https://github.com/Circuitscape/Circuitscape.jl))
   - `-d` Post process Circuitscape outputs into tabular data
   - `-g` Make figures, knitting the Rmd document that is the base of the
-    github page for this repo (link at the top).
+    GitHub page for this repo (link at the top). **This is the only
+    fully reproducible step.** in the absence of additional data.
 
 ![wkfl1](thesis/figures/Chapter1_flowchart2.png)
 
-Finally you can also do: - `-a` Run ALL steps (again, provided data is
-provided)
-
 -----
 
-<!-- #### Docker image detailed breakdwon -->
+<!-- #### Docker image detailed breakdown -->
 
 <!-- ***** -->
 

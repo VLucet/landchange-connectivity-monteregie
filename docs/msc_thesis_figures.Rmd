@@ -19,7 +19,7 @@ params:
   REPRO_FIGS_ONLY: TRUE
 ---
 
-**This regroups most of the figures in the thesis (appendix figures are not included, except for the ROC resample figures and BAU simulated land use change).**
+**This regroups most of the figures in the thesis (appendix figures are not included, except for the ROC resample figures, the BAU simulated land use change and the radar graph for change in flow for both chapters).**
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -631,6 +631,8 @@ ggsave("../thesis/figures/radar_ggradar_chap2.png", radar_chap2,
 
 ##### Radar Graph
 
+Change in mean flow (in \% of the the 2010 flow) between 2010 (observed) and 2100 (predicted), contrasting BAU scenario (solid line) with all other scenarios from borth chapters - radar graph.
+
 ```{r figure_1_model_both_radar, message=FALSE, warning=FALSE, out.width="100%"}
 radar_data_all <- joined %>% 
   filter(climate != "none") %>% 
@@ -663,7 +665,7 @@ ggsave("../thesis/figures/radar_ggradar_both.png", radar_all,
 
 ### ROC Curves
 
-ROC curves from fitting both models, plotted with the `patchwork` package.
+ROC curves from fitting both models (with resampling), plotted with the `patchwork` package.
 
 ```{r roc_curves, eval=!(params$REPRO_FIGS_ONLY), message=FALSE, warning=FALSE, out.width="100%"}
 # Roc curves data
@@ -1177,11 +1179,13 @@ ggsave("../thesis/figures/bar_chap2.png", bar_chap2,
 
 ![](../thesis/figures/bar_chap2.png)
 
-##### Other code for calculation
-
-Compute auc / precision on predictions.
 
 ```{r eval=FALSE, include=FALSE}
+##### ##### ##### ##### ##### ##### ##### 
+#####  Other code for calculation   ##### 
+##### ##### ##### ##### ##### ##### ##### 
+
+# Compute auc / precision on predictions.
 
 options(yardstick.event_first = T)
 # crosstab(the_mean>0, final)
