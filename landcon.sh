@@ -95,6 +95,7 @@ prep_stsim_data(){
   Rscript scripts/2.3_prep_stsim_transition_size_distribution.R
   Rscript scripts/2.4_prep_stsim_spatial_multipliers.R
   Rscript scripts/2.5_prep_stsim_datasheets.R
+  Rscript scripts/2.6_prep_trans_vals_data.R
 }
 
 prep_model_data(){
