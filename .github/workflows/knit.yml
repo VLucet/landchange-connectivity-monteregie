@@ -29,13 +29,16 @@ jobs:
   
     - name: knit rmd
       run: |
-        docker run -e REPRO_FIGS_ONLY='TRUE' -v "$(pwd)/docs/:/home/rstudio/land_con_monteregie/docs/" \
+        docker run -e REPRO_FIGS_ONLY='TRUE' \
+        -v "$(pwd)/docs/:/home/rstudio/land_con_monteregie/docs/" \
+        -v "$(pwd)/thesis/:/home/rstudio/land_con_monteregie/thesis/" \
         vlucet/land_con_monteregie:3.6.2-1 /bin/bash -c "git checkout * && git pull && ./landcon.sh -g"
         
     - name: print git status
       run: git status
 
     - name: check for changes
+      id: changes
       uses: UnicornGlobal/has-changes-action@v1.0.11
   
     - name: Commit files
@@ -43,7 +46,7 @@ jobs:
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git add docs/**
+        git add docs/** thesis/**
         git commit -m "CI - figures"
 
     - name: Push changes
