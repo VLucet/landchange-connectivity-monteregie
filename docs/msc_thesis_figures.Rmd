@@ -318,7 +318,12 @@ trans_biplot <- ggbiplot(Trans_Pca, scale = 1,
                                 "Urban Spread/Agricultural Loss")) +
   theme(panel.background = element_rect(fill = "white", colour = "grey50"),
         legend.direction = 'horizontal', legend.position = 'top') +
-  ggtitle("PCA of Municipality profiles")
+  ggtitle("PCA of Municipality profiles") +
+  theme(legend.box.background = element_blank(),
+        panel.border = element_rect(fill = NA),
+        legend.title = element_text(size = 8),
+        legend.text = element_text(size = 8))
+#trans_biplot  
 
 ggsave(plot = trans_biplot, "../thesis/figures/PCA_trans_profiles.png", 
        height = 8, width = 10, dpi = the_dpi)
@@ -393,7 +398,11 @@ vals_biplot <- ggbiplot(Values_Pca, scale = 1,
                                 "Urban - High Density"))+
   theme(panel.background = element_rect(fill = "white", colour = "grey50"),
         legend.direction = 'horizontal', legend.position = 'top') +
-  ggtitle("PCA of Municipality profiles")
+  ggtitle("PCA of Municipality profiles")  +
+  theme(legend.box.background = element_blank(),
+        panel.border = element_rect(fill = NA),
+        legend.title = element_text(size = 10),
+        legend.text = element_text(size = 10))
 
 ggsave(plot = vals_biplot, "../thesis/figures/PCA_data_profiles.png", 
        height = 8, width = 10, dpi = the_dpi)
@@ -1052,21 +1061,21 @@ Comparison of Monteregie at the beginning of the BAU scenario in 2010, and at th
 ```{r BAU, message=FALSE, warning=FALSE, out.width="100%"}
 
 final_df_39 <- bar_data %>% 
-  filter(scenario == 39)
+filter(scenario == 39)
 
 bar_plot_39 <- final_df_39 %>% 
-  #filter(value > 10) %>% 
-  mutate(value = as.factor(value), timestep = as.factor(timestep)) %>% 
-  ggplot(aes(fill=timestep, y=area, x=new_class)) + 
-  geom_bar(position="dodge", stat="identity") +
-  #geom_errorbar(aes(ymin=mean_count-sd_count, ymax=mean_count+sd_count), width=.2,
-  #               position=position_dodge(.9)) +
-  scale_fill_manual(values = bi_colors) +
-  theme(legend.position = c(0.85, 0.7)) +
-  labs(x = "Land use Class", 
-       y = "Mean Area (hectare)", 
-       fill = "Year") +
-  NULL
+#filter(value > 10) %>% 
+mutate(value = as.factor(value), timestep = as.factor(timestep)) %>% 
+ggplot(aes(fill=timestep, y=area, x=new_class)) + 
+geom_bar(position="dodge", stat="identity") +
+#geom_errorbar(aes(ymin=mean_count-sd_count, ymax=mean_count+sd_count), width=.2,
+#               position=position_dodge(.9)) +
+scale_fill_manual(values = bi_colors) +
+theme(legend.position = c(0.85, 0.7)) +
+labs(x = "Land use Class", 
+y = "Mean Area (hectare)", 
+fill = "Year") +
+NULL
 #bar_plot_39
 #ggsave("../thesis/figures/bar_BAU.png", bar_plot_39, width = 15, height = 10)
 ```
@@ -1076,21 +1085,21 @@ bar_plot_39 <- final_df_39 %>%
 ```{r reforestation,  message=FALSE, warning=FALSE, out.width="100%"}
 # draw_scenario(42)
 final_df_42 <- bar_data %>% 
-  filter(scenario == 42)
+filter(scenario == 42)
 
 bar_plot_42 <- final_df_42  %>% 
-  #filter(value > 10) %>% 
-  mutate(value = as.factor(value), timestep = as.factor(timestep)) %>% 
-  ggplot(aes(fill=timestep, y=area, x=new_class)) + 
-  geom_bar(position="dodge", stat="identity") +
-  scale_fill_manual(values = bi_colors) +
-  #geom_errorbar(aes(ymin=mean_count-sd_count, ymax=mean_count+sd_count), width=.2,
-  #               position=position_dodge(.9)) +
-  theme(legend.position = c(0.85, 0.7)) +
-  labs(x = "Land use Class", 
-       y = "Mean Area (hectare)", 
-       fill = "Year") +
-  NULL
+#filter(value > 10) %>% 
+mutate(value = as.factor(value), timestep = as.factor(timestep)) %>% 
+ggplot(aes(fill=timestep, y=area, x=new_class)) + 
+geom_bar(position="dodge", stat="identity") +
+scale_fill_manual(values = bi_colors) +
+#geom_errorbar(aes(ymin=mean_count-sd_count, ymax=mean_count+sd_count), width=.2,
+#               position=position_dodge(.9)) +
+theme(legend.position = c(0.85, 0.7)) +
+labs(x = "Land use Class", 
+y = "Mean Area (hectare)", 
+fill = "Year") +
+NULL
 #bar_plot_42
 #ggsave("../thesis/figures/bar_Ref.png", bar_plot_42, width = 15, height = 10)
 ```
