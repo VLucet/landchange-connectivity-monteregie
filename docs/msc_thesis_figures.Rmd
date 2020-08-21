@@ -41,6 +41,11 @@ suppressPackageStartupMessages({
   library(tidymodels)
   library(patchwork)
   library(ggplotify)
+  library(vegan)
+  library(dendextend)
+  library(ggbiplot)
+  library(ggnewscale)
+  library(RColorBrewer)
 })
 
 theme_set(theme_minimal())
@@ -725,66 +730,6 @@ for (scenario in c(39, 42, 45, 48, 51)){
 }
 ```
 
-Compute auc / precision on predictions.
-
-```{r eval=FALSE, include=FALSE}
-
-options(yardstick.event_first = T)
-# crosstab(the_mean>0, final)
-
-summary_vals <- data.frame()
-
-for (class in c(1:2)){
-  
-  the_stack <- stack(lapply(list_of_files, raster)) == class
-  original <- raster("../data/land_use/aggregated/aggregated_lu_buffered_1990_patched.tif") == class
-  final <- raster("../data/land_use/aggregated/aggregated_lu_buffered_2010_patched.tif") == class
-  
-  # Transform, give names
-  the_stack[original == 1] <- 0
-  final[original == 1] <- 0
-  the_stack[stratum==0] <- NA
-  final[stratum==0] <- NA
-  the_stack <- trim(the_stack)
-  final <- trim(final)
-  
-  the_mean <-  mean(the_stack)
-  names(the_mean) <- "mean"
-  names(final) <- "observation"
-  
-  
-  names(the_stack) <- rep("model", length(names(the_stack)))
-  
-  aucs <- c()
-  precs <- c()
-  for (x in 1:nlayers(the_stack)){
-    the_df <- as.data.frame(stack(the_stack[[x]], final)) %>% 
-      drop_na() %>% 
-      rename(estimate = starts_with("model"), truth = "observation")
-    the_df_2 <- the_df %>% 
-      mutate(truth = factor(truth, ordered = F)) %>%
-      mutate(truth = relevel(.$truth, "1"))
-    auc <- the_df_2 %>% 
-      roc_auc(truth = truth, estimate) %>% 
-      pull(.estimate)
-    prec <- the_df_2 %>% 
-      average_precision(truth = truth, estimate) %>% 
-      pull(.estimate)
-    aucs <- c(aucs, auc)
-    precs <- c(precs, prec)
-  }
-  
-  summary_vals <- bind_rows(summary_vals, 
-                            data.frame(class = class, 
-                                       mean_auc = mean(aucs), sd_auc = sd(aucs), 
-                                       mean_prec = mean(precs), sd_prec = sd(precs)))
-  
-}
-
-write_csv(summary_vals, "../outputs/metrics/summary_vals.csv")
-summary_vals
-```
-
 ### Bar charts
 
 #### Scenario BAU
@@ -909,6 +854,69 @@ bar_chap2
 ggsave("../thesis/figures/bar_chap2.png", bar_chap2, 
        width = the_width, height = 20, dpi = the_dpi)
 ```
+
+##### Other calculations
+
+Compute auc / precision on predictions.
+
+```{r eval=FALSE, include=FALSE}
+
+options(yardstick.event_first = T)
+# crosstab(the_mean>0, final)
+
+summary_vals <- data.frame()
+
+for (class in c(1:2)){
+  
+  the_stack <- stack(lapply(list_of_files, raster)) == class
+  original <- raster("../data/land_use/aggregated/aggregated_lu_buffered_1990_patched.tif") == class
+  final <- raster("../data/land_use/aggregated/aggregated_lu_buffered_2010_patched.tif") == class
+  
+  # Transform, give names
+  the_stack[original == 1] <- 0
+  final[original == 1] <- 0
+  the_stack[stratum==0] <- NA
+  final[stratum==0] <- NA
+  the_stack <- trim(the_stack)
+  final <- trim(final)
+  
+  the_mean <-  mean(the_stack)
+  names(the_mean) <- "mean"
+  names(final) <- "observation"
+  
+  
+  names(the_stack) <- rep("model", length(names(the_stack)))
+  
+  aucs <- c()
+  precs <- c()
+  for (x in 1:nlayers(the_stack)){
+    the_df <- as.data.frame(stack(the_stack[[x]], final)) %>% 
+      drop_na() %>% 
+      rename(estimate = starts_with("model"), truth = "observation")
+    the_df_2 <- the_df %>% 
+      mutate(truth = factor(truth, ordered = F)) %>%
+      mutate(truth = relevel(.$truth, "1"))
+    auc <- the_df_2 %>% 
+      roc_auc(truth = truth, estimate) %>% 
+      pull(.estimate)
+    prec <- the_df_2 %>% 
+      average_precision(truth = truth, estimate) %>% 
+      pull(.estimate)
+    aucs <- c(aucs, auc)
+    precs <- c(precs, prec)
+  }
+  
+  summary_vals <- bind_rows(summary_vals, 
+                            data.frame(class = class, 
+                                       mean_auc = mean(aucs), sd_auc = sd(aucs), 
+                                       mean_prec = mean(precs), sd_prec = sd(precs)))
+  
+}
+
+write_csv(summary_vals, "../outputs/metrics/summary_vals.csv")
+summary_vals
+```
+
 
 <!-- ### Map of change
 
