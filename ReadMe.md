@@ -8,8 +8,8 @@ Figures](https://github.com/VLucet/landchange-connectivity-monteregie/workflows/
 
 -----
 
-| [GitHub page (latest)](https://vlucet.github.io/landchange-connectivity-monteregie/) | [Thesis PDF (latest)](https://github.com/VLucet/landchange-connectivity-monteregie/blob/master/thesis/build/thesis.pdf) | [Initial submission release](https://github.com/VLucet/landchange-connectivity-monteregie/) |
-| :----------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------: |
+| [GitHub page (latest)](https://vlucet.github.io/landchange-connectivity-monteregie/) | [Thesis PDF (latest)](https://github.com/VLucet/landchange-connectivity-monteregie/blob/master/thesis/build/thesis.pdf) | [Initial submission release](https://github.com/VLucet/landchange-connectivity-monteregie/releases/tag/v1.0) |
+| :----------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------: |
 
 -----
 
