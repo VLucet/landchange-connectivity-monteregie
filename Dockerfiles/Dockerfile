@@ -27,7 +27,7 @@ RUN apt-get -y update -qq \
     mono-devel=5.18.0.240+dfsg-3 \
     grass-dev=7.6.0-1 \
     curl=7.64.0-4+deb10u1 \ 
-    cargo=0.35.0-2 \
+    cargo \
     gdal-bin=2.4.0+dfsg-1+b1 \
     python-gdal=2.4.0+dfsg-1+b1 \
     bc=1.07.1-2+b1 \
