@@ -59,7 +59,7 @@ RUN apt-get -y update -qq \
     texlive-bibtex-extra \
     biber \ 
     latexmk \
-    texlive-science \
+    texlive-science
     
 # Julia install
 ENV JULIA_DEPOT_PATH=/opt/julia
