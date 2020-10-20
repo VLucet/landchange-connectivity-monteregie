@@ -15,8 +15,6 @@ output:
   pdf_document:
     toc: yes
     toc_depth: '5'
-params:
-  REPRO_FIGS_ONLY: TRUE
 ---
 
 **This regroups most of the figures in the thesis (appendix figures are not included, except for the ROC resample figures, the BAU simulated land use change and the radar graph for change in flow for both chapters).**
@@ -63,6 +61,14 @@ theme_update(legend.position = c(0.85, 0.20),
              strip.text.x = element_text(size = 22),
              strip.text.y = element_text(22),
              axis.title=element_text(size=22))
+
+# Set the REPROG_FIGS_ONLY
+REPRO_FIGS_ONLY <- Sys.getenv("REPRO_FIGS_ONLY")
+if(REPRO_FIGS_ONLY == ""){
+  REPRO_FIGS_ONLY <- FALSE
+} else {
+  REPRO_FIGS_ONLY <- TRUE
+}
 ```
 
 ### Data prep
@@ -676,7 +682,7 @@ ggsave("../thesis/figures/radar_ggradar_both.png", radar_all,
 
 ROC curves from fitting both models (with resampling), plotted with the `patchwork` package.
 
-```{r roc_curves, eval=!(params$REPRO_FIGS_ONLY), message=FALSE, warning=FALSE, out.width="100%"}
+```{r roc_curves, eval=!(REPRO_FIGS_ONLY), message=FALSE, warning=FALSE, out.width="100%"}
 # Roc curves data
 urb <- readRDS("../data/temp/fit_rs_outcome_rf_urb_2.RDS")
 agex <- readRDS("../data/temp/fit_rs_outcome_rf_agex_2.RDS")
@@ -955,7 +961,7 @@ ggsave("../thesis/figures/surf_radar_chap2.png", surf_radar_2,
 
 ### Prediction maps
 
-```{r 2010_compare_prep, eval=!(params$REPRO_FIGS_ONLY), message=FALSE, warning=FALSE, out.width="100%"}
+```{r 2010_compare_prep, eval=!(REPRO_FIGS_ONLY), message=FALSE, warning=FALSE, out.width="100%"}
 list_of_files <-  list.files("../libraries/stsim/monteregie-conncons-scripted.ssim.output/Scenario-37/stsim_OutputSpatialState", full.names = T)
 list_of_files <- list_of_files[grep(x=list_of_files, "ts2")]
 stratum <- raster("../data/stsim/aggregated/primary_stratum_mont_or_not_or_PA.tif")
@@ -963,7 +969,7 @@ stratum <- raster("../data/stsim/aggregated/primary_stratum_mont_or_not_or_PA.ti
 
 Predicted probability of urbanization (left) vs observed urbanization (right) between 1990 and 2010.
 
-```{r 2010_compare_urb, eval=!(params$REPRO_FIGS_ONLY), message=FALSE, warning=FALSE, out.width="100%"}
+```{r 2010_compare_urb, eval=!(REPRO_FIGS_ONLY), message=FALSE, warning=FALSE, out.width="100%"}
 names <- paste0(c("historic_compare_agex", "historic_compare_urb"), ".png")
 
 for (class in c(1:2)){
@@ -1033,7 +1039,7 @@ Predicted probability of agricultural expansion (left) vs observed agricultural 
 
 Land use maps showing predictions of land use changes (Only BAU is displayed below).
 
-```{r compare, eval=!(params$REPRO_FIGS_ONLY), message=FALSE, warning=FALSE, out.width="100%"}
+```{r compare, eval=!(REPRO_FIGS_ONLY), message=FALSE, warning=FALSE, out.width="100%"}
 source('../scripts/functions/draw_scenario.R')
 for (scenario in c(39, 42, 45, 48, 51)){
   the_plot <- draw_scenario(scenario, mxp = mxp)
