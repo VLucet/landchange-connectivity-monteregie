@@ -6,6 +6,7 @@
 *.Rproj
 # Figures
 *.pdf
+!thesis/appendix/*pdf
 *.png
 !thesis/figures/*.png
 # test and temp folder
