@@ -49,17 +49,21 @@ RUN apt-get -y update -qq \
     libatlas-base-dev \
     gfortran \
     python3-dev \
-    python3-pip
+    python3-pip \
+  && tlmgr install setspace ulem sectsty datetime ms psnfss subfig multirow \ 
+    adjustbox collectbox enumitem lipsum lineno pdfpages siunitx biblatex \
+    logreq courier
+    
     # Latex req
-    #pandoc \
-    #texlive \
-    #texlive-latex-extra \
-    #texlive-extra-utils \
-    #texlive-fonts-extra \
-    #texlive-bibtex-extra \
-    #biber \ 
-    #latexmk \
-    #texlive-science
+    # pandoc \
+    # texlive \
+    # texlive-latex-extra \
+    # texlive-extra-utils \
+    # texlive-fonts-extra \
+    # texlive-bibtex-extra \
+    # biber \ 
+    # latexmk \
+    # texlive-science
     
 # Julia install
 ENV JULIA_DEPOT_PATH=/opt/julia
