@@ -76,21 +76,21 @@ RUN mkdir /home/rstudio/syncrosim_2_10 \
   && curl -L https://github.com/ApexRMS/stsim/releases/download/3.2.17/stsim-3-2-17.ssimpkg --output /home/rstudio/syncrosim_packages/stsim-3-2-17.ssimpkg
 
 # OpenCV / python
-# RUN cd /home/rstudio \
-#  && git clone https://github.com/opencv/opencv.git \
-#  && git clone https://github.com/opencv/opencv_contrib.git \
-#  && cd /home/rstudio/opencv \
-#  && mkdir build \
-#  && cd build \
-#  && sudo cmake -D CMAKE_BUILD_TYPE=RELEASE \
-#  -D CMAKE_INSTALL_PREFIX=/usr/local \
-#  -D OPENCV_ENABLE_NONFREE=ON \
-#  -D OPENCV_EXTRA_MODULES_PATH=/home/rstudio/opencv_contrib/modules \
-#  -D PYTHON_INCLUDE_DIR=/usr/include/python3.7 \
-#  -D PYTHON3_EXECUTABLE=/usr/bin/python3 .. \
-#	&& make -j4 \
-#	&& sudo make install \
-#	&& pip3 install numpy matplotlib pandas scikit-image scipy
+RUN cd /home/rstudio \
+  && git clone https://github.com/opencv/opencv.git \
+  && git clone https://github.com/opencv/opencv_contrib.git \
+  && cd /home/rstudio/opencv \
+  && mkdir build \
+  && cd build \
+  && sudo cmake -D CMAKE_BUILD_TYPE=RELEASE \
+  -D CMAKE_INSTALL_PREFIX=/usr/local \
+  -D OPENCV_ENABLE_NONFREE=ON \
+  -D OPENCV_EXTRA_MODULES_PATH=/home/rstudio/opencv_contrib/modules \
+  -D PYTHON_INCLUDE_DIR=/usr/include/python3.7 \
+  -D PYTHON3_EXECUTABLE=/usr/bin/python3 .. \
+  && make -j4 \
+  && sudo make install \
+	&& pip3 install numpy matplotlib pandas scikit-image scipy
 
 # Download repo
 RUN mkdir /home/rstudio/land_con_monteregie \
@@ -101,9 +101,9 @@ RUN mkdir /home/rstudio/land_con_monteregie \
 WORKDIR /home/rstudio/land_con_monteregie
 
 # Set up renv and Restore renv library
-# RUN R -e "install.packages('remotes', repos = c(CRAN = 'https://cloud.r-project.org'))"
-# RUN R -e "remotes::install_github('rstudio/renv@${RENV_VERSION}')"
-# RUN R -e "renv::restore()"
+RUN R -e "install.packages('remotes', repos = c(CRAN = 'https://cloud.r-project.org'))"
+RUN R -e "remotes::install_github('rstudio/renv@${RENV_VERSION}')"
+RUN R -e "renv::restore()"
 
 # Set up links
 RUN chmod +x landcon.sh \
