@@ -1,0 +1,54 @@
+name: CI - Make all
+
+on:
+  push:
+    branches: [ master ]
+  #  paths:
+  #    - ".github/workflows/make_all.yml"
+  #    - "docs/**"
+  #    - "thesis/figures/**"
+  # schedule: # Runs at 06:00 UTC every day
+  #   - cron: "0 6 * * *"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        lfs: true
+  
+    # - name: test
+    #   run: pwd && ls
+
+    - name: pull docker image
+      run: docker pull vlucet/land_con_monteregie:3.6.2-1 
+  
+    - name: knit rmd
+      run: |
+        docker run -e REPRO_FIGS_ONLY='TRUE' \
+        -v "$(pwd)/docs/:/home/rstudio/land_con_monteregie/docs/" \
+        -v "$(pwd)/thesis/:/home/rstudio/land_con_monteregie/thesis/" \
+        vlucet/land_con_monteregie:3.6.2-1 /bin/bash -c "git checkout * && git pull && make all"
+        
+    - name: print git status
+      run: git status
+
+    - name: check for changes
+      id: changes
+      uses: UnicornGlobal/has-changes-action@v1.0.11
+  
+    - name: Commit files
+      if: steps.changes.outputs.changed == 1
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add docs/** thesis/**
+        git commit -m "CI - figures"
+        
+    - name: Push changes
+      if: steps.changes.outputs.changed == 1
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
