@@ -3,10 +3,8 @@ name: CI - Make all
 on:
   push:
     branches: [ master ]
-  #  paths:
-  #    - ".github/workflows/make_all.yml"
-  #    - "docs/**"
-  #    - "thesis/figures/**"
+   paths:
+     - ".github/workflows/make_all.yml"
   schedule: # Runs at 06:00 UTC every day
     - cron: "0 7 * * *"
 
