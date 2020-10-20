@@ -49,7 +49,7 @@ RUN apt-get -y update -qq \
     libatlas-base-dev \
     gfortran \
     python3-dev \
-    python3-pip # \
+    python3-pip
     # Latex req
     #pandoc \
     #texlive \
