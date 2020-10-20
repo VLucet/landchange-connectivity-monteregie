@@ -1,6 +1,6 @@
 all: thesis/build/thesis.pdf
 
-docs/index.html: docs/msc_thesis_figures.Rmd outputs/final/*.csv outputs/final/*.RDS
+docs/index.html: docs/msc_thesis_figures.Rmd outputs/final/**
 	sh landcon.sh -e figs -a
 
 thesis/build/thesis.pdf: thesis/*.tex thesis/*.bib thesis/figures/*.png docs/index.html
