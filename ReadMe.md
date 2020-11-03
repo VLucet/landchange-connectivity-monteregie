@@ -16,9 +16,9 @@ Figures](https://github.com/VLucet/landchange-connectivity-monteregie/workflows/
 This repository contains all the code and some of the data that is
 needed to reproduce the work of my M.Sc. Thesis titled:
 
-> **Integrating land use and land cover change simulations and
-> connectivity modeling: a case study in the Montérégie region in
-> southern Québec.**
+> **Integrating land use and land cover change simulations, stakeholder
+> understanding of the landscape, and connectivity modelling: a case
+> study in the Montérégie region in southern Québec.**
 
 It is packaged under the form of a [Docker
 image](https://docs.docker.com/engine/reference/commandline/image/) and
