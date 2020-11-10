@@ -193,18 +193,18 @@ The final list of scenarios is the following:
 
 \subsection{Habitat suitability and connectivity modelling}
 
-Connectivity modeling is similar to land use change modeling inasmuch as the diversity of methods at the researcher’s disposal is large \citep{calabrese_comparison_2004}. As mentioned in the intro, we implemented an analysis of Potential Functional Connectivity, or PFC. A typical PFC modeling workflow can be broken down to 3 steps: species selection, Habitat suitability modeling and connectivity analysis. The three steps are described below, and the methodology partially follows the methodology of Rayfield et al. This part of the methods is summarized in figure \ref{fig:workflow2}.\\
+Connectivity modeling is similar to land use change modeling inasmuch as the diversity of methods at the researcher’s disposal is large \citep{calabrese_comparison_2004}. As mentioned in the intro, we implemented an analysis of Potential Functional Connectivity, or PFC. A typical PFC modeling workflow can be broken down to 3 steps: species selection, Habitat suitability modeling and connectivity analysis. The three steps are described below, and the methodology partially follows the methodology of \cite{rayfield_priorisation_2018}. This part of the methods is summarized in figure \ref{fig:workflow2}.\\
 
 \subsubsection{Species selection}
 
-Species selection is unchanged from Rayfield et al. The five species chosen are presented in the appendix table \ref{tab:species}. It was demonstrated that modeling the connectivity needs of those 5 species was equivalent to modeling the needs of 14 species in the study region \citep{meurant_selecting_2018, albert_applying_2017}\\
+The species selection process is unchanged from \cite{rayfield_priorisation_2018}. The species are the Northern short-tailed Shrew (\textit{Blarina brevicauda}), the American marten (\textit{Martes americana}), the Red-Backed Salamander (\textit{Plethodon cinereus}), the Wood Frog (\textit{Rana sylvatica}), and the Black Bear (\textit{Ursus americanus}). As previusly mentionned, these  species are considered umbrella species from the standpoint of ecological connectivity, as it has been shown that modeling the connectivity needs of those 5 species was equivalent to modeling the needs of 14 species in the study region \citep{meurant_selecting_2018, albert_applying_2017}\\
 
 \subsubsection{Habitat suitability}
 
 Habitat suitability analysis consists in reclassifying land use data into a resistance surface which is then used to model connectivity. For each of the maps obtained from the land use change analysis (for each of the timestep in every iteration and for each of the 5 species), we followed the following steps to reclass land use into resistance:
 \begin{enumerate}
 \item Classify the landscape as \textbf{forest} and \textbf{non forest}.
-\item Reclassify non-forest pixels into resistance following the supplementary tables in  \citeauthor{rayfield_priorisation_2018}, with only a few alterations. See table \ref{tab:key_non_forest} for the reclassification key.
+\item Reclassify non-forest pixels into resistance following the supplementary tables in  \cite{rayfield_priorisation_2018}, with only a few alterations. See table \ref{tab:key_non_forest} for the reclassification key.
 \item Clump the forest landscape into contiguous \textbf{patches} using queen case neighborhood (includes diagonal).
 \item Reclassify pixels in all patches as suitable (value = 1) unsuitable (value = 0) or moderately suitable (value = 0.5), based on forest age and type, and following guidelines in the supplementary tables in  \citeauthor{rayfield_priorisation_2018}.  The key for such reclassification is recorded in table \ref{tab:suit_pixls}.
 \item  Compute the mean patch value based on the clumped outputs.
