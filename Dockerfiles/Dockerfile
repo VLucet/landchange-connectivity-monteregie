@@ -53,7 +53,7 @@ RUN apt-get -y update -qq \
     biber \
   && tlmgr install setspace ulem sectsty datetime ms psnfss subfig multirow \ 
     adjustbox collectbox enumitem lipsum lineno pdfpages siunitx biblatex \
-    logreq courier soul
+    logreq courier soul biblatex-apa
     
 # Julia install
 ENV JULIA_DEPOT_PATH=/opt/julia
