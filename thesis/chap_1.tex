@@ -30,7 +30,7 @@ Land use change models have been used in conservation planning (for example, see
 Connectivity researchers have studied how past changes in land use can explain current connectivity patterns \citep{dupras_urban_2015, henareh_khalyani_spatial_2013, vergara_deforestation_2013, patru-stupariu_using_2013} and multiple connectivity measures have been developed, one specifically in the context of landscape planning \citep{saura_new_2007}. But beyond these historical analyses, land use models are becoming more common \citep{correa_ayram_habitat_2015}. For example, \cite{rubio_sustaining_2012} identified a network of forest patches resilient to land use change under multiple scenarios in Spain. Similarly, \cite{piquer-rodriguez_future_2012} integrated land use change and connectivity models to identify under-protected areas by projecting land use change trends. \cite{huang_simulating_2018} also used land use change models to assess potential impacts on functional connectivity in China. \cite{albert_applying_2017} used a land use change model to forecast changes in species networks. However, combining land use change modelling and connectivity modelling does not yet have a fully established methodology. In its emerging form, it simply consists of running a land use change model on a given landscape, and comparing changes in the connectivity measure of choice between time steps \citep{perkl_urban_2018}.
 
 % [back to what we want to do]
-Climate change can interact with land use change in ways that impact biodiversity \citep{oliver_interactions_2014} It is therefore likely that connectivity models integrating these two drivers would improve connectivity conservation methods such as CPAN design. Yet, in a recent review, \cite{costanza_landscape_2019} have found that connectivity methodological frameworks rarely combine  land use change and climate change. Here, we build on recent connectivity modelling work using circuit theory, by pairing it with a hybrid land use and climate change model \citep{albert_applying_2017}. The model we develop uses a combination of statistical modelling and simulations based on a Markov Chain Monte Carlo (MCMC) method, combining Random forests (RF) models with a Cellular automaton (CA) model. We use this RF-CA model to project future land use changes and estimate the changes in potential functional connectivity for five different umbrella species, under different climate change scenarios. We also derive potential insights for the design of a hypothetical regional network of connected protected areas resilient to future landscape change. In addition, we provide an analysis of past land use change trends in our study region, the Montérégie region in southern Québec.
+Climate change can interact with land use change in ways that impact biodiversity \citep{oliver_interactions_2014} It is therefore likely that connectivity models integrating these two drivers would improve connectivity conservation methods such as CPAN design. Yet, in a recent review, \cite{costanza_landscape_2019} have found that connectivity methodological frameworks rarely combine  land use change and climate change. Here, we build on recent connectivity modelling work using circuit theory, by pairing it with a hybrid land use and climate change model \citep{albert_applying_2017}. The model we develop uses a combination of statistical modelling and simulations based on a Markov Chain Monte Carlo (MCMC) method, combining Random forests (RF) models with a Cellular automaton (CA) model. We use this RF-CA model to project future land use changes and estimate the changes in potential functional connectivity for five different umbrella species, under different climate change scenarios. We also derive potential insights for the design of a hypothetical regional network of connected protected areas resilient to future landscape change. In addition, we provide an analysis of past land use change trends in our study region (appendix 3), the Montérégie region in southern Québec.
 
 %[we are building on past work]
 This work is the continuation of recent research efforts on the connectivity of the region \citep{albert_applying_2017, rayfield_priorisation_2018}. In a seminal paper, \cite{albert_applying_2017} laid out some of the methodological steps we follow such as umbrella species selection and habitat suitability analysis. They also included a simple land use change model that was parameterized to replicate plausible change in the region. \cite{meurant_selecting_2018} developed the criteria for reducing the number of focal species from fourteen to five. They showed that because species had redundant connectivity needs, modelling the needs for 5 species resulted in qualitatively similar results than when modelling the needs of all 14 species, such as in \cite{albert_applying_2017}. While \cite{rayfield_priorisation_2018} extended the spatial scale of the analysis to include the Saint Lawrence lowlands ecoregion, they demonstrated that we could exploit this redundancy to reduce the computing time needed for the connectivity analysis. This is an important development because land use change simulations are also computationally intensive.
@@ -56,6 +56,12 @@ All work was conducted in the R statistical software version 3.6.2 "Dark and Sto
 We used ST-Sim version 2.2.10, scripted in R with the help of the rsyncrosim package version 1.2.0. ST-Sim ran on Linux (Ubuntu 18.04) via Mono 6.4. Many steps of data preparation were conducted in GRASS GIS 7.8.
 
 A note should be added on data availability and reproducibility. A few datasets were not obtained from open sources. These datasets are marked in red in figure \ref{fig:workflow1}. The Canadian census data was obtained through the University of Toronto's CHASS (Computing in the Humanities and Social Sciences) Data Centre, which requires institutional access. This makes the Random Forest analysis not reproducible. In addition, data on protected areas in Montérégie was obtained  via the RMN (Réseaux des milieux naturels protégés du Québec) under a limited license, which makes the Land use change modeling via ST-Sim not fully reproducible. However, the final results of those steps are made open (under the form of csv files), and therefore the generation of the main figures are reproducible via the use of various software (i.e. docker, renv, and more). \\
+
+\subsubsection*{\textit{Preliminary analysis of past land use change}}
+
+To get a better sense of land use patterns in the region, we ran some preliminary analysis on land use change data at the municipality level. These results are not presented in the main text but are to be found in Appendix 3. 
+Montérégie is made up of 177 different municipalities. We generated land use matrices (amount of each land use category) and land cover transition matrices for the first timestep of our dataset (1990 to 2000) for each municipality and for the land use categories corresponding to our model. We then performed multivariate analyses by running a first ordination using PCA (Principal Component Analysis), and then using Ward clustering \citep{legendre_ordination_2012}. The results of this analysis
+Because municipalities in Montérégie have variable size, the amount of change in each municipality needed to be standardized. The data was normalized prior to the ordination to reflect relative amounts of change in each municipality. We used the \verb|vegan| package in R to produce such plots.\\
 
 \subsection{Land use change modelling}
 Land use change modelling is a prolific subfield of land systems science which has spurred a broad diversity of approaches \citep{dang_review_2016, noszczyk_review_2018}. Beyond the many methods published, there is a large number of applications and software tools available for research - although their openness and accessibility varies \citep{moulds_open_2015}. Papers that compare frameworks and results across tools and methods are rare \citep{pontius_comparing_2008, pontius_comparison_2005, sun_comparison_2018}. Although a full review of land use change modelling methods is beyond the scope of this chapter and this thesis, we will introduce the key concepts.
@@ -86,7 +92,7 @@ Another limitation is the coordinate reference system (CRS) in which this datase
 
 \subsubsection*{\textit{Forest types and dynamics under climate change}}
 
-The AAFC data does not differentiate between different forest types. However, our connectivity analysis relies on an analysis of habitat suitability, which is reliant on knowing the preferences of different species for different forest types (see section of habitat suitability analysis for more details). In order to integrate dynamics of forest types into our simulations, we relied on the results of a separate set of simulations that were run in LANDIS, a free and open source software designed to model forest growth. Those simulations were run by Boulanger and Larocque (unpublished, see Appendix 3) for the extent of the Saint-Lawrence lowlands ecoregion, in the context of a research contract with the MELCC (Ministère de l'Environnement et de la Lutte contre les changements climatiques). The LANDIS simulations do not include land use change and therefore can not be directly merged into our simulations. Instead, we parameterized the changes in forest types from the results of the LANDIS simulations. A more detailed methodological description of the LANDIS simulations is to be found in the Appendix 3.
+The AAFC data does not differentiate between different forest types. However, our connectivity analysis relies on an analysis of habitat suitability, which is reliant on knowing the preferences of different species for different forest types (see section of habitat suitability analysis for more details). In order to integrate dynamics of forest types into our simulations, we relied on the results of a separate set of simulations that were run in LANDIS, a free and open source software designed to model forest growth. Those simulations were run by Boulanger and Larocque (unpublished, see Appendix 4) for the extent of the Saint-Lawrence lowlands ecoregion, in the context of a research contract with the MELCC (Ministère de l'Environnement et de la Lutte contre les changements climatiques). The LANDIS simulations do not include land use change and therefore can not be directly merged into our simulations. Instead, we parameterized the changes in forest types from the results of the LANDIS simulations. A more detailed methodological description of the LANDIS simulations is to be found in the Appendix 4.
 
 We source two different sets of "parameters" from these simulations: first, forest type data in 2010 was used as a starting point for the forecast scenarios. Second, a set of transition multipliers were extracted from the simulations and was used to reflect different forest dynamics under different climate change scenarios. These are described in more details in the "Model Execution" section.\\
 
@@ -105,11 +111,6 @@ The first step consisted in reclassifying the AAFC land use dataset into 4 categ
 A second step was the preparation of the explanatory variables. Vector data was rasterized when needed. A significant effort was invested in working with the Canadian Census data, as Statistics Canada does not make available a spatial dataset for their census data. Therefore, the geometries of DAs and EAs had to be matched with the corresponding line in the Census dataset, based on the unique EA and DA IDs. Some of these (between 2 and 5 \% of the total number of DAs or EAs, depending of the time steps) have remained unmatched due to discrepancies between the (spatial) boundaries datasets of EAs/DAs available and the EAs/DAs listed in the StatsCan dataset. This led to areas with NAs values. These areas could not be ignored in our random forest model and had to be imputed. We used mean imputation for lack of a better method but are aware of the large number of issues associated with this practice \citep[see][]{lodder_impute_2014}.
 
 Finally, all variables were extracted and turned into tabular data. Only relevant pixels (i.e. rows in the dataset) were kept to model each transition. For instance, only forest and agricultural land pixels were kept to model urbanization. The variables were standardized prior to running the model. We used the \verb|tidymodels| framework (version 0.1.0) in R to pre-process our tabular data and run our random forest models. \\
-
-\subsubsection{Preliminary analysis of past land use change}
-
-To better understand land use patterns in the region, we ran some preliminary analysis on land use change data at the municipality level. Montérégie is made up of 177 different municipalities. We generated land use matrices (amount of each land use category) and land cover transition matrices for the first timestep of our dataset (1990 to 2000) for each municipality and for the land use categories corresponding to our model. We then performed multivariate analyses by running a first ordination using PCA (Principal Component Analysis), and then using Ward clustering \citep{legendre_ordination_2012}.
-Because municipalities in Montérégie have variable size, the amount of change in each municipality needs to be standardized. The data was normalized prior to the ordination to reflect relative amounts of change in each municipality. We used the \verb|vegan| package in R to produce such plots.\\
 
 \subsubsection{Model Execution}
 
@@ -235,29 +236,6 @@ Following the advice in \citeauthor{pelletier_forest_2017}, we ran SURF for each
 
 \section{Results}
 
-We first describe the results of the preliminary analysis on land use change dynamics, then go on to describe the results of the hybrid land use change and connectivity model.\\
-
-\subsection{Analysis of past land use changes in Montérégie}
-
-The clustering and subsequent ordination of the land use change matrices of the 177 municipalities revealed that Montérégie has 5 main profiles and land compositions (see figures \ref{fig:PCAvals}, and \ref{fig:mapvals}):
-\renewcommand{\labelitemi}{$\textendash$}
-\begin{itemize}[leftmargin=0.5cm]
- \item \textbf{Forest - Dominant}: have the lowest level of fragmentation and are dominated by forest.
- \item \textbf{Forest - Agriculture}: they still have a significant area of forest but fragmentation is much more pronounced.
- \item \textbf{Agriculture - Dominant}: forested habitat is scarce and most of the remaining forest is classified as “Trees” in the AAFC dataset (forest fragment of less than 1 hectare).
- \item \textbf{Urban - Medium density}: correspond to the front of the wave of urban sprawling.
- \item \textbf{Urban - High density}: urban cores make up the majority of the municipality’ area (> 50\%).
-\end{itemize}
-
-The clustering and subsequent ordination of land use change profiles showed that Montérégie has 4 different transition profiles (see figures \ref{fig:PCAtrans}, and \ref{fig:maptrans}):
-\begin{itemize}[leftmargin=0.5cm]
- \item \textbf{Urban Spread / Deforestation}: forest fragmentation is progressing mainly via the growth of urban land (in the west) or development for holiday cottages (“villegiatives pressures”, in the east).
- \item \textbf{Urban Spread / Agricultural loss}: agriculture is losing ground to urban land.
- \item \textbf{Agricultural Expansion / Fragmentation}: forest is being lost to agriculture in those municipalities where forest is still quite present.
- \item \textbf{Agricultural Expansion / Deforestation}: forest is already scarce and is being replaced by agricultural land.
-These results show marked regional trends with a front line of fragmentation and deforestation on both sides of the region and along the Richelieu river. \\ % (Fig. \ref{fig:map}).
-\end{itemize}
-
 \subsection{Random forest models}
 
 \subsubsection{Variable importance}
@@ -374,47 +352,6 @@ We successfully integrated a potential functional connectivity model for 5 umbre
 %---------------------------------------------------------------------------------------------------------------------------------------------------
 % Results figures
 
-% Figures: values
-
-% Clustering moved to appendix
-
-% PCA
-\begin{figure}[h!]
-\makebox[\textwidth]{
-  \includegraphics[width=0.9\textwidth]{thesis/figures/PCA_data_profiles.png}
-}
-\caption{Ordination of land use data (proportions) for municipalities.}
-\label{fig:PCAvals}
-
-% MAP
-\makebox[\textwidth]{
-    \includegraphics[width=0.9\textwidth]{thesis/figures/profiles_land_use.png}
-}
-\caption{Geographical distribution of the 5 profiles identified in figure \ref{fig:PCAvals}.}
-\label{fig:mapvals}
-\end{figure}
-
-% Figures: Transitions
-
-% PCA
-\begin{figure}[h!]
-\makebox[\textwidth]{
-  \includegraphics[width=0.9\textwidth]{thesis/figures/PCA_trans_profiles.png}
-}
-\caption{Ordination of land use transition data for municipalities.}
-\label{fig:PCAtrans}
-
-%MAP
-\makebox[\textwidth]{
-    \includegraphics[width=0.9\textwidth]{thesis/figures/transition_prof_map.png}
-}
-\caption{Geographical distribution of the 4 change profiles identified in figure \ref{fig:PCAtrans}.}
-\label{fig:maptrans}
-\end{figure}
-
-\clearpage
-
-%---------------------------------------------------------------------------------------------------------------------------------------------------
 % Model tables (roc curves moved to the appendix)
 
 % RF Variable importance
