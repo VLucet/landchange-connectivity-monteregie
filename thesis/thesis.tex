@@ -18,19 +18,18 @@
 \usepackage{soulutf8}
 
 % Bib style
-%\setcitestyle{authoryear,open={((},close={))}}
-  \usepackage[
-    style=apa,
-    maxbibnames=20,
-    maxcitenames=2,
-    minbibnames=19,
-    mincitenames=1,
-    isbn = false,
-    backend=biber,
-    %uniquelist = false,
-    natbib=true %, 
-    %refsection=chapter
-  ]{biblatex}
+\usepackage[
+  style=authoryear,
+  giveninits=true,
+  maxcitenames=2,
+  mincitenames=1,
+  maxbibnames=21,
+  minbibnames=19,
+  isbn = false,
+  backend=biber,
+  uniquelist = false,
+  natbib=true
+]{biblatex}
 
 \addbibresource{thesis/mcgilletd.bib}
 \addbibresource{thesis/software.bib}
