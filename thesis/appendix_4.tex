@@ -1,0 +1,19 @@
+% !TEX root = ./thesis.tex
+
+\chapter*{\textbf{Appendix 3: LANDIS model details \\ \hspace{1em}}}
+\addcontentsline{toc}{chapter}{Chapter II Workshop Materials}
+
+\setcounter{chapter}{6}
+\setcounter{table}{0}
+\setcounter{figure}{0}
+
+We used the simulation framework LANDIS-II v7 \citep{scheller_forest_2004} to project forest type changes in the future. We used the output to parameterize STSIM forest type transitions. It was necessary to combine these outputs in that way because LANDIS-II does not support land use change natively.
+
+In LANDIS-II, stand level forest processes occur in each cell of the grid that represents the landscape. Landscape-level processes can affect multiple cells.The model simulates change as a function of growth and succession and a range of other factors: disturbances, forest management, and climate change. 
+
+We set a pixel resolution of 90m and a 10-year time step for 100 years. Forest composition in each pixel was derived from the forest inventory plots of the Québec government and the Canadian National Forest Inventory. Each of these pixels was assigned to a “landtype” with homogeneous soil and climate conditions (see details in \cite{boulanger_climate_2019}).
+
+Climate scenarios were derived from the Canadian Earth System Model version 2 (CanESM2). Climate projections from CanESM2 were accessed from the World Climate Research Program (WCRP) Climate Model Intercomparison Project Phase 5 (CMIP5) archive for RCP 4.5 and RCP 8.5 (details in \cite{boulanger_climate_2019}).
+LANDIS-II requires specific input parameters which are generally derived from more ecologically detailed, fine-scale forest stand models. We used a 3D-patch model for spatially explicit simulation of vegetation composition (details in \cite{lexer_modified_2001} and \cite{tremblay_harvesting_2018}).
+
+Forest harvesting was simulated using the Biomass Harvest extension (v4.3; \cite{gustafson_spatial_2000}). The harvesting scenario - ecosystem based forest management, EBFM - emulates different intensities of clearcutting and partial harvesting, which vary according to vegetations as defined by Québec’s Hierarchical System for Territorial Ecological Classification \citep{bergeron_quebec_1992}, closely mimicking the historical disturbance regimes.
