@@ -12,4 +12,7 @@ thesis/build/thesis.pdf: thesis/*.tex thesis/*.bib thesis/figures/*.png docs/ind
 
 clean: 
 	cd thesis/build/ \
-	&& rm *.aux *.bbl *.bcf *.blg *.lof *.log *.lot *.out *.xml *.toc
+	&& rm *.aux *.bbl *.bcf *.blg *.lof *.log *.lot *.out *.xml *.toc \
+	&& cd thesis \
+	&& rm *.aux *.bbl *.bcf *.blg *.lof *.log *.lot *.out *.xml *.toc \
+	
