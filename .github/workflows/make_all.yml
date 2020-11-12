@@ -5,6 +5,7 @@ on:
     branches: [ master ]
     paths:
       - ".github/workflows/make_all.yml"
+      - "*.tex"
   schedule:
     - cron: "0 5 * * *"
 
