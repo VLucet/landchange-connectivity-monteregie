@@ -45,7 +45,7 @@
 \hline
 Distance from urban land & \multirow{3}{*}{Raster} & \multirow{2}{*}{Generated from land cover data} \\ \cline{1-1}
 Size of forest patch &  &  \\ \cline{1-1} \cline{3-3} 
-Elevation &  & \begin{tabular}[c]{@{}l@{}}SRTM 30m from \\ Google Earth Engine \\ data library\end{tabular} \\ \hline
+Elevation &  & \begin{tabular}[c]{@{}l@{}}SRTM 30m from Google \\ Earth Engine data library\end{tabular} \\ \hline
 Population change & \multirow{2}{*}{\begin{tabular}[c]{@{}l@{}}Tabular data joined to vector \\ data and rasterized\end{tabular}} & \multirow{2}{*}{\begin{tabular}[c]{@{}l@{}}Canadian Census for \\ 1991, 2001 and 2011\end{tabular}} \\ \cline{1-1}
 Income &  &  \\ \hline
 Road network & Vector data (rasterized) & Adresses Québec \\ 
@@ -60,11 +60,11 @@ Road network & Vector data (rasterized) & Adresses Québec \\
 
 \begin{table}[h!]
 \centering
-\caption{Neighborhood rules for ST-Sim transitions.}
+\caption[Rules for the transitions in the land use change model]{Rules for the transitions in the land use change model. The transition is only allowed if the Proportion of the Pixel counted is reached in the Neighborhood.}
 \label{tab:neigh_rules}
 \begin{tabular}{llcc}
 \hline
-\textbf{Transition} & \textbf{State counted} & \textbf{Neighborhood (m)} & \textbf{Minimum Proportion} \\ \hline
+\textbf{Transition} & \textbf{Pixel counted} & \textbf{Neighborhood (m)} & \textbf{Minimum Proportion} \\ \hline
 Urbanization & Urban & 500 & 0.7 \\
 Agricultural Expansion & Agriculture & 250 & 0.9 \\
 Reforestation & Forest (any type) & 250 & 0.9 \\
@@ -79,12 +79,10 @@ Forest Internals & Forest (specific type) & 225 & 0.15 \\ \hline
 
 \begin{table}[h!]
 \centering
-\caption{Pixel suitability table based on forest types and age.}
+\caption[Rules for the suitability analysis of forest pixels]{Rules for the suitability analysis of forest pixels. For each species, forest pixels are classified into suitability values based on forest types and age.}
 \label{tab:suit_pixls}
 \begin{tabular}{lccccccccc}
-\cline{2-10}
- & \multicolumn{9}{c}{\textbf{Forest}} \\ \cline{2-10} 
-\textbf{} & \multicolumn{3}{c}{\textbf{Deciduous}} & \multicolumn{3}{c}{\textbf{Mixt}} & \multicolumn{3}{c}{\textbf{Coniferous}} \\ \hline
+\textbf{} & \multicolumn{3}{c}{\textbf{Deciduous}} & \multicolumn{3}{c}{\textbf{Mixed}} & \multicolumn{3}{c}{\textbf{Coniferous}} \\ \hline
 \textbf{Species} & \textbf{Young} & \textbf{Medium} & \textbf{Old} & \textbf{Young} & \textbf{Medium} & \textbf{Old} & \textbf{Young} & \textbf{Medium} & \textbf{Old} \\ \hline
 \textit{\begin{tabular}[c]{@{}l@{}}Blarina \\ brevicauda\end{tabular}} & 0 & 0.5 & 1 & 0 & 0.5 & 1 & 0 & 0 & 0 \\ \hline
 \textit{\begin{tabular}[c]{@{}l@{}}Martes \\ americana\end{tabular}} & 0 & 0 & 0 & 0 & 1 & 1 & 1 & 1 & 1 \\ \hline
@@ -98,7 +96,7 @@ Forest Internals & Forest (specific type) & 225 & 0.15 \\ \hline
 
 \begin{table}[h!]
 \centering
-\caption{Resistance reclassification table for non-forest pixels.}
+\caption[Rules for the reclassification into resistance of non-forest pixels]{Rules for the reclassification into resistance of non-forest pixels. For all species, pixels of different land uses are classified into the same resistance values.}
 \label{tab:key_non_forest}
 \begin{tabular}{lcccccc}
 \hline
@@ -115,16 +113,16 @@ Forest Internals & Forest (specific type) & 225 & 0.15 \\ \hline
 
 \begin{table}[h!]
 \centering
-\caption{Minimum patch size for suitability table of a patch in the habitat suitability analysis.}
+\caption[Minimum patch size rules for the suitability analysis of forest patches]{Minimum patch size rules for the suitability analysis of forest patches. A patch of forest is only deemed suitable if its size is above the minimum size.}
 \label{tab:patch_size}
 \begin{tabular}{lc}
 \hline
-\textbf{Species} 																									& \textbf{Minimum patch size} (hectares) \\ \hline 
-\textit{\begin{tabular}[c]{@{}l@{}}Blarina \\ brevicauda\end{tabular}} 	&  1		\\ \hline
-\textit{\begin{tabular}[c]{@{}l@{}}Martes \\ americana\end{tabular}} 	&  150		\\ \hline
-\textit{\begin{tabular}[c]{@{}l@{}}Plethodon \\ cinereus\end{tabular}} 	&  1		\\ \hline
-\textit{\begin{tabular}[c]{@{}l@{}}Rana \\ sylvatica\end{tabular}} 			&  1		\\ \hline
-\textit{\begin{tabular}[c]{@{}l@{}}Ursus\\ americanus\end{tabular}} 		&  1200		\\ \hline
+\textbf{Species} & \textbf{Minimum patch size} (hectares) \\ \hline 
+\textit{\begin{tabular}[c]{@{}l@{}}Blarina brevicauda\end{tabular}} 	&  1		\\ \hline
+\textit{\begin{tabular}[c]{@{}l@{}}Martes americana\end{tabular}} 	&  150		\\ \hline
+\textit{\begin{tabular}[c]{@{}l@{}}Plethodon cinereus\end{tabular}} 	&  1		\\ \hline
+\textit{\begin{tabular}[c]{@{}l@{}}Rana sylvatica\end{tabular}} 			&  1		\\ \hline
+\textit{\begin{tabular}[c]{@{}l@{}}Ursus americanus\end{tabular}} 		&  1200		\\ \hline
 \end{tabular}
 \end{table}
 
@@ -132,7 +130,7 @@ Forest Internals & Forest (specific type) & 225 & 0.15 \\ \hline
 
 \begin{table}[h!]
 \centering
-\caption{Resistance reclassification table for different forest patches types.}
+\caption[Rules for the reclassification into resistance of forest patches]{Rules for the reclassification into resistance of forest patches. For each species, forest patches are classified into different resistance values based on whether they are considered suitable habitat, too small or non-habitat. For a patch to be considered habitat, the majority of its pixels mush have a suitability value of 1 (see table \ref{tab:suit_pixls}) and its size must be above the minimum size for the species (see table \ref{tab:patch_size}.}
 \label{tab:hab_or_not}
 \begin{tabular}{lccc}
 \hline
@@ -149,7 +147,7 @@ Forest Internals & Forest (specific type) & 225 & 0.15 \\ \hline
 
 \begin{table}[h!]
 \centering
-\caption{SURF analysis parameters.}
+\caption[SURF analysis parameters.]{Parameters for the SURF (Speeded-up Robust Features) analysis (Feature detection analysis). Parameters were chosen arbitrarily (see methods).}
 \label{tab:surf}
 \begin{tabular}{lc}
 \hline
