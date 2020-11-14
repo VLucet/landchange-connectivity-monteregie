@@ -335,23 +335,23 @@ We successfully integrated a potential functional connectivity model for 5 umbre
 
 \begin{figure}[h]
 \makebox[\textwidth]{
-\includegraphics[width=1.3\textwidth]{thesis/figures/Chapter1_flowchart.png}
+\includegraphics[width=1.25\textwidth]{thesis/figures/Chapter1_flowchart.png}
 }
-\caption{Workflow for data preparation, statistical modelling and land use change modelling.}
+\caption[Workflow diagram for Chapter 1 (part 1)]{Workflow diagram for Chapter 1 (part 1). This figure shows the methodological steps for data preparation, statistical modelling and land use change modelling. Data layers (parallelograms) were extracted from multiple databases (cylinders) and processed (hexagons) in order to produced the outputs (data tables and raster layers) used for statistical and land use change modelling. The resulting data table was split in test and train sets before runnig the random forest model. Note the multiple outputs of the land use change model which produced different simulations based on scenarios. }
 \label{fig:workflow1}
 \end{figure}
 \clearpage
 
 \begin{figure}[h!]
 \makebox[\textwidth]{
-\includegraphics[width=1.3\textwidth]{thesis/figures/Chapter1_flowchart2.png}
+\includegraphics[width=1.25\textwidth]{thesis/figures/Chapter1_flowchart2.png}
 }
-\caption{Workflow for the habitat suitability and connectivity analyses.} 
+\caption[Workflow diagram for Chapter 1 (part 2)]{Workflow diagram for Chapter 1 (part 2). We adapted the habitat suitabiliy anakysis steps from \cite{rayfield_priorisation_2018} to suit the characteristics of our data. From the land use change simulations results, we followed the steps outline on the left side. Either sides of "if statements" (rhombi) lead to different processing decisions (for instance, the size of suitable patches is evaluated before being reclassified into resistance, while unsuitable patches get the same resistance value for a given species). Note the different color denoting whether the processing step was performed at the patch level or at the pixel level. On the right side, the main steps of the connectivity analysis are represented: Curcuitscape is ran in two directions and the sum of these two outputs is taken to produce zonal statistics and proceed to the feature detection analysis (SURF analysis).} 
 \label{fig:workflow2}
 \end{figure}
 \clearpage
 
-%---------------------------------------------------------------------------------------------------------------------------------------------------
+%--------------------------------------------------------------------------------------------------
 % Results figures
 
 % Model tables (roc curves moved to the appendix)
@@ -360,7 +360,7 @@ We successfully integrated a potential functional connectivity model for 5 umbre
 
 \begin{table}[h!]
 \centering
-\caption{Variable importance (gini impurity index) for both random forest models - non-categorical variables only (rounded to nearest integer, highest values in bold).}
+\caption[Variable importance (gini impurity index) for variables in the random forest models]{Variable importance (gini impurity index) for variables in the random forest models - categorical variables are excluded (rounded to nearest integer, highest values are in bold).}
 \label{tab:varimp}
 \begin{tabular}{lcc}
 \hline
@@ -379,7 +379,7 @@ Income & 371 & 315 \\
 % R squares and AUC
 
 %\begin{table}[!htbp] \centering 
-  \caption[$R^{2}$, AUC, and average precision values for both models and both validation sets.]{$R^{2}$, AUC, and average precision values for both models and both validation sets - The spatial validation set corresponds to the testing partition for the 1990-2000 timestep, whereas the temporal validation set corresponds to the entire data of the 2000-2010 timestep.} 
+  \caption[$R^{2}$, AUC, and average precision values for both models and both validation sets.]{$R^{2}$, AUC (Area Under Curve), and average precision values for both models and both validation sets - The spatial validation set corresponds to the testing partition for the 1990-2000 timestep, whereas the temporal validation set corresponds to the entire data of the 2000-2010 timestep.} 
   \label{tab:R_squares_AUC} 
 \begin{tabular}{@{\extracolsep{5pt}} ccccc} 
 \\[-1.8ex]\hline 
@@ -397,7 +397,7 @@ Urbanization & Temporal & $0.573$ & $0.921$ & $0.250$ \\
 % R square resample
 
 %\begin{table}[!htbp] \centering 
-\caption{AUC values for both models in resampled 10 folds CCV.} 
+\caption[AUC values for both models in resampled 10 folds CCV]{AUC (Area Under Curve) values for both random forest models in resampled 10 folds CCV (Classic Cross-Validation).} 
 \label{tab:R_squares_resample} 
 \begin{tabular}{@{\extracolsep{5pt}} cccccc} 
 \\[-1.8ex]\hline 
@@ -413,7 +413,7 @@ Urbanisation & $0.938 \pm 0.002$ \\
 % Historic model metrics
 
 %\begin{table}[!htbp] \centering
-\caption{AUC and average precision values for the predictions of the land use change model.} 
+\caption[AUC and average precision values for the predictions of the land use change model]{AUC (Area Under Curver) and average precision values for the predictions of the land use change model. A binary raster (transition either happened or did not happen) was used to generate those values.} 
 \label{tab:historic_metrics} 
 \begin{tabular}{lcccc}
 \hline
@@ -424,48 +424,48 @@ Urbanisation & $0.784$ & $0.287$ & $0.647 \pm 0.001$ & $0.135 \pm 0.001$ \\ \hli
 \end{tabular}
 \end{table}
 
-%---------------------------------------------------------------------------------------------------------------------------------------------------
+%--------------------------------------------------------------------------------------------------
 % Historic model 
 
 \begin{figure}[h!]
 \makebox[\textwidth]{
-  \includegraphics[width=1.3\textwidth]{thesis/figures/historic_compare_urb.png}
+  \includegraphics[width=1.2\textwidth]{thesis/figures/historic_compare_urb.png}
 }
- \caption[Predicted probability of urbanization vs observed urbanization between 1990 and 2010.]{Predicted probability of urbanization (left) vs observed urbanization (right) between 1990 and 2010.}
+ \caption[Predicted probability of urbanization vs observed urbanization between 1990 and 2010.]{(A, left) Predicted probability of urbanization (deom 0 to 1) based on the Random Forest Model. (left) ; (B, right) Binary map (0 or 1, Not Observed OR Observed) for urbanization in Montérégie between 1990 and 2010. A near perfect model prediction would produce nearly identical maps.}
  \label{fig:compare_urb}
 %\end{figure}
 
 %\begin{figure}[h!]
 \makebox[\textwidth]{
-  \includegraphics[width=1.3\textwidth]{thesis/figures/historic_compare_agex.png}
+  \includegraphics[width=1.2\textwidth]{thesis/figures/historic_compare_agex.png}
 }
- \caption[Predicted probability of agricultural expansion vs observed agricultural expansion between 1990 and 2010.]{Predicted probability of agricultural expansion (left) vs observed agricultural expansion (right) between 1990 and 2010.}
+ \caption[Predicted probability of agriculral expansion vs observed agriculral expansion between 1990 and 2010.]{(A, left) Predicted probability of agriculral expansion (from 0 to 1) based on the Random Forest Model. (left) ; (B, right) Binary map (0 or 1, Not Observed OR Observed) for agriculral expansion in Montérégie between 1990 and 2010. A near perfect model prediction would produce nearly identical maps.}
  \label{fig:compare_agex}
 \end{figure}
 
-%---------------------------------------------------------------------------------------------------------------------------------------------------
+%--------------------------------------------------------------------------------------------------
 % Other land use change scenario (maps moved to appendix)
 
 \begin{figure}[h!]
 \makebox[\textwidth]{
-  \includegraphics[width=1.3\textwidth]{thesis/figures/bar_both.png}
+  \includegraphics[width=1.2\textwidth]{thesis/figures/bar_both.png}
 }
- \caption{Land use class frequencies in 2010 (observed) and 2100 (predicted) for the BAU and Reforestation scenarios (under baseline climate scenario).}
+ \caption[Land use class fequencies in 2010 and 2100 for the BAU and Reforestation scenarios ]{Land use class fequencies (in hectares) in 2010 (observed from the land use data) and 2100 (predicted by the land use change model) for the BAU (Business As Usual) and Reforestation scenarios (Note: these predictions are done under baseline climate scenario). Top: Forest broken down by forest types (coniferous, deciduous and mixed) ; Bottom: Agriculture and Urban.}
  \label{fig:bar_both}
 \end{figure}
 
-%---------------------------------------------------------------------------------------------------------------------------------------------------
+%--------------------------------------------------------------------------------------------------
 % Histogram historic
 
 \begin{figure}[h!]
 \makebox[\textwidth]{
   \includegraphics[width=1.3\textwidth]{thesis/figures/original_hists.png}
 }
- \caption{Histograms of flow values for the year 2010 comparing the historic model run (1990-2010) with observations.}
+ \caption[Histograms of flow values for 2010 comparing the historic model run (1990-2010) with observations]{Histograms of flow values (results of Circuitscape runs for study region) for the year 2010. This compares the current values from the output of the historic model (in blue, i.e. connectivity analysis of the output for the year 2010, after running the land use change model from 1990 to 2010) with the current values observed (in red, connectivity analysis of the observed land use maps in 2010).}
  \label{fig:hist_historic}
 \end{figure}
 
-%---------------------------------------------------------------------------------------------------------------------------------------------------
+%--------------------------------------------------------------------------------------------------
 % Flow
 
 % Historic
@@ -474,7 +474,7 @@ Urbanisation & $0.784$ & $0.287$ & $0.647 \pm 0.001$ & $0.135 \pm 0.001$ \\ \hli
 \makebox[\textwidth]{
   \includegraphics[width=1.3\textwidth]{thesis/figures/connectivity_decrease_x5species_historic.png}
 }
- \caption{Change in mean flow (in \% of the 1990 flow) between 1990 and 2010, contrasting observed historic change (1990-2010) and simulated change from historic model run.}
+ \caption[Change in mean flow (in \% of the 1990 flow) between 1990 and 2010, comparing the historic model run (1990-2010) with observations] {Change in mean flow (decrease in \% of the baseline 1990 flow) between 1990 and 2010. This compares the changes (decrease in current flow from the 1990 baseline) observed in the land use data (in blue), with the changes observed in the output of the historic model (ran from 1990 to 2010, in orange), facetted by species.}
  \label{fig:flow_historic}
 \end{figure}
 
@@ -484,7 +484,7 @@ Urbanisation & $0.784$ & $0.287$ & $0.647 \pm 0.001$ & $0.135 \pm 0.001$ \\ \hli
 \makebox[\textwidth]{
   \includegraphics[width=1.3\textwidth]{thesis/figures/connectivity_decrease_x5species_chap1.png}
 }
- \caption{Change in mean flow (in \% of the 2010 flow) between 2010 (observed) and 2100 (predicted), contrasting BAU scenario (solid line) with other land use change scenarios - linear graph.}
+ \caption[Linear graph of change in mean flow (decrease in \% of the baseline 2010 flow) between 2010 (observed) and 2100 (predicted), comparing BAU scenario with other land use change scenarios]{Linear graph of change in mean flow (decrease in \% of the baseline 2010 flow) between 2010 (observed) and 2100 (predicted). This compares the BAU (Business As Usual) scenario with the Reforestation (R) scenario, facetted by species. Note that the line type represents the different climate scenarios so as to represent all scenario combinations.}
  \label{fig:flow_linear_1}
 \end{figure}
 
@@ -494,7 +494,7 @@ Urbanisation & $0.784$ & $0.287$ & $0.647 \pm 0.001$ & $0.135 \pm 0.001$ \\ \hli
 \makebox[\textwidth]{
   \includegraphics[width=1.3\textwidth]{thesis/figures/radar_ggradar_chap1.png}
 }
- \caption{Change in mean flow (in \% of the 2010 flow) between 2010 (observed) and 2100 (predicted), contrasting BAU scenario with other land use change scenarios - radar graph.}
+ \caption[Radar graph of change in mean flow (decrease in \% of the baseline 2010 flow) between 2010 (observed) and 2100 (predicted), comparing BAU scenario with other land use change scenarios]{Radar graph of change in mean flow (decrease in \% of the baseline 2010 flow) between 2010 (observed) and 2100 (predicted). This compares the BAU (Business As Usual) scenario with the Reforestation (R) scenario, for all 5 species. Note that the line color represent species and that each side of the graph is a different scenario combination.}
  \label{fig:flow_radar_1}
 \end{figure}
 
@@ -504,11 +504,12 @@ Urbanisation & $0.784$ & $0.287$ & $0.647 \pm 0.001$ & $0.135 \pm 0.001$ \\ \hli
 \makebox[\textwidth]{
   \includegraphics[width=1.3\textwidth]{thesis/figures/hist_chap1.png}
 }
- \caption{Histograms of flow values for all species and scenarios, for 2010 (observed) and 2100 (predicted).}
+ \caption[Histograms of flow values for all species and scenarios, comparing timesteps 2010 (observed) with 2100 (predicted)]{
+ Histograms of flow values (results of Circuitscape runs for study region) for the years 2010 and 2100. This compares the observed values for the year 2010 (in blue, i.e. connectivity analysis of the land use map) with the current values of the model output in 2100 (in red, connectivity analysis of the year 2100 of the output of the land use change model). Note that the results are facetted by species and by scenario combination.}
  \label{fig:hist_1}
 \end{figure}
 
-%---------------------------------------------------------------------------------------------------------------------------------------------------
+%--------------------------------------------------------------------------------------------------
 % SURF
 
 % Linear
@@ -517,7 +518,7 @@ Urbanisation & $0.784$ & $0.287$ & $0.647 \pm 0.001$ & $0.135 \pm 0.001$ \\ \hli
 \makebox[\textwidth]{
   \includegraphics[width=1.3\textwidth]{thesis/figures/surf_chap1.png}
 }
- \caption{Change in the number of features (in \% of the 2010 flow) identified by the SURF analysis between 2010 (observed) and 2100 (predicted), contrasting BAU scenario with other land use change scenarios - linear graph.}
+  \caption[Linear graph of change in the number of features (decrease in \% of the baseline 2010 numbers) between 2010 (observed) and 2100 (predicted), comparing BAU scenario with other land use change scenarios]{Linear graph of change in the number of features (decrease in \% of the baseline 2010 numbers) between 2010 (observed) and 2100 (predicted). This compares the BAU (Business As Usual) scenario with the Reforestation (R) scenario, facetted by species. Note that the line type represents the different climate scenarios so as to represent all scenario combinations.}
  \label{fig:surf_linear_1}
 \end{figure}
 
@@ -527,7 +528,7 @@ Urbanisation & $0.784$ & $0.287$ & $0.647 \pm 0.001$ & $0.135 \pm 0.001$ \\ \hli
 \makebox[\textwidth]{
   \includegraphics[width=1.3\textwidth]{thesis/figures/surf_radar_chap1.png}
 }
- \caption{Change in the number of features (in \% of the 2010 flow) identified by the SURF analysis between 2010 (observed) and 2100 (predicted), contrasting BAU scenario with other land use change scenarios - radar graph.}
+  \caption[Radar graph of change in number of features (decrease in \% of the baseline 2010 numbers) between 2010 (observed) and 2100 (predicted), comparing BAU scenario with other land use change scenarios]{Radar graph of change in number of features (decrease in \% of the baseline 2010 numbers) between 2010 (observed) and 2100 (predicted). This compares the BAU (Business As Usual) scenario with the Reforestation (R) scenario, for all 5 species. Note that the line color represent species and that each side of the graph is a different scenario combination.}
  \label{fig:surf_radar_1}
 \end{figure}
 
