@@ -59,7 +59,7 @@ A note should be added on data availability and reproducibility. A few datasets 
 
 \subsubsection*{\textit{Preliminary analysis of past land use change}}
 
-To get a better sense of land use patterns in the region, we ran some preliminary analysis on land use change data at the municipality level. These results are not presented in the main text but are to be found in Appendix 3. 
+To get a better sense of land use patterns in the region, we ran a preliminary analysis on land use change data at the municipality level. These results are not presented in the main text but are to be found in Appendix 3. 
 Montérégie is made up of 177 different municipalities. We generated land use matrices (amount of each land use category) and land cover transition matrices for the first timestep of our dataset (1990 to 2000) for each municipality and for the land use categories corresponding to our model. We then performed multivariate analyses by running a first ordination using PCA (Principal Component Analysis), and then using Ward clustering \citep{legendre_ordination_2012}. The results of this analysis
 Because municipalities in Montérégie have variable size, the amount of change in each municipality needed to be standardized. The data was normalized prior to the ordination to reflect relative amounts of change in each municipality. We used the \verb|vegan| package in R to produce such plots.\\
 
@@ -337,7 +337,7 @@ We successfully integrated a potential functional connectivity model for 5 umbre
 \makebox[\textwidth]{
 \includegraphics[width=1.20\textwidth]{thesis/figures/Chapter1_flowchart.png}
 }
-\caption[Workflow diagram for Chapter 1 (part 1)]{Workflow diagram for Chapter 1 (part 1). This figure shows the methodological steps for data preparation, statistical modelling and land use change modelling. Data layers (parallelograms) were extracted from multiple databases (cylinders) and processed (hexagons) in order to produced the outputs (data tables and raster layers) used for statistical and land use change modelling. The resulting data table was split in test and train sets before runnig the random forest model. Note the multiple outputs of the land use change model which produced different simulations based on scenarios. }
+\caption[Workflow diagram for Chapter 1 (part 1)]{Workflow diagram for Chapter 1 (part 1). This figure shows the methodological steps for data preparation, statistical modelling and land use change modelling. Data layers (parallelograms) were extracted from multiple databases (cylinders) and processed (hexagons) in order to produced the outputs (data tables and raster layers) used for statistical and land use change modelling. The resulting data table was split into test and training datasets before running the random forest model. Note the multiple outputs of the land use change model which produced different simulations based on scenarios. }
 \label{fig:workflow1}
 \end{figure}
 \clearpage
