@@ -390,6 +390,12 @@ for (sce in sce_dir_vec[1]){
                     expression = paste0(wetlands_name_distance_reclassed_scaled, " = ", wetlands_name_distance_reclassed, " / 10.0"), 
                     flags = "overwrite")
           
+          execGRASS("r.out.gdal", 
+                    input = wetlands_name_distance_reclassed_scaled, 
+                    format='GTiff',createopt='COMPRESS=LZW', 
+                    output = paste0("outputs/reclassed/", wetlands_name_distance_reclassed_scaled, ".tif"),
+                    flags=c('overwrite'))
+          
         } else {
           wetlands_name_distance_reclassed_scaled <- ""
         }
@@ -424,6 +430,12 @@ for (sce in sce_dir_vec[1]){
           execGRASS("r.mapcalc", 
                     expression = paste0(urban_name_distance_reclassed_scaled, " = ", urban_name_distance_reclassed, " / 10.0"), 
                     flags = "overwrite")
+          
+          execGRASS("r.out.gdal", 
+                    input = urban_name_distance_reclassed_scaled, 
+                    format='GTiff',createopt='COMPRESS=LZW', 
+                    output = paste0("outputs/reclassed/", urban_name_distance_reclassed_scaled, ".tif"),
+                    flags=c('overwrite'))
           
         } else {
           urban_name_distance_reclassed_scaled <- ""
