@@ -422,7 +422,7 @@ for (sce in sce_dir_vec){
         stat_zonal_name <- paste0(multiplied_forest_name,"_s")
         execGRASS("r.stats.zonal", 
                   base = forest_clumped_name,
-                  cover = multiplier_expression, 
+                  cover = multiplied_forest_name, 
                   method = "average",
                   output = stat_zonal_name,
                   flags = "overwrite")
