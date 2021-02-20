@@ -312,6 +312,77 @@ for (sce in sce_dir_vec){
                   rules = paste0("config/rcl_tables/species/",specie,".txt"), 
                   flags = "overwrite")
         
+        # ----------------------------------------------------------------------
+        
+        # Modulate habitat quality based on distance
+        
+        # 1. Get only roads
+        write_lines(c("4 = 1", "* = NULL"), "config/rcl_tables/grass/rule.txt")
+        roads_name <- paste0(base_name,"_roads")
+        execGRASS("r.reclass", 
+                  input = base_name, 
+                  rules = "config/rcl_tables/grass/rule.txt",
+                  output = roads_name, 
+                  flags = c("overwrite"))
+        
+        # Grow distance
+        roads_name_distance <- paste0(roads_name,"_dist")
+        execGRASS("r.grow.distance", input = roads_name, 
+                  distance = roads_name_distance, 
+                  flags = c("overwrite"))
+        
+        # Reclass it 
+        
+        # 2. Get only Wetlands
+        write_lines(c("6 = 1", "* = NULL"), "config/rcl_tables/grass/rule.txt")
+        wetlands_name <- paste0(base_name,"_wet")
+        execGRASS("r.reclass", 
+                  input = base_name, 
+                  rules = "config/rcl_tables/grass/rule.txt",
+                  output = wetlands_name, 
+                  flags = c("overwrite"))
+        
+        # Grow distance
+        wetlands_name_distance <- paste0(wetlands_name,"_dist")
+        execGRASS("r.grow.distance", input = wetlands_name, 
+                  distance = wetlands_name_distance, 
+                  flags = c("overwrite"))
+        
+        # Reclass it 
+        
+        if (specie == "URAM"){
+          
+          # 8. Get only urban
+          write_lines(c("2 = 1", "* = NULL"), "config/rcl_tables/grass/rule.txt")
+          urban_name <- paste0(base_name,"_urb")
+          execGRASS("r.reclass", 
+                    input = base_name, 
+                    rules = "config/rcl_tables/grass/rule.txt",
+                    output = urban_name, 
+                    flags = c("overwrite"))
+          
+          # 9. Grow distance
+          urban_name_distance <- paste0(urban_name,"_dist")
+          execGRASS("r.grow.distance", input = urban_name, 
+                    distance = urban_name_distance, 
+                    flags = c("overwrite"))
+          
+          # 10. Reclass it 
+          urban_name_distance_reclassed <- paste0(specie, "_", urban_name_distance, "_rcl") 
+          execGRASS("r.reclass", 
+                    input = urban_name_distance, 
+                    output = urban_name_distance_reclassed, 
+                    rules = paste0("config/rcl_tables/species/",specie,".txt"), 
+                    flags = "overwrite")
+          
+          # MULTIPLY HERE BEFORE END OF LOOP
+          
+        }
+        
+        # END: Multiply tmp_mult by this reclassed
+        
+        # ----------------------------------------------------------------------
+        
         # r.stats.zonal per patch for patch suitability
         stat_zonal_name <- paste0(binary_forest_name,"_s")
         execGRASS("r.stats.zonal", 
@@ -320,9 +391,6 @@ for (sce in sce_dir_vec){
                   method = "average",
                   output = stat_zonal_name,
                   flags = "overwrite")
-        
-        # Modulate habitat quality based on distance
-        # TODO
         
         # separate unsuitable from suitable patches 
         habitat_suit <- paste0(stat_zonal_name, "_su")
