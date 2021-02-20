@@ -331,11 +331,16 @@ for (sce in sce_dir_vec[1]){
                   flags = "overwrite")
         
         # TODO MESSED UP FLOATING POINT HERE
+        # Divide to put on 0-1 scale
+        binary_forest_name_scaled <- paste0(binary_forest_name, "_scl") 
+        execGRASS("r.mapcalc", 
+                  expression = paste0(binary_forest_name_scaled, " = ", binary_forest_name, " / 10.0"), 
+                  flags = "overwrite")
         
         execGRASS("r.out.gdal", 
-                  input = binary_forest_name, 
+                  input = binary_forest_name_scaled, 
                   format='GTiff',createopt='COMPRESS=LZW', 
-                  output = paste0("outputs/reclassed/", binary_forest_name, ".tif"),
+                  output = paste0("outputs/reclassed/", binary_forest_name_scaled, ".tif"),
                   flags=c('overwrite'))
         
         # ----------------------------------------------------------------------
@@ -468,10 +473,10 @@ for (sce in sce_dir_vec[1]){
         multipliers <- multipliers[!(multipliers == "")]
         
         # Build the expression
-        multiplied_forest_name <- paste0(binary_forest_name, "_multiplied")
+        multiplied_forest_name <- paste0(binary_forest_name_scaled, "_multiplied")
         multiplier_expression <- 
           paste0(multiplied_forest_name, " = ", 
-                 paste0(c(binary_forest_name, multipliers), collapse = " * "))
+                 paste0(c(binary_forest_name_scaled, multipliers), collapse = " * "))
         
         # Perform multiplication
         execGRASS("r.mapcalc", 
