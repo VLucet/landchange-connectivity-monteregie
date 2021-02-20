@@ -391,7 +391,7 @@ for (sce in sce_dir_vec){
                     flags = "overwrite")
           
         } else {
-          wetlands_name_distance_reclassed <- ""
+          wetlands_name_distance_reclassed_scaled <- ""
         }
         
         if (specie == "URAM"){
@@ -426,7 +426,7 @@ for (sce in sce_dir_vec){
                     flags = "overwrite")
           
         } else {
-          urban_name_distance_reclassed <- ""
+          urban_name_distance_reclassed_scaled <- ""
         }
         
         # Get all multipliers
