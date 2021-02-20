@@ -344,7 +344,7 @@ for (sce in sce_dir_vec){
         execGRASS("r.out.gdal", 
                   input = roads_name_distance_reclassed, 
                   format='GTiff',createopt='COMPRESS=LZW', 
-                  output = paste0(roads_name_distance_reclassed, ".tif"),
+                  output = paste0("outputs/reclassed/", roads_name_distance_reclassed, ".tif"),
                   flags=c('overwrite'))
         
         if (specie == "RANA"){
