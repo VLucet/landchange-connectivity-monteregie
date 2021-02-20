@@ -321,6 +321,9 @@ for (sce in sce_dir_vec){
                   output = stat_zonal_name,
                   flags = "overwrite")
         
+        # Modulate habitat quality based on distance
+        # TODO
+        
         # separate unsuitable from suitable patches 
         habitat_suit <- paste0(stat_zonal_name, "_su")
         execGRASS("r.mapcalc", 
