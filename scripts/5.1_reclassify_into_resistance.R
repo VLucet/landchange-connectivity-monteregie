@@ -314,6 +314,12 @@ for (sce in sce_dir_vec){
                   rules = paste0("config/rcl_tables/species/",specie,".txt"), 
                   flags = "overwrite")
         
+        execGRASS("r.out.gdal", 
+                  input = binary_forest_name, 
+                  format='GTiff',createopt='COMPRESS=LZW', 
+                  output = paste0("outputs/reclassed/", binary_forest_name, ".tif"),
+                  flags=c('overwrite'))
+        
         # ----------------------------------------------------------------------
         
         # Modulate habitat quality based on distance
@@ -430,6 +436,12 @@ for (sce in sce_dir_vec){
                   expression = multiplier_expression, 
                   flags = "overwrite")
         
+        execGRASS("r.out.gdal", 
+                  input = multiplied_forest_name, 
+                  format='GTiff',createopt='COMPRESS=LZW', 
+                  output = paste0("outputs/reclassed/", multiplied_forest_name, ".tif"),
+                  flags=c('overwrite'))
+        
         # ----------------------------------------------------------------------
         
         # r.stats.zonal per patch for patch suitability
@@ -519,6 +531,8 @@ for (sce in sce_dir_vec){
                                   "_ts_", the_ts,
                                   "_", specie,"_.tif"),
                   flags=c('overwrite'))
+        
+        stop()
         
         execGRASS("g.remove", pattern=paste0(specie, "*"), type = "all", flags = "f")
       }
