@@ -271,6 +271,7 @@ for (sce in sce_dir_vec[1]){
       execGRASS("g.region", raster = base_name)
       
       # Get only forest **
+      # FOREST TYPES
       write_lines(c("0 thru 10 = NULL", "* = *"), "config/rcl_tables/grass/rule.txt")
       forest_name <- paste0(base_name,"_for")
       execGRASS("r.reclass", 
@@ -279,10 +280,19 @@ for (sce in sce_dir_vec[1]){
                 output = forest_name, 
                 flags = c("overwrite"))
       
+      # ONLY FOREST
+      write_lines(c("0 thru 10 = NULL", "* = 1"), "config/rcl_tables/grass/rule.txt")
+      forest_only_name <- paste0(base_name,"_for_only")
+      execGRASS("r.reclass", 
+                input = base_name, 
+                rules = "config/rcl_tables/grass/rule.txt",
+                output = forest_only_name, 
+                flags = c("overwrite"))
+      
       # clump it **
-      forest_clumped_name <- paste0(forest_name,"_c")
+      forest_clumped_name <- paste0(forest_only_name,"_c")
       execGRASS("r.clump", 
-                input = forest_name, 
+                input = forest_only_name, 
                 output = forest_clumped_name,
                 flags = c("overwrite", "d")) 
       
@@ -319,6 +329,8 @@ for (sce in sce_dir_vec[1]){
                   output = binary_forest_name, 
                   rules = paste0("config/rcl_tables/species/",specie,".txt"), 
                   flags = "overwrite")
+        
+        # TODO MESSED UP FLOATING POINT HERE
         
         execGRASS("r.out.gdal", 
                   input = binary_forest_name, 
