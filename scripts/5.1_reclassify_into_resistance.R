@@ -359,7 +359,7 @@ for (sce in sce_dir_vec[1]){
                   output = paste0("outputs/reclassed/", roads_name_distance_reclassed_scaled, ".tif"),
                   flags=c('overwrite'))
         
-        if (specie == "RANA"){
+        if (specie == "RASY"){
           
           # Get only Wetlands
           write_lines(c("6 = 1", "* = NULL"), "config/rcl_tables/grass/rule.txt")
