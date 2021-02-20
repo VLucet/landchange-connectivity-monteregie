@@ -339,6 +339,12 @@ for (sce in sce_dir_vec){
                   rules = paste0("config/rcl_tables/distance/roads/",specie,".txt"), 
                   flags = "overwrite")
         
+        execGRASS("r.out.gdal", 
+                  input = roads_name_distance_reclassed, 
+                  format='GTiff',createopt='COMPRESS=LZW', 
+                  output = paste0(roads_name_distance_reclassed, ".tif"),
+                  flags=c('overwrite'))
+        
         if (specie == "RANA"){
           
           # Get only Wetlands
