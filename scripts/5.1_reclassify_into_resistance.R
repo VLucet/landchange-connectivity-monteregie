@@ -68,7 +68,7 @@ initGRASS(gisBase = "/usr/lib/grass76/", gisDbase = "libraries/grass/",
 execGRASS("g.proj", flags = c("c"), proj4 = projection(raster(true_landuse_list[1])))
 execGRASS("g.mapset", mapset = "habsuit_1", flags = c("c", "overwrite"))
 
-if(false){
+if(FALSE){
 for (true_lu in true_landuse_list){
   
   base_name <- tools::file_path_sans_ext(basename(true_lu))
