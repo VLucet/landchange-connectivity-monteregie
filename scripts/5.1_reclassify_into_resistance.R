@@ -477,6 +477,12 @@ for (sce in sce_dir_vec[1]){
                   output = stat_zonal_name,
                   flags = "overwrite")
         
+        execGRASS("r.out.gdal", 
+                  input = stat_zonal_name, 
+                  format='GTiff',createopt='COMPRESS=LZW', 
+                  output = paste0("outputs/reclassed/", stat_zonal_name, ".tif"),
+                  flags=c('overwrite'))
+        
         # separate unsuitable from suitable patches 
         habitat_suit <- paste0(stat_zonal_name, "_su")
         execGRASS("r.mapcalc", 
