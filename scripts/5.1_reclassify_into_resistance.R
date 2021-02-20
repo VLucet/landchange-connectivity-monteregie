@@ -341,10 +341,16 @@ for (sce in sce_dir_vec){
                   rules = paste0("config/rcl_tables/distance/roads/",specie,".txt"), 
                   flags = "overwrite")
         
+        # Divide to put on 0-1 scale
+        roads_name_distance_reclassed_scaled <- paste0(roads_name_distance_reclassed, "_scl") 
+        execGRASS("r.mapcalc", 
+                  expression = paste0(roads_name_distance_reclassed_scaled, " = ", roads_name_distance_reclassed, " / 10.0"), 
+                  flags = "overwrite")
+        
         execGRASS("r.out.gdal", 
-                  input = roads_name_distance_reclassed, 
+                  input = roads_name_distance_reclassed_scaled, 
                   format='GTiff',createopt='COMPRESS=LZW', 
-                  output = paste0("outputs/reclassed/", roads_name_distance_reclassed, ".tif"),
+                  output = paste0("outputs/reclassed/", roads_name_distance_reclassed_scaled, ".tif"),
                   flags=c('overwrite'))
         
         if (specie == "RANA"){
