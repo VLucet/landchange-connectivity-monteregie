@@ -223,7 +223,7 @@ initGRASS(gisBase = "/usr/lib/grass76/", gisDbase = "libraries/grass/",
 execGRASS("g.proj", flags = c("c"), proj4 = projection(raster(true_landuse_list[1])))
 execGRASS("g.mapset", mapset = "habsuit_2", flags = c("c", "overwrite"))
 
-for (sce in sce_dir_vec){
+for (sce in sce_dir_vec[1]){
   
   sce_nb <- as.numeric(unlist(lapply(str_split(sce, "-"), FUN = last)))
   
@@ -254,10 +254,10 @@ for (sce in sce_dir_vec){
                                           max(ts_vec), # to max
                                           STSIM_STEP_SAVE))) # by whatever we save
   
-  for (it in split_by_iter){
+  for (it in split_by_iter[1]){
     print(it)
     
-    for(ts in unlist(it)){
+    for(ts in unlist(it)[1]){
       print(ts)
       
       base_name <- paste("s",sce_nb, tools::file_path_sans_ext(basename(ts)), sep = "_")
@@ -543,8 +543,6 @@ for (sce in sce_dir_vec){
                                   "_ts_", the_ts,
                                   "_", specie,"_.tif"),
                   flags=c('overwrite'))
-        
-        stop()
         
         execGRASS("g.remove", pattern=paste0(specie, "*"), type = "all", flags = "f")
       }
