@@ -284,7 +284,13 @@ for (sce in sce_dir_vec[1]){
       execGRASS("r.clump", 
                 input = forest_name, 
                 output = forest_clumped_name,
-                flags = c("overwrite", "d"))                                 
+                flags = c("overwrite", "d")) 
+      
+      execGRASS("r.out.gdal", 
+                input = forest_clumped_name, 
+                format='GTiff',createopt='COMPRESS=LZW', 
+                output = paste0("outputs/reclassed/", forest_clumped_name, ".tif"),
+                flags=c('overwrite'))
       
       # Get the no forest **
       write_lines(c("10 thru 100 = NULL", "* = *"), "config/rcl_tables/grass/rule.txt")
