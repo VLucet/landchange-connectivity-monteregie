@@ -330,7 +330,6 @@ for (sce in sce_dir_vec[1]){
                   rules = paste0("config/rcl_tables/species/",specie,".txt"), 
                   flags = "overwrite")
         
-        # TODO MESSED UP FLOATING POINT HERE
         # Divide to put on 0-1 scale
         binary_forest_name_scaled <- paste0(binary_forest_name, "_scl") 
         execGRASS("r.mapcalc", 
