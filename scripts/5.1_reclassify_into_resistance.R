@@ -384,6 +384,12 @@ for (sce in sce_dir_vec){
                     rules = paste0("config/rcl_tables/distance/wetlands/",specie,".txt"), 
                     flags = "overwrite")
           
+          # Divide to put on 0-1 scale
+          wetlands_name_distance_reclassed_scaled <- paste0(wetlands_name_distance_reclassed, "_scl") 
+          execGRASS("r.mapcalc", 
+                    expression = paste0(wetlands_name_distance_reclassed_scaled, " = ", wetlands_name_distance_reclassed, " / 10.0"), 
+                    flags = "overwrite")
+          
         } else {
           wetlands_name_distance_reclassed <- ""
         }
@@ -413,14 +419,20 @@ for (sce in sce_dir_vec){
                     rules = paste0("config/rcl_tables/distance/urban/",specie,".txt"), 
                     flags = "overwrite")
           
+          # Divide to put on 0-1 scale
+          urban_name_distance_reclassed_scaled <- paste0(urban_name_distance_reclassed, "_scl") 
+          execGRASS("r.mapcalc", 
+                    expression = paste0(urban_name_distance_reclassed_scaled, " = ", urban_name_distance_reclassed, " / 10.0"), 
+                    flags = "overwrite")
+          
         } else {
           urban_name_distance_reclassed <- ""
         }
         
         # Get all multipliers
-        multipliers <- c(roads_name_distance_reclassed, 
-                         wetlands_name_distance_reclassed, 
-                         urban_name_distance_reclassed)
+        multipliers <- c(roads_name_distance_reclassed_scaled, 
+                         wetlands_name_distance_reclassed_scaled, 
+                         urban_name_distance_reclassed_scaled)
         
         # Only keep non-empty ones
         multipliers <- multipliers[!(multipliers == "")]
