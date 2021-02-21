@@ -71,6 +71,8 @@ execGRASS("g.mapset", mapset = "habsuit_1", flags = c("c", "overwrite"))
 for (true_lu in true_landuse_list){
   
   base_name <- tools::file_path_sans_ext(basename(true_lu))
+  # Shorten base_name 
+  base_name <- gsub("aggregated_lu_buffered_", "", base_name, fixed="TRUE")
   
   # Input **
   execGRASS("r.in.gdal", 
