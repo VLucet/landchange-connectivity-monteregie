@@ -329,7 +329,7 @@ for (true_lu in true_landuse_list){
     write_lines(paste0("* = 1"), "config/rcl_tables/grass/rule.txt")
     execGRASS("r.reclass",
               input = greater_area_name,
-              output = "Test",
+              output = greater_area_reclassed_name,
               rules = "config/rcl_tables/grass/rule.txt",
               flags = "overwrite")
     #execGRASS("g.remove", type = "raster", name = greater_area_name)
