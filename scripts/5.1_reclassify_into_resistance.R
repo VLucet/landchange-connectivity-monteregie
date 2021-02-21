@@ -457,11 +457,11 @@ for (sce in sce_dir_vec){
                 output = forest_clumped_name,
                 flags = c("overwrite", "d")) 
       
-      execGRASS("r.out.gdal", 
-                input = forest_clumped_name, 
-                format='GTiff',createopt='COMPRESS=LZW', 
-                output = paste0("outputs/reclassed/", forest_clumped_name, ".tif"),
-                flags=c('overwrite'))
+      # execGRASS("r.out.gdal", 
+      #           input = forest_clumped_name, 
+      #           format='GTiff',createopt='COMPRESS=LZW', 
+      #           output = paste0("outputs/reclassed/", forest_clumped_name, ".tif"),
+      #           flags=c('overwrite'))
       
       # Get the no forest **
       write_lines(c("10 thru 100 = NULL", "* = *"), "config/rcl_tables/grass/rule.txt")
@@ -497,11 +497,11 @@ for (sce in sce_dir_vec){
                   expression = paste0(binary_forest_name_scaled, " = ", binary_forest_name, " / 10.0"), 
                   flags = "overwrite")
         
-        execGRASS("r.out.gdal", 
-                  input = binary_forest_name_scaled, 
-                  format='GTiff',createopt='COMPRESS=LZW', 
-                  output = paste0("outputs/reclassed/", binary_forest_name_scaled, ".tif"),
-                  flags=c('overwrite'))
+        # execGRASS("r.out.gdal", 
+        #           input = binary_forest_name_scaled, 
+        #           format='GTiff',createopt='COMPRESS=LZW', 
+        #           output = paste0("outputs/reclassed/", binary_forest_name_scaled, ".tif"),
+        #           flags=c('overwrite'))
         
         # ----------------------------------------------------------------------
         
@@ -536,11 +536,11 @@ for (sce in sce_dir_vec){
                   expression = paste0(roads_name_distance_reclassed_scaled, " = ", roads_name_distance_reclassed, " / 10.0"), 
                   flags = "overwrite")
         
-        execGRASS("r.out.gdal", 
-                  input = roads_name_distance_reclassed_scaled, 
-                  format='GTiff',createopt='COMPRESS=LZW', 
-                  output = paste0("outputs/reclassed/", roads_name_distance_reclassed_scaled, ".tif"),
-                  flags=c('overwrite'))
+        # execGRASS("r.out.gdal", 
+        #           input = roads_name_distance_reclassed_scaled, 
+        #           format='GTiff',createopt='COMPRESS=LZW', 
+        #           output = paste0("outputs/reclassed/", roads_name_distance_reclassed_scaled, ".tif"),
+        #           flags=c('overwrite'))
         
         if (specie == "RASY"){
           
@@ -573,11 +573,11 @@ for (sce in sce_dir_vec){
                     expression = paste0(wetlands_name_distance_reclassed_scaled, " = ", wetlands_name_distance_reclassed, " / 10.0"), 
                     flags = "overwrite")
           
-          execGRASS("r.out.gdal", 
-                    input = wetlands_name_distance_reclassed_scaled, 
-                    format='GTiff',createopt='COMPRESS=LZW', 
-                    output = paste0("outputs/reclassed/", wetlands_name_distance_reclassed_scaled, ".tif"),
-                    flags=c('overwrite'))
+          # execGRASS("r.out.gdal", 
+          #           input = wetlands_name_distance_reclassed_scaled, 
+          #           format='GTiff',createopt='COMPRESS=LZW', 
+          #           output = paste0("outputs/reclassed/", wetlands_name_distance_reclassed_scaled, ".tif"),
+          #           flags=c('overwrite'))
           
         } else {
           wetlands_name_distance_reclassed_scaled <- ""
@@ -614,11 +614,11 @@ for (sce in sce_dir_vec){
                     expression = paste0(urban_name_distance_reclassed_scaled, " = ", urban_name_distance_reclassed, " / 10.0"), 
                     flags = "overwrite")
           
-          execGRASS("r.out.gdal", 
-                    input = urban_name_distance_reclassed_scaled, 
-                    format='GTiff',createopt='COMPRESS=LZW', 
-                    output = paste0("outputs/reclassed/", urban_name_distance_reclassed_scaled, ".tif"),
-                    flags=c('overwrite'))
+          # execGRASS("r.out.gdal", 
+          #           input = urban_name_distance_reclassed_scaled, 
+          #           format='GTiff',createopt='COMPRESS=LZW', 
+          #           output = paste0("outputs/reclassed/", urban_name_distance_reclassed_scaled, ".tif"),
+          #           flags=c('overwrite'))
           
         } else {
           urban_name_distance_reclassed_scaled <- ""
@@ -643,11 +643,11 @@ for (sce in sce_dir_vec){
                   expression = multiplier_expression, 
                   flags = "overwrite")
         
-        execGRASS("r.out.gdal", 
-                  input = multiplied_forest_name, 
-                  format='GTiff',createopt='COMPRESS=LZW', 
-                  output = paste0("outputs/reclassed/", multiplied_forest_name, ".tif"),
-                  flags=c('overwrite'))
+        # execGRASS("r.out.gdal", 
+        #           input = multiplied_forest_name, 
+        #           format='GTiff',createopt='COMPRESS=LZW', 
+        #           output = paste0("outputs/reclassed/", multiplied_forest_name, ".tif"),
+        #           flags=c('overwrite'))
         
         # ----------------------------------------------------------------------
         
@@ -660,11 +660,11 @@ for (sce in sce_dir_vec){
                   output = stat_zonal_name,
                   flags = "overwrite")
         
-        execGRASS("r.out.gdal", 
-                  input = stat_zonal_name, 
-                  format='GTiff',createopt='COMPRESS=LZW', 
-                  output = paste0("outputs/reclassed/", stat_zonal_name, ".tif"),
-                  flags=c('overwrite'))
+        # execGRASS("r.out.gdal", 
+        #           input = stat_zonal_name, 
+        #           format='GTiff',createopt='COMPRESS=LZW', 
+        #           output = paste0("outputs/reclassed/", stat_zonal_name, ".tif"),
+        #           flags=c('overwrite'))
         
         # separate unsuitable from suitable patches 
         habitat_suit <- paste0(stat_zonal_name, "_su")
