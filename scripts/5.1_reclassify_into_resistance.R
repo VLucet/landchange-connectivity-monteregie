@@ -68,7 +68,6 @@ initGRASS(gisBase = "/usr/lib/grass76/", gisDbase = "libraries/grass/",
 execGRASS("g.proj", flags = c("c"), proj4 = projection(raster(true_landuse_list[1])))
 execGRASS("g.mapset", mapset = "habsuit_1", flags = c("c", "overwrite"))
 
-if(FALSE){
 for (true_lu in true_landuse_list){
   
   base_name <- tools::file_path_sans_ext(basename(true_lu))
@@ -208,7 +207,6 @@ for (true_lu in true_landuse_list){
               flags=c('overwrite'))
   }
 }
-}
 
 # test <- stack(map(list.files("outputs/reclassed/", full.names = T), raster))
 # plot(test$TRUE_lu_2_MAAM==1)
@@ -223,7 +221,7 @@ initGRASS(gisBase = "/usr/lib/grass76/", gisDbase = "libraries/grass/",
 execGRASS("g.proj", flags = c("c"), proj4 = projection(raster(true_landuse_list[1])))
 execGRASS("g.mapset", mapset = "habsuit_2", flags = c("c", "overwrite"))
 
-for (sce in sce_dir_vec[1]){
+for (sce in sce_dir_vec){
   
   sce_nb <- as.numeric(unlist(lapply(str_split(sce, "-"), FUN = last)))
   
@@ -254,10 +252,10 @@ for (sce in sce_dir_vec[1]){
                                           max(ts_vec), # to max
                                           STSIM_STEP_SAVE))) # by whatever we save
   
-  for (it in split_by_iter[1]){
+  for (it in split_by_iter){
     print(it)
     
-    for(ts in unlist(it)[1]){
+    for(ts in unlist(it)){
       print(ts)
       
       base_name <- paste("s",sce_nb, tools::file_path_sans_ext(basename(ts)), sep = "_")
