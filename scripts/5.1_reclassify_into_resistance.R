@@ -89,12 +89,21 @@ for (true_lu in true_landuse_list){
             output = forest_name, 
             flags = c("overwrite"))
   
+  # ONLY FOREST
+  write_lines(c("0 thru 10 = NULL", "* = 1"), "config/rcl_tables/grass/rule.txt")
+  forest_only_name <- paste0(base_name,"_for_only")
+  execGRASS("r.reclass", 
+            input = base_name, 
+            rules = "config/rcl_tables/grass/rule.txt",
+            output = forest_only_name, 
+            flags = c("overwrite"))
+  
   # clump it **
-  forest_clumped_name <- paste0(forest_name,"_c")
+  forest_clumped_name <- paste0(forest_only_name,"_c")
   execGRASS("r.clump", 
-            input = forest_name, 
+            input = forest_only_name, 
             output = forest_clumped_name,
-            flags = c("overwrite", "d"))                                 
+            flags = c("overwrite", "d")) 
   
   # Get the no forest **
   write_lines(c("10 thru 100 = NULL", "* = *"), "config/rcl_tables/grass/rule.txt")
