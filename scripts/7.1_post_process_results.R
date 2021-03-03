@@ -177,6 +177,7 @@ write_csv(final_df[limit:rows,], "outputs/final/final_df_current_density_part2.c
 
 #-------------------------------------------------------------------------------
 
+if (false) {
 n_cores = 8 # very important smaller number of cores!!
 clust <- makeCluster(n_cores, outfile="log.txt")
 registerDoParallel(cl = clust)
@@ -228,6 +229,7 @@ foreach(sce = sce_nb_vec) %dopar% {
   removeTmpFiles(h=0)
 }
 
+}
 #-------------------------------------------------------------------------------
 
 # Now with original data - simple loop this time
