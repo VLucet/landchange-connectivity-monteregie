@@ -427,7 +427,7 @@ for (sce in sce_dir_vec){
       print(ts)
 
       if(length(ts) == 3){
-        NULL # Go as is
+        # DO NOTHING
       }else{
         ts <- ts[c(1,5,10)]
       }
