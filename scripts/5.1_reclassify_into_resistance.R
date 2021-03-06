@@ -750,7 +750,7 @@ for (sce in sce_dir_vec){
 
         execGRASS("g.remove", pattern=paste0(specie, "*"), type = "all", flags = "f")
       }
-      execGRASS("g.remove", pattern=paste0("ts", the_ts), type = "all", flags = "f")
+      #execGRASS("g.remove", pattern=paste0("ts", the_ts), type = "all", flags = "f")
     }
     execGRASS("g.remove", pattern=paste0("it", the_it), type = "all", flags = "f")
   }
