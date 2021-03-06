@@ -458,7 +458,7 @@ for (sce in sce_dir_vec){
       execGRASS("r.clump",
                 input = forest_only_name,
                 output = forest_clumped_name,
-                flags = c("overwrite", "d"))
+                flags = c("overwrite"))
 
       # execGRASS("r.out.gdal",
       #           input = forest_clumped_name,
