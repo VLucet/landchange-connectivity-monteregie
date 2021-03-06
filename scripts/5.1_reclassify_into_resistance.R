@@ -34,6 +34,7 @@ sce_dir_vec <- list.files("libraries/stsim/monteregie-conncons-scripted.ssim.out
 
 # Template
 iter_template <- paste0("it", 1:STSIM_ITER)
+iter_template <- paste0("it", 1:5)
 
 ## Load classification matrices
 species_list <- tools::file_path_sans_ext(list.files("config/rcl_tables/species/"))
@@ -420,7 +421,7 @@ for (sce in sce_dir_vec){
   for (it in split_by_iter){
     print(it)
 
-    for(ts in unlist(it)){
+    for(ts in unlist(it)[c(1,5,10)]){
       print(ts)
 
       base_name <- paste("s",sce_nb, tools::file_path_sans_ext(basename(ts)), sep = "_")
