@@ -131,7 +131,7 @@ reclassify(){
   print_vars
   echo "Reclassify"
   ## Remove files we dont need (from last run)
-  #rm -rf outputs/reclassed/*
+  rm -rf outputs/reclassed/*
   rm -rf outputs/reclassed_with_buffer/*
   touch scripts/0.2_add_buffer_to_all.sh
   rm scripts/0.2_add_buffer_to_all.sh

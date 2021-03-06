@@ -69,7 +69,6 @@ initGRASS(gisBase = "/usr/lib/grass76/", gisDbase = "libraries/grass/",
 execGRASS("g.proj", flags = c("c"), proj4 = projection(raster(true_landuse_list[1])))
 execGRASS("g.mapset", mapset = "habsuit_1", flags = c("c", "overwrite"))
 
-if (FALSE){
 for (true_lu in true_landuse_list){
 
   base_name <- tools::file_path_sans_ext(basename(true_lu))
@@ -107,7 +106,7 @@ for (true_lu in true_landuse_list){
   execGRASS("r.clump",
             input = forest_only_name,
             output = forest_clumped_name,
-            flags = c("overwrite", "d"))
+            flags = c("overwrite"))
 
   # Get the no forest **
   write_lines(c("10 thru 100 = NULL", "* = *"), "config/rcl_tables/grass/rule.txt")
@@ -328,7 +327,7 @@ for (true_lu in true_landuse_list){
               output = greater_area_name,
               value =  subset(patch_size, species == specie)$value,
               mode = "greater",
-              flags = c("overwrite", "d")) # diagonal neighbors
+              flags = c("overwrite")) # diagonal neighbors
     greater_area_reclassed_name <-  paste0(greater_area_name, "_r")
     write_lines(paste0("* = 1"), "config/rcl_tables/grass/rule.txt")
     execGRASS("r.reclass",
@@ -345,7 +344,7 @@ for (true_lu in true_landuse_list){
               output = lesser_area_name,
               value =  subset(patch_size, species == specie)$value,
               mode = "lesser",
-              flags = c("overwrite", "d")) # diagonal neighbors
+              flags = c("overwrite")) # diagonal neighbors
     lesser_area_reclassed_name <- paste0(lesser_area_name, "_r")
     write_lines(paste0("* = ", as.character(subset(too_small, species==specie)$value)),
                 "config/rcl_tables/grass/rule.txt")
@@ -373,7 +372,6 @@ for (true_lu in true_landuse_list){
               output = paste0("outputs/reclassed/TRUE_lu_",ts,"_", specie, ".tif"),
               flags=c('overwrite'))
   }
-}
 }
 
 # test <- stack(map(list.files("outputs/reclassed/", full.names = T), raster))
@@ -705,7 +703,7 @@ for (sce in sce_dir_vec){
                   output = greater_area_name,
                   value =  subset(patch_size, species == specie)$value,
                   mode = "greater",
-                  flags = c("overwrite", "d")) # diagonal neighbors
+                  flags = c("overwrite")) # diagonal neighbors
         greater_area_reclassed_name <-  paste0(greater_area_name, "_r")
         write_lines(paste0("* = 1"), "config/rcl_tables/grass/rule.txt")
         execGRASS("r.reclass",
@@ -722,7 +720,7 @@ for (sce in sce_dir_vec){
                   output = lesser_area_name,
                   value =  subset(patch_size, species == specie)$value,
                   mode = "lesser",
-                  flags = c("overwrite", "d")) # diagonal neighbors
+                  flags = c("overwrite")) # diagonal neighbors
         lesser_area_reclassed_name <- paste0(lesser_area_name, "_r")
         write_lines(paste0("* = ", as.character(subset(too_small, species==specie)$value)),
                     "config/rcl_tables/grass/rule.txt")
