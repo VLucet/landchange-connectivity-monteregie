@@ -502,11 +502,11 @@ for (sce in sce_dir_vec){
                   expression = paste0(binary_forest_name_scaled, " = ", binary_forest_name, " / 10.0"),
                   flags = "overwrite")
 
-         execGRASS("r.out.gdal",
-                   input = binary_forest_name_scaled,
-                   format='GTiff',createopt='COMPRESS=LZW',
-                   output = paste0("outputs/reclassed/", binary_forest_name_scaled, ".tif"),
-                   flags=c('overwrite'))
+         #execGRASS("r.out.gdal",
+          #         input = binary_forest_name_scaled,
+          #         format='GTiff',createopt='COMPRESS=LZW',
+          #         output = paste0("outputs/reclassed/", binary_forest_name_scaled, ".tif"),
+          #         flags=c('overwrite'))
 
         # ----------------------------------------------------------------------
 
@@ -750,7 +750,7 @@ for (sce in sce_dir_vec){
                                   "_", specie,"_.tif"),
                   flags=c('overwrite'))
 
-        execGRASS("g.remove", pattern=paste0(specie, "*"), type = "all", flags = "f")
+        #execGRASS("g.remove", pattern=paste0(specie, "*"), type = "all", flags = "f")
       }
       #execGRASS("g.remove", pattern=paste0("ts", the_ts), type = "all", flags = "f")
     }
