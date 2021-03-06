@@ -423,15 +423,14 @@ for (sce in sce_dir_vec){
   for (it in split_by_iter){
     print(it)
 
+    if(length(it) == 3){
+      # DO NOTHING
+    }else{
+      ts <- ts[c(1,5,10)]
+    }
+
     for(ts in unlist(it)){
       print(ts)
-      print(length(ts))
-
-      if(length(ts) == 3){
-        # DO NOTHING
-      }else{
-        ts <- ts[c(1,5,10)]
-      }
 
       base_name <- paste("s",sce_nb, tools::file_path_sans_ext(basename(ts)), sep = "_")
 
