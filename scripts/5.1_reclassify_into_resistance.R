@@ -34,7 +34,7 @@ sce_dir_vec <- list.files("libraries/stsim/monteregie-conncons-scripted.ssim.out
 
 # Template
 iter_template <- paste0("it", 1:STSIM_ITER)
-iter_template <- paste0("it", 1:5)
+iter_template <- paste0("it", 1)
 
 ## Load classification matrices
 species_list <- tools::file_path_sans_ext(list.files("config/rcl_tables/species/"))
@@ -69,6 +69,7 @@ initGRASS(gisBase = "/usr/lib/grass76/", gisDbase = "libraries/grass/",
 execGRASS("g.proj", flags = c("c"), proj4 = projection(raster(true_landuse_list[1])))
 execGRASS("g.mapset", mapset = "habsuit_1", flags = c("c", "overwrite"))
 
+if (FALSE){
 for (true_lu in true_landuse_list){
 
   base_name <- tools::file_path_sans_ext(basename(true_lu))
@@ -372,6 +373,7 @@ for (true_lu in true_landuse_list){
               output = paste0("outputs/reclassed/TRUE_lu_",ts,"_", specie, ".tif"),
               flags=c('overwrite'))
   }
+}
 }
 
 # test <- stack(map(list.files("outputs/reclassed/", full.names = T), raster))
