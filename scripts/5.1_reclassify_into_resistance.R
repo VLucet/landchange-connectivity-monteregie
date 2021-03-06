@@ -425,6 +425,7 @@ for (sce in sce_dir_vec){
 
     for(ts in unlist(it)){
       print(ts)
+      print(length(ts))
 
       if(length(ts) == 3){
         # DO NOTHING
