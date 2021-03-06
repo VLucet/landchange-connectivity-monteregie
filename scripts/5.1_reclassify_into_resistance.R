@@ -426,7 +426,7 @@ for (sce in sce_dir_vec){
     if(length(it) == 3){
       # DO NOTHING
     }else{
-      ts <- ts[c(1,5,10)]
+      it <- it[c(1,5,10)]
     }
 
     for(ts in unlist(it)){
