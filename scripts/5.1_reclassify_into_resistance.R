@@ -42,6 +42,9 @@ patch_size <- read_csv("config/rcl_tables/grass/patch_size.csv")
 non_habitat <- read_csv("config/rcl_tables/grass/non_habitat.csv")
 too_small <- read_csv("config/rcl_tables/grass/too_small.csv")
 
+## Patch zone
+patch_raster_path  <- 'data/land_use/aggregated/aggregated_lu_buffered_1990_to_patch.tif'
+
 #-------------------------------------------------------------------------------
 if (R_AGGR_FACT){
   true_landuse_list <- list.files("data/land_use/aggregated/", full.names=T,
@@ -69,6 +72,11 @@ initGRASS(gisBase = "/usr/lib/grass76/", gisDbase = "libraries/grass/",
 execGRASS("g.proj", flags = c("c"), proj4 = projection(raster(true_landuse_list[1])))
 execGRASS("g.mapset", mapset = "habsuit_1", flags = c("c", "overwrite"))
 
+  execGRASS("r.in.gdal",
+            input = patch_raster_path,
+            output = "patch_raster",
+            flags = c("overwrite"))
+
 for (true_lu in true_landuse_list){
 
   base_name <- tools::file_path_sans_ext(basename(true_lu))
@@ -91,6 +99,11 @@ for (true_lu in true_landuse_list){
             rules = "config/rcl_tables/grass/rule.txt",
             output = forest_name,
             flags = c("overwrite"))
+
+  # Change value in Patch
+  execGRASS("r.mapcalc",
+              expression = paste0(forest_name, " = ", forest_name, " - (10 * patch_raster)"),
+              flags = "overwrite")  
 
   # ONLY FOREST
   write_lines(c("0 thru 10 = NULL", "* = 1"), "config/rcl_tables/grass/rule.txt")
@@ -129,6 +142,7 @@ for (true_lu in true_landuse_list){
               flags = "overwrite")
 
     ## Reclass all forest based on prefered versus non prefered pixels
+    ## not really binary here because nuances
     binary_forest_name <- paste0(specie, "_", forest_name, "_b")
     execGRASS("r.reclass",
               input = forest_name,
@@ -386,6 +400,11 @@ initGRASS(gisBase = "/usr/lib/grass76/", gisDbase = "libraries/grass/",
           override = TRUE)
 execGRASS("g.proj", flags = c("c"), proj4 = projection(raster(true_landuse_list[1])))
 execGRASS("g.mapset", mapset = "habsuit_2", flags = c("c", "overwrite"))
+
+  execGRASS("r.in.gdal",
+            input = patch_raster_path,
+            output = "patch_raster",
+            flags = c("overwrite"))
 
 for (sce in sce_dir_vec){
 
