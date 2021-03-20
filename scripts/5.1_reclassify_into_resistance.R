@@ -477,6 +477,11 @@ for (sce in sce_dir_vec[c(4)]){ # ,7,10,13,16
                 output = forest_name,
                 flags = c("overwrite"))
 
+      # Change value in Patch
+      execGRASS("r.mapcalc",
+                expression = paste0(forest_name, " = if((", forest_name, " == 22 && patch_raster==1), 12, ", forest_name, ")"),
+                flags = "overwrite")
+
       # ONLY FOREST
       write_lines(c("0 thru 10 = NULL", "* = 1"), "config/rcl_tables/grass/rule.txt")
       forest_only_name <- paste0(base_name,"_for_only")
@@ -493,11 +498,11 @@ for (sce in sce_dir_vec[c(4)]){ # ,7,10,13,16
                 output = forest_clumped_name,
                 flags = c("overwrite"))
 
-       execGRASS("r.out.gdal",
-                 input = forest_clumped_name,
-                 format='GTiff',createopt='COMPRESS=LZW',
-                 output = paste0("outputs/reclassed/", forest_clumped_name, ".tif"),
-                 flags=c('overwrite'))
+      #  execGRASS("r.out.gdal",
+      #            input = forest_clumped_name,
+      #            format='GTiff',createopt='COMPRESS=LZW',
+      #            output = paste0("outputs/reclassed/", forest_clumped_name, ".tif"),
+      #            flags=c('overwrite'))
 
       # Get the no forest **
       write_lines(c("10 thru 100 = NULL", "* = *"), "config/rcl_tables/grass/rule.txt")
