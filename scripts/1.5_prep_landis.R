@@ -131,7 +131,7 @@ writeRaster(patched_region$lu.1990,'data/land_use/aggregated/aggregated_lu_buffe
             format="GTiff", overwrite=T) 
 
 baseline_combined[is.na(baseline_combined) & 
-                    !is.na(lu.stack.buf.ag$aggregated_lu_buffered_new_roads_2010)] <-  # missing value replaced
+                    !is.na(lu.stack.buf.ag$aggregated_lu_buffered_new_roads_2010)] <- 12 # missing value replaced
 
 # reproj and crop
 landis_stack <- stack(baseline_combined, landtypes_reproj)
