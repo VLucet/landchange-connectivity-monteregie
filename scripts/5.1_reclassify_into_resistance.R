@@ -772,12 +772,12 @@ for (sce in sce_dir_vec[c(4,7,10,13,16)]){
         if (specie == "MAAM"){
           # Change value in Patch
             execGRASS("r.mapcalc",
-                      expression = paste0(final_name, " = ", final_name, " - (8 * patch_raster)"),
+                      expression = paste0(final_name, " = ", final_name, " + (7 * patch_raster)"),
                       flags = "overwrite")
         } else if(specie == "BLBR"){
           # Change value in Patch
             execGRASS("r.mapcalc",
-                      expression = paste0(final_name, " = ", final_name, " - (4 * patch_raster)"),
+                      expression = paste0(final_name, " = ", final_name, " + (3 * patch_raster)"),
                       flags = "overwrite")
         }
 
