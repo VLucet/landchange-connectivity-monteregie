@@ -106,11 +106,11 @@ for (true_lu in true_landuse_list){
               expression = paste0(forest_name, " = ", forest_name, " - (10 * patch_raster)"),
               flags = "overwrite")
 
-  execGRASS("r.out.gdal",
-              input = forest_name,
-              format='GTiff',createopt='COMPRESS=LZW',
-              output = paste0(forest_name,".tif"),
-              flags=c('overwrite'))
+  # execGRASS("r.out.gdal",
+  #             input = forest_name,
+  #             format='GTiff',createopt='COMPRESS=LZW',
+  #             output = paste0("outputs/reclassed/",forest_name,".tif"),
+  #             flags=c('overwrite'))
 
   # ONLY FOREST
   write_lines(c("0 thru 10 = NULL", "* = 1"), "config/rcl_tables/grass/rule.txt")
@@ -411,7 +411,8 @@ execGRASS("g.mapset", mapset = "habsuit_2", flags = c("c", "overwrite"))
   execGRASS("r.in.gdal",
             input = patch_raster_path,
             output = "patch_raster",
-            flags = c("overwrite"))
+            flags = c("o","overwrite"))
+  execGRASS("r.null", map = "patch_raster", null=0)
 
 for (sce in sce_dir_vec){
 
