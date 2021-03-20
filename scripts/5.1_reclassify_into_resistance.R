@@ -105,6 +105,12 @@ for (true_lu in true_landuse_list){
               expression = paste0(forest_name, " = ", forest_name, " - (10 * patch_raster)"),
               flags = "overwrite")  
 
+  execGRASS("r.out.gdal",
+              input = forest_name,
+              format='GTiff',createopt='COMPRESS=LZW',
+              output = paste0(forest_name,".tif"),
+              flags=c('overwrite'))
+
   # ONLY FOREST
   write_lines(c("0 thru 10 = NULL", "* = 1"), "config/rcl_tables/grass/rule.txt")
   forest_only_name <- paste0(base_name,"_for_only")
