@@ -451,7 +451,7 @@ for (sce in sce_dir_vec){
     if(length(it) == 3){
       # DO NOTHING
     }else{
-      it <- it[c(1,4,10)]
+      it <- it[c(1,10)]
     }
 
     for(ts in unlist(it)){
