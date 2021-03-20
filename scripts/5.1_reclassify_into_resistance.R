@@ -769,6 +769,18 @@ for (sce in sce_dir_vec[c(4,7,10,13,16)]){
                   output = final_name,
                   flags = "overwrite")
 
+        if (specie == "MAAM"){
+          # Change value in Patch
+            execGRASS("r.mapcalc",
+                      expression = paste0(final_name, " = ", final_name, " - (8 * patch_raster)"),
+                      flags = "overwrite")
+        } else if(specie == "BLBR"){
+          # Change value in Patch
+            execGRASS("r.mapcalc",
+                      expression = paste0(final_name, " = ", final_name, " - (4 * patch_raster)"),
+                      flags = "overwrite")
+        }
+
         the_it <- unlist(str_split(unlist(str_split(base_name, pattern = "it*"))[2], pattern = "\\."))[1]
         the_ts <- unlist(str_split(base_name, pattern = "ts"))[2]
 
