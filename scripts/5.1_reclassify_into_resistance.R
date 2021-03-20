@@ -76,6 +76,7 @@ execGRASS("g.mapset", mapset = "habsuit_1", flags = c("c", "overwrite"))
             input = patch_raster_path,
             output = "patch_raster",
             flags = c("o","overwrite"))
+  execGRASS("r.null", map = "patch_raster", null="0")
 
 for (true_lu in true_landuse_list){
 
@@ -103,7 +104,7 @@ for (true_lu in true_landuse_list){
   # Change value in Patch
   execGRASS("r.mapcalc",
               expression = paste0(forest_name, " = ", forest_name, " - (10 * patch_raster)"),
-              flags = "overwrite")  
+              flags = "overwrite")
 
   execGRASS("r.out.gdal",
               input = forest_name,
