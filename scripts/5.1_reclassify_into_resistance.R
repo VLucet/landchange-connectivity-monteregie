@@ -76,7 +76,7 @@ execGRASS("g.mapset", mapset = "habsuit_1", flags = c("c", "overwrite"))
             input = patch_raster_path,
             output = "patch_raster",
             flags = c("o","overwrite"))
-  execGRASS("r.null", map = "patch_raster", null="0")
+  execGRASS("r.null", map = "patch_raster", null=0)
 
 for (true_lu in true_landuse_list){
 
