@@ -103,7 +103,7 @@ for (true_lu in true_landuse_list){
 
   # Change value in Patch
   execGRASS("r.mapcalc",
-              expression = paste0(forest_name, " = ", forest_name, " - (10 * patch_raster)"),
+              expression = paste0(forest_name, " = if((", forest_name, " == 22 && patch_raster==1), 12, ", forest_name, ")"),
               flags = "overwrite")
 
   # execGRASS("r.out.gdal",
@@ -414,7 +414,7 @@ execGRASS("g.mapset", mapset = "habsuit_2", flags = c("c", "overwrite"))
             flags = c("o","overwrite"))
   execGRASS("r.null", map = "patch_raster", null=0)
 
-for (sce in sce_dir_vec[c(4,7,10,13,16)]){
+for (sce in sce_dir_vec[c(4)]){ # ,7,10,13,16
 
   sce_nb <- as.numeric(unlist(lapply(str_split(sce, "-"), FUN = last)))
 
@@ -769,17 +769,17 @@ for (sce in sce_dir_vec[c(4,7,10,13,16)]){
                   output = final_name,
                   flags = "overwrite")
 
-        if (specie == "MAAM"){
-          # Change value in Patch
-            execGRASS("r.mapcalc",
-                      expression = paste0(final_name, " = ", final_name, " + (7 * patch_raster)"),
-                      flags = "overwrite")
-        } else if(specie == "BLBR"){
-          # Change value in Patch
-            execGRASS("r.mapcalc",
-                      expression = paste0(final_name, " = ", final_name, " + (3 * patch_raster)"),
-                      flags = "overwrite")
-        }
+        # if (specie == "MAAM"){
+        #   # Change value in Patch
+        #     execGRASS("r.mapcalc",
+        #               expression = paste0(final_name, " = if((", final_name, " == ?? && patch_raster==1), 8, ", final_name, ")"),
+        #               flags = "overwrite")
+        # } else if(specie == "BLBR"){
+        #   # Change value in Patch
+        #     execGRASS("r.mapcalc",
+        #               expression = paste0(final_name, " = if((", final_name, " == ?? && patch_raster==1), 4, ", final_name, ")"),
+        #               flags = "overwrite")
+        # }
 
         the_it <- unlist(str_split(unlist(str_split(base_name, pattern = "it*"))[2], pattern = "\\."))[1]
         the_ts <- unlist(str_split(base_name, pattern = "ts"))[2]
