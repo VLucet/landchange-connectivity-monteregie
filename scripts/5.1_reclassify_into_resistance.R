@@ -731,17 +731,35 @@ for (sce in sce_dir_vec[c(4)]){ # ,7,10,13,16
                   flags = "overwrite")
         execGRASS("r.null", map = habitat_suit, setnull="0")
 
+        execGRASS("r.out.gdal",
+                   input = habitat_suit,
+                   format='GTiff',createopt='COMPRESS=LZW',
+                   output = paste0("outputs/reclassed/", habitat_suit, ".tif"),
+                   flags=c('overwrite'))
+
         habitat_suit_interm <- paste0(stat_zonal_name, "_su_interm")
         execGRASS("r.mapcalc",
                   expression=paste0(habitat_suit_interm," = (", stat_zonal_name, " >= 0.3 || ", stat_zonal_name, "< 0.5)"),
                   flags = "overwrite")
         execGRASS("r.null", map = habitat_suit_interm, setnull="0")
 
+        execGRASS("r.out.gdal",
+                   input = habitat_suit_interm,
+                   format='GTiff',createopt='COMPRESS=LZW',
+                   output = paste0("outputs/reclassed/", habitat_suit_interm, ".tif"),
+                   flags=c('overwrite'))
+
         habitat_unsuit <- paste0(stat_zonal_name, "_un")
         execGRASS("r.mapcalc",
                   expression=paste0(habitat_unsuit, " = ",stat_zonal_name, " < 0.3"),
                   flags = "overwrite")
         execGRASS("r.null", map = habitat_unsuit, setnull="0")
+
+        execGRASS("r.out.gdal",
+                   input = habitat_unsuit,
+                   format='GTiff',createopt='COMPRESS=LZW',
+                   output = paste0("outputs/reclassed/", habitat_unsuit, ".tif"),
+                   flags=c('overwrite'))
 
         # Reclass all interm habitat
         write_lines(paste0("* = ", as.character(subset(interm, species==specie)$value)),
