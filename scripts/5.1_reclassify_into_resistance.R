@@ -790,19 +790,19 @@ for (sce in sce_dir_vec[c(4)]){ # ,7,10,13,16
                   output = final_name,
                   flags = "overwrite")
 
-        if (specie == "RASY"){
-          # Change value in Patch
-            execGRASS("r.mapcalc",
-                      expression = paste0(final_name, " = if((", final_name, " == 1 && patch_raster==1), 4, ", final_name, ")"),
-                      flags = "overwrite")
-        }
+        # if (specie == "RASY"){
+        #   # Change value in Patch
+        #     execGRASS("r.mapcalc",
+        #               expression = paste0(final_name, " = if((", final_name, " == 1 && patch_raster==1), 4, ", final_name, ")"),
+        #               flags = "overwrite")
+        # }
         
-        if(specie == "BLBR"){
-          # Change value in Patch
-            execGRASS("r.mapcalc",
-                      expression = paste0(final_name, " = if((", final_name, " == 1 && patch_raster==1), 4, ", final_name, ")"),
-                      flags = "overwrite")
-        }
+        # if(specie == "BLBR"){
+        #   # Change value in Patch
+        #     execGRASS("r.mapcalc",
+        #               expression = paste0(final_name, " = if((", final_name, " == 1 && patch_raster==1), 4, ", final_name, ")"),
+        #               flags = "overwrite")
+        # }
 
         the_it <- unlist(str_split(unlist(str_split(base_name, pattern = "it*"))[2], pattern = "\\."))[1]
         the_ts <- unlist(str_split(base_name, pattern = "ts"))[2]
