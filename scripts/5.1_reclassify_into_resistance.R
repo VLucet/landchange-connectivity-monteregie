@@ -726,12 +726,12 @@ for (sce in sce_dir_vec[c(4)]){ # ,7,10,13,16
         # separate unsuitable from suitable patches
         habitat_suit <- paste0(stat_zonal_name, "_su")
         execGRASS("r.mapcalc",
-                  expression=paste0(habitat_suit," = ", stat_zonal_name, " >= 0.5"),
+                  expression=paste0(habitat_suit," = ", stat_zonal_name, " >= 0.4"),
                   flags = "overwrite")
         execGRASS("r.null", map = habitat_suit, setnull="0")
         habitat_unsuit <- paste0(stat_zonal_name, "_un")
         execGRASS("r.mapcalc",
-                  expression=paste0(habitat_unsuit, " = ",stat_zonal_name, " < 0.5"),
+                  expression=paste0(habitat_unsuit, " = ",stat_zonal_name, " < 0.4"),
                   flags = "overwrite")
         execGRASS("r.null", map = habitat_unsuit, setnull="0")
 
