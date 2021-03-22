@@ -41,6 +41,7 @@ species_list <- tools::file_path_sans_ext(list.files("config/rcl_tables/species/
 patch_size <- read_csv("config/rcl_tables/grass/patch_size.csv")
 non_habitat <- read_csv("config/rcl_tables/grass/non_habitat.csv")
 too_small <- read_csv("config/rcl_tables/grass/too_small.csv")
+interm  <- read_csv("config/rcl_tables/grass/interm.csv")
 
 ## Patch zone
 patch_raster_path  <- 'data/land_use/aggregated/aggregated_lu_buffered_1990_to_patch.tif'
@@ -726,14 +727,30 @@ for (sce in sce_dir_vec[c(4)]){ # ,7,10,13,16
         # separate unsuitable from suitable patches
         habitat_suit <- paste0(stat_zonal_name, "_su")
         execGRASS("r.mapcalc",
-                  expression=paste0(habitat_suit," = ", stat_zonal_name, " >= 0.4"),
+                  expression=paste0(habitat_suit," = ", stat_zonal_name, " >= 0.6"),
                   flags = "overwrite")
         execGRASS("r.null", map = habitat_suit, setnull="0")
+
+        habitat_suit_interm <- paste0(stat_zonal_name, "_su_interm")
+        execGRASS("r.mapcalc",
+                  expression=paste0(habitat_suit_interm," = (", stat_zonal_name, " >= 0.4 || ", stat_zonal_name, "< 0.6) * 2"),
+                  flags = "overwrite")
+        execGRASS("r.null", map = habitat_suit_interm, setnull="0")
+
         habitat_unsuit <- paste0(stat_zonal_name, "_un")
         execGRASS("r.mapcalc",
                   expression=paste0(habitat_unsuit, " = ",stat_zonal_name, " < 0.4"),
                   flags = "overwrite")
         execGRASS("r.null", map = habitat_unsuit, setnull="0")
+
+        # Reclass all interm habitat
+        write_lines(paste0("* = ", as.character(subset(interm, species==specie)$value)),
+                    "config/rcl_tables/grass/rule.txt")
+        habitat_suit_interm_reclassed <- paste0(habitat_suit_interm, "_r")
+        execGRASS("r.reclass",
+                  input = habitat_suit_interm,
+                  output = habitat_suit_interm_reclassed,
+                  rules = "config/rcl_tables/grass/rule.txt")
 
         # Reclass all unsuit based on non habitat rule
         write_lines(paste0("* = ", as.character(subset(non_habitat, species==specie)$value)),
@@ -784,6 +801,7 @@ for (sce in sce_dir_vec[c(4)]){ # ,7,10,13,16
         execGRASS("r.patch",
                   input = c(no_forest_reclassed_name,
                             habitat_unsuit_reclassed,
+                            habitat_suit_interm_reclassed,
                             lesser_area_reclassed_name,
                             greater_area_reclassed_name
                   ),
