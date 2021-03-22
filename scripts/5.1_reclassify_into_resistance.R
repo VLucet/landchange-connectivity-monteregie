@@ -739,7 +739,7 @@ for (sce in sce_dir_vec[c(4)]){ # ,7,10,13,16
 
         habitat_unsuit <- paste0(stat_zonal_name, "_un")
         execGRASS("r.mapcalc",
-                  expression=paste0(habitat_unsuit, " = ",stat_zonal_name, " < 0.4"),
+                  expression=paste0(habitat_unsuit, " = ",stat_zonal_name, " < 0.3"),
                   flags = "overwrite")
         execGRASS("r.null", map = habitat_unsuit, setnull="0")
 
