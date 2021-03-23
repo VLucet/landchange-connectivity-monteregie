@@ -760,6 +760,24 @@ for (sce in sce_dir_vec){ # *4*,7,10,13,16
                   flags = "overwrite")
         execGRASS("r.null", map = habitat_suit_interm, setnull="0")
 
+        habitat_suit_all <- paste0(stat_zonal_name, "_su_all")
+        execGRASS("r.mapcalc",
+                  expression=paste0(habitat_suit_all," = (", stat_zonal_name, " >= 0.25"),
+                  flags = "overwrite")
+        execGRASS("r.null", map = habitat_suit_all, setnull="0")
+
+        habitat_suit_all_clumped  <- paste0(habitat_suit_all, "_c")
+        execGRASS("r.clump",
+            input = habitat_suit_all,
+            output = habitat_suit_all_clumped,
+            flags = c("overwrite"))
+
+        execGRASS("r.out.gdal",
+                   input = habitat_suit_all_clumped,
+                   format='GTiff',createopt='COMPRESS=LZW',
+                   output = paste0("outputs/hab_suit/", habitat_suit_all_clumped, ".tif"),
+                   flags=c('overwrite'))
+
         # execGRASS("r.out.gdal",
         #            input = habitat_suit_interm,
         #            format='GTiff',createopt='COMPRESS=LZW',
