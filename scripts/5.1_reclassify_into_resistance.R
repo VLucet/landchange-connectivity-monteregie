@@ -327,11 +327,27 @@ for (true_lu in true_landuse_list){
               expression=paste0(habitat_suit," = ",stat_zonal_name, " >= 0.5"),
               flags = "overwrite")
     execGRASS("r.null", map = habitat_suit, setnull="0")
+
+    habitat_suit_interm <- paste0(stat_zonal_name, "_su_interm")
+    execGRASS("r.mapcalc",
+              expression=paste0(habitat_suit_interm," = (", stat_zonal_name, " >= 0.25 && ", stat_zonal_name, "< 0.5)"),
+              flags = "overwrite")
+    execGRASS("r.null", map = habitat_suit_interm, setnull="0")
+
     habitat_unsuit <- paste0(stat_zonal_name, "_un")
     execGRASS("r.mapcalc",
-              expression=paste0(habitat_unsuit, " = ",stat_zonal_name, " < 0.5"),
+              expression=paste0(habitat_unsuit, " = ",stat_zonal_name, " < 0.25"),
               flags = "overwrite")
     execGRASS("r.null", map = habitat_unsuit, setnull="0")
+
+    # Reclass all interm habitat
+    write_lines(paste0("* = ", as.character(subset(interm, species==specie)$value)),
+                "config/rcl_tables/grass/rule.txt")
+    habitat_suit_interm_reclassed <- paste0(habitat_suit_interm, "_r")
+    execGRASS("r.reclass",
+              input = habitat_suit_interm,
+              output = habitat_suit_interm_reclassed,
+              rules = "config/rcl_tables/grass/rule.txt")
 
     # Reclass all unsuit based on non habitat rule
     write_lines(paste0("* = ", as.character(subset(non_habitat, species==specie)$value)),
@@ -382,6 +398,7 @@ for (true_lu in true_landuse_list){
     execGRASS("r.patch",
               input = c(no_forest_reclassed_name,
                         habitat_unsuit_reclassed,
+                        habitat_suit_interm_reclassed,
                         lesser_area_reclassed_name,
                         greater_area_reclassed_name
               ),
@@ -751,7 +768,7 @@ for (sce in sce_dir_vec){ # *4*,7,10,13,16
 
         habitat_unsuit <- paste0(stat_zonal_name, "_un")
         execGRASS("r.mapcalc",
-                  expression=paste0(habitat_unsuit, " = ",stat_zonal_name, " < 0.3"),
+                  expression=paste0(habitat_unsuit, " = ",stat_zonal_name, " < 0.25"),
                   flags = "overwrite")
         execGRASS("r.null", map = habitat_unsuit, setnull="0")
 
