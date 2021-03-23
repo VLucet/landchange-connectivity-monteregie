@@ -431,7 +431,7 @@ execGRASS("g.mapset", mapset = "habsuit_2", flags = c("c", "overwrite"))
             flags = c("o","overwrite"))
   execGRASS("r.null", map = "patch_raster", null=0)
 
-for (sce in sce_dir_vec[c(4)]){ # ,7,10,13,16
+for (sce in sce_dir_vec){ # *4*,7,10,13,16
 
   sce_nb <- as.numeric(unlist(lapply(str_split(sce, "-"), FUN = last)))
 
@@ -465,11 +465,11 @@ for (sce in sce_dir_vec[c(4)]){ # ,7,10,13,16
   for (it in split_by_iter){
     print(it)
 
-    if(length(it) == 3){
-      # DO NOTHING
-    }else{
-      it <- it[c(1,10)]
-    }
+    # if(length(it) == 3){
+    #   # DO NOTHING
+    # }else{
+    #   it <- it[c(1,10)]
+    # }
 
     for(ts in unlist(it)){
       print(ts)
@@ -852,13 +852,13 @@ for (sce in sce_dir_vec[c(4)]){ # ,7,10,13,16
                                   "_", specie,"_.tif"),
                   flags=c('overwrite'))
 
-        #execGRASS("g.remove", pattern=paste0(specie, "*"), type = "all", flags = "f")
+        execGRASS("g.remove", pattern=paste0(specie, "*"), type = "all", flags = "f")
       }
-      #execGRASS("g.remove", pattern=paste0("ts", the_ts), type = "all", flags = "f")
+      execGRASS("g.remove", pattern=paste0("ts", the_ts), type = "all", flags = "f")
     }
-    #execGRASS("g.remove", pattern=paste0("it", the_it), type = "all", flags = "f")
+    execGRASS("g.remove", pattern=paste0("it", the_it), type = "all", flags = "f")
   }
-  #execGRASS("g.remove", pattern=paste0("sce", sce_nb), type = "all", flags = "f")
+  execGRASS("g.remove", pattern=paste0("sce", sce_nb), type = "all", flags = "f")
 }
 
 #-------------------------------------------------------------------------------
