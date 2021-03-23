@@ -107,11 +107,11 @@ for (true_lu in true_landuse_list){
               expression = paste0(forest_name, " = if((", forest_name, " == 22 && patch_raster==1), 12, ", forest_name, ")"),
               flags = "overwrite")
 
-  execGRASS("r.out.gdal",
-              input = forest_name,
-              format='GTiff',createopt='COMPRESS=LZW',
-              output = paste0("outputs/reclassed/",forest_name,".tif"),
-              flags=c('overwrite'))
+  # execGRASS("r.out.gdal",
+  #             input = forest_name,
+  #             format='GTiff',createopt='COMPRESS=LZW',
+  #             output = paste0("outputs/reclassed/",forest_name,".tif"),
+  #             flags=c('overwrite'))
 
   # ONLY FOREST
   write_lines(c("0 thru 10 = NULL", "* = 1"), "config/rcl_tables/grass/rule.txt")
@@ -594,11 +594,11 @@ for (sce in sce_dir_vec[c(4)]){ # ,7,10,13,16
                   expression = paste0(roads_name_distance_reclassed_scaled, " = ", roads_name_distance_reclassed, " / 10.0"),
                   flags = "overwrite")
 
-         execGRASS("r.out.gdal",
-                   input = roads_name_distance_reclassed_scaled,
-                   format='GTiff',createopt='COMPRESS=LZW',
-                   output = paste0("outputs/reclassed/", roads_name_distance_reclassed_scaled, ".tif"),
-                   flags=c('overwrite'))
+        #  execGRASS("r.out.gdal",
+        #            input = roads_name_distance_reclassed_scaled,
+        #            format='GTiff',createopt='COMPRESS=LZW',
+        #            output = paste0("outputs/reclassed/", roads_name_distance_reclassed_scaled, ".tif"),
+        #            flags=c('overwrite'))
 
         if (specie == "RASY"){
 
@@ -631,11 +631,11 @@ for (sce in sce_dir_vec[c(4)]){ # ,7,10,13,16
                     expression = paste0(wetlands_name_distance_reclassed_scaled, " = ", wetlands_name_distance_reclassed, " / 10.0"),
                     flags = "overwrite")
 
-           execGRASS("r.out.gdal",
-                     input = wetlands_name_distance_reclassed_scaled,
-                     format='GTiff',createopt='COMPRESS=LZW',
-                     output = paste0("outputs/reclassed/", wetlands_name_distance_reclassed_scaled, ".tif"),
-                     flags=c('overwrite'))
+          #  execGRASS("r.out.gdal",
+          #            input = wetlands_name_distance_reclassed_scaled,
+          #            format='GTiff',createopt='COMPRESS=LZW',
+          #            output = paste0("outputs/reclassed/", wetlands_name_distance_reclassed_scaled, ".tif"),
+          #            flags=c('overwrite'))
 
         } else {
           wetlands_name_distance_reclassed_scaled <- ""
@@ -672,11 +672,11 @@ for (sce in sce_dir_vec[c(4)]){ # ,7,10,13,16
                     expression = paste0(urban_name_distance_reclassed_scaled, " = ", urban_name_distance_reclassed, " / 10.0"),
                     flags = "overwrite")
 
-           execGRASS("r.out.gdal",
-                     input = urban_name_distance_reclassed_scaled,
-                     format='GTiff',createopt='COMPRESS=LZW',
-                     output = paste0("outputs/reclassed/", urban_name_distance_reclassed_scaled, ".tif"),
-                     flags=c('overwrite'))
+          #  execGRASS("r.out.gdal",
+          #            input = urban_name_distance_reclassed_scaled,
+          #            format='GTiff',createopt='COMPRESS=LZW',
+          #            output = paste0("outputs/reclassed/", urban_name_distance_reclassed_scaled, ".tif"),
+          #            flags=c('overwrite'))
 
         } else {
           urban_name_distance_reclassed_scaled <- ""
@@ -701,11 +701,11 @@ for (sce in sce_dir_vec[c(4)]){ # ,7,10,13,16
                   expression = multiplier_expression,
                   flags = "overwrite")
 
-         execGRASS("r.out.gdal",
-                   input = multiplied_forest_name,
-                   format='GTiff',createopt='COMPRESS=LZW',
-                   output = paste0("outputs/reclassed/", multiplied_forest_name, ".tif"),
-                   flags=c('overwrite'))
+        #  execGRASS("r.out.gdal",
+        #            input = multiplied_forest_name,
+        #            format='GTiff',createopt='COMPRESS=LZW',
+        #            output = paste0("outputs/reclassed/", multiplied_forest_name, ".tif"),
+        #            flags=c('overwrite'))
 
         # ----------------------------------------------------------------------
 
@@ -718,11 +718,11 @@ for (sce in sce_dir_vec[c(4)]){ # ,7,10,13,16
                   output = stat_zonal_name,
                   flags = "overwrite")
 
-        execGRASS("r.out.gdal",
-                   input = stat_zonal_name,
-                   format='GTiff',createopt='COMPRESS=LZW',
-                   output = paste0("outputs/reclassed/", stat_zonal_name, ".tif"),
-                   flags=c('overwrite'))
+        # execGRASS("r.out.gdal",
+        #            input = stat_zonal_name,
+        #            format='GTiff',createopt='COMPRESS=LZW',
+        #            output = paste0("outputs/reclassed/", stat_zonal_name, ".tif"),
+        #            flags=c('overwrite'))
 
         # separate unsuitable from suitable patches
         habitat_suit <- paste0(stat_zonal_name, "_su")
@@ -731,11 +731,11 @@ for (sce in sce_dir_vec[c(4)]){ # ,7,10,13,16
                   flags = "overwrite")
         execGRASS("r.null", map = habitat_suit, setnull="0")
 
-        execGRASS("r.out.gdal",
-                   input = habitat_suit,
-                   format='GTiff',createopt='COMPRESS=LZW',
-                   output = paste0("outputs/reclassed/", habitat_suit, ".tif"),
-                   flags=c('overwrite'))
+        # execGRASS("r.out.gdal",
+        #            input = habitat_suit,
+        #            format='GTiff',createopt='COMPRESS=LZW',
+        #            output = paste0("outputs/reclassed/", habitat_suit, ".tif"),
+        #            flags=c('overwrite'))
 
         habitat_suit_interm <- paste0(stat_zonal_name, "_su_interm")
         execGRASS("r.mapcalc",
@@ -743,11 +743,11 @@ for (sce in sce_dir_vec[c(4)]){ # ,7,10,13,16
                   flags = "overwrite")
         execGRASS("r.null", map = habitat_suit_interm, setnull="0")
 
-        execGRASS("r.out.gdal",
-                   input = habitat_suit_interm,
-                   format='GTiff',createopt='COMPRESS=LZW',
-                   output = paste0("outputs/reclassed/", habitat_suit_interm, ".tif"),
-                   flags=c('overwrite'))
+        # execGRASS("r.out.gdal",
+        #            input = habitat_suit_interm,
+        #            format='GTiff',createopt='COMPRESS=LZW',
+        #            output = paste0("outputs/reclassed/", habitat_suit_interm, ".tif"),
+        #            flags=c('overwrite'))
 
         habitat_unsuit <- paste0(stat_zonal_name, "_un")
         execGRASS("r.mapcalc",
@@ -755,11 +755,11 @@ for (sce in sce_dir_vec[c(4)]){ # ,7,10,13,16
                   flags = "overwrite")
         execGRASS("r.null", map = habitat_unsuit, setnull="0")
 
-        execGRASS("r.out.gdal",
-                   input = habitat_unsuit,
-                   format='GTiff',createopt='COMPRESS=LZW',
-                   output = paste0("outputs/reclassed/", habitat_unsuit, ".tif"),
-                   flags=c('overwrite'))
+        # execGRASS("r.out.gdal",
+        #            input = habitat_unsuit,
+        #            format='GTiff',createopt='COMPRESS=LZW',
+        #            output = paste0("outputs/reclassed/", habitat_unsuit, ".tif"),
+        #            flags=c('overwrite'))
 
         # Reclass all interm habitat
         write_lines(paste0("* = ", as.character(subset(interm, species==specie)$value)),
