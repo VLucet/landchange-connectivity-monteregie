@@ -150,6 +150,7 @@ final_df <- foreach(sce = sce_nb_vec, .combine = dplyr::bind_rows) %do% {
       df2$zone <- as.factor(df2$zone)
       df2$species <- species
       df2$timestep <- ts_template[which(ts_vec == timestep)]
+      df2$it <- iter # TODO To remove, this is temp
       print(head(df2))
       
       final <- df2 %>% 
