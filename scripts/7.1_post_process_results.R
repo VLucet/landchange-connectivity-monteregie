@@ -60,7 +60,7 @@ sce_nb_vec <- paste0("sce_", as.numeric(unlist(lapply(str_split(sce_dir_vec, "-"
                                                       FUN = last))))
 
 # Templates
-iter_template <- paste0("it_", 1:STSIM_ITER, "_")
+iter_template <- paste0("it_", 1:STSIM_ITER, "_")[1]
 #-------------------------------------------------------------------------------
 
 # Load raster inputs (maybe this will take too much ram?)
