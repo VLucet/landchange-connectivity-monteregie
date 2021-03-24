@@ -105,7 +105,7 @@ get_ts_template <- function(list_of_files, step_save) {
 
 #-------------------------------------------------------------------------------
 
-final_df <- foreach(sce = sce_nb_vec, .combine = dplyr::bind_rows) %dopar% {
+final_df <- foreach(sce = sce_nb_vec, .combine = dplyr::bind_rows) %do% {
   
   library(tidyverse)
   library(raster)
