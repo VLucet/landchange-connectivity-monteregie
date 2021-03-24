@@ -150,14 +150,14 @@ final_df <- foreach(sce = sce_nb_vec, .combine = dplyr::bind_rows) %dopar% {
       df2$zone <- as.factor(df2$zone)
       df2$species <- species
       df2$timestep <- ts_template[which(ts_vec == timestep)]
-      df2$iteration <- iter # TODO To remove, this is temp
+      # df2$iteration <- iter # TODO To remove, this is temp
       print(head(df2))
 
       final <- df2 %>% rename(current = value)
       
-      # final <- df2 %>% 
-      #   pivot_longer(cols = contains("it"), names_to = "iteration", 
-      #                values_to = "current")
+      final <- df2 %>% 
+        pivot_longer(cols = contains("it"), names_to = "iteration", 
+                     values_to = "current")
       
       ts_list[[which(ts_vec == timestep)]] <- final
     }
@@ -230,7 +230,6 @@ foreach(sce = sce_nb_vec) %dopar% {
   }
   removeTmpFiles(h=0)
 }
-
 }
 #-------------------------------------------------------------------------------
 

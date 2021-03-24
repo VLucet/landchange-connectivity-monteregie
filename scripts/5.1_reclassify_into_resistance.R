@@ -34,7 +34,7 @@ sce_dir_vec <- list.files("libraries/stsim/monteregie-conncons-scripted.ssim.out
 
 # Template
 iter_template <- paste0("it", 1:STSIM_ITER)
-iter_template <- paste0("it", 1)
+# iter_template <- paste0("it", 1)
 
 ## Load classification matrices
 species_list <- tools::file_path_sans_ext(list.files("config/rcl_tables/species/"))
