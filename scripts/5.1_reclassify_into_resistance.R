@@ -448,7 +448,7 @@ execGRASS("g.mapset", mapset = "habsuit_2", flags = c("c", "overwrite"))
             flags = c("o","overwrite"))
   execGRASS("r.null", map = "patch_raster", null=0)
 
-for (sce in sce_dir_vec){ # *4*,7,10,13,16
+for (sce in sce_dir_vec[-c(2,5,8,11,14)]){ # *4*,7,10,13,16
 
   sce_nb <- as.numeric(unlist(lapply(str_split(sce, "-"), FUN = last)))
 
