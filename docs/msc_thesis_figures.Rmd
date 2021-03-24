@@ -498,17 +498,15 @@ colors_sce <-
              color = c("#8DA0CB", "#FC4E2A", "#800026"), stringsAsFactors = F)
 
 fig_1_static_chap_1 <- joined %>% 
-  filter(climate != "none", chapter %in% c("none", "both", "chap_1"), species=="MAAM") %>% 
+  filter(climate != "none", chapter %in% c("none", "both", "chap_1")) %>% 
   group_by(scenarioId, species, iteration) %>% 
   group_modify(~mutate(.x , baseline = subset(.x, timestep == 2010)$sum_cur, 
                        the_diff = ((sum_cur-baseline)/baseline)*100 )) %>% 
-  mutate(unique=paste0(sce, iteration)) %>% 
   ggplot(aes(x=timestep, y=the_diff, col=climate)) +
   scale_color_manual(values = colors_sce$color, 
                      labels = c("Historic", "Baseline", "RCP 8.5")) +
-  #geom_smooth(aes(group = sce, linetype=code_run), alpha=0.5, method="loess") +
-  geom_point(aes(group = sce), size=0.1) +
-  geom_line(aes(group=unique, linetype=code_run))+
+  geom_smooth(aes(group = sce, linetype=code_run), alpha=0.5, method="loess") +
+  #geom_point(aes(group = sce)) +
   scale_linetype_manual(values=c("solid", "twodash")) +
   facet_wrap(~species, scales = "fixed") +
   geom_hline(yintercept = 0, linetype = "dashed", alpha = 0.5) +
@@ -519,12 +517,12 @@ fig_1_static_chap_1 <- joined %>%
        linetype = "Run") +
   guides(col = guide_legend(ncol = 2, nrow=2), 
          linetype = guide_legend(nrow=1, override.aes = list(colour = 'black'))) +
-  theme(legend.position = c(0, 0))+
+  theme(legend.position = c(0.85, 0.15))+
   NULL
-fig_1_static_chap_1
-# ggsave(fig_1_static_chap_1, 
-#        filename = "../thesis/figures/connectivity_decrease_x5species_chap1.png", 
-#        width = the_width, height = the_height, dpi = the_dpi)
+#fig_1_static_chap_1
+ggsave(fig_1_static_chap_1, 
+       filename = "../thesis/figures/connectivity_decrease_x5species_chap1.png", 
+       width = the_width, height = the_height, dpi = the_dpi)
 ```
 
 ![](../thesis/figures/connectivity_decrease_x5species_chap1.png)
@@ -585,13 +583,10 @@ fig_1_static_chap_2 <- joined %>%
   group_by(scenarioId, species, iteration) %>% 
   group_modify(~mutate(.x , baseline = subset(.x, timestep == 2010)$sum_cur, 
                        the_diff = ((sum_cur-baseline)/baseline)*100 )) %>% 
-  mutate(unique=paste0(sce, iteration)) %>% 
   ggplot(aes(x=timestep, y=the_diff, col=climate)) +
   scale_color_manual(values = colors_sce$color,
                      labels = c("Historic", "Baseline", "RCP 8.5")) +
-  #geom_smooth(aes(group = sce, linetype=code_run), alpha=0.5, method="loess") +
-  geom_point(aes(group = sce), size=0.1) +
-  geom_line(aes(group=unique, linetype=code_run))+
+  geom_smooth(aes(group = sce, linetype=code_run), alpha=0.5, method="loess") +
   scale_linetype_manual(values=c("solid", "dashed", "longdash", "dotted")) +
   facet_wrap(~species, scales = "fixed") +
   geom_hline(yintercept = 0, linetype = "dashed", alpha = 0.5) +
@@ -605,11 +600,10 @@ fig_1_static_chap_2 <- joined %>%
                                  override.aes = list(colour = 'black'))) +
   theme(legend.position = c(0.85, 0.15))+
   NULL
-fig_1_static_chap_2
 #fig_1_static_chap_2
-# ggsave(fig_1_static_chap_2, 
-#        filename = "../thesis/figures/connectivity_decrease_x5species_chap2.png", 
-#        width = the_width, height = the_height, dpi = the_dpi)
+ggsave(fig_1_static_chap_2, 
+       filename = "../thesis/figures/connectivity_decrease_x5species_chap2.png", 
+       width = the_width, height = the_height, dpi = the_dpi)
 ```
 
 ![](../thesis/figures/connectivity_decrease_x5species_chap2.png)
