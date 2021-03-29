@@ -61,7 +61,7 @@ sce_nb_vec <- paste0("sce_", as.numeric(unlist(lapply(str_split(sce_dir_vec, "-"
 print(sce_nb_vec)
 
 # Templates
-iter_template <- paste0("it_", 1:STSIM_ITER, "_")[1]
+iter_template <- paste0("it_", 1:STSIM_ITER, "_")
 #-------------------------------------------------------------------------------
 
 # Load raster inputs (maybe this will take too much ram?)
@@ -151,7 +151,7 @@ final_df <- foreach(sce = sce_nb_vec, .combine = dplyr::bind_rows) %dopar% {
       df2$zone <- as.factor(df2$zone)
       df2$species <- species
       df2$timestep <- ts_template[which(ts_vec == timestep)]
-      # df2$iteration <- iter # TODO To remove, this is temp
+      # df2$iteration <- iter
       print(head(df2))
 
       final <- df2 %>% rename(current = value)
