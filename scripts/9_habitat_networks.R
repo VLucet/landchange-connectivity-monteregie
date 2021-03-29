@@ -9,7 +9,10 @@ library(grainscape)
 library(igraph)
 
 # Load file list in patches
-patches <- list.files("patches/hab_suit/", pattern = ".tif") # DOES NOT HAVE TRUE
+
+media_path <- "/media/vlucet/backup/results_march_2021"
+patches <- list.files(file.path(media_path, "patches/hab_suit/"), 
+                      pattern = ".tif") # DOES NOT HAVE TRUE
 
 grab_element <- function(string, patt, index, numeric = TRUE){
   splitted <- unlist(str_split(string, patt))[index]
@@ -24,7 +27,7 @@ grab_element <- function(string, patt, index, numeric = TRUE){
 
 patches_df <- data.frame(patches_raw_name = patches) %>%
   mutate(patches_short_name = gsub(patches_raw_name,
-                                   pattern = "_for_b_scl_multiplied_s_su_all_c",
+                                   pattern = "_for_b_scl_multiplied_s_su_all",
                                    replacement = "", fixed=T)) %>%
   rowwise() %>%
   mutate(timestep = grab_element(patches_short_name, "[.]", 3)) %>%
@@ -35,7 +38,7 @@ patches_df <- data.frame(patches_raw_name = patches) %>%
 
 
 # Load files in reclassed (cost)
-cost <- list.files("reclassed/", pattern = ".tif")
+cost <- list.files(file.path(media_path, "reclassed/"), pattern = ".tif")
 cost_sub <- cost[!sapply(cost, grepl, pattern="TRUE", fixed = TRUE)]
 
 cost_sub_df <- data.frame(cost_raw_name = cost_sub) %>%
@@ -47,18 +50,25 @@ cost_sub_df <- data.frame(cost_raw_name = cost_sub) %>%
   ungroup()
 
 # Join them
-all_joined <- full_join(patches_df, cost_sub_df,
+all_joined <- left_join(patches_df, cost_sub_df,
                         by = c("timestep", "iteration", "species", "scenario")) %>%
   dplyr::select(-c(patches_short_name))
 
+dim(all_joined)
+
 # Define clip area
 clipAreaThreshold <- 0.8
+
+DISP <- data.frame(Species = sort(unique(all_joined$species)),
+                   PATCH   = c(0,   120,   0,  0,   60),
+                   Natal   = c(459, 46659, 16, 564, 55088),
+                   Gap     = c(39,  220,   10, 39,  236))
 
 # -------------------------------------------------------------------------
 
 # Get muns convec hull
 mun <-
-  st_read("~/Documents/Master/Thesis/land_con_monteregie/data/mun/munic_SHP_clean.shp") %>%
+  st_read("data/mun/munic_SHP_clean.shp") %>%
   st_union() %>%
   st_as_sf()
 
@@ -73,10 +83,10 @@ for(i in 1:nrow(all_joined)){
   
   # Get test files
   test_patches <-
-    crop(raster("patches/hab_suit/")>0,
+    crop(raster(file.path(media_path, "patches/hab_suit/", all_joined$patches_raw_name[i]))>0,
          mun_convex)
   test_cost <-
-    crop(raster("reclassed/sce_37_it_1_ts_0_BLBR_.tif"),
+    crop(raster(file.path(media_path, "reclassed/", all_joined$cost_raw_name[i])),
          mun_convex)
   
   # Fasterize muns
@@ -198,7 +208,7 @@ for(i in 1:nrow(all_joined)){
   
   # If this section is being run after the previous sections then set up output tables and load in the necessary files from disk
   # for(i in 4:5){#1:length(speciesList)){
-  species <- speciesList[i]
+  species <- all_joined$species[i]
   
   #species-specific estimates of gap-crossing and natal median dispersal distances
   d50GAP<-DISP$Gap[DISP$Species == species]
