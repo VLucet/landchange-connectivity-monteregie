@@ -37,4 +37,4 @@ overall.indices.standard<-function(landscape.graph,distanceDecayCoefficient,link
   EC<-sqrt(PCnum)
   rm(PCnum)
   return(EC)
-}s
+}
