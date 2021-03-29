@@ -55,9 +55,10 @@ key <- read.csv("config/stsim/SecondaryStratum.csv")
 
 # Get result secenario directory 
 sce_dir_vec <- list.files("libraries/stsim/monteregie-conncons-scripted.ssim.output", 
-                          full.names = T)
+                          full.names = T)[-c(2,5,8,11,14)]
 sce_nb_vec <- paste0("sce_", as.numeric(unlist(lapply(str_split(sce_dir_vec, "-"), 
                                                       FUN = last))))
+print(sce_nb_vec)
 
 # Templates
 iter_template <- paste0("it_", 1:STSIM_ITER, "_")[1]
