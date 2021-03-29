@@ -149,7 +149,7 @@ joined <- full_join(df_summarised, df_origin_summarised,
   # Make factors
   mutate(sce = as.factor(sce), run = as.factor(run), sum_cur = 10*(sum_cur),
          climate = factor(climate, levels = c("none", "historic",
-                                              "baseline", "RCP 8.5")),
+                                              "RCP 8.5")),
          run = factor(run, levels = c("historic run", "BAU run", 
                                       "BAU run + corrs protection", "BAU run + ref", 
                                       "BAU run + corrs protection + ref",
