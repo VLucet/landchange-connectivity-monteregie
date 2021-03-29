@@ -154,7 +154,7 @@ final_df <- foreach(sce = sce_nb_vec, .combine = dplyr::bind_rows) %dopar% {
       # df2$iteration <- iter
       print(head(df2))
 
-      final <- df2 %>% rename(current = value)
+      # final <- df2 %>% rename(current = value)
       
       final <- df2 %>% 
         pivot_longer(cols = contains("it"), names_to = "iteration", 
