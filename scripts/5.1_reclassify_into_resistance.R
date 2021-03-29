@@ -762,7 +762,7 @@ for (sce in sce_dir_vec[-c(2,5,8,11,14)]){ # *4*,7,10,13,16
 
         habitat_suit_all <- paste0(stat_zonal_name, "_su_all")
         execGRASS("r.mapcalc",
-                  expression=paste0(habitat_suit_all," = (", stat_zonal_name, " * (", stat_zonal_name, "<= 0.25))"),
+                  expression=paste0(habitat_suit_all," = (", stat_zonal_name, " * (", stat_zonal_name, ">= 0.25))"),
                   flags = "overwrite")
         execGRASS("r.null", map = habitat_suit_all, setnull="0")
 
