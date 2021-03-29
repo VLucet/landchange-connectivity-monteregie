@@ -837,8 +837,8 @@ surf_1 <- surf %>%
   geom_smooth(aes(group = scenario, linetype=code_run), alpha=0.2, method="loess")+
   #geom_point(aes(group=scenario), alpha= 0.05, size = 0.5)+
   facet_wrap(~species, scales = "fixed")+
-  scale_color_manual(values = colors_sce$color,
-                     labels = colors_sce$sce) +
+  # scale_color_manual(values = colors_sce$color,
+  #                    labels = colors_sce$sce) +
   labs(y = "Change in nb of Keypoints detected (%)",
        x = "Year",
        col = "Climate",
@@ -907,8 +907,8 @@ surf_2 <- surf %>%
   #geom_point(aes(group=scenario), alpha= 0.05, size = 0.5)+
   scale_linetype_manual(values=c("solid", "dashed", "longdash", "dotted")) +
   facet_wrap(~species, scales = "fixed")+
-  scale_color_manual(values = colors_sce$color,
-                     labels = colors_sce$sce) +
+  # scale_color_manual(values = colors_sce$color,
+  #                    labels = colors_sce$sce) +
   labs(y = "Change in nb of Keypoints detected (%)",
        x = "Year",
        col = "Climate",
