@@ -1,0 +1,421 @@
+# Load libraries
+
+library(tidyverse)
+library(raster)
+library(sf)
+library(fasterize)
+
+library(grainscape)
+library(igraph)
+
+# Load file list in patches
+patches <- list.files("patches/hab_suit/", pattern = ".tif") # DOES NOT HAVE TRUE
+
+grab_element <- function(string, patt, index, numeric = TRUE){
+  splitted <- unlist(str_split(string, patt))[index]
+  if(numeric){
+    ret <- gsub("[^0-9.-]", "", splitted)
+    ret <- as.numeric(ret)
+  } else {
+    ret <- gsub("[:digit:]", "", splitted)
+  }
+  return(ret)
+}
+
+patches_df <- data.frame(patches_raw_name = patches) %>%
+  mutate(patches_short_name = gsub(patches_raw_name,
+                                   pattern = "_for_b_scl_multiplied_s_su_all_c",
+                                   replacement = "", fixed=T)) %>%
+  rowwise() %>%
+  mutate(timestep = grab_element(patches_short_name, "[.]", 3)) %>%
+  mutate(iteration = grab_element(patches_short_name, "[.]", 2)) %>%
+  mutate(species = grab_element(patches_short_name, "[_]", 1, numeric = FALSE)) %>%
+  mutate(scenario = grab_element(patches_short_name, "[_]", 3)) %>%
+  ungroup()
+
+
+# Load files in reclassed (cost)
+cost <- list.files("reclassed/", pattern = ".tif")
+cost_sub <- cost[!sapply(cost, grepl, pattern="TRUE", fixed = TRUE)]
+
+cost_sub_df <- data.frame(cost_raw_name = cost_sub) %>%
+  rowwise() %>%
+  mutate(timestep = grab_element(cost_raw_name, "[_]", 6)) %>%
+  mutate(iteration = grab_element(cost_raw_name, "[_]", 4)) %>%
+  mutate(species = grab_element(cost_raw_name, "[_]", 7, numeric = FALSE)) %>%
+  mutate(scenario = grab_element(cost_raw_name, "[_]", 2)) %>%
+  ungroup()
+
+# Join them
+all_joined <- full_join(patches_df, cost_sub_df,
+                        by = c("timestep", "iteration", "species", "scenario")) %>%
+  dplyr::select(-c(patches_short_name))
+
+# Define clip area
+clipAreaThreshold <- 0.8
+
+# -------------------------------------------------------------------------
+
+# Get muns convec hull
+mun <-
+  st_read("~/Documents/Master/Thesis/land_con_monteregie/data/mun/munic_SHP_clean.shp") %>%
+  st_union() %>%
+  st_as_sf()
+
+mun_convex <- mun %>%
+  st_convex_hull()
+
+mun_buffer <- mun %>%
+  st_buffer(4000) %>%
+  st_crop(mun_convex)
+
+for(i in 1:nrow(all_joined)){
+  
+  # Get test files
+  test_patches <-
+    crop(raster("patches/hab_suit/")>0,
+         mun_convex)
+  test_cost <-
+    crop(raster("reclassed/sce_37_it_1_ts_0_BLBR_.tif"),
+         mun_convex)
+  
+  # Fasterize muns
+  mun_raster <- fasterize(mun, raster=test_patches)
+  mun_buffer_raster <- fasterize(mun_buffer, raster=test_patches)
+  mun_convex_raster <- fasterize(mun_convex, raster=test_patches)
+  
+  # 1. get mpg
+  test <-
+    MPG(patch = mask(test_patches, mun_convex_raster),
+        cost = mask(test_cost, mun_convex_raster))
+  
+  # 2. get the objects
+  raster_list <- list(mpgpatchId = slot(test, "patchId"),
+                      voronoi = slot(test, "voronoi"),
+                      lcpPerimWeight = slot(test, "lcpPerimWeight"),
+                      lcpLinkId = slot(test, "lcpLinkId"),
+                      mpgPlot = slot(test, "mpgPlot"))
+  
+  df_list <- unlist(graphdf(slot(test, "mpg")), recursive = FALSE)
+  
+  # 3. Crop to mun
+  raster_list_cropped <- lapply(raster_list, function(x){mun_buffer_raster*x})
+  
+  # 4. Evaluate set
+  diff_set <-
+    setdiff(unique(raster_list$mpgpatchId), unique(raster_list_cropped$mpgpatchId))
+  
+  # 5. Deal with patches out
+  count_in <- freq(raster_list_cropped$mpgpatchId)
+  
+  replacelist <- matrix(c(NA,1,1,NA),ncol=2)
+  mun_raster_OUT <- raster::reclassify(mun_buffer_raster,replacelist)
+  
+  raster_list_cropped_OUT <- lapply(raster_list, function(x){mun_raster_OUT*x})
+  
+  count_out <- freq(raster_list_cropped_OUT$mpgpatchId)
+  
+  # which patches straddle the boundary?
+  overlap_patches_in <- count_in[count_in[,1] %in% count_out[,1],]
+  overlap_patches_out <- count_out[count_out[,1] %in% count_in[,1],]
+  
+  #calculate their percernt area inside the ecological region
+  overlap_patches <-
+    data.frame(id=overlap_patches_in[,1],
+               incount=overlap_patches_in[,2],
+               outcount=overlap_patches_out[,2])
+  overlap_patches$percentin <-
+    overlap_patches$incount/(overlap_patches$incount+overlap_patches$outcount)
+  
+  # identify patches to remove if they have less than clipAreaThreshold proportion
+  # of their area inside the ecological region
+  remove_patches_overlap <- overlap_patches[overlap_patches$percentin < clipAreaThreshold, ]
+  keep_patches_overlap <- overlap_patches[overlap_patches$percentin >= clipAreaThreshold, ]
+  
+  remove_patches_notoverlap <- setdiff(diff_set, keep_patches_overlap$id)
+  remove_patches <- union(remove_patches_notoverlap, remove_patches_overlap$id)
+  
+  #Links to delete
+  node1_rowids <- which(df_list$e$e1 %in% remove_patches)
+  node2_rowids <- which(df_list$e$e2 %in% remove_patches)
+  rowids_del <- union(node1_rowids, node2_rowids)
+  
+  #draw clipped link layer
+  replacelist <- cbind(-df_list$e[rowids_del, "linkId"], NA)
+  linkidmap_reg <- raster::reclassify(raster_list$lcpLinkId, replacelist)
+  linkStats_reg <- df_list$e[-rowids_del, ]
+  
+  # draw clipped patch layer with patches on the boundary removes if their area
+  # inside ecol region is < 0.8
+  # also removes patches that were only connected to
+  # other patches in the ecoregion indirectly via paths outside the ecoregion
+  replacelist <- cbind(c(0, setdiff(unique(raster_list$mpgpatchId),
+                                    unique(c(linkStats_reg$e1,
+                                             linkStats_reg$e2)))), NA)
+  patchidmap_reg<-raster::reclassify(raster_list_cropped$mpgpatchId, replacelist)
+  
+  
+  # Now we have linkidmap_reg, linkStats_reg, patchidmap_reg to proceeed with
+  
+  # 6. Define graph object using data.frame
+  landscape.graph <-
+    graph.data.frame(data.frame(linkStats_reg[,c("e2","e1")]), directed=FALSE) #,vertices=patchquality)
+  
+  # find biggest cluster
+  C <- clusters(landscape.graph)
+  
+  if(C$no > 1){
+    bigclus<-which(C$csize==max(C$csize))
+    bigClusNodes<-as.numeric(V(landscape.graph)$name[which(C$membership==bigclus)])
+    
+    #Define graph object in which all the nodes belong to a single cluster
+    landscape.graph.NotInBigClus<-delete.vertices(landscape.graph,which(C$membership==bigclus))
+    linksNotInBigClus<-matrix(as.numeric(get.edgelist(landscape.graph.NotInBigClus)),
+                              ecount(landscape.graph.NotInBigClus), 2)
+    
+    links_to_delete<-c(linkStats_reg$linkId[which(linkStats_reg$e1 %in% linksNotInBigClus[,1] & linkStats_reg$e2 %in% linksNotInBigClus[,2])],
+                       linkStats_reg$linkId[which(linkStats_reg$e2 %in% linksNotInBigClus[,1] & linkStats_reg$e1 %in% linksNotInBigClus[,2])])
+    linkStats_reg<-linkStats_reg[-which(linkStats_reg$linkId %in% links_to_delete),]
+    
+    #draw clipped link layer
+    replacelist<-cbind(-links_to_delete,NA)
+    linkidmap_reg<-raster::reclassify(linkidmap_reg,replacelist)
+    
+    #draw clipped patchid layer
+    replacelist<-cbind(as.numeric(V(landscape.graph)$name[which(C$membership!=bigclus)]), NA)
+    patchidmap_reg<-raster::reclassify(patchidmap_reg,replacelist)
+  }
+  
+  patchStats_reg <- df_list$v[which(df_list$v$patchId%in%unique(c(linkStats_reg$e1,
+                                                                  linkStats_reg$e2))),]
+  
+  # -------------------------------------------------------------------------
+  
+  ############################
+  # Analyze habitat networks #
+  ############################
+  
+  
+  # If this section is being run after the previous sections then set up output tables and load in the necessary files from disk
+  # for(i in 4:5){#1:length(speciesList)){
+  species <- speciesList[i]
+  
+  #species-specific estimates of gap-crossing and natal median dispersal distances
+  d50GAP<-DISP$Gap[DISP$Species == species]
+  d50NATAL<-DISP$Natal[DISP$Species == species]
+  
+  #dispersal distance coefficients
+  coefficientGAP<-log(0.5)/d50GAP
+  coefficientNATAL<-log(0.5)/d50NATAL
+  
+  # Full extent network calculations
+  # nodes<-patchStats
+  # links<-linkStats
+  # patchId<-original_patchid
+  nodes<-read.csv(paste0(networkDir,species,"_patchStatsMPG.csv"),header=TRUE)
+  links<-read.csv(paste0(networkDir,species,"_linkStatsMPG.csv"),header=TRUE)
+  patchId<-raster(paste0(networkDir,species,"_patchId.asc"))
+  
+  #produce patch-level summary of habitat quality
+  habitatquality<-raster(paste0(habitatDir, species, "_habitatSuitability_30m.tif"))
+  nodeQuality<-data.frame(zonal(habitatquality,patchId,fun='mean'))
+  
+  #add in node quality
+  nodes<-merge(nodes, nodeQuality, by.x="patchId", by.y="zone")
+  nodes<-data.frame(name=nodes$patchId, area=nodes$patchArea, quality=nodes$mean, areaquality=(nodes$patchArea*nodes$mean/100))
+  
+  #define graph object using data.frame
+  landscape.graph<-graph.data.frame(links, directed=FALSE, vertices=nodes)
+  
+  # Network Summary Statistics
+  ptm <- proc.time()
+  netsum[i, "Species"]<-species
+  netsum[i, "numNodes"]<-vcount(landscape.graph)
+  netsum[i, "numLinks"]<-ecount(landscape.graph)
+  netsum[i, "totArea"]<-sum(as.numeric(V(landscape.graph)$area))
+  netsum[i, "meanArea"]<-mean(as.numeric(V(landscape.graph)$area))
+  netsum[i, "totQuality"]<-sum(as.numeric(V(landscape.graph)$quality))
+  netsum[i, "meanQuality"]<-mean(as.numeric(V(landscape.graph)$quality))
+  netsum[i, "totAreaQuality"]<-sum(as.numeric(V(landscape.graph)$areaquality))
+  netsum[i, "meanAreaQuality"]<-mean(as.numeric(V(landscape.graph)$areaquality))
+  netsum[i, "totCost"]<-sum(as.numeric(E(landscape.graph)$lcpPerimWeight))
+  netsum[i, "meanCost"]<-mean(as.numeric(E(landscape.graph)$lcpPerimWeight))
+  #netsum[i, "overallECgap"]<-overall.indices.standard(landscape.graph, coefficientGAP,'lcpPerimWeight','areaquality')
+  #netsum[i, "overallECnatal"]<-overall.indices.standard(landscape.graph, coefficientNATAL,'lcpPerimWeight','areaquality')
+  
+  # ### edge.betweenness.community
+  # ebc <- edge.betweenness.community(landscape.graph, modularity=TRUE, membership=TRUE)
+  #
+  # netsum[i, "modularity"]<-max(ebc$modularity)
+  # netsum[i, "numCommunities"]<-length(ebc)
+  # netsum[i, "meanNodesperComm"]<-mean(sizes(ebc))
+  #
+  # V(landscape.graph)$comm<-membership(ebc)
+  # Vmatrix<-data.frame(V(landscape.graph)$patchId, V(landscape.graph)$area, V(landscape.graph)$areaquality, V(landscape.graph)$comm)
+  # names(Vmatrix)<-c("v1", "v2", "v3", "v4")
+  # netsum[i, "meanAreaperComm"]<-mean(ddply(Vmatrix, "v4", function(df) sumarea=sum(df$v2))[,2])
+  # netsum[i, "meanAreaQualityperComm"]<-mean(ddply(Vmatrix, "v4", function(df) sumarea=sum(df$v3))[,2])
+  elapsed_time<-proc.time() - ptm
+  #populate table tracking time for each species
+  mpgAnalysisTime[i,"summarySeconds"]<-elapsed_time[3]
+  
+  # Betweenness
+  #tabular betweenness output
+  ptm <- proc.time()
+  btwn<-data.frame(patchId=as.numeric(V(landscape.graph)$name), btwn=betweenness(landscape.graph, weights=E(landscape.graph)$lcpPerimWeight, directed=FALSE))
+  
+  #raster betweenness output raw
+  #replace patch ids with betweeness values
+  btwnMap<-reclassify(patchId, btwn)
+  
+  #raster betweenness output 0 - 1
+  #make a look-up table between patch id and betweenness value
+  btwn_lookup<-cbind(patchId=btwn$patchId, btwn=1/(max(btwn$btwn)-min(btwn$btwn))*(btwn$btwn-min(btwn$btwn)))
+  #replace patch ids with betweeness values 0 - 1
+  btwnMap01<-reclassify(patchId, btwn_lookup)
+  elapsed_time<-proc.time() - ptm
+  
+  #populate table tracking time for each species
+  mpgAnalysisTime[i,"btwnSeconds"]<-elapsed_time[3]
+  
+  #Save betweenness outputs
+  btwnName<-paste0(species, "_betweenness.csv")
+  btwnMapName<-paste0(species, "_betweenness.tif")
+  btwnMapName01<-paste0(species, "_betweenness_01.tif")
+  writeRaster(btwnMap, filename=paste0(networkDir, btwnMapName), overwrite=TRUE)
+  writeRaster(btwnMap01, filename=paste0(networkDir, btwnMapName01), overwrite=TRUE)
+  write.csv(btwn, paste0(networkDir, btwnName), row.names=F)
+  
+  # BTSL extent
+  # nodes<-patchStats_ecol
+  # links<-linkStats_ecol
+  # patchId<-patchidmap_ecol
+  nodes<-read.csv(paste0(networkDir,species,"_patchStatsMPG_BTSL.csv"),header=TRUE)
+  links<-read.csv(paste0(networkDir,species,"_linkStatsMPG_BTSL.csv"),header=TRUE)
+  patchId<-raster(paste0(networkDir,species,"_patchId_BTSL.tif"))
+  
+  #produce patch-level summary of habitat quality
+  habitatquality<-raster(paste0(habitatDir, species, "_habitatSuitability_30m.tif"))
+  nodeQuality<-data.frame(zonal(habitatquality,patchId,fun='mean'))
+  
+  #add in node quality
+  nodes<-merge(nodes, nodeQuality, by.x="patchId", by.y="zone")
+  nodes<-data.frame(name=nodes$patchId, area=nodes$patchArea, quality=nodes$mean, areaquality=(nodes$patchArea*nodes$mean/100))
+  
+  #define graph object using data.frame
+  landscape.graph.clipped<-graph.data.frame(links, directed=FALSE, vertices=nodes)
+  
+  
+  # Network Summary Statistics
+  ptm <- proc.time()
+  netsumBTSL[i, "Species"]<-species
+  netsumBTSL[i, "numNodes"]<-vcount(landscape.graph.clipped)
+  netsumBTSL[i, "numLinks"]<-ecount(landscape.graph.clipped)
+  netsumBTSL[i, "totArea"]<-sum(as.numeric(V(landscape.graph.clipped)$area))
+  netsumBTSL[i, "meanArea"]<-mean(as.numeric(V(landscape.graph.clipped)$area))
+  netsumBTSL[i, "totQuality"]<-sum(as.numeric(V(landscape.graph.clipped)$quality))
+  netsumBTSL[i, "meanQuality"]<-mean(as.numeric(V(landscape.graph.clipped)$quality))
+  netsumBTSL[i, "totAreaQuality"]<-sum(as.numeric(V(landscape.graph.clipped)$areaquality))
+  netsumBTSL[i, "meanAreaQuality"]<-mean(as.numeric(V(landscape.graph.clipped)$areaquality))
+  netsumBTSL[i, "totCost"]<-sum(as.numeric(E(landscape.graph.clipped)$lcpPerimWeight))
+  netsumBTSL[i, "meanCost"]<-mean(as.numeric(E(landscape.graph.clipped)$lcpPerimWeight))
+  netsumBTSL[i, "overallECgap"]<-overall.indices.standard(landscape.graph.clipped, coefficientGAP,'lcpPerimWeight','areaquality')
+  netsumBTSL[i, "overallECnatal"]<-overall.indices.standard(landscape.graph.clipped, coefficientNATAL,'lcpPerimWeight','areaquality')
+  
+  # ### edge.betweenness.community
+  # ebc <- edge.betweenness.community(landscape.graph.clipped, modularity=TRUE, membership=TRUE)
+  #
+  # netsumBTSL[i, "modularity"]<-max(ebc$modularity)
+  # netsumBTSL[i, "numCommunities"]<-length(ebc)
+  # netsumBTSL[i, "meanNodesperComm"]<-mean(sizes(ebc))
+  #
+  # V(landscape.graph.clipped)$comm<-membership(ebc)
+  # Vmatrix<-data.frame(V(landscape.graph.clipped)$patchId, V(landscape.graph.clipped)$area, V(landscape.graph.clipped)$areaquality, V(landscape.graph.clipped)$comm)
+  # names(Vmatrix)<-c("v1", "v2", "v3", "v4")
+  # netsumBTSL[i, "meanAreaperComm"]<-mean(ddply(Vmatrix, "v4", function(df) sumarea=sum(df$v2))[,2])
+  # netsumBTSL[i, "meanAreaQualityperComm"]<-mean(ddply(Vmatrix, "v4", function(df) sumarea=sum(df$v3))[,2])
+  elapsed_time<-proc.time() - ptm
+  #populate table tracking time for each species
+  mpgAnalysisTime[i,"summaryBTSLSeconds"]<-elapsed_time[3]
+  
+  # Betweenness
+  
+  #tabular betweenness output
+  ptm <- proc.time()
+  btwn<-data.frame(patchId=as.numeric(V(landscape.graph.clipped)$name), btwn=betweenness(landscape.graph.clipped, weights=E(landscape.graph.clipped)$lcpPerimWeight, directed=FALSE))
+  
+  #raster betweenness output raw
+  #replace patch ids with betweeness values
+  btwnMap<-reclassify(patchId, btwn)
+  
+  #raster betweenness output 0 - 1
+  #make a look-up table between patch id and betweenness value
+  btwn_lookup<-cbind(patchId=btwn$patchId, btwn=1/(max(btwn$btwn)-min(btwn$btwn))*(btwn$btwn-min(btwn$btwn)))
+  #replace patch ids with betweeness values 0 - 1
+  btwnMap01<-reclassify(patchId, btwn_lookup)
+  elapsed_time<-proc.time() - ptm
+  
+  #populate table tracking time for each species
+  mpgAnalysisTime[i,"btwnBTSLSeconds"]<-elapsed_time[3]
+  
+  #Save betweennness outputs
+  btwnName<-paste0(species, "_betweenness_BTSL.csv")
+  btwnMapName<-paste0(species, "_betweenness_BTSL.tif")
+  btwnMapName01<-paste0(species, "_betweenness_BTSL_01.tif")
+  writeRaster(btwnMap, filename=paste0(networkDir, btwnMapName), overwrite=TRUE)
+  writeRaster(btwnMap01, filename=paste0(networkDir, btwnMapName01), overwrite=TRUE)
+  write.csv(btwn, paste0(networkDir, btwnName), row.names=F)
+  
+  # dEC # ONLY FOR MAAM/URAM
+  if(species %in% c("MAAM","URAM")){
+    
+    #get a list of patches in the ecological region
+    #patchList<-unique(patchId*ecobound)
+    
+    startNode<-1
+    endNode<-startNode+netsumBTSL[i,"numNodes"]-1
+    
+    inputparams<-data.frame(#Node=as.numeric(patchList),
+      Node=as.numeric(V(landscape.graph.clipped)$name[startNode:endNode]),
+      coefficientGAP=as.numeric(coefficientGAP),
+      coefficientNATAL=as.numeric(coefficientNATAL),
+      linkWeight='lcpPerimWeight',
+      nodeWeight='areaquality',
+      EC_Gap=netsumBTSL[i,'overallECgap'],
+      EC_Natal=netsumBTSL[i,'overallECnatal'])
+    ptm <- proc.time()
+    dEC<-data.frame(t(apply(inputparams,1,function(x,y){node.importance(x,y)},y=landscape.graph.clipped)))
+    
+    #Raster dEC output
+    #dEC gap
+    #make a look-up table raw
+    dEC_lookup<-cbind(patchId=dEC$Node, dEC=as.numeric(dEC$dEC_GAP))
+    #replace patch ids with dEC values 0 - 1
+    dEC_GAPMap<-reclassify(patchId, dEC_lookup)
+    #make a look-up table 0 - 1
+    dEC_lookup<-cbind(patchId=dEC$Node, dEC=1/(max(as.numeric(dEC$dEC_GAP))-min(as.numeric(dEC$dEC_GAP)))*(as.numeric(dEC$dEC_GAP)-min(as.numeric(dEC$dEC_GAP))))
+    #replace patch ids with dEC values 0 - 1
+    dEC_GAPMap01<-reclassify(patchId, dEC_lookup)
+    
+    #dEC natal
+    #make a look-up table raw
+    dEC_lookup<-cbind(patchId=dEC$Node, dEC=as.numeric(dEC$dEC_NATAL))
+    #replace patch ids with dEC values
+    dEC_NATALMap<-reclassify(patchId, dEC_lookup)
+    #make a look-up table 0 - 1
+    dEC_lookup<-cbind(patchId=dEC$Node, dEC=1/(max(as.numeric(dEC$dEC_NATAL))-min(as.numeric(dEC$dEC_NATAL)))*(as.numeric(dEC$dEC_NATAL)-min(as.numeric(dEC$dEC_NATAL))))
+    #replace patch ids with dEC values
+    dEC_NATALMap01<-reclassify(patchId, dEC_lookup)
+    
+    write.csv(dEC, paste0(networkDir, species, "_dEC.csv"), row.names=FALSE)
+    writeRaster(dEC_GAPMap, filename=paste0(networkDir, species, "_dECGap_BTSL.tif"), overwrite=TRUE)
+    writeRaster(dEC_NATALMap, filename=paste0(networkDir, species, "_dECNatal_BTSL.tif"), overwrite=TRUE)
+    writeRaster(dEC_GAPMap01, filename=paste0(networkDir, species, "_dECGap_BTSL_01.tif"), overwrite=TRUE)
+    writeRaster(dEC_NATALMap01, filename=paste0(networkDir, species, "_dECNatal_BTSL_01.tif"), overwrite=TRUE)
+    elapsed_time<-proc.time() - ptm
+    
+    #populate table tracking time for each species
+    mpgAnalysisTime[i,"dECSeconds"]<-elapsed_time[3]
+  }
+  # }
+}
