@@ -1,6 +1,6 @@
 {
   "R": {
-    "Version": "3.6.2",
+    "Version": "4.0.3",
     "Repositories": [
       {
         "Name": "CRAN",
@@ -9,7 +9,7 @@
     ]
   },
   "Bioconductor": {
-    "Version": "3.10"
+    "Version": "3.12"
   },
   "Packages": {
     "BH": {
@@ -577,6 +577,13 @@
       "Repository": "CRAN",
       "Hash": "e2e613d600a40ddfed6e8a88bf276332"
     },
+    "foreign": {
+      "Package": "foreign",
+      "Version": "0.8-79",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "910ad5e5ce9aae0d0f57186ca9a12e1e"
+    },
     "fracdiff": {
       "Package": "fracdiff",
       "Version": "1.5-1",
@@ -740,6 +747,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "8c9dd0fe4766504762688b9f1de3139e"
+    },
+    "grainscape": {
+      "Package": "grainscape",
+      "Version": "0.4.3",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "64fecf024ec37664af830d112eb6bbab"
     },
     "gridExtra": {
       "Package": "gridExtra",
