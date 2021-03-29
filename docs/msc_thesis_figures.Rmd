@@ -148,7 +148,7 @@ joined <- full_join(df_summarised, df_origin_summarised,
   replace_na(list(climate = "none", run = "historic run")) %>% 
   # Make factors
   mutate(sce = as.factor(sce), run = as.factor(run), sum_cur = 10*(sum_cur),
-         climate = factor(climate, levels = c("none", "historic",
+         climate = factor(climate, levels = c("none", "baseline",
                                               "RCP 8.5")),
          run = factor(run, levels = c("historic run", "BAU run", 
                                       "BAU run + corrs protection", "BAU run + ref", 
@@ -494,7 +494,7 @@ Change in mean flow (in \% of the the 2010 flow) between 2010 (observed) and 210
 
 ```{r figure_1_model_1, message=FALSE,  warning=FALSE, out.width="100%", fig.cap="Connectivity change for species through time, 2010-2100"}
 colors_sce <- 
-  data.frame(sce = c("Hist", "RCP85"), 
+  data.frame(sce = c("Baseline", "RCP85"), 
              color = c("#8DA0CB", "#800026"), stringsAsFactors = F)
 
 fig_1_static_chap_1 <- joined %>% 
