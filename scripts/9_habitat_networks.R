@@ -13,7 +13,9 @@ library(doParallel)
 
 # Load file list in patches
 
-media_path <- "/media/vlucet/backup/results_march_2021"
+# media_path <- "/media/vlucet/backup/results_march_2021"
+media_path <- "/mnt/val/landchange-connectivity-monteregie/outputs/"
+
 patches <- list.files(file.path(media_path, "patches/hab_suit/"), 
                       pattern = ".tif") # DOES NOT HAVE TRUE
 
