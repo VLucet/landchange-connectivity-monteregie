@@ -265,7 +265,7 @@ final_df <- foreach(i = 1:nrow(all_joined), .combine = dplyr::bind_rows) %dopar%
   patchId <- patchidmap_reg
   
   #produce patch-level summary of habitat quality
-  habitatquality <- crop(raster(file.path(media_path, "patches/hab_suit/", 
+  habitatquality <- crop(raster(file.path(media_path, "hab_suit/", 
                                           all_joined$patches_raw_name[i])), patchId)
   nodeQuality <- data.frame(zonal(habitatquality, patchId, fun='mean'))
   
@@ -332,7 +332,7 @@ final_df <- foreach(i = 1:nrow(all_joined), .combine = dplyr::bind_rows) %dopar%
   btwnMapName01<-paste0(tools::file_path_sans_ext(all_joined$cost_raw_name[i]), 
                         "betweenness_BTSL_01.tif")
   
-  networkDir <- file.path(media_path, "network")
+  networkDir <- file.path(media_path, "network/")
   
   writeRaster(btwnMap, filename=file.path(networkDir, btwnMapName), overwrite=TRUE)
   writeRaster(btwnMap01, filename=file.path(networkDir, btwnMapName01), overwrite=TRUE)
