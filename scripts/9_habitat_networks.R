@@ -92,7 +92,7 @@ mun_buffer <- mun %>%
 
 # -------------------------------------------------------------------------
 
-n_cores = 15 # very important smaller number of cores!!
+n_cores = 12 # very important smaller number of cores!!
 clust <- makeCluster(n_cores, outfile="log.txt")
 registerDoParallel(cl = clust)
 
