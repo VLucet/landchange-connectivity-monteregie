@@ -92,7 +92,7 @@ mun_buffer <- mun %>%
 
 # -------------------------------------------------------------------------
 
-n_cores = 10 # very important smaller number of cores!!
+n_cores = 15 # very important smaller number of cores!!
 clust <- makeCluster(n_cores, outfile="log.txt")
 registerDoParallel(cl = clust)
 
@@ -121,7 +121,7 @@ final_df <- foreach(i = 1:8, .combine = dplyr::bind_rows) %dopar% {
   
   # Get test files
   test_patches <-
-    crop(raster(file.path(media_path, "patches/hab_suit/", all_joined$patches_raw_name[i]))>0,
+    crop(raster(file.path(media_path, "hab_suit/", all_joined$patches_raw_name[i]))>0,
          mun_convex)
   test_cost <-
     crop(raster(file.path(media_path, "reclassed/", all_joined$cost_raw_name[i])),
