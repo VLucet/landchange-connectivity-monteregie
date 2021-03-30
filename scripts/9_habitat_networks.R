@@ -14,9 +14,9 @@ library(doParallel)
 # Load file list in patches
 
 # media_path <- "/media/vlucet/backup/results_march_2021"
-media_path <- "/home/rstudio/outputs"
+media_path <- "/home/rstudio/land_con_monteregie"
 
-patches <- list.files(file.path(media_path, "patches/hab_suit/"), 
+patches <- list.files(file.path(media_path, "hab_suit/"), 
                       pattern = ".tif") # DOES NOT HAVE TRUE
 
 grab_element <- function(string, patt, index, numeric = TRUE){
