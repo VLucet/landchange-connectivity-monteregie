@@ -96,7 +96,7 @@ n_cores = 15 # very important smaller number of cores!!
 clust <- makeCluster(n_cores, outfile="log.txt")
 registerDoParallel(cl = clust)
 
-final_df <- foreach(i = 1:8, .combine = dplyr::bind_rows) %dopar% {
+final_df <- foreach(i = 1:nrow(all_joined), .combine = dplyr::bind_rows) %dopar% {
   
   library(tidyverse)
   library(raster)
