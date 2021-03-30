@@ -1,6 +1,6 @@
 {
   "R": {
-    "Version": "4.0.3",
+    "Version": "3.6.2",
     "Repositories": [
       {
         "Name": "CRAN",
@@ -9,7 +9,7 @@
     ]
   },
   "Bioconductor": {
-    "Version": "3.12"
+    "Version": "3.10"
   },
   "Packages": {
     "BH": {
@@ -576,13 +576,6 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "e2e613d600a40ddfed6e8a88bf276332"
-    },
-    "foreign": {
-      "Package": "foreign",
-      "Version": "0.8-79",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "910ad5e5ce9aae0d0f57186ca9a12e1e"
     },
     "fracdiff": {
       "Package": "fracdiff",
