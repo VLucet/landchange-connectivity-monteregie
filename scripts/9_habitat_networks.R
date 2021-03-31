@@ -272,7 +272,7 @@ final_df <- foreach(i = 1:nrow(all_joined), .combine = dplyr::bind_rows) %dopar%
   #add in node quality
   nodes <- merge(nodes, nodeQuality, by.x="patchId", by.y="zone")
   nodes <- data.frame(name=nodes$patchId, area=nodes$patchArea, quality=nodes$mean, 
-                      areaquality=(nodes$patchArea*(1/nodes$mean)))
+                      areaquality=(nodes$patchArea*(nodes$mean)))
   
   #define graph object using data.frame
   landscape.graph.clipped<-graph.data.frame(links, directed=FALSE, vertices=nodes)
