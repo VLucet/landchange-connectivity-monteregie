@@ -307,36 +307,38 @@ final_df <- foreach(i = 1:nrow(all_joined), .combine = dplyr::bind_rows) %dopar%
   # Betweenness
   
   #tabular betweenness output
-  btwn<-data.frame(patchId=as.numeric(V(landscape.graph.clipped)$name), 
-                   btwn=betweenness(landscape.graph.clipped, 
-                                    weights=E(landscape.graph.clipped)$lcpPerimWeight, 
-                                    directed=FALSE))
-  
-  #raster betweenness output raw
-  #replace patch ids with betweeness values
-  btwnMap<-reclassify(patchId, btwn)
-  
-  #raster betweenness output 0 - 1
-  #make a look-up table between patch id and betweenness value
-  btwn_lookup<-cbind(patchId=btwn$patchId, 
-                     btwn=1/(max(btwn$btwn)-min(btwn$btwn))*(btwn$btwn-min(btwn$btwn)))
-  
-  #replace patch ids with betweeness values 0 - 1
-  btwnMap01<-reclassify(patchId, btwn_lookup)
-  
-  #Save betweennness outputs
-  btwnName<-paste0(tools::file_path_sans_ext(all_joined$cost_raw_name[i]), 
-                   "betweenness_BTSL.csv")
-  btwnMapName<-paste0(tools::file_path_sans_ext(all_joined$cost_raw_name[i]), 
-                      "betweenness_BTSL.tif")
-  btwnMapName01<-paste0(tools::file_path_sans_ext(all_joined$cost_raw_name[i]), 
-                        "betweenness_BTSL_01.tif")
-  
-  networkDir <- file.path(media_path, "network/")
-  
-  writeRaster(btwnMap, filename=file.path(networkDir, btwnMapName), overwrite=TRUE)
-  writeRaster(btwnMap01, filename=file.path(networkDir, btwnMapName01), overwrite=TRUE)
-  write.csv(btwn, file.path(networkDir, btwnName), row.names=F)
+  if(FALSE){
+    btwn<-data.frame(patchId=as.numeric(V(landscape.graph.clipped)$name), 
+                     btwn=betweenness(landscape.graph.clipped, 
+                                      weights=E(landscape.graph.clipped)$lcpPerimWeight, 
+                                      directed=FALSE))
+    
+    #raster betweenness output raw
+    #replace patch ids with betweeness values
+    btwnMap<-reclassify(patchId, btwn)
+    
+    #raster betweenness output 0 - 1
+    #make a look-up table between patch id and betweenness value
+    btwn_lookup<-cbind(patchId=btwn$patchId, 
+                       btwn=1/(max(btwn$btwn)-min(btwn$btwn))*(btwn$btwn-min(btwn$btwn)))
+    
+    #replace patch ids with betweeness values 0 - 1
+    btwnMap01<-reclassify(patchId, btwn_lookup)
+    
+    #Save betweennness outputs
+    btwnName<-paste0(tools::file_path_sans_ext(all_joined$cost_raw_name[i]), 
+                     "betweenness_BTSL.csv")
+    btwnMapName<-paste0(tools::file_path_sans_ext(all_joined$cost_raw_name[i]), 
+                        "betweenness_BTSL.tif")
+    btwnMapName01<-paste0(tools::file_path_sans_ext(all_joined$cost_raw_name[i]), 
+                          "betweenness_BTSL_01.tif")
+    
+    networkDir <- file.path(media_path, "network/")
+    
+    writeRaster(btwnMap, filename=file.path(networkDir, btwnMapName), overwrite=TRUE)
+    writeRaster(btwnMap01, filename=file.path(networkDir, btwnMapName01), overwrite=TRUE)
+    write.csv(btwn, file.path(networkDir, btwnName), row.names=F)
+  }
   
   # Return value
   print(temp_row)
