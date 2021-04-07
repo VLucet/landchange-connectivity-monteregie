@@ -843,7 +843,7 @@ for (sce in sce_dir_vec[c(4)]){ # *4*,7,10,13,16 ## -c(2,5,8,11,14)
                   flags = c("overwrite"))
         
          execGRASS("r.out.gdal",
-                   input = forest_clumped_name,
+                   input = greater_area_clumped_name,
                    format='GTiff',createopt='COMPRESS=LZW',
                    output = paste0("outputs/hab_suit/", greater_area_clumped_name, ".tif"),
                    flags=c('overwrite'))
