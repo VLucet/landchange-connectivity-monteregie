@@ -829,16 +829,22 @@ for (sce in sce_dir_vec[c(4)]){ # *4*,7,10,13,16 ## -c(2,5,8,11,14)
         
         # ----------------------------------------------------------------------
         # EXPORT suitable patches
+        greater_area_name_ex <- paste0(greater_area_name, "_ex")
+        execGRASS("r.mapcalc",
+                  expression=paste0(greater_area_name_ex, " = ", greater_area_name, " * ", multiplied_forest_name),
+                  flags = "overwrite")
+        execGRASS("r.null", map = greater_area_name_ex, setnull="0")
+        
         execGRASS("r.out.gdal",
-                   input = greater_area_name,
+                   input = greater_area_name_ex,
                    format='GTiff',createopt='COMPRESS=LZW',
-                   output = paste0("outputs/hab_suit/", greater_area_name, ".tif"),
+                   output = paste0("outputs/hab_suit/", greater_area_name_ex, ".tif"),
                    flags=c('overwrite'))
         
         # ALSO CLUMP THEM
-        greater_area_clumped_name <- paste0(greater_area_name,"_c")
+        greater_area_clumped_name <- paste0(greater_area_name_ex,"_c")
         execGRASS("r.clump",
-                  input = forest_only_name,
+                  input = greater_area_name_ex,
                   output = greater_area_clumped_name,
                   flags = c("overwrite"))
         
