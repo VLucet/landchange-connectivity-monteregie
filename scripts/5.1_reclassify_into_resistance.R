@@ -715,7 +715,7 @@ for (sce in sce_dir_vec[c(4)]){ # *4*,7,10,13,16 ## -c(2,5,8,11,14)
         multiplied_forest_name <- paste0(reclassed_forest_name, "_multiplied")
         multiplier_expression <-
           paste0(multiplied_forest_name, " = ",
-                 paste0(c(reclassed_forest_name_scaled, multipliers), collapse = " * "))
+                 paste0(c(reclassed_forest_name, multipliers), collapse = " * "))
 
         # Perform multiplication
         execGRASS("r.mapcalc",
