@@ -741,6 +741,13 @@
       "Repository": "CRAN",
       "Hash": "8c9dd0fe4766504762688b9f1de3139e"
     },
+    "grainscape": {
+      "Package": "grainscape",
+      "Version": "0.4.3",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "64fecf024ec37664af830d112eb6bbab"
+    },
     "gridExtra": {
       "Package": "gridExtra",
       "Version": "2.3",

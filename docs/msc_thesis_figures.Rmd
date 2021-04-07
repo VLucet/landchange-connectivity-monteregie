@@ -148,8 +148,8 @@ joined <- full_join(df_summarised, df_origin_summarised,
   replace_na(list(climate = "none", run = "historic run")) %>% 
   # Make factors
   mutate(sce = as.factor(sce), run = as.factor(run), sum_cur = 10*(sum_cur),
-         climate = factor(climate, levels = c("none", "historic",
-                                              "baseline", "RCP 8.5")),
+         climate = factor(climate, levels = c("none", "baseline",
+                                              "RCP 8.5")),
          run = factor(run, levels = c("historic run", "BAU run", 
                                       "BAU run + corrs protection", "BAU run + ref", 
                                       "BAU run + corrs protection + ref",
@@ -494,8 +494,8 @@ Change in mean flow (in \% of the the 2010 flow) between 2010 (observed) and 210
 
 ```{r figure_1_model_1, message=FALSE,  warning=FALSE, out.width="100%", fig.cap="Connectivity change for species through time, 2010-2100"}
 colors_sce <- 
-  data.frame(sce = c("Hist", "Baseline", "RCP85"), 
-             color = c("#8DA0CB", "#FC4E2A", "#800026"), stringsAsFactors = F)
+  data.frame(sce = c("Baseline", "RCP85"), 
+             color = c("#8DA0CB", "#800026"), stringsAsFactors = F)
 
 fig_1_static_chap_1 <- joined %>% 
   filter(climate != "none", chapter %in% c("none", "both", "chap_1")) %>% 
@@ -504,7 +504,7 @@ fig_1_static_chap_1 <- joined %>%
                        the_diff = ((sum_cur-baseline)/baseline)*100 )) %>% 
   ggplot(aes(x=timestep, y=the_diff, col=climate)) +
   scale_color_manual(values = colors_sce$color, 
-                     labels = c("Historic", "Baseline", "RCP 8.5")) +
+                     labels = colors_sce$sce) +
   geom_smooth(aes(group = sce, linetype=code_run), alpha=0.5, method="loess") +
   #geom_point(aes(group = sce)) +
   scale_linetype_manual(values=c("solid", "twodash")) +
@@ -585,7 +585,7 @@ fig_1_static_chap_2 <- joined %>%
                        the_diff = ((sum_cur-baseline)/baseline)*100 )) %>% 
   ggplot(aes(x=timestep, y=the_diff, col=climate)) +
   scale_color_manual(values = colors_sce$color,
-                     labels = c("Historic", "Baseline", "RCP 8.5")) +
+                     labels = colors_sce$sce) +
   geom_smooth(aes(group = sce, linetype=code_run), alpha=0.5, method="loess") +
   scale_linetype_manual(values=c("solid", "dashed", "longdash", "dotted")) +
   facet_wrap(~species, scales = "fixed") +
@@ -837,8 +837,8 @@ surf_1 <- surf %>%
   geom_smooth(aes(group = scenario, linetype=code_run), alpha=0.2, method="loess")+
   #geom_point(aes(group=scenario), alpha= 0.05, size = 0.5)+
   facet_wrap(~species, scales = "fixed")+
-  scale_color_manual(values = colors_sce$color,
-                     labels = c("Historic", "Baseline", "RCP 8.5")) +
+  # scale_color_manual(values = colors_sce$color,
+  #                    labels = colors_sce$sce) +
   labs(y = "Change in nb of Keypoints detected (%)",
        x = "Year",
        col = "Climate",
@@ -907,8 +907,8 @@ surf_2 <- surf %>%
   #geom_point(aes(group=scenario), alpha= 0.05, size = 0.5)+
   scale_linetype_manual(values=c("solid", "dashed", "longdash", "dotted")) +
   facet_wrap(~species, scales = "fixed")+
-  scale_color_manual(values = colors_sce$color,
-                     labels = c("Historic", "Baseline", "RCP 8.5")) +
+  # scale_color_manual(values = colors_sce$color,
+  #                    labels = colors_sce$sce) +
   labs(y = "Change in nb of Keypoints detected (%)",
        x = "Year",
        col = "Climate",
