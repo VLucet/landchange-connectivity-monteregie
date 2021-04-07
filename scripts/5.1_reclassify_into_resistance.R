@@ -788,9 +788,9 @@ for (sce in sce_dir_vec[c(4)]){ # *4*,7,10,13,16 ## -c(2,5,8,11,14)
         #            output = paste0("outputs/reclassed/", habitat_suit_interm, ".tif"),
         #            flags=c('overwrite'))
 
-        habitat_unsuit <- paste0(stat_zonal_name, "_un")
+        habitat_unsuit <- paste0(multiplied_forest_name, "_un")
         execGRASS("r.mapcalc",
-                  expression=paste0(habitat_unsuit, " = ",stat_zonal_name, " < 60"),
+                  expression=paste0(habitat_unsuit, " = ",multiplied_forest_name, " < 60"),
                   flags = "overwrite")
         execGRASS("r.null", map = habitat_unsuit, setnull="0")
 

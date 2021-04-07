@@ -1,0 +1,46 @@
+Iteration,Timestep,SpeciesID,StateClassID,Value
+,,American Marten,Forest:Coniferous Medium,100
+,,American Marten,Forest:Coniferous Old,100
+,,American Marten,Forest:Coniferous Young,50
+,,American Marten,Forest:Deciduous Medium,35
+,,American Marten,Forest:Deciduous Old,35
+,,American Marten,Forest:Deciduous Young,18
+,,American Marten,Forest:Mixed Medium,100
+,,American Marten,Forest:Mixed Old,100
+,,American Marten,Forest:Mixed Young,50
+,,Black Bear,Forest:Coniferous Medium,60
+,,Black Bear,Forest:Coniferous Old,60
+,,Black Bear,Forest:Coniferous Young,60
+,,Black Bear,Forest:Deciduous Medium,100
+,,Black Bear,Forest:Deciduous Old,100
+,,Black Bear,Forest:Deciduous Young,100
+,,Black Bear,Forest:Mixed Medium,80
+,,Black Bear,Forest:Mixed Old,80
+,,Black Bear,Forest:Mixed Young,80
+,,Red Backed Salamander,Forest:Coniferous Medium,40
+,,Red Backed Salamander,Forest:Coniferous Old,40
+,,Red Backed Salamander,Forest:Coniferous Young,40
+,,Red Backed Salamander,Forest:Deciduous Medium,100
+,,Red Backed Salamander,Forest:Deciduous Old,100
+,,Red Backed Salamander,Forest:Deciduous Young,100
+,,Red Backed Salamander,Forest:Mixed Medium,90
+,,Red Backed Salamander,Forest:Mixed Old,90
+,,Red Backed Salamander,Forest:Mixed Young,90
+,,Short-tailed Shrew,Forest:Coniferous Medium,32
+,,Short-tailed Shrew,Forest:Coniferous Old,40
+,,Short-tailed Shrew,Forest:Coniferous Young,16
+,,Short-tailed Shrew,Forest:Deciduous Medium,80
+,,Short-tailed Shrew,Forest:Deciduous Old,100
+,,Short-tailed Shrew,Forest:Deciduous Young,40
+,,Short-tailed Shrew,Forest:Mixed Medium,72
+,,Short-tailed Shrew,Forest:Mixed Old,90
+,,Short-tailed Shrew,Forest:Mixed Young,36
+,,Wood Frog,Forest:Coniferous Medium,100
+,,Wood Frog,Forest:Coniferous Old,100
+,,Wood Frog,Forest:Coniferous Young,100
+,,Wood Frog,Forest:Deciduous Medium,100
+,,Wood Frog,Forest:Deciduous Old,100
+,,Wood Frog,Forest:Deciduous Young,100
+,,Wood Frog,Forest:Mixed Medium,100
+,,Wood Frog,Forest:Mixed Old,100
+,,Wood Frog,Forest:Mixed Young,100
