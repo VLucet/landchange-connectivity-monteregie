@@ -335,9 +335,9 @@ final_df <- foreach(i = 1:nrow(all_joined), .combine = dplyr::bind_rows) %dopar%
     
     networkDir <- file.path(media_path, "network/")
     
-    writeRaster(btwnMap, filename=file.path(networkDir, btwnMapName), overwrite=TRUE)
+    # writeRaster(btwnMap, filename=file.path(networkDir, btwnMapName), overwrite=TRUE)
     writeRaster(btwnMap01, filename=file.path(networkDir, btwnMapName01), overwrite=TRUE)
-    write.csv(btwn, file.path(networkDir, btwnName), row.names=F)
+    # write.csv(btwn, file.path(networkDir, btwnName), row.names=F)
   }
   
   # Return value
