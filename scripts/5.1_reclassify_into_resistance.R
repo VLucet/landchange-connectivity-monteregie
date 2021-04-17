@@ -841,18 +841,24 @@ for (sce in sce_dir_vec[c(4)]){ # *4*,7,10,13,16 ## -c(2,5,8,11,14)
                    output = paste0("outputs/hab_suit/", greater_area_name_ex, ".tif"),
                    flags=c('overwrite'))
         
-        # ALSO CLUMP THEM
-        greater_area_clumped_name <- paste0(greater_area_name_ex,"_c")
+        # ALSO RECLASS + CLUMP THEM
+        greater_area_reclassed_name  <- paste0(greater_area_name_ex, "_r")
+        execGRASS("r.reclass",
+                  input = greater_area_name_ex,
+                  output = greater_area_reclassed_name,
+                  rules = "* = 1")
+
+        greater_area_clumped_name <- paste0(greater_area_reclassed_name,"_c")
         execGRASS("r.clump",
                   input = greater_area_name_ex,
                   output = greater_area_clumped_name,
                   flags = c("overwrite"))
         
-         execGRASS("r.out.gdal",
-                   input = greater_area_clumped_name,
-                   format='GTiff',createopt='COMPRESS=LZW',
-                   output = paste0("outputs/hab_suit/", greater_area_clumped_name, ".tif"),
-                   flags=c('overwrite'))
+        #  execGRASS("r.out.gdal",
+        #            input = greater_area_clumped_name,
+        #            format='GTiff',createopt='COMPRESS=LZW',
+        #            output = paste0("outputs/hab_suit/", greater_area_clumped_name, ".tif"),
+        #            flags=c('overwrite'))
         # ----------------------------------------------------------------------
         
         # reclass greater
