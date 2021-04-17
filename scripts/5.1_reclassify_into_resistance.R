@@ -850,7 +850,7 @@ for (sce in sce_dir_vec[c(4)]){ # *4*,7,10,13,16 ## -c(2,5,8,11,14)
 
         greater_area_clumped_name <- paste0(greater_area_reclassed_name,"_c")
         execGRASS("r.clump",
-                  input = greater_area_name_ex,
+                  input = greater_area_reclassed_name,
                   output = greater_area_clumped_name,
                   flags = c("overwrite"))
         
