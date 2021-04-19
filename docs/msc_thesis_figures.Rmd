@@ -1313,7 +1313,7 @@ Mapping takes a lot of time, not knitted by default
 
 -->
 
-#### Networks
+### Networks
 ##### CHAP 1
 ```{r, message=FALSE, warning=FALSE, out.width="100%", fig.cap=""}
 networks <- read_csv("../outputs/final/final_df_network_stats.csv") %>% 
