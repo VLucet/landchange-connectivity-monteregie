@@ -17,7 +17,7 @@ library(doParallel)
 media_path <- "/home/rstudio/land_con_monteregie/outputs"
 
 patches <- list.files(file.path(media_path, "hab_suit/"), 
-                      pattern = ".tif") # DOES NOT HAVE TRUE
+                      pattern = "_for_b_multiplied_su_ra_g_ex.tif") # DOES NOT HAVE TRUE
 
 grab_element <- function(string, patt, index, numeric = TRUE){
   splitted <- unlist(str_split(string, patt))[index]
@@ -32,7 +32,7 @@ grab_element <- function(string, patt, index, numeric = TRUE){
 
 patches_df <- data.frame(patches_raw_name = patches) %>%
   mutate(patches_short_name = gsub(patches_raw_name,
-                                   pattern = "_for_b_scl_multiplied_s_su_all",
+                                   pattern = "_for_b_multiplied_su_ra_g_ex",
                                    replacement = "", fixed=T)) %>%
   rowwise() %>%
   mutate(timestep = grab_element(patches_short_name, "[.]", 3)) %>%
