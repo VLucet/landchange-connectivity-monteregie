@@ -182,7 +182,7 @@ write_csv(final_df[limit:rows,], "outputs/final/final_df_current_density_part2.c
 }
 
 #-------------------------------------------------------------------------------
-if (FALSE) {
+if (TRUE) {
 n_cores = 8 # very important smaller number of cores!!
 clust <- makeCluster(n_cores, outfile="log.txt")
 registerDoParallel(cl = clust)
