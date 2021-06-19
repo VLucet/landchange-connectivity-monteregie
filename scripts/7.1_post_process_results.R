@@ -182,7 +182,7 @@ write_csv(final_df[limit:rows,], "outputs/final/final_df_current_density_part2.c
 }
 
 #-------------------------------------------------------------------------------
-if (TRUE) {
+if (FALSE) {
 n_cores = 8 # very important smaller number of cores!!
 clust <- makeCluster(n_cores, outfile="log.txt")
 registerDoParallel(cl = clust)
@@ -235,7 +235,7 @@ foreach(sce = sce_nb_vec) %dopar% {
 }
 }
 #-------------------------------------------------------------------------------
-if (FALSE) {
+if (TRUE) {
 # Now with original data - simple loop this time
 list_files_origin <- list_files[grepl(x = list_files, pattern = "TRUE")]
 
