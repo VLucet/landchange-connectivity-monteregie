@@ -99,7 +99,8 @@ for sce in ["sce_" + str(nb) for nb in range(38, 53)]:
                     temp_df.head()
                     final = final.append(temp_df, ignore_index=True)
                 else:
-                    raise Exception("Error with length")
+                    print("length error, passing")
+                    next
 
 final.to_csv("outputs/final/final_values_output.csv", index=False)
 
@@ -120,7 +121,8 @@ for sce in ["sce_" + str(nb) for nb in [37]]:
                     temp_df.head()
                     final = final.append(temp_df, ignore_index=True)
                 else:
-                    raise Exception("Error with length")
+                    print("length error, passing")
+                    next
 
 final.to_csv("outputs/final/final_values_output_original.csv", index=False)
 
