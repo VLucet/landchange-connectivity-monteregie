@@ -150,7 +150,8 @@ for spe in ['BLBR', 'PLCI', 'MAAM', 'URAM', 'RASY']:
             temp_df.head()
             final = final.append(temp_df, ignore_index=True)
         else:
-            raise Exception("Error with length")
+            print("length error, passing")
+            next
 
 final.to_csv("outputs/final/final_values_output_TRUE.csv", index=False)
 
@@ -170,7 +171,8 @@ for sce in ["sce_" + str(nb) for nb in range(38, 53)]:
             plt.hist(end, 1000, alpha=0.5);
             plt.savefig("outputs/figures/" + sce + '_' + spe + "_hists.png");
         else:
-            raise Exception("Length is not correct")
+            print("length error, passing")
+            next
 
 
 
