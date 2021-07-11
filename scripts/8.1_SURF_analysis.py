@@ -48,34 +48,34 @@ the_mask[the_mask == 2] = 1
 
 # ------------------------------------
 
-workers = mp.Pool(processes=8)
-kp_lengths = workers.map(partial(utils.get_kp_lengths, mask=the_mask, h_threshold=7000, oct_nb=1, oct_layers=2), list_of_files)
-# kp_lengths = workers.map(utils.get_kp_lengths, list_of_files)
-workers.close()
-
-# i = 0
-# kp_lengths = [0] * len(list_of_files)
-# for file in list_of_files:
-#     kp_lengths[i] = utils.get_kp_lengths(file, mask=the_mask, h_threshold=7000, oct_nb=1, oct_layers=2)
-#     i += i
-
-# ------------ Create surf CSV ------------
-
-# Split at ".", get first element, then split at "_"
-splitted = list(map(lambda x: x.split("_"), [i[0] for i in list(map(lambda x: x.split("."), base_files))]))
-# print(splitted)
-results = pd.DataFrame(list(zip([i[1] for i in splitted],
-                                [i[3] for i in splitted],
-                                [i[5] for i in splitted],
-                                [i[6] for i in splitted],
-                                kp_lengths)),
-                       columns=["scenario",
-                                "timestep",
-                                "iter",
-                                "species",
-                                "kp_nb"])
-# print(results.head())
-results.to_csv("surf/surf_output.csv", index=False)
+# workers = mp.Pool(processes=8)
+# kp_lengths = workers.map(partial(utils.get_kp_lengths, mask=the_mask, h_threshold=7000, oct_nb=1, oct_layers=2), list_of_files)
+# # kp_lengths = workers.map(utils.get_kp_lengths, list_of_files)
+# workers.close()
+# 
+# # i = 0
+# # kp_lengths = [0] * len(list_of_files)
+# # for file in list_of_files:
+# #     kp_lengths[i] = utils.get_kp_lengths(file, mask=the_mask, h_threshold=7000, oct_nb=1, oct_layers=2)
+# #     i += i
+# 
+# # ------------ Create surf CSV ------------
+# 
+# # Split at ".", get first element, then split at "_"
+# splitted = list(map(lambda x: x.split("_"), [i[0] for i in list(map(lambda x: x.split("."), base_files))]))
+# # print(splitted)
+# results = pd.DataFrame(list(zip([i[1] for i in splitted],
+#                                 [i[3] for i in splitted],
+#                                 [i[5] for i in splitted],
+#                                 [i[6] for i in splitted],
+#                                 kp_lengths)),
+#                        columns=["scenario",
+#                                 "timestep",
+#                                 "iter",
+#                                 "species",
+#                                 "kp_nb"])
+# # print(results.head())
+# results.to_csv("surf/surf_output.csv", index=False)
 
 
 # ------------ Create hist CSV ------------
@@ -99,7 +99,8 @@ for sce in ["sce_" + str(nb) for nb in range(38, 53)]:
                     temp_df.head()
                     final = final.append(temp_df, ignore_index=True)
                 else:
-                    raise Exception("Error with length")
+                    print("length error, passing")
+                    next
 
 final.to_csv("outputs/final/final_values_output.csv", index=False)
 
@@ -120,7 +121,8 @@ for sce in ["sce_" + str(nb) for nb in [37]]:
                     temp_df.head()
                     final = final.append(temp_df, ignore_index=True)
                 else:
-                    raise Exception("Error with length")
+                    print("length error, passing")
+                    next
 
 final.to_csv("outputs/final/final_values_output_original.csv", index=False)
 
@@ -148,7 +150,8 @@ for spe in ['BLBR', 'PLCI', 'MAAM', 'URAM', 'RASY']:
             temp_df.head()
             final = final.append(temp_df, ignore_index=True)
         else:
-            raise Exception("Error with length")
+            print("length error, passing")
+            next
 
 final.to_csv("outputs/final/final_values_output_TRUE.csv", index=False)
 
@@ -168,7 +171,8 @@ for sce in ["sce_" + str(nb) for nb in range(38, 53)]:
             plt.hist(end, 1000, alpha=0.5);
             plt.savefig("outputs/figures/" + sce + '_' + spe + "_hists.png");
         else:
-            raise Exception("Length is not correct")
+            print("length error, passing")
+            next
 
 
 

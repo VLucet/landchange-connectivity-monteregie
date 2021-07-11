@@ -41,7 +41,7 @@ species_list <- tools::file_path_sans_ext(list.files("config/rcl_tables/species/
 patch_size <- read_csv("config/rcl_tables/grass/patch_size.csv")
 non_habitat <- read_csv("config/rcl_tables/grass/non_habitat.csv")
 too_small <- read_csv("config/rcl_tables/grass/too_small.csv")
-interm  <- read_csv("config/rcl_tables/grass/interm.csv")
+# interm  <- read_csv("config/rcl_tables/grass/interm.csv")
 
 ## Patch zone
 patch_raster_path  <- 'data/land_use/aggregated/aggregated_lu_buffered_1990_to_patch.tif'
@@ -113,6 +113,16 @@ for (true_lu in true_landuse_list){
   #             output = paste0("outputs/reclassed/",forest_name,".tif"),
   #             flags=c('overwrite'))
 
+  # Get only forest **
+  # FOREST TYPES
+  write_lines(c("0 thru 10 = NULL", "* = *"), "config/rcl_tables/grass/rule.txt")
+  forest_name <- paste0(base_name,"_for")
+  execGRASS("r.reclass",
+            input = base_name,
+            rules = "config/rcl_tables/grass/rule.txt",
+            output = forest_name,
+            flags = c("overwrite"))
+
   # ONLY FOREST
   write_lines(c("0 thru 10 = NULL", "* = 1"), "config/rcl_tables/grass/rule.txt")
   forest_only_name <- paste0(base_name,"_for_only")
@@ -122,12 +132,12 @@ for (true_lu in true_landuse_list){
             output = forest_only_name,
             flags = c("overwrite"))
 
-  # clump it **
-  forest_clumped_name <- paste0(forest_only_name,"_c")
-  execGRASS("r.clump",
-            input = forest_only_name,
-            output = forest_clumped_name,
-            flags = c("overwrite"))
+  # # clump it **
+  # forest_clumped_name <- paste0(forest_only_name,"_c")
+  # execGRASS("r.clump",
+  #           input = forest_only_name,
+  #           output = forest_clumped_name,
+  #           flags = c("overwrite"))
 
   # Get the no forest **
   write_lines(c("10 thru 100 = NULL", "* = *"), "config/rcl_tables/grass/rule.txt")
@@ -151,18 +161,18 @@ for (true_lu in true_landuse_list){
 
     ## Reclass all forest based on prefered versus non prefered pixels
     ## not really binary here because nuances
-    binary_forest_name <- paste0(specie, "_", forest_name, "_b")
+    reclassed_forest_name <- paste0(specie, "_", forest_name, "_b")
     execGRASS("r.reclass",
               input = forest_name,
-              output = binary_forest_name,
+              output = reclassed_forest_name,
               rules = paste0("config/rcl_tables/species/",specie,".txt"),
               flags = "overwrite")
 
-    # Divide to put on 0-1 scale
-    binary_forest_name_scaled <- paste0(binary_forest_name, "_scl")
-    execGRASS("r.mapcalc",
-              expression = paste0(binary_forest_name_scaled, " = ", binary_forest_name, " / 10.0"),
-              flags = "overwrite")
+    # # Divide to put on 0-1 scale
+    # binary_forest_name_scaled <- paste0(binary_forest_name, "_scl")
+    # execGRASS("r.mapcalc",
+    #           expression = paste0(binary_forest_name_scaled, " = ", binary_forest_name, " / 10.0"),
+    #           flags = "overwrite")
 
     # ----------------------------------------------------------------------
 
@@ -294,10 +304,10 @@ for (true_lu in true_landuse_list){
     multipliers <- multipliers[!(multipliers == "")]
 
     # Build the expression
-    multiplied_forest_name <- paste0(binary_forest_name_scaled, "_multiplied")
+    multiplied_forest_name <- paste0(reclassed_forest_name, "_multiplied")
     multiplier_expression <-
       paste0(multiplied_forest_name, " = ",
-             paste0(c(binary_forest_name_scaled, multipliers), collapse = " * "))
+             paste0(c(reclassed_forest_name, multipliers), collapse = " * "))
 
     # Perform multiplication
     execGRASS("r.mapcalc",
@@ -312,42 +322,42 @@ for (true_lu in true_landuse_list){
 
     # ----------------------------------------------------------------------
 
-    # r.stats.zonal per patch for patch suitability
-    stat_zonal_name <- paste0(multiplied_forest_name,"_s")
-    execGRASS("r.stats.zonal",
-              base = forest_clumped_name,
-              cover = multiplied_forest_name,
-              method = "average",
-              output = stat_zonal_name,
-              flags = "overwrite")
+    # # r.stats.zonal per patch for patch suitability
+    # stat_zonal_name <- paste0(multiplied_forest_name,"_s")
+    # execGRASS("r.stats.zonal",
+    #           base = forest_clumped_name,
+    #           cover = multiplied_forest_name,
+    #           method = "average",
+    #           output = stat_zonal_name,
+    #           flags = "overwrite")
 
     # separate unsuitable from suitable patches
-    habitat_suit <- paste0(stat_zonal_name, "_su")
+    habitat_suit <- paste0(multiplied_forest_name, "_su")
     execGRASS("r.mapcalc",
-              expression=paste0(habitat_suit," = ",stat_zonal_name, " >= 0.5"),
+              expression=paste0(habitat_suit," = ",multiplied_forest_name, " >= 60"),
               flags = "overwrite")
     execGRASS("r.null", map = habitat_suit, setnull="0")
 
-    habitat_suit_interm <- paste0(stat_zonal_name, "_su_interm")
-    execGRASS("r.mapcalc",
-              expression=paste0(habitat_suit_interm," = (", stat_zonal_name, " >= 0.25 && ", stat_zonal_name, "< 0.5)"),
-              flags = "overwrite")
-    execGRASS("r.null", map = habitat_suit_interm, setnull="0")
+    # habitat_suit_interm <- paste0(stat_zonal_name, "_su_interm")
+    # execGRASS("r.mapcalc",
+    #           expression=paste0(habitat_suit_interm," = (", stat_zonal_name, " >= 0.25 && ", stat_zonal_name, "< 0.5)"),
+    #           flags = "overwrite")
+    # execGRASS("r.null", map = habitat_suit_interm, setnull="0")
 
-    habitat_unsuit <- paste0(stat_zonal_name, "_un")
-    execGRASS("r.mapcalc",
-              expression=paste0(habitat_unsuit, " = ",stat_zonal_name, " < 0.25"),
-              flags = "overwrite")
-    execGRASS("r.null", map = habitat_unsuit, setnull="0")
+    habitat_unsuit <- paste0(multiplied_forest_name, "_un")
+        execGRASS("r.mapcalc",
+                  expression=paste0(habitat_unsuit, " = ",multiplied_forest_name, " < 60"),
+                  flags = "overwrite")
+        execGRASS("r.null", map = habitat_unsuit, setnull="0")
 
     # Reclass all interm habitat
-    write_lines(paste0("* = ", as.character(subset(interm, species==specie)$value)),
-                "config/rcl_tables/grass/rule.txt")
-    habitat_suit_interm_reclassed <- paste0(habitat_suit_interm, "_r")
-    execGRASS("r.reclass",
-              input = habitat_suit_interm,
-              output = habitat_suit_interm_reclassed,
-              rules = "config/rcl_tables/grass/rule.txt")
+    # write_lines(paste0("* = ", as.character(subset(interm, species==specie)$value)),
+    #             "config/rcl_tables/grass/rule.txt")
+    # habitat_suit_interm_reclassed <- paste0(habitat_suit_interm, "_r")
+    # execGRASS("r.reclass",
+    #           input = habitat_suit_interm,
+    #           output = habitat_suit_interm_reclassed,
+    #           rules = "config/rcl_tables/grass/rule.txt")
 
     # Reclass all unsuit based on non habitat rule
     write_lines(paste0("* = ", as.character(subset(non_habitat, species==specie)$value)),
@@ -398,7 +408,7 @@ for (true_lu in true_landuse_list){
     execGRASS("r.patch",
               input = c(no_forest_reclassed_name,
                         habitat_unsuit_reclassed,
-                        habitat_suit_interm_reclassed,
+                        # habitat_suit_interm_reclassed,
                         lesser_area_reclassed_name,
                         greater_area_reclassed_name
               ),
@@ -429,6 +439,7 @@ for (true_lu in true_landuse_list){
   }
 }
 
+
 # test <- stack(map(list.files("outputs/reclassed/", full.names = T), raster))
 # plot(test$TRUE_lu_2_MAAM==1)
 
@@ -448,7 +459,7 @@ execGRASS("g.mapset", mapset = "habsuit_2", flags = c("c", "overwrite"))
             flags = c("o","overwrite"))
   execGRASS("r.null", map = "patch_raster", null=0)
 
-for (sce in sce_dir_vec[-c(2,5,8,11,14)]){ # *4*,7,10,13,16
+for (sce in sce_dir_vec[-c(2,5,8,11,14)]){ # *4*,7,10,13,16 ## -c(2,5,8,11,14)
 
   sce_nb <- as.numeric(unlist(lapply(str_split(sce, "-"), FUN = last)))
 
@@ -488,7 +499,7 @@ for (sce in sce_dir_vec[-c(2,5,8,11,14)]){ # *4*,7,10,13,16
     #   it <- it[c(1,10)]
     # }
 
-    for(ts in unlist(it)){
+    for(ts in unlist(it)){ # c(1, 10)
       print(ts)
 
       base_name <- paste("s",sce_nb, tools::file_path_sans_ext(basename(ts)), sep = "_")
@@ -525,12 +536,12 @@ for (sce in sce_dir_vec[-c(2,5,8,11,14)]){ # *4*,7,10,13,16
                 output = forest_only_name,
                 flags = c("overwrite"))
 
-      # clump it **
-      forest_clumped_name <- paste0(forest_only_name,"_c")
-      execGRASS("r.clump",
-                input = forest_only_name,
-                output = forest_clumped_name,
-                flags = c("overwrite"))
+      # # clump it **
+      # forest_clumped_name <- paste0(forest_only_name,"_c")
+      # execGRASS("r.clump",
+      #           input = forest_only_name,
+      #           output = forest_clumped_name,
+      #           flags = c("overwrite"))
 
       #  execGRASS("r.out.gdal",
       #            input = forest_clumped_name,
@@ -549,7 +560,9 @@ for (sce in sce_dir_vec[-c(2,5,8,11,14)]){ # *4*,7,10,13,16
 
       #for (specie in species_list){}
       for (specie in species_list){
+        
         print(specie)
+        
         # RECLASS NON-FOREST **
         no_forest_reclassed_name <- paste0(specie,"_", no_forest_name,"_r")
         execGRASS("r.reclass",
@@ -559,24 +572,24 @@ for (sce in sce_dir_vec[-c(2,5,8,11,14)]){ # *4*,7,10,13,16
                   flags = "overwrite")
 
         ## Reclass all forest based on prefered versus non prefered pixels
-        binary_forest_name <- paste0(specie, "_", forest_name, "_b")
+        reclassed_forest_name <- paste0(specie, "_", forest_name, "_b")
         execGRASS("r.reclass",
                   input = forest_name,
-                  output = binary_forest_name,
+                  output = reclassed_forest_name,
                   rules = paste0("config/rcl_tables/species/",specie,".txt"),
                   flags = "overwrite")
 
         # Divide to put on 0-1 scale
-        binary_forest_name_scaled <- paste0(binary_forest_name, "_scl")
-        execGRASS("r.mapcalc",
-                  expression = paste0(binary_forest_name_scaled, " = ", binary_forest_name, " / 10.0"),
-                  flags = "overwrite")
+        # reclassed_forest_name_scaled <- paste0(reclassed_forest_name, "_scl")
+        # execGRASS("r.mapcalc",
+        #           expression = paste0(reclassed_forest_name_scaled, " = ", reclassed_forest_name, " / 10.0"),
+        #           flags = "overwrite")
 
-         #execGRASS("r.out.gdal",
-          #         input = binary_forest_name_scaled,
-          #         format='GTiff',createopt='COMPRESS=LZW',
-          #         output = paste0("outputs/reclassed/", binary_forest_name_scaled, ".tif"),
-          #         flags=c('overwrite'))
+        # execGRASS("r.out.gdal",
+        #           input = binary_forest_name_scaled,
+        #           format='GTiff',createopt='COMPRESS=LZW',
+        #           output = paste0("outputs/reclassed/", binary_forest_name_scaled, ".tif"),
+        #           flags=c('overwrite'))
 
         # ----------------------------------------------------------------------
 
@@ -708,10 +721,10 @@ for (sce in sce_dir_vec[-c(2,5,8,11,14)]){ # *4*,7,10,13,16
         multipliers <- multipliers[!(multipliers == "")]
 
         # Build the expression
-        multiplied_forest_name <- paste0(binary_forest_name_scaled, "_multiplied")
+        multiplied_forest_name <- paste0(reclassed_forest_name, "_multiplied")
         multiplier_expression <-
           paste0(multiplied_forest_name, " = ",
-                 paste0(c(binary_forest_name_scaled, multipliers), collapse = " * "))
+                 paste0(c(reclassed_forest_name, multipliers), collapse = " * "))
 
         # Perform multiplication
         execGRASS("r.mapcalc",
@@ -727,13 +740,13 @@ for (sce in sce_dir_vec[-c(2,5,8,11,14)]){ # *4*,7,10,13,16
         # ----------------------------------------------------------------------
 
         # r.stats.zonal per patch for patch suitability
-        stat_zonal_name <- paste0(multiplied_forest_name,"_s")
-        execGRASS("r.stats.zonal",
-                  base = forest_clumped_name,
-                  cover = multiplied_forest_name,
-                  method = "average",
-                  output = stat_zonal_name,
-                  flags = "overwrite")
+        # stat_zonal_name <- paste0(multiplied_forest_name,"_s")
+        # execGRASS("r.stats.zonal",
+        #           base = forest_clumped_name,
+        #           cover = multiplied_forest_name,
+        #           method = "average",
+        #           output = stat_zonal_name,
+        #           flags = "overwrite")
 
         # execGRASS("r.out.gdal",
         #            input = stat_zonal_name,
@@ -742,9 +755,9 @@ for (sce in sce_dir_vec[-c(2,5,8,11,14)]){ # *4*,7,10,13,16
         #            flags=c('overwrite'))
 
         # separate unsuitable from suitable patches
-        habitat_suit <- paste0(stat_zonal_name, "_su")
+        habitat_suit <- paste0(multiplied_forest_name, "_su")
         execGRASS("r.mapcalc",
-                  expression=paste0(habitat_suit," = ", stat_zonal_name, " >= 0.5"),
+                  expression=paste0(habitat_suit," = ", multiplied_forest_name, " >= 60"),
                   flags = "overwrite")
         execGRASS("r.null", map = habitat_suit, setnull="0")
 
@@ -754,17 +767,17 @@ for (sce in sce_dir_vec[-c(2,5,8,11,14)]){ # *4*,7,10,13,16
         #            output = paste0("outputs/reclassed/", habitat_suit, ".tif"),
         #            flags=c('overwrite'))
 
-        habitat_suit_interm <- paste0(stat_zonal_name, "_su_interm")
-        execGRASS("r.mapcalc",
-                  expression=paste0(habitat_suit_interm," = (", stat_zonal_name, " >= 0.25 && ", stat_zonal_name, "< 0.5)"),
-                  flags = "overwrite")
-        execGRASS("r.null", map = habitat_suit_interm, setnull="0")
+        # habitat_suit_interm <- paste0(stat_zonal_name, "_su_interm")
+        # execGRASS("r.mapcalc",
+        #           expression=paste0(habitat_suit_interm," = (", stat_zonal_name, " >= 0.25 && ", stat_zonal_name, "< 0.5)"),
+        #           flags = "overwrite")
+        # execGRASS("r.null", map = habitat_suit_interm, setnull="0")
 
-        habitat_suit_all <- paste0(stat_zonal_name, "_su_all")
-        execGRASS("r.mapcalc",
-                  expression=paste0(habitat_suit_all," = (", stat_zonal_name, " * (", stat_zonal_name, ">= 0.25))"),
-                  flags = "overwrite")
-        execGRASS("r.null", map = habitat_suit_all, setnull="0")
+        # habitat_suit_all <- paste0(stat_zonal_name, "_su_all")
+        # execGRASS("r.mapcalc",
+        #           expression=paste0(habitat_suit_all," = (", stat_zonal_name, " * (", stat_zonal_name, ">= 0.25))"),
+        #           flags = "overwrite")
+        # execGRASS("r.null", map = habitat_suit_all, setnull="0")
 
         # habitat_suit_all_clumped  <- paste0(habitat_suit_all, "_c")
         # execGRASS("r.clump",
@@ -772,11 +785,11 @@ for (sce in sce_dir_vec[-c(2,5,8,11,14)]){ # *4*,7,10,13,16
         #     output = habitat_suit_all_clumped,
         #     flags = c("overwrite"))
 
-        execGRASS("r.out.gdal",
-                   input = habitat_suit_all,
-                   format='GTiff',createopt='COMPRESS=LZW',
-                   output = paste0("outputs/hab_suit/", habitat_suit_all, ".tif"),
-                   flags=c('overwrite'))
+        # execGRASS("r.out.gdal",
+        #            input = habitat_suit_all,
+        #            format='GTiff',createopt='COMPRESS=LZW',
+        #            output = paste0("outputs/hab_suit/", habitat_suit_all, ".tif"),
+        #            flags=c('overwrite'))
 
         # execGRASS("r.out.gdal",
         #            input = habitat_suit_interm,
@@ -784,9 +797,9 @@ for (sce in sce_dir_vec[-c(2,5,8,11,14)]){ # *4*,7,10,13,16
         #            output = paste0("outputs/reclassed/", habitat_suit_interm, ".tif"),
         #            flags=c('overwrite'))
 
-        habitat_unsuit <- paste0(stat_zonal_name, "_un")
+        habitat_unsuit <- paste0(multiplied_forest_name, "_un")
         execGRASS("r.mapcalc",
-                  expression=paste0(habitat_unsuit, " = ",stat_zonal_name, " < 0.25"),
+                  expression=paste0(habitat_unsuit, " = ",multiplied_forest_name, " < 60"),
                   flags = "overwrite")
         execGRASS("r.null", map = habitat_unsuit, setnull="0")
 
@@ -797,13 +810,13 @@ for (sce in sce_dir_vec[-c(2,5,8,11,14)]){ # *4*,7,10,13,16
         #            flags=c('overwrite'))
 
         # Reclass all interm habitat
-        write_lines(paste0("* = ", as.character(subset(interm, species==specie)$value)),
-                    "config/rcl_tables/grass/rule.txt")
-        habitat_suit_interm_reclassed <- paste0(habitat_suit_interm, "_r")
-        execGRASS("r.reclass",
-                  input = habitat_suit_interm,
-                  output = habitat_suit_interm_reclassed,
-                  rules = "config/rcl_tables/grass/rule.txt")
+        # write_lines(paste0("* = ", as.character(subset(interm, species==specie)$value)),
+        #             "config/rcl_tables/grass/rule.txt")
+        # habitat_suit_interm_reclassed <- paste0(habitat_suit_interm, "_r")
+        # execGRASS("r.reclass",
+        #           input = habitat_suit_interm,
+        #           output = habitat_suit_interm_reclassed,
+        #           rules = "config/rcl_tables/grass/rule.txt")
 
         # Reclass all unsuit based on non habitat rule
         write_lines(paste0("* = ", as.character(subset(non_habitat, species==specie)$value)),
@@ -822,6 +835,44 @@ for (sce in sce_dir_vec[-c(2,5,8,11,14)]){ # *4*,7,10,13,16
                   value =  subset(patch_size, species == specie)$value,
                   mode = "greater",
                   flags = c("overwrite")) # diagonal neighbors
+        
+        # ----------------------------------------------------------------------
+        # EXPORT suitable patches
+        greater_area_name_ex <- paste0(greater_area_name, "_ex")
+        execGRASS("r.mapcalc",
+                  expression=paste0(greater_area_name_ex, " = ", greater_area_name, " * ", multiplied_forest_name),
+                  flags = "overwrite")
+        execGRASS("r.null", map = greater_area_name_ex, setnull="0")
+        
+        execGRASS("r.out.gdal",
+                   input = greater_area_name_ex,
+                   format='GTiff',createopt='COMPRESS=LZW',
+                   output = paste0("outputs/hab_suit/", greater_area_name_ex, ".tif"),
+                   flags=c('overwrite'))
+        
+        # ALSO RECLASS + CLUMP THEM
+        write_lines("* = 1",
+                    "config/rcl_tables/grass/rule.txt")
+        greater_area_reclassed_name  <- paste0(greater_area_name_ex, "_r")
+        execGRASS("r.reclass",
+                  input = greater_area_name_ex,
+                  output = greater_area_reclassed_name,
+                  rules = "config/rcl_tables/grass/rule.txt")
+
+        greater_area_clumped_name <- paste0(greater_area_reclassed_name,"_c")
+        execGRASS("r.clump",
+                  input = greater_area_reclassed_name,
+                  output = greater_area_clumped_name,
+                  flags = c("overwrite"))
+        
+         execGRASS("r.out.gdal",
+                   input = greater_area_clumped_name,
+                   format='GTiff',createopt='COMPRESS=LZW',
+                   output = paste0("outputs/hab_suit/", greater_area_clumped_name, ".tif"),
+                   flags=c('overwrite'))
+        # ----------------------------------------------------------------------
+        
+        # reclass greater
         greater_area_reclassed_name <-  paste0(greater_area_name, "_r")
         write_lines(paste0("* = 1"), "config/rcl_tables/grass/rule.txt")
         execGRASS("r.reclass",
@@ -839,6 +890,8 @@ for (sce in sce_dir_vec[-c(2,5,8,11,14)]){ # *4*,7,10,13,16
                   value =  subset(patch_size, species == specie)$value,
                   mode = "lesser",
                   flags = c("overwrite")) # diagonal neighbors
+        
+        # reclass smaller
         lesser_area_reclassed_name <- paste0(lesser_area_name, "_r")
         write_lines(paste0("* = ", as.character(subset(too_small, species==specie)$value)),
                     "config/rcl_tables/grass/rule.txt")
@@ -854,7 +907,7 @@ for (sce in sce_dir_vec[-c(2,5,8,11,14)]){ # *4*,7,10,13,16
         execGRASS("r.patch",
                   input = c(no_forest_reclassed_name,
                             habitat_unsuit_reclassed,
-                            habitat_suit_interm_reclassed,
+                            # habitat_suit_interm_reclassed,
                             lesser_area_reclassed_name,
                             greater_area_reclassed_name
                   ),

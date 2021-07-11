@@ -106,6 +106,7 @@ get_ts_template <- function(list_of_files, step_save) {
 
 #-------------------------------------------------------------------------------
 
+if (FALSE) {
 final_df <- foreach(sce = sce_nb_vec, .combine = dplyr::bind_rows) %dopar% {
   
   library(tidyverse)
@@ -178,9 +179,10 @@ limit <- round(rows/2)
 
 write_csv(final_df[1:limit,], "outputs/final/final_df_current_density_part1.csv")
 write_csv(final_df[limit:rows,], "outputs/final/final_df_current_density_part2.csv")
+}
 
 #-------------------------------------------------------------------------------
-if (FALSE) {
+if (TRUE) {
 n_cores = 8 # very important smaller number of cores!!
 clust <- makeCluster(n_cores, outfile="log.txt")
 registerDoParallel(cl = clust)
@@ -233,7 +235,7 @@ foreach(sce = sce_nb_vec) %dopar% {
 }
 }
 #-------------------------------------------------------------------------------
-
+if (TRUE) {
 # Now with original data - simple loop this time
 list_files_origin <- list_files[grepl(x = list_files, pattern = "TRUE")]
 
@@ -285,7 +287,7 @@ write_csv(final_df_origin, "outputs/final/final_df_origin_current_density.csv")
 output <- 
   get_bar_df(sce_folder="libraries/stsim/monteregie-conncons-scripted.ssim.output/")
 write_csv(output, "outputs/final/final_bar_plot_data.csv")
-
+}
 #-------------------------------------------------------------------------------
 
 # # FULL SUM FOR FINAL OUTPUTS
