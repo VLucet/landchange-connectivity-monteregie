@@ -105,7 +105,6 @@ get_ts_template <- function(list_of_files, step_save) {
 }
 
 #-------------------------------------------------------------------------------
-
 if (FALSE) {
 final_df <- foreach(sce = sce_nb_vec, .combine = dplyr::bind_rows) %dopar% {
   
@@ -180,7 +179,6 @@ limit <- round(rows/2)
 write_csv(final_df[1:limit,], "outputs/final/final_df_current_density_part1.csv")
 write_csv(final_df[limit:rows,], "outputs/final/final_df_current_density_part2.csv")
 }
-
 #-------------------------------------------------------------------------------
 if (TRUE) {
 n_cores = 8 # very important smaller number of cores!!
