@@ -20,9 +20,7 @@ MAINTAINER Valentin Lucet <valentin.lucet@gmail.com>
 ENV PATH="$PATH:/home/rstudio/julia-1.4.2/bin"
 ENV RENV_VERSION 0.10.0
 
-RUN 
-Learn more about the "RUN " Dockerfile command.
-echo 'we are running some # of cool things'
+RUN echo 'we are running some # of cool things'
 
 # Install System dependencies
 #RUN apt-get -y update -qq \
