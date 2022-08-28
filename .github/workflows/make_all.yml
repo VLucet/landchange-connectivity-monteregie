@@ -6,8 +6,6 @@ on:
     paths:
       - ".github/workflows/make_all.yml"
       - "**.tex"
-  schedule:
-    - cron: "0 5 * * *"
 
 jobs:
   build:
