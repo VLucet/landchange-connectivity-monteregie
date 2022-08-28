@@ -37,7 +37,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
-          dockerfile: ./Dockerfiles/Dockerfile 
+          file: ./Dockerfiles/Dockerfile 
           push: true
           tags: vlucet/land_con_monteregie:3.6.2-1
 
