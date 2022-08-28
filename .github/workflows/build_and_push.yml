@@ -9,8 +9,6 @@ on:
       - "Dockerfiles/Dockerfile"
       - ".github/workflows/build_and_push.yml"
       - "renv.lock"
-  schedule:
-    - cron: "0 1 * * *"
 
 jobs:
   build_and_push:
