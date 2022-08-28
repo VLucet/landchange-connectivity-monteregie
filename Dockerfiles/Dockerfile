@@ -23,40 +23,44 @@ ENV RENV_VERSION 0.10.0
 RUN echo 'we are running some # of cool things'
 
 # Install System dependencies
-RUN apt-get -y update -qq \
-  && apt-get install -y --no-install-recommends \
-#    libgsl-dev=2.5+dfsg-6 \
-#    mono-devel=5.18.0.240+dfsg-3 \
-#    grass-dev=7.6.0-1 \
-    curl=7.64.0-4+deb10u1 
-#    cargo \
-#    gdal-bin=2.4.0+dfsg-1+b1 \
-#    python-gdal=2.4.0+dfsg-1+b1 \
-#    bc=1.07.1-2+b1 \
-#    nano=3.2-3 \
-#    htop=2.2.0-1+b1 \
-#    # OpenCV req
-#    cmake \
-#    unzip \
-#    pkg-config \
-#    libjpeg-dev \
-#    libpng-dev \
-#    libtiff-dev \
-#    libavcodec-dev \
-#    libavformat-dev \
-#    libswscale-dev \
-#    libv4l-dev \
-#    libxvidcore-dev \
-#    libx264-dev \
-#    libatlas-base-dev \
-#    gfortran \
-#    python3-dev \
-#    python3-pip \
-#    biber #\
-#  && tlmgr install setspace ulem sectsty datetime ms psnfss subfig multirow \ 
-#    adjustbox collectbox enumitem lipsum lineno pdfpages siunitx biblatex \
-#    logreq courier soul biblatex-apa
-    
+RUN apt-get -y update
+
+RUN apt-get -y update -qq 
+
+RUN apt-get install -y --no-install-recommends \
+    libgsl-dev=2.5+dfsg-6 \
+    mono-devel=5.18.0.240+dfsg-3 \
+    grass-dev=7.6.0-1 \
+    curl=7.64.0-4+deb10u1 \
+    cargo \
+    gdal-bin=2.4.0+dfsg-1+b1 \
+    python-gdal=2.4.0+dfsg-1+b1 \
+    bc=1.07.1-2+b1 \
+    nano=3.2-3 \
+    htop=2.2.0-1+b1 \
+    # OpenCV req
+    cmake \
+    unzip \
+    pkg-config \
+    libjpeg-dev \
+    libpng-dev \
+    libtiff-dev \
+    libavcodec-dev \
+    libavformat-dev \
+    libswscale-dev \
+    libv4l-dev \
+    libxvidcore-dev \
+    libx264-dev \
+    libatlas-base-dev \
+    gfortran \
+    python3-dev \
+    python3-pip \
+    biber
+
+RUN tlmgr install setspace ulem sectsty datetime ms psnfss subfig multirow \ 
+    adjustbox collectbox enumitem lipsum lineno pdfpages siunitx biblatex \
+    logreq courier soul biblatex-apa
+   
 # Julia install
 ENV JULIA_DEPOT_PATH=/opt/julia
 ENV JULIA_PKGDIR=/opt/julia
