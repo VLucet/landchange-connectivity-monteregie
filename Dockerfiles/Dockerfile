@@ -23,9 +23,7 @@ ENV RENV_VERSION 0.10.0
 RUN echo 'we are running some # of cool things'
 
 # Install System dependencies
-RUN apt-get -y update
-
-RUN apt-get -y update -qq 
+RUN apt-get -y --allow-releaseinfo-change update -qq 
 
 RUN apt-get install -y --no-install-recommends \
     libgsl-dev=2.5+dfsg-6 \
