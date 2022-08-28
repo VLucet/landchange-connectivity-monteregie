@@ -13,7 +13,6 @@
 test/
 # Don't track these
 *.xz
-*.txt
 .idea
 *.tif
 *.aux.xml

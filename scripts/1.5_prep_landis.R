@@ -60,7 +60,7 @@ writeRaster(baseline_combined_reproj, "data/landis/spatial/temp_baseline.tif",
 
 # Calculate distance => in GRASS Start Grass session
 unlink("libraries/grass/landusechangemodel/", recursive = T)
-initGRASS(gisBase = "/usr/lib/grass76/", gisDbase = "libraries/grass/", 
+initGRASS(gisBase = "/usr/lib/grass78/", gisDbase = "libraries/grass/", 
           location = "landusechangemodel", mapset = "landis", 
           override = TRUE)
 # Run section below to set projection again
@@ -125,8 +125,13 @@ baseline_combined <-
              lu.2000 = raster('data/land_use/aggregated/aggregated_lu_buffered_2000_patched.tif'), 
              lu.2010 = raster('data/land_use/aggregated/aggregated_lu_buffered_2010_patched.tif')))
 
+patched_region <- is.na(baseline_combined) & !is.na(lu.stack.buf.ag$aggregated_lu_buffered_new_roads_2010) 
+patched_region[patched_region==0]  <- NA
+writeRaster(patched_region$lu.1990,'data/land_use/aggregated/aggregated_lu_buffered_1990_to_patch',  
+            format="GTiff", overwrite=T) 
+
 baseline_combined[is.na(baseline_combined) & 
-                    !is.na(lu.stack.buf.ag$aggregated_lu_buffered_new_roads_2010)] <- 22 # missing value replaced
+                    !is.na(lu.stack.buf.ag$aggregated_lu_buffered_new_roads_2010)] <- 12 # missing value replaced
 
 # reproj and crop
 landis_stack <- stack(baseline_combined, landtypes_reproj)

@@ -37,7 +37,7 @@ make_INI_file = function(file, orientation) {
                                      orientation, ".tif"))
   INI <- lapply(X=INI, FUN=str_replace_all, 
                 pattern ="OUTPUT_FILE",
-                replacement = paste0("outputs/current_density/",file, "_", orientation, 
+                replacement = paste0("../current_density_2/",file, "_", orientation, 
                                      "_out")) # Np need for .tif here
   fileConn<-file(paste0("config/ini_circuitscape/all/", file, "_",orientation,".ini"))
   writeLines(unlist(INI), fileConn)

@@ -55,9 +55,10 @@ key <- read.csv("config/stsim/SecondaryStratum.csv")
 
 # Get result secenario directory 
 sce_dir_vec <- list.files("libraries/stsim/monteregie-conncons-scripted.ssim.output", 
-                          full.names = T)
+                          full.names = T)[-c(2,5,8,11,14)]
 sce_nb_vec <- paste0("sce_", as.numeric(unlist(lapply(str_split(sce_dir_vec, "-"), 
                                                       FUN = last))))
+print(sce_nb_vec)
 
 # Templates
 iter_template <- paste0("it_", 1:STSIM_ITER, "_")
@@ -104,7 +105,7 @@ get_ts_template <- function(list_of_files, step_save) {
 }
 
 #-------------------------------------------------------------------------------
-
+if (FALSE) {
 final_df <- foreach(sce = sce_nb_vec, .combine = dplyr::bind_rows) %dopar% {
   
   library(tidyverse)
@@ -150,7 +151,10 @@ final_df <- foreach(sce = sce_nb_vec, .combine = dplyr::bind_rows) %dopar% {
       df2$zone <- as.factor(df2$zone)
       df2$species <- species
       df2$timestep <- ts_template[which(ts_vec == timestep)]
+      # df2$iteration <- iter
       print(head(df2))
+
+      # final <- df2 %>% rename(current = value)
       
       final <- df2 %>% 
         pivot_longer(cols = contains("it"), names_to = "iteration", 
@@ -174,9 +178,9 @@ limit <- round(rows/2)
 
 write_csv(final_df[1:limit,], "outputs/final/final_df_current_density_part1.csv")
 write_csv(final_df[limit:rows,], "outputs/final/final_df_current_density_part2.csv")
-
+}
 #-------------------------------------------------------------------------------
-
+if (TRUE) {
 n_cores = 8 # very important smaller number of cores!!
 clust <- makeCluster(n_cores, outfile="log.txt")
 registerDoParallel(cl = clust)
@@ -227,9 +231,9 @@ foreach(sce = sce_nb_vec) %dopar% {
   }
   removeTmpFiles(h=0)
 }
-
+}
 #-------------------------------------------------------------------------------
-
+if (TRUE) {
 # Now with original data - simple loop this time
 list_files_origin <- list_files[grepl(x = list_files, pattern = "TRUE")]
 
@@ -281,7 +285,7 @@ write_csv(final_df_origin, "outputs/final/final_df_origin_current_density.csv")
 output <- 
   get_bar_df(sce_folder="libraries/stsim/monteregie-conncons-scripted.ssim.output/")
 write_csv(output, "outputs/final/final_bar_plot_data.csv")
-
+}
 #-------------------------------------------------------------------------------
 
 # # FULL SUM FOR FINAL OUTPUTS

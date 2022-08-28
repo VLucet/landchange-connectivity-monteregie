@@ -68,7 +68,7 @@ print_main_usage(){
   echo "Usage: landcon.sh [-a run all] [-p prep] [-m model no prep] [-f fit & predict]"
   echo "                  [-s stsim] [-r reclassify] [-c circuitscape] [-d post process] [-g make figures]"
   echo ""
-  echo "Subcommands: prep, fitpred, stsim, cs, figs (use -h to see usage on each subcommand)" 
+  echo "Subcommands: prep, fitpred, stsim, cs, figs (use -h to see usage on each subcommand)"
   echo ""
 }
 
@@ -246,27 +246,27 @@ while getopts ":aepmfsrcdgy" opt; do
       run_prep
       echo $?
       ;;
-    m ) 
+    m )
       run_model_no_prep
       ;;
     f )
       #export R_METHOD='all'
       export R_N_TREES='500'
-      fit_predict_model 
+      fit_predict_model
       ;;
     s )
       export STSIM_RUN='TRUE'
-      run_stsim 
+      run_stsim
       ;;
     r )
-      reclassify 
+      reclassify
       ;;
     c )
       prep_circuitscape
-      run_circuitscape 
+      run_circuitscape
       ;;
     d )
-      post_process 
+      post_process
       ;;
     g )
       export REPRO_FIGS_ONLY='TRUE'
@@ -287,7 +287,7 @@ shift $((OPTIND-1))
 
 subcommand=$1; shift # remove subcommand from the argument list
 case "$subcommand" in
-  
+
   prep)
     echo "prep - prepare inputs from raw data"
     echo ""
@@ -312,35 +312,35 @@ case "$subcommand" in
     done
     shift $((OPTIND -1))
     ;;
-  
+
   fitpred)
-    
+
     if [[ $# -eq 0 ]] ; then
       echo "Usage: fitpred <string nb trees>"
       echo "" 1>&2
       exit 0
     fi
-    
+
     export R_N_TREES=$1
     fit_predict_model
-    
+
     shift $((OPTIND -1))
     ;;
-    
+
   stsim)
     echo "stsim - prepare stsim library and run all scenarios"
     echo ""
-    
+
     while getopts ":lr" opt; do
       case ${opt} in
         l )
           export STSIM_RUN='FALSE'
           run_stsim
-          ;; 
+          ;;
         r )
           export STSIM_RUN='TRUE'
           run_stsim
-          ;; 
+          ;;
         \? )
           echo "Usage: stsim [-l library only] [-r run stsim]"
           echo "" 1>&2
@@ -348,23 +348,23 @@ case "$subcommand" in
           ;;
       esac
     done
-    
+
     shift $((OPTIND -1))
     ;;
-    
+
   cs)
     echo "cs - prepare circuitscape inputs and run julia script"
     echo ""
-    
+
     while getopts ":pr:a" opt; do
       case ${opt} in
         p )
           prep_circuitscape
-          ;; 
+          ;;
         r )
           export CS_CORES=$OPTARG
           run_circuitscape
-          ;; 
+          ;;
         a )
           prep_circuitscape
           run_circuitscape
@@ -376,21 +376,21 @@ case "$subcommand" in
           ;;
       esac
     done
-    
+
     shift $((OPTIND -1))
     ;;
-    
+
   figs)
     echo "figs - reproduce thesis figures"
     echo ""
-    
+
     if [ $# -eq 0 ]; then
       echo "Reproducing out-of-the-box reproducible figures only"
       echo "" 1>&2
       export REPRO_FIGS_ONLY='TRUE'
       make_figures
     fi
-    
+
     while getopts ":a" opt; do
       case ${opt} in
         a )
@@ -406,7 +406,7 @@ case "$subcommand" in
           ;;
       esac
     done
-    
+
     shift $((OPTIND -1))
     ;;
 

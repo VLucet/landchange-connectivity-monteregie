@@ -1,10 +1,10 @@
-ID,Name
-11,decid_1
-12,decid_2
-13,decid_3
-21,mixt_1
-22,mixt_2
-23,mixt_3
-31,conif_1
-32,conif_2
-33,conif_3
+ID,Name,Name_full
+11,decid_1,Young Deciduous
+12,decid_2,Medium Deciduous
+13,decid_3,Old Deciduous
+21,mixt_1,Young Mixed
+22,mixt_2,Medium Mixed
+23,mixt_3,Old Mixed
+31,conif_1,Young Coniferous
+32,conif_2,Medium Coniferous
+33,conif_3,Old Coniferous
