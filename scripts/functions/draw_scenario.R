@@ -3,10 +3,12 @@ draw_scenario <- function(sce = NULL,
                           mxp = 10000,
                           sce_folder = "../libraries/stsim/monteregie-conncons-scripted.ssim.output"){
   
+  # browser()
+  
   # Classes stuff
   classes <- read_csv("../config/rcl_tables/land_use/recode_table.csv")
   forest_classes <- read_csv("../config/rcl_tables/land_use/recode_table_forest.csv") %>%
-    rename(new_code = "ID", new_class = "Name")
+    rename(new_code = "ID", new_class = "Name_full")
   classes_unique <- unique(classes[, c("new_code", "new_class")]) %>%
     bind_rows(forest_classes)
   
@@ -48,9 +50,14 @@ draw_scenario <- function(sce = NULL,
                                           '#ffff00')),
                         scales=list(draw=FALSE),
                         maxpixels = mxp,
-                        colorkey=FALSE,
+                        colorkey=TRUE,
                         cex = 0.1,
-                        main = "2010")
+                        main = "2010") +
+    latticeExtra::layer(sp.polygons(as_Spatial(st_transform(
+      st_read("../data/raw/vector/prov_SHP/lpr_000b16a_e.shp"), 
+      "+proj=utm +zone=18 +datum=WGS84 +units=m +no_defs")), fill='gray80'), 
+      under = TRUE)
+
   BAU_plot <- as.ggplot(BAU_plot)
   
   ALT <- ratify(stack_to_plot$Alternative)
@@ -66,12 +73,18 @@ draw_scenario <- function(sce = NULL,
                                           '#ffff00')),
                         scales=list(draw=FALSE),
                         maxpixels = mxp,
-                        colorkey=list(space="right"),
+                        colorkey=list(space="right", width = 2),
                         labels = list(cex = 5),
-                        main = "2100")
+                        main = "2100")  +
+    latticeExtra::layer(sp.polygons(as_Spatial(st_transform(
+      st_read("../data/raw/vector/prov_SHP/lpr_000b16a_e.shp"), 
+      "+proj=utm +zone=18 +datum=WGS84 +units=m +no_defs")), fill='gray80'), 
+      under = TRUE)
+  
   ALT_plot <- as.ggplot(ALT_plot)
   
-  final_plot <- BAU_plot + ALT_plot  + plot_layout(widths = c(1, 1.08))
+  final_plot <- plot_grid(BAU_plot, ALT_plot, rel_widths = c(1, .56), ncol = 1, nrow = 2, 
+                          align = "v")
   
   return(final_plot)
 }
