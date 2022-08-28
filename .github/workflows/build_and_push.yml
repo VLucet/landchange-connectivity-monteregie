@@ -17,9 +17,9 @@ jobs:
   build_and_push:
     runs-on: ubuntu-latest
     steps:
-#      -
-#        name: Checkout
-#        uses: actions/checkout@v3
+      -
+        name: Checkout
+        uses: actions/checkout@v3
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v2
@@ -36,7 +36,8 @@ jobs:
         name: Build and Push image
         uses: docker/build-push-action@v3
         with:
-          dockerfile: Dockerfiles/Dockerfile 
+          context: .
+          dockerfile: ./Dockerfiles/Dockerfile 
           push: true
           tags: vlucet/land_con_monteregie:3.6.2-1
 
