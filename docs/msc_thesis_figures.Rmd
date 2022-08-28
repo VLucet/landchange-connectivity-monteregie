@@ -79,7 +79,7 @@ if(REPRO_FIGS_ONLY == ""){
 
 #### Cleaning and formatting
 
-We start by preparing the data from the outputs of scripts `2.6`, `7.1` and `8.1`. The results table shown as output summarised all simulation efforts for the thesis. 
+We start by preparing the data from the outputs of scripts `2.6`, `7.1` and `8.1`. The results table shown as output summarised all simulation efforts for the thesis.
 
 ```{r data_prep, message=FALSE, warning=FALSE, paged.print=TRUE}
 # Land use data 
