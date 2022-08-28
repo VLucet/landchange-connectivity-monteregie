@@ -50,10 +50,10 @@ RUN apt-get -y update -qq \
     gfortran \
     python3-dev \
     python3-pip \
-    biber \
-  && tlmgr install setspace ulem sectsty datetime ms psnfss subfig multirow \ 
-    adjustbox collectbox enumitem lipsum lineno pdfpages siunitx biblatex \
-    logreq courier soul biblatex-apa
+    biber #\
+#  && tlmgr install setspace ulem sectsty datetime ms psnfss subfig multirow \ 
+#    adjustbox collectbox enumitem lipsum lineno pdfpages siunitx biblatex \
+#    logreq courier soul biblatex-apa
     
 # Julia install
 ENV JULIA_DEPOT_PATH=/opt/julia
