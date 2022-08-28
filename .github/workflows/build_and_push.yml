@@ -39,5 +39,6 @@ jobs:
           context: .
           file: ./Dockerfiles/Dockerfile 
           push: true
+          no-cache: true
           tags: vlucet/land_con_monteregie:3.6.2-1
 
