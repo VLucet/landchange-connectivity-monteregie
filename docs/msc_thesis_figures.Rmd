@@ -44,6 +44,10 @@ suppressPackageStartupMessages({
   library(tidymodels)
   library(patchwork)
   library(ggplotify)
+  library(gt)
+  library(webshot)
+  library(wesanderson)
+  library(cowplot)
 })
 
 theme_set(theme_minimal())
@@ -83,10 +87,10 @@ trans_df <- read_csv("../outputs/final/land_use_trans_df.csv")
 vals_df <- read_csv("../outputs/final/land_use_vals_df.csv")
 
 # Results dir + mun and mrc shapefile
-mun <- st_read("../data/mun/munic_SHP_clean.shp", quiet = TRUE)
-mrc <- st_read("../data/raw/vector/mrc_SHP/mrc_polygone.shp",  quiet = TRUE)
-mrc.mont <- mrc %>% filter(MRS_NM_REG=="Montérégie") 
-mrc.mont.reproj <- st_transform(mrc.mont, crs = st_crs(mun))
+# mun <- st_read("../data/mun/munic_SHP_clean.shp", quiet = TRUE)
+# mrc <- st_read("../data/raw/vector/mrc_SHP/mrc_polygone.shp",  quiet = TRUE)
+# mrc.mont <- mrc %>% filter(MRS_NM_REG=="Montérégie") 
+# mrc.mont.reproj <- st_transform(mrc.mont, crs = st_crs(mun))
 
 # Classes
 classes <- read_csv("../config/rcl_tables/land_use/recode_table.csv")
@@ -98,10 +102,10 @@ classes_unique <- unique(classes[, c("new_code", "new_class")]) %>%
 
 # results key
 sce_code_vec <- 
-  as.vector(t(outer(c("BAU-", "RR-", "CP-", "CPR-", "CPTR-"), 
+  as.vector(t(outer(c("BAU-", "BAUR-", "CP-", "CPR-", "CPTR-"), 
                     c("Hist", "Base", "RCP8"), paste0)))
 sce_code_vec_run <- 
-  rep(c("BAU", "RR", "CP", "CPR", "CPTR"), each=3)
+  rep(c("BAU", "BAUR", "CP", "CPR", "CPTR"), each=3)
 
 results_clean <- read_csv("../outputs/final/stsim_run_results.csv") %>% 
   dplyr::select(scenarioId, name) %>% 
@@ -493,6 +497,11 @@ ggsave(fig_1_historic,
 Change in mean flow (in \% of the the 2010 flow) between 2010 (observed) and 2100 (predicted), contrasting BAU scenario (solid line) with other land use change scenarios - linear graph.
 
 ```{r figure_1_model_1, message=FALSE,  warning=FALSE, out.width="100%", fig.cap="Connectivity change for species through time, 2010-2100"}
+
+the_width = 18 
+the_height = 15
+the_dpi = 500
+
 colors_sce <- 
   data.frame(sce = c("Baseline", "RCP85"), 
              color = c("#8DA0CB", "#800026"), stringsAsFactors = F)
@@ -604,6 +613,7 @@ fig_1_static_chap_2 <- joined %>%
 ggsave(fig_1_static_chap_2, 
        filename = "../thesis/figures/connectivity_decrease_x5species_chap2.png", 
        width = the_width, height = the_height, dpi = the_dpi)
+fig_1_static_chap_2
 ```
 
 ![](../thesis/figures/connectivity_decrease_x5species_chap2.png)
@@ -747,6 +757,8 @@ hist_plot_origin <- histograms %>%
 #hist_plot_origin
 ggsave("../thesis/figures/original_hists.png", hist_plot_origin,
        width = the_width, height = the_height, dpi = the_dpi)
+
+hist_plot_origin
 ```
 
 ![](../thesis/figures/original_hists.png)
@@ -762,6 +774,7 @@ bi_colors <- c("#67a9cf", "#ef8a62")
 hist_plot_1 <- histograms %>% 
   mutate(ts = as.factor(ts)) %>% 
   filter(chapter %in% c('both', 'chap_1')) %>%  
+  filter(climate != "baseline") %>% 
   ggplot(aes(x=bins, y=n, group=ts)) + 
   geom_density(stat='identity', show.legend=T, aes(fill=factor(ts), color=factor(ts)), alpha=0.3)+
   facet_grid(code~species) +
@@ -771,16 +784,17 @@ hist_plot_1 <- histograms %>%
                      labels = c("2010", "2100")) +
   labs(x = "Flow intensity distribution (log)", 
        y = "")+
-  theme(strip.text.y = element_text(angle=360, size=10, hjust = 0), 
+  theme(strip.text.y = element_text(angle=360, size=20, hjust = 0), 
         axis.text.x=element_blank(),
         axis.ticks.x=element_blank(), 
         axis.text.y.left = element_blank(),
         axis.ticks.y.left = element_blank(), 
-        legend.position = c(0.95, 0.96)) +
+        legend.position = c(0.94, 0.94)) +
   labs(color="Timestep", fill="Timestep") +
   NULL
 #hist_plot_1
 ggsave("../thesis/figures/hist_chap1.png", hist_plot_1, width = 18, height = 15)
+hist_plot_1
 ```
 
 ![](../thesis/figures/hist_chap1.png)
@@ -793,9 +807,10 @@ Histograms of flow values for all species and scenarios, for 2010 (observed) and
 hist_plot_2 <- histograms %>% 
   mutate(ts = as.factor(ts)) %>% 
   filter(chapter %in% c('chap_2')) %>%  
+  filter(climate != "baseline") %>% 
   ggplot(aes(x=bins, y=n, group=ts)) + 
   geom_density(stat='identity', aes(fill=factor(ts),  colour=factor(ts)), alpha=0.3)+
-  facet_grid(code~species) +
+  facet_grid(species~code) +
   scale_fill_manual(values = bi_colors, 
                     labels = c("2010", "2100")) +
   scale_color_manual(values = bi_colors, 
@@ -807,14 +822,48 @@ hist_plot_2 <- histograms %>%
         axis.ticks.x=element_blank(), 
         axis.text.y.left = element_blank(),
         axis.ticks.y.left = element_blank(),
-        legend.position = c(0.95, 0.96)) +
+        legend.position = c(0.94, 0.94)) +
   labs(color="Timestep", fill="Timestep") +
   NULL
 #hist_plot_2
 ggsave("../thesis/figures/hist_chap2.png", hist_plot_2, width = 18, height = 20)
+
+hist_plot_2
 ```
 
 ![](../thesis/figures/hist_chap2.png)
+
+#### BOTH
+```{r hist_plot_3, message=FALSE, warning=FALSE, out.width="100%"}
+wes_2_colors = wes_palette("Zissou1", 2, type = "continuous")
+hist_plot_3 <- histograms %>% 
+  mutate(ts = as.factor(ts)) %>% 
+  
+  filter(chapter %in% c('both', 'chap_1', 'chap_2')) %>%  
+  filter(climate != "baseline") %>% 
+  
+  ggplot(aes(x=bins, y=n, group=ts)) + 
+  geom_density(stat='identity', aes(colour=factor(ts)), alpha=0.3)+
+  facet_grid(code~species) +
+  # scale_fill_manual(values = wes_2_colors, 
+  #                   labels = c("2010", "2100")) +
+  scale_color_manual(values = wes_2_colors, 
+                     labels = c("2010", "2100")) +
+  labs(x = "Flow intensity distribution (log)", 
+       y = "") +
+  theme(strip.text.y = element_text(angle=360, size=25, hjust = 0), 
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank(), 
+        axis.text.y.left = element_blank(),
+        axis.ticks.y.left = element_blank(),
+        legend.position = c(0.94, 0.94)) +
+  labs(color="Timestep") +
+  NULL
+#hist_plot_2
+ggsave("../thesis/figures/hist_both_chap.png", hist_plot_3, width = 18, height = 15)
+
+hist_plot_3
+```
 
 ### SURF Analysis
 
@@ -1041,11 +1090,13 @@ Land use maps showing predictions of land use changes (Only BAU is displayed bel
 
 ```{r compare, eval=!(REPRO_FIGS_ONLY), message=FALSE, warning=FALSE, out.width="100%"}
 source('../scripts/functions/draw_scenario.R')
+mxp <- 1e10000 # 1000
+the_dpi = 300
 for (scenario in c(39, 42, 45, 48, 51)){
-  the_plot <- draw_scenario(scenario, mxp = mxp)
+  the_plot <- draw_scenario(scenario, mxp = mxp, sce_folder = "/media/vlucet/backup/results_july/monteregie-conncons-scripted.ssim.output/")
   the_name <- paste0("scenario_", as.character(scenario),"_compare.png")
-  ggsave(plot = the_plot, 
-         filename = paste0("../thesis/figures/",the_name), width = 30, height = 12, dpi = the_dpi)
+  ggsave(plot = the_plot,
+  filename = paste0("../thesis/figures/",the_name), width = 15, height = 18, dpi = the_dpi)
 }
 ```
 
@@ -1314,6 +1365,11 @@ Mapping takes a lot of time, not knitted by default
 -->
 
 ### Networks
+```{r, message=FALSE, warning=FALSE, out.width="100%", fig.cap=""}
+networks <- read_csv("../outputs/final/final_df_network_stats.csv") %>% 
+  left_join(results_clean, by = c("scenario" = "scenarioId"))
+```
+
 ##### CHAP 1
 ```{r, message=FALSE, warning=FALSE, out.width="100%", fig.cap=""}
 networks <- read_csv("../outputs/final/final_df_network_stats.csv") %>% 
@@ -1683,4 +1739,423 @@ networks %>%
 ggsave(net_6_2, 
        filename = "../thesis/figures/meanCost_2.png", 
        width = the_width, height = the_height, dpi = the_dpi)
+```
+
+```{r}
+networks %>% 
+  filter(scenario != 37, timestep %in% c(2,10)) %>% 
+  filter(species %in% c("MAAM", "URAM")) %>% 
+  pivot_longer(numNodes:overallECnatal, names_to = "metric", values_to = "values") %>% 
+  select (species, iteration, timestep, code_run, climate, metric, values) %>% 
+  group_by(species, timestep, code_run, climate, metric) %>% 
+  summarise(values = mean(values)) %>% 
+  ungroup() %>% 
+  pivot_wider(names_from = timestep, names_glue = "ts_{timestep}_{.value}", values_from = values) %>% 
+  mutate(percent_change = (ts_10_values - ts_2_values)/ts_2_values) %>% 
+  select(-starts_with("ts")) %>% 
+  pivot_wider(names_from = metric, values_from = percent_change) %>% 
+  mutate(code_run = fct_relevel(code_run, c("BAU", "BAUR", "CP", "CPR", "CPTR"))) %>% 
+  arrange(code_run) %>% 
+  mutate(climate = fct_relevel(climate, c("baseline", "RCP 8.5")))  %>% 
+  arrange(code_run, climate) %>% 
+  mutate(scenario = paste(code_run, climate)) %>%
+  arrange(code_run, climate, scenario) %>% 
+  select(-c(code_run, climate)) %>%
+  select(species, scenario, starts_with("overall"), numNodes, numLinks, meanAreaQuality, meanCost) %>% 
+  
+  gt(rowname_col = "scenario", groupname_col = "species") %>% 
+  fmt_percent(everything()) %>% 
+  cols_label(
+    overallECgap = "EC (gap)", 
+    overallECnatal = "EC (natal)", 
+    numNodes = "Nodes", 
+    numLinks = "Links", 
+    meanAreaQuality = "Mean Quality", 
+    meanCost = "Mean Cost"
+  ) %>% 
+  data_color(
+    columns = overallECgap:meanAreaQuality, 
+    colors = scales::col_bin(palette = as.character(paletteer::paletteer_c("scico::cork", n = 100)), 
+                             bins = seq(from =-1, to = 1, by = 0.1))) %>% 
+  data_color(
+    columns = meanCost, 
+    colors = scales::col_bin(palette = as.character(paletteer::paletteer_c("scico::cork", n = 100)), 
+                             bins = seq(from =-1, to = 1, by = 0.1), reverse = -1)) -> metrics_table 
+metrics_table
+gtsave(metrics_table, "../thesis/figures/metrics.png")
+
+```
+
+```{r}
+networks_tbl <- networks
+# networks_tbl$code_run[networks_tbl$code_run == "BAUR"] <- "\n    BAUR"
+# networks_tbl$code_run[networks_tbl$code_run == "CP"] <- "    CP"
+# networks_tbl$code_run[networks_tbl$climate == "RCP 8.5"] <- "RCP 8.5"
+networks_tbl %>% 
+  filter(scenario != 37, timestep %in% c(2,10)) %>% 
+  # filter(species %in% c("MAAM", "URAM")) %>% 
+  pivot_longer(numNodes:overallECnatal, names_to = "metric", values_to = "values") %>% 
+  select (species, iteration, timestep, code_run, climate, metric, values) %>% 
+  group_by(species, timestep, code_run, climate, metric) %>% 
+  summarise(values = mean(values)) %>% 
+  ungroup() %>% 
+  pivot_wider(names_from = timestep, names_glue = "ts_{timestep}_{.value}", values_from = values) %>% 
+  mutate(percent_change = (ts_10_values - ts_2_values)/ts_2_values) %>% 
+  select(-starts_with("ts")) %>% 
+  
+  # pivot_wider(names_from = metric, values_from = percent_change) %>% 
+  
+  mutate(code_run = fct_relevel(code_run, c("BAU", "BAUR", "CP", "CPR", "CPTR"))) %>% 
+  arrange(code_run) %>% 
+  mutate(climate = fct_relevel(climate, c("baseline", "RCP 8.5")))  %>% 
+  arrange(code_run, climate) %>% 
+  mutate(scenario = paste(code_run, climate)) %>%
+  arrange(code_run, climate, scenario) %>% 
+  
+  select(-c(code_run, climate)) %>%
+  
+  pivot_wider(names_from = "scenario", values_from = "percent_change") %>% 
+  
+  # select(species, scenario, starts_with("overall"), numNodes, numLinks, meanAreaQuality, meanCost) %>% 
+  filter(metric %in% c("overallECgap", "overallECnatal", "numNodes", 
+                       "numLinks", "meanAreaQuality")) %>% 
+  
+  # mutate(metric = fct_relevel(metric, c("overallECgap", "overallECnatal", "numNodes", 
+  #                                       "numLinks", "meanAreaQuality"))) %>% 
+  left_join(data.frame(metric = c("overallECgap", "overallECnatal", "numNodes", 
+                                  "numLinks", "meanAreaQuality"), 
+                       metric_name = c("EC (gap)", "EC (natal)", "Nodes", 
+                                       "Links", "Quality"))) %>% 
+  mutate(metric_name = fct_relevel(metric_name, c("EC (gap)", "EC (natal)", "Nodes", 
+                                                  "Links", "Quality"))) %>%
+  arrange(metric_name) %>%
+  select(-metric) %>% 
+  
+  gt(rowname_col = "metric_name", groupname_col = "species") %>% 
+  fmt_percent(everything(), decimals=0) %>% 
+  data_color(
+    columns = `BAU baseline`:`CPTR RCP 8.5`, 
+    colors = scales::col_bin(palette = as.character(paletteer::paletteer_c("scico::cork", n = 100)), 
+                             bins = seq(from =-1, to = 1, by = 0.1))) %>%
+  tab_options(data_row.padding = px(1)) %>% 
+  cols_width(metric_name~px(89), everything()~px(68)) %>% 
+  tab_style(locations = cells_body(), cell_text(size = 12)) -> metrics_table_2 # %>% # 89
+# data_color(
+#   columns = meanCost, 
+#   colors = scales::col_bin(palette = as.character(paletteer::paletteer_c("scico::cork", n = 100)), 
+#                            bins = seq(from =-1, to = 1, by = 0.1), reverse = -1)) 
+
+metrics_table_2
+gtsave(metrics_table_2, "../thesis/figures/metrics_2.png")
+
+```
+
+```{r}
+URAM <- networks %>% 
+  filter(scenario != 37, timestep %in% c(2,10)) %>% 
+  pivot_longer(numNodes:overallECnatal, names_to = "metric", values_to = "values") %>% 
+  select (species, iteration, timestep, code_run, climate, metric, values) %>% 
+  group_by(species, timestep, code_run, climate, metric) %>% 
+  summarise(values = mean(values)) %>% 
+  ungroup() %>% 
+  pivot_wider(names_from = timestep, names_glue = "ts_{timestep}_{.value}", values_from = values) %>% 
+  mutate(percent_change = (ts_10_values - ts_2_values)/ts_2_values*100) %>% 
+  select(-starts_with("ts")) %>% 
+  mutate(code_run = fct_relevel(code_run, c("BAU", "BAUR", "CP", "CPR", "CPTR"))) %>% 
+  arrange(code_run) %>% 
+  mutate(climate = fct_relevel(climate, c("baseline", "RCP 8.5")))  %>% 
+  arrange(code_run, climate) %>% 
+  mutate(scenario = paste(code_run, climate)) %>%
+  arrange(code_run, climate, scenario) %>% 
+  
+  select(-c(code_run, climate)) %>% 
+  ungroup() %>% 
+  filter(species == "URAM") %>% 
+  filter(metric %in% c("overallECgap", "overallECnatal", "numNodes", 
+                       "numLinks", "meanAreaQuality")) %>% 
+  left_join(data.frame(metric = c("overallECgap", "overallECnatal", "numNodes", 
+                                  "numLinks", "meanAreaQuality"), 
+                       metric_name = c("EC (gap)", "EC (natal)", "Nodes", 
+                                       "Links", "Quality"))) %>% 
+  mutate(metric_name = fct_relevel(metric_name, c("EC (gap)", "EC (natal)", "Nodes", 
+                                                  "Links", "Quality"))) %>%
+  arrange(metric_name) %>%
+  select(-metric) %>% 
+  mutate(`% Change` = percent_change, Metric = metric_name, Scenario = scenario) %>% 
+  tidyHeatmap::heatmap(Scenario, Metric, `% Change`, .scale="none", cluster_columns = FALSE)
+
+BLBR <- networks %>% 
+  filter(scenario != 37, timestep %in% c(2,10)) %>% 
+  pivot_longer(numNodes:overallECnatal, names_to = "metric", values_to = "values") %>% 
+  select (species, iteration, timestep, code_run, climate, metric, values) %>% 
+  group_by(species, timestep, code_run, climate, metric) %>% 
+  summarise(values = mean(values)) %>% 
+  ungroup() %>% 
+  pivot_wider(names_from = timestep, names_glue = "ts_{timestep}_{.value}", values_from = values) %>% 
+  mutate(percent_change = (ts_10_values - ts_2_values)/ts_2_values*100) %>% 
+  select(-starts_with("ts")) %>% 
+  mutate(code_run = fct_relevel(code_run, c("BAU", "BAUR", "CP", "CPR", "CPTR"))) %>% 
+  arrange(code_run) %>% 
+  mutate(climate = fct_relevel(climate, c("baseline", "RCP 8.5")))  %>% 
+  arrange(code_run, climate) %>% 
+  mutate(scenario = paste(code_run, climate)) %>%
+  arrange(code_run, climate, scenario) %>% 
+  
+  select(-c(code_run, climate)) %>% 
+  ungroup() %>% 
+  filter(species == "BLBR") %>% 
+  filter(metric %in% c("overallECgap", "overallECnatal", "numNodes", 
+                       "numLinks", "meanAreaQuality")) %>% 
+  left_join(data.frame(metric = c("overallECgap", "overallECnatal", "numNodes", 
+                                  "numLinks", "meanAreaQuality"), 
+                       metric_name = c("EC (gap)", "EC (natal)", "Nodes", 
+                                       "Links", "Quality"))) %>% 
+  mutate(metric_name = fct_relevel(metric_name, c("EC (gap)", "EC (natal)", "Nodes", 
+                                                  "Links", "Quality"))) %>%
+  arrange(metric_name) %>%
+  select(-metric) %>% 
+  mutate(`% Change` = percent_change, Metric = metric_name, Scenario = scenario) %>% 
+  tidyHeatmap::heatmap(Scenario, Metric, `% Change`, .scale="none", cluster_columns = FALSE)
+
+MAAM <- networks %>% 
+  filter(scenario != 37, timestep %in% c(2,10)) %>% 
+  pivot_longer(numNodes:overallECnatal, names_to = "metric", values_to = "values") %>% 
+  select (species, iteration, timestep, code_run, climate, metric, values) %>% 
+  group_by(species, timestep, code_run, climate, metric) %>% 
+  summarise(values = mean(values)) %>% 
+  ungroup() %>% 
+  pivot_wider(names_from = timestep, names_glue = "ts_{timestep}_{.value}", values_from = values) %>% 
+  mutate(percent_change = (ts_10_values - ts_2_values)/ts_2_values*100) %>% 
+  select(-starts_with("ts")) %>% 
+  mutate(code_run = fct_relevel(code_run, c("BAU", "BAUR", "CP", "CPR", "CPTR"))) %>% 
+  arrange(code_run) %>% 
+  mutate(climate = fct_relevel(climate, c("baseline", "RCP 8.5")))  %>% 
+  arrange(code_run, climate) %>% 
+  mutate(scenario = paste(code_run, climate)) %>%
+  arrange(code_run, climate, scenario) %>% 
+  
+  select(-c(code_run, climate)) %>% 
+  ungroup() %>% 
+  filter(species == "MAAM") %>% 
+  filter(metric %in% c("overallECgap", "overallECnatal", "numNodes", 
+                       "numLinks", "meanAreaQuality")) %>% 
+  left_join(data.frame(metric = c("overallECgap", "overallECnatal", "numNodes", 
+                                  "numLinks", "meanAreaQuality"), 
+                       metric_name = c("EC (gap)", "EC (natal)", "Nodes", 
+                                       "Links", "Quality"))) %>% 
+  mutate(metric_name = fct_relevel(metric_name, c("EC (gap)", "EC (natal)", "Nodes", 
+                                                  "Links", "Quality"))) %>%
+  arrange(metric_name) %>%
+  select(-metric) %>% 
+  mutate(`% Change` = percent_change, Metric = metric_name, Scenario = scenario) %>% 
+  tidyHeatmap::heatmap(Scenario, Metric, `% Change`, .scale="none", cluster_columns = FALSE)
+
+PLCI <- networks %>% 
+  filter(scenario != 37, timestep %in% c(2,10)) %>% 
+  pivot_longer(numNodes:overallECnatal, names_to = "metric", values_to = "values") %>% 
+  select (species, iteration, timestep, code_run, climate, metric, values) %>% 
+  group_by(species, timestep, code_run, climate, metric) %>% 
+  summarise(values = mean(values)) %>% 
+  ungroup() %>% 
+  pivot_wider(names_from = timestep, names_glue = "ts_{timestep}_{.value}", values_from = values) %>% 
+  mutate(percent_change = (ts_10_values - ts_2_values)/ts_2_values*100) %>% 
+  select(-starts_with("ts")) %>% 
+  mutate(code_run = fct_relevel(code_run, c("BAU", "BAUR", "CP", "CPR", "CPTR"))) %>% 
+  arrange(code_run) %>% 
+  mutate(climate = fct_relevel(climate, c("baseline", "RCP 8.5")))  %>% 
+  arrange(code_run, climate) %>% 
+  mutate(scenario = paste(code_run, climate)) %>%
+  arrange(code_run, climate, scenario) %>% 
+  
+  select(-c(code_run, climate)) %>% 
+  ungroup() %>% 
+  filter(species == "PLCI") %>% 
+  filter(metric %in% c("overallECgap", "overallECnatal", "numNodes", 
+                       "numLinks", "meanAreaQuality")) %>% 
+  left_join(data.frame(metric = c("overallECgap", "overallECnatal", "numNodes", 
+                                  "numLinks", "meanAreaQuality"), 
+                       metric_name = c("EC (gap)", "EC (natal)", "Nodes", 
+                                       "Links", "Quality"))) %>% 
+  mutate(metric_name = fct_relevel(metric_name, c("EC (gap)", "EC (natal)", "Nodes", 
+                                                  "Links", "Quality"))) %>%
+  arrange(metric_name) %>%
+  select(-metric) %>% 
+  mutate(`% Change` = percent_change, Metric = metric_name, Scenario = scenario) %>% 
+  tidyHeatmap::heatmap(Scenario, Metric, `% Change`, .scale="none", cluster_columns = FALSE)
+
+RASY <- networks %>% 
+  filter(scenario != 37, timestep %in% c(2,10)) %>% 
+  pivot_longer(numNodes:overallECnatal, names_to = "metric", values_to = "values") %>% 
+  select (species, iteration, timestep, code_run, climate, metric, values) %>% 
+  group_by(species, timestep, code_run, climate, metric) %>% 
+  summarise(values = mean(values)) %>% 
+  ungroup() %>% 
+  pivot_wider(names_from = timestep, names_glue = "ts_{timestep}_{.value}", values_from = values) %>% 
+  mutate(percent_change = (ts_10_values - ts_2_values)/ts_2_values*100) %>% 
+  select(-starts_with("ts")) %>% 
+  mutate(code_run = fct_relevel(code_run, c("BAU", "BAUR", "CP", "CPR", "CPTR"))) %>% 
+  arrange(code_run) %>% 
+  mutate(climate = fct_relevel(climate, c("baseline", "RCP 8.5")))  %>% 
+  arrange(code_run, climate) %>% 
+  mutate(scenario = paste(code_run, climate)) %>%
+  arrange(code_run, climate, scenario) %>% 
+  
+  select(-c(code_run, climate)) %>% 
+  ungroup() %>% 
+  filter(species == "RASY") %>% 
+  filter(metric %in% c("overallECgap", "overallECnatal", "numNodes", 
+                       "numLinks", "meanAreaQuality")) %>% 
+  left_join(data.frame(metric = c("overallECgap", "overallECnatal", "numNodes", 
+                                  "numLinks", "meanAreaQuality"), 
+                       metric_name = c("EC (gap)", "EC (natal)", "Nodes", 
+                                       "Links", "Quality"))) %>% 
+  mutate(metric_name = fct_relevel(metric_name, c("EC (gap)", "EC (natal)", "Nodes", 
+                                                  "Links", "Quality"))) %>%
+  arrange(metric_name) %>%
+  select(-metric) %>% 
+  mutate(`% Change` = percent_change, Metric = metric_name, Scenario = scenario) %>% 
+  tidyHeatmap::heatmap(Scenario, Metric, `% Change`, .scale="none", cluster_columns = FALSE)
+```
+
+```{r}
+mtcars_tidy <- 
+  mtcars %>% 
+  as_tibble(rownames="Car name") %>% 
+  mutate_at(vars(-`Car name`, -hp, -vs), scale) %>%
+  pivot_longer(cols = -c(`Car name`, hp, vs), names_to = "Property", values_to = "Value")
+mtcars_tidy_nested <- bind_rows(mutate(mtcars_tidy, Year=1990), mutate(mtcars_tidy, Year=2000)) %>% 
+  mutate(Value = runif(n = n(), min = 0, max = 10))
+mtcars_tidy_nested %>% 
+  heatmap(`Car name`, Property, Value) 
+```
+
+#### HEATMAP
+
+```{r}
+HEATMAP_data <- networks %>% 
+  filter(scenario != 37, timestep %in% c(2,10)) %>% 
+  pivot_longer(numNodes:overallECnatal, names_to = "metric", values_to = "values") %>% 
+  select (species, iteration, timestep, code_run, climate, metric, values) %>% 
+  group_by(species, timestep, code_run, climate, metric) %>% 
+  summarise(values = mean(values)) %>% 
+  ungroup() %>% 
+  pivot_wider(names_from = timestep, names_glue = "ts_{timestep}_{.value}", values_from = values) %>% 
+  mutate(percent_change = (ts_10_values - ts_2_values)/ts_2_values*100) %>% 
+  select(-starts_with("ts")) %>% 
+  mutate(code_run = fct_relevel(code_run, c("BAU", "BAUR", "CP", "CPR", "CPTR"))) %>% 
+  arrange(code_run) %>% 
+  mutate(climate = fct_relevel(climate, c("baseline", "RCP 8.5")))  %>% 
+  arrange(code_run, climate) %>% 
+  mutate(scenario = paste(code_run, climate)) %>%
+  arrange(code_run, climate, scenario) %>% 
+  
+  select(-c(code_run, climate)) %>% 
+  ungroup() %>% 
+  #filter(species == "URAM") %>% 
+  filter(metric %in% c("overallECgap", "overallECnatal", "numNodes", 
+                       "numLinks", "meanAreaQuality")) %>% 
+  left_join(data.frame(metric = c("overallECgap", "overallECnatal", "numNodes", 
+                                  "numLinks", "meanAreaQuality"), 
+                       metric_name = c("EC (gap)", "EC (natal)", "Nodes", 
+                                       "Links", "Quality"))) %>% 
+  mutate(metric_name = fct_relevel(metric_name, c("EC (gap)", "EC (natal)", "Nodes",
+                                                  "Links", "Quality"))) %>%
+  arrange(metric_name) %>%
+  select(-metric) %>% 
+  mutate(`% Change` = percent_change, `Connectivity Metric` = metric_name, `Species / Scenario` = scenario) %>% 
+  select(species, `% Change`, `Connectivity Metric`, `Species / Scenario`)
+
+titles <- expand_grid(left = c("BAU", "BAUR", "CP", "CPR", "CPTR"), right = c("baseline", "RCP 8.5")) %>% mutate(final = paste(left, right)) %>% pull(final) %>% sort()
+
+HEATMAP_data %>% 
+  unite( "Species / Scenario", c(`Species / Scenario`, species), remove = F) %>%  group_by(species) %>% 
+  tidyHeatmap::heatmap(`Species / Scenario`, `Connectivity Metric`, `% Change`, .scale="none", cluster_columns = FALSE, 
+                       cluster_rows = FALSE, palette_value = c("red", "white", "darkGreen"), 
+                       rect_gp = grid::gpar(col = "#161616", lwd = 0.1),
+                       palette_grouping = list("grey"), row_labels = rep(titles, each = 5), 
+                       heatmap_legend_param = list(at = c(-60, 0 , 60))) -> heatmap_networks
+
+zissou_palette_custom <- c("#F21A00", "#E67D00", "#E4B80E",
+                           "#FFFFFF",
+                           "#9EBE91", "#4EA365", "#315849")
+
+HEATMAP_data %>% 
+  unite( "Species / Scenario", c(`Species / Scenario`, species), remove = F) %>%  group_by(species) %>% 
+  tidyHeatmap::heatmap(`Species / Scenario`, `Connectivity Metric`, `% Change`, .scale="none", cluster_columns = FALSE, 
+                       cluster_rows = FALSE, palette_value = 
+                         circlize::colorRamp2(c(-60, -40, -20, 0, 20, 40, 60), 
+                                              zissou_palette_custom), 
+                       # rect_gp = grid::gpar(col = "#161616", lwd = 0.1),
+                       palette_grouping = list("grey"), row_labels = rep(titles, each = 5), 
+                       heatmap_legend_param = list(at = c(-60, -40, -20, 0, 20, 40, 60))
+  ) -> heatmap_networks
+
+heatmap_networks %>% 
+  tidyHeatmap::save_pdf(filename = "../thesis/figures/heatmap_networks.pdf")
+# width = the_width, height = the_height)
+# heatmap(`Car name`, Property, Value) 
+```
+
+```{r}
+joined %>% 
+  filter(climate != "none", chapter %in% c("none", "both", "chap_1", "chap_2")) %>% 
+  group_by(scenarioId, species, iteration) %>% 
+  group_modify(~mutate(.x , baseline = subset(.x, timestep == 2010)$sum_cur, 
+                       the_diff = ((sum_cur-baseline)/baseline)*100 )) %>% 
+  ungroup() %>% 
+  filter(timestep == 2100) %>%
+  group_by(code, species) %>% 
+  summarise(the_diff = mean(the_diff)) %>% 
+  ungroup() %>% 
+  mutate(`% Change` = the_diff, Species = species, Scenario = code) %>% 
+  select(Species, `% Change`, Scenario) -> current_heatmap_df
+
+current_heatmap_df %>% 
+  # unite( "Scenario", c(Scenario, Species), remove = F) %>%  group_by(Species) %>% 
+  tidyHeatmap::heatmap(Scenario, Species, `% Change`, .scale="none", cluster_columns = TRUE, 
+                       cluster_rows = TRUE,
+                       palette_value = circlize::colorRamp2(c(-15, -10, -5, 0), viridis::magma(4))) -> heatmap_current
+```
+#### Scenario map
+
+```{r}
+library(tmap)
+library(stars)
+
+classes <- read_csv("../config/rcl_tables/land_use/recode_table.csv")
+
+corridors <- st_read("../data/raw/workshop/corridors/Key_links_smoothed_RegTables.shp", 
+                     quiet = TRUE) %>% sf::st_make_valid() %>% st_buffer(1000) %>% 
+  mutate(type = "Corridors")
+areas <- st_read("../data/raw/workshop/ensembles/Key_ensembles_smoothed_RegTables.shp", 
+                 quiet = TRUE) %>% sf::st_make_valid()%>% 
+  mutate(type = "Cores")
+background <- raster("../data/land_use/LandUse_mont_aafc_buffered_30by30_2010.tif")
+background_cropped <- crop(background, st_transform(areas, st_crs(background)))
+
+background_stars <- stars::st_as_stars(background_cropped) %>% 
+  mutate(`Land Use Class` = 
+           as.factor(case_when(LandUse_mont_aafc_buffered_30by30_2010 == 1 ~ "Agriculture", 
+                               LandUse_mont_aafc_buffered_30by30_2010 %in% c(2,4) ~ "Urban / Roads",
+                               LandUse_mont_aafc_buffered_30by30_2010 == 3 ~ "Forest",
+                               LandUse_mont_aafc_buffered_30by30_2010 == 5 ~ "Water",
+                               LandUse_mont_aafc_buffered_30by30_2010 == 6 ~ "Wetlands")))
+
+tmap_mode("plot")
+tmap_options(check.and.fix = TRUE)
+test <- tm_shape(background_stars, raster.downsample = FALSE) + 
+  tm_raster("Land.Use.Class", palette = c("#F9E79F", # Ag
+                                          "#58D68D", # Fo
+                                          "#ABB2B9", # Urb / Rd
+                                          "#5DADE2", # Wat
+                                          "#A569BD"),# Wet
+            title = "Land Use Class") +
+  tm_shape(areas) + 
+  tm_borders(lwd=1, col ="#283747") + 
+  tm_fill("type", col = "#196F3D", alpha = 0.3) +
+  tm_shape(corridors) + 
+  tm_borders(lwd=2, col = "#0B5345", lty = 3) +
+  tm_layout(legend.bg.color = "white", legend.bg.alpha = .9, 
+            legend.frame = "gray50")
+tmap_save(test, "../thesis/figures/corridors_cores.png")
 ```
