@@ -53,6 +53,7 @@ RUN apt-get install -y --no-install-recommends \
     gfortran \
     python3-dev \
     python3-pip \
+    python3-setuptools \
     biber
 
 RUN tlmgr install setspace ulem sectsty datetime ms psnfss subfig multirow \ 
