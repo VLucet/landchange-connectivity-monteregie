@@ -228,14 +228,6 @@
       "Hash": "c5d4a8b3df9c2a2403cd8a392de457e8",
       "Requirements": []
     },
-    "StanHeaders": {
-      "Package": "StanHeaders",
-      "Version": "2.19.2",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "41726c001c1cee4ce5869f648c64f013",
-      "Requirements": []
-    },
     "TTR": {
       "Package": "TTR",
       "Version": "0.23-6",
@@ -1738,14 +1730,6 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "b40a5207b6624f6e2b8cdb50689cdb69",
-      "Requirements": []
-    },
-    "shinystan": {
-      "Package": "shinystan",
-      "Version": "2.5.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "85e1a9e77cdd1b8740e92b37f8fdce7b",
       "Requirements": []
     },
     "shinythemes": {
