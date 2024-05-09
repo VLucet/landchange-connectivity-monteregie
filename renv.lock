@@ -1,6 +1,6 @@
 {
   "R": {
-    "Version": "3.6.2",
+    "Version": "3.6.3",
     "Repositories": [
       {
         "Name": "CRAN",
@@ -827,6 +827,11 @@
         "withr"
       ],
       "Hash": "69783cdd607c58fffb21c5c26c6ededf"
+    },
+    "renv": {
+      "Package": "renv",
+      "Version": "1.0.7",
+      "Source": "Repository"
     },
     "rlang": {
       "Package": "rlang",

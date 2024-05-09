@@ -18,7 +18,7 @@ MAINTAINER Valentin Lucet <valentin.lucet@gmail.com>
 
 # ENV vars
 ENV PATH="$PATH:/home/rstudio/julia-1.4.2/bin"
-ENV RENV_VERSION 0.10.0
+ENV RENV_VERSION 1.0.7
 
 # Install System dependencies
 RUN apt-get -y --allow-releaseinfo-change update -qq 
