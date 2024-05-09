@@ -1844,14 +1844,6 @@
       "Hash": "eca5e9d3398d0a4b26f5f7e4250adb1b",
       "Requirements": []
     },
-    "tidyposterior": {
-      "Package": "tidyposterior",
-      "Version": "0.0.2",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "35353b78b2e01ee8d6495b0a9681d7fd",
-      "Requirements": []
-    },
     "tidypredict": {
       "Package": "tidypredict",
       "Version": "0.4.5",
