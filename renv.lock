@@ -579,11 +579,9 @@
     },
     "ellipsis": {
       "Package": "ellipsis",
-      "Version": "0.3.1",
+      "Version": "0.3.2",
       "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "fd2844b3a43ae2d27e70ece2df1b4e2a",
-      "Requirements": []
+      "Repository": "CRAN"
     },
     "evaluate": {
       "Package": "evaluate",
@@ -2016,11 +2014,9 @@
     },
     "vctrs": {
       "Package": "vctrs",
-      "Version": "0.3.0",
+      "Version": "0.3.8",
       "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "fbf7ee297936697ec8404a22859da129",
-      "Requirements": []
+      "Repository": "CRAN"
     },
     "vegan": {
       "Package": "vegan",
