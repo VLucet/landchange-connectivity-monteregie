@@ -23,40 +23,40 @@ ENV RENV_VERSION 0.10.0
 # Install System dependencies
 RUN apt-get -y --allow-releaseinfo-change update -qq 
 
-# RUN apt-get install -y --no-install-recommends \
-#     libgsl-dev=2.5+dfsg-6 \
-#     mono-devel=5.18.0.240+dfsg-3+deb10u1 \
-#     grass-dev=7.6.0-1 \
-#     curl \
-#     cargo \
-#     gdal-bin=2.4.0+dfsg-1+b1 \
-#     python-gdal=2.4.0+dfsg-1+b1 \
-#     bc=1.07.1-2+b1 \
-#     nano=3.2-3 \
-#     htop=2.2.0-1+b1 \
-#     # OpenCV req
-#     cmake \
-#     unzip \
-#     pkg-config \
-#     libjpeg-dev \
-#     libpng-dev \
-#     libtiff-dev \
-#     libavcodec-dev \
-#     libavformat-dev \
-#     libswscale-dev \
-#     libv4l-dev \
-#     libxvidcore-dev \
-#     libx264-dev \
-#     libatlas-base-dev \
-#     gfortran \
-#     python3-dev \
-#     python3-pip \
-#     python3-setuptools \
-#     biber
-# 
-# RUN tlmgr install setspace ulem sectsty datetime ms psnfss subfig multirow \ 
-#     adjustbox collectbox enumitem lipsum lineno pdfpages siunitx biblatex \
-#     logreq courier soul biblatex-apa
+RUN apt-get install -y --no-install-recommends \
+    libgsl-dev=2.5+dfsg-6 \
+    mono-devel=5.18.0.240+dfsg-3+deb10u1 \
+    grass-dev=7.6.0-1 \
+    curl \
+    cargo \
+    gdal-bin=2.4.0+dfsg-1+b1 \
+    python-gdal=2.4.0+dfsg-1+b1 \
+    bc=1.07.1-2+b1 \
+    nano=3.2-3 \
+    htop=2.2.0-1+b1 \
+    # OpenCV req
+    cmake \
+    unzip \
+    pkg-config \
+    libjpeg-dev \
+    libpng-dev \
+    libtiff-dev \
+    libavcodec-dev \
+    libavformat-dev \
+    libswscale-dev \
+    libv4l-dev \
+    libxvidcore-dev \
+    libx264-dev \
+    libatlas-base-dev \
+    gfortran \
+    python3-dev \
+    python3-pip \
+    python3-setuptools \
+    biber
+
+RUN tlmgr install setspace ulem sectsty datetime ms psnfss subfig multirow \ 
+    adjustbox collectbox enumitem lipsum lineno pdfpages siunitx biblatex \
+    logreq courier soul biblatex-apa
 #    
 # # Julia install
 # ENV JULIA_DEPOT_PATH=/opt/julia
@@ -94,11 +94,11 @@ RUN apt-get -y --allow-releaseinfo-change update -qq
 #   && make -j4 \
 #   && sudo make install \
 # 	&& pip3 install numpy matplotlib pandas scikit-image scipy
-# 
-# # Download repo
-# RUN mkdir /home/rstudio/land_con_monteregie \
-#   && chown -R rstudio /home/rstudio/land_con_monteregie \
-#   && git clone https://github.com/VLucet/landchange-connectivity-monteregie.git /home/rstudio/land_con_monteregie
+
+# Download repo
+RUN mkdir /home/rstudio/land_con_monteregie \
+  && chown -R rstudio /home/rstudio/land_con_monteregie \
+  && git clone https://github.com/VLucet/landchange-connectivity-monteregie.git /home/rstudio/land_con_monteregie
 
 # Move to the working directory
 WORKDIR /home/rstudio/land_con_monteregie
