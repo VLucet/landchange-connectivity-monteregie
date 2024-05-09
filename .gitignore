@@ -18,3 +18,4 @@ test/
 *.aux.xml
 temp.RDS
 *.qgz
+*.rds

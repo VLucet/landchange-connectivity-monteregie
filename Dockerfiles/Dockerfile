@@ -23,82 +23,82 @@ ENV RENV_VERSION 0.10.0
 # Install System dependencies
 RUN apt-get -y --allow-releaseinfo-change update -qq 
 
-RUN apt-get install -y --no-install-recommends \
-    libgsl-dev=2.5+dfsg-6 \
-    mono-devel=5.18.0.240+dfsg-3+deb10u1 \
-    grass-dev=7.6.0-1 \
-    curl \
-    cargo \
-    gdal-bin=2.4.0+dfsg-1+b1 \
-    python-gdal=2.4.0+dfsg-1+b1 \
-    bc=1.07.1-2+b1 \
-    nano=3.2-3 \
-    htop=2.2.0-1+b1 \
-    # OpenCV req
-    cmake \
-    unzip \
-    pkg-config \
-    libjpeg-dev \
-    libpng-dev \
-    libtiff-dev \
-    libavcodec-dev \
-    libavformat-dev \
-    libswscale-dev \
-    libv4l-dev \
-    libxvidcore-dev \
-    libx264-dev \
-    libatlas-base-dev \
-    gfortran \
-    python3-dev \
-    python3-pip \
-    python3-setuptools \
-    biber
-
-RUN tlmgr install setspace ulem sectsty datetime ms psnfss subfig multirow \ 
-    adjustbox collectbox enumitem lipsum lineno pdfpages siunitx biblatex \
-    logreq courier soul biblatex-apa
-   
-# Julia install
-ENV JULIA_DEPOT_PATH=/opt/julia
-ENV JULIA_PKGDIR=/opt/julia
-
-# Install julia and custom version of circuitscape
-RUN curl -L https://julialang-s3.julialang.org/bin/linux/x64/1.4/julia-1.4.2-linux-x86_64.tar.gz --output /home/rstudio/julia-1.4.2-linux-x86_64.tar.gz \
-  && tar -xzf /home/rstudio/julia-1.4.2-linux-x86_64.tar.gz -C /home/rstudio/ \
-  && julia -e 'import Pkg; Pkg.activate("."); Pkg.instantiate(); Pkg.precompile()' \
-  && chown -R rstudio /home/rstudio/julia-1.4.2 \ 
-  && chown -R rstudio /opt/julia
-
-# Install syncrosim and download package file
-RUN mkdir /home/rstudio/syncrosim_2_10 \
-  && chown -R rstudio /home/rstudio/syncrosim_2_10 \
-  && curl -L https://syncrosim.com/download-id/syncrosim-for-linux-version-2-0-18/ --output /home/rstudio/syncrosim_2_10.zip \
-  && unzip /home/rstudio/syncrosim_2_10.zip -d /home/rstudio/syncrosim_2_10 \
-  && mkdir /home/rstudio/syncrosim_packages \
-  && chown -R rstudio /home/rstudio/syncrosim_packages \
-  && curl -L https://github.com/ApexRMS/stsim/releases/download/3.2.17/stsim-3-2-17.ssimpkg --output /home/rstudio/syncrosim_packages/stsim-3-2-17.ssimpkg
-
-# OpenCV / python
-RUN cd /home/rstudio \
-  && git clone https://github.com/opencv/opencv.git \
-  && git clone https://github.com/opencv/opencv_contrib.git \
-  && cd /home/rstudio/opencv \
-  && mkdir build \
-  && cd build \
-  && sudo cmake -D CMAKE_BUILD_TYPE=RELEASE \
-  -D CMAKE_INSTALL_PREFIX=/usr/local \
-  -D OPENCV_ENABLE_NONFREE=ON \
-  -D OPENCV_EXTRA_MODULES_PATH=/home/rstudio/opencv_contrib/modules \
-  -D PYTHON_INCLUDE_DIR=/usr/include/python3.7 \
-  -D PYTHON3_EXECUTABLE=/usr/bin/python3 .. \
-  && make -j4 \
-  && sudo make install \
-	&& pip3 install numpy matplotlib pandas scikit-image scipy
-
-# Download repo
-RUN mkdir /home/rstudio/land_con_monteregie \
-  && chown -R rstudio /home/rstudio/land_con_monteregie \
-  && git clone https://github.com/VLucet/landchange-connectivity-monteregie.git /home/rstudio/land_con_monteregie
+# RUN apt-get install -y --no-install-recommends \
+#     libgsl-dev=2.5+dfsg-6 \
+#     mono-devel=5.18.0.240+dfsg-3+deb10u1 \
+#     grass-dev=7.6.0-1 \
+#     curl \
+#     cargo \
+#     gdal-bin=2.4.0+dfsg-1+b1 \
+#     python-gdal=2.4.0+dfsg-1+b1 \
+#     bc=1.07.1-2+b1 \
+#     nano=3.2-3 \
+#     htop=2.2.0-1+b1 \
+#     # OpenCV req
+#     cmake \
+#     unzip \
+#     pkg-config \
+#     libjpeg-dev \
+#     libpng-dev \
+#     libtiff-dev \
+#     libavcodec-dev \
+#     libavformat-dev \
+#     libswscale-dev \
+#     libv4l-dev \
+#     libxvidcore-dev \
+#     libx264-dev \
+#     libatlas-base-dev \
+#     gfortran \
+#     python3-dev \
+#     python3-pip \
+#     python3-setuptools \
+#     biber
+# 
+# RUN tlmgr install setspace ulem sectsty datetime ms psnfss subfig multirow \ 
+#     adjustbox collectbox enumitem lipsum lineno pdfpages siunitx biblatex \
+#     logreq courier soul biblatex-apa
+#    
+# # Julia install
+# ENV JULIA_DEPOT_PATH=/opt/julia
+# ENV JULIA_PKGDIR=/opt/julia
+# 
+# # Install julia and custom version of circuitscape
+# RUN curl -L https://julialang-s3.julialang.org/bin/linux/x64/1.4/julia-1.4.2-linux-x86_64.tar.gz --output /home/rstudio/julia-1.4.2-linux-x86_64.tar.gz \
+#   && tar -xzf /home/rstudio/julia-1.4.2-linux-x86_64.tar.gz -C /home/rstudio/ \
+#   && julia -e 'import Pkg; Pkg.activate("."); Pkg.instantiate(); Pkg.precompile()' \
+#   && chown -R rstudio /home/rstudio/julia-1.4.2 \ 
+#   && chown -R rstudio /opt/julia
+# 
+# # Install syncrosim and download package file
+# RUN mkdir /home/rstudio/syncrosim_2_10 \
+#   && chown -R rstudio /home/rstudio/syncrosim_2_10 \
+#   && curl -L https://syncrosim.com/download-id/syncrosim-for-linux-version-2-0-18/ --output /home/rstudio/syncrosim_2_10.zip \
+#   && unzip /home/rstudio/syncrosim_2_10.zip -d /home/rstudio/syncrosim_2_10 \
+#   && mkdir /home/rstudio/syncrosim_packages \
+#   && chown -R rstudio /home/rstudio/syncrosim_packages \
+#   && curl -L https://github.com/ApexRMS/stsim/releases/download/3.2.17/stsim-3-2-17.ssimpkg --output /home/rstudio/syncrosim_packages/stsim-3-2-17.ssimpkg
+# 
+# # OpenCV / python
+# RUN cd /home/rstudio \
+#   && git clone https://github.com/opencv/opencv.git \
+#   && git clone https://github.com/opencv/opencv_contrib.git \
+#   && cd /home/rstudio/opencv \
+#   && mkdir build \
+#   && cd build \
+#   && sudo cmake -D CMAKE_BUILD_TYPE=RELEASE \
+#   -D CMAKE_INSTALL_PREFIX=/usr/local \
+#   -D OPENCV_ENABLE_NONFREE=ON \
+#   -D OPENCV_EXTRA_MODULES_PATH=/home/rstudio/opencv_contrib/modules \
+#   -D PYTHON_INCLUDE_DIR=/usr/include/python3.7 \
+#   -D PYTHON3_EXECUTABLE=/usr/bin/python3 .. \
+#   && make -j4 \
+#   && sudo make install \
+# 	&& pip3 install numpy matplotlib pandas scikit-image scipy
+# 
+# # Download repo
+# RUN mkdir /home/rstudio/land_con_monteregie \
+#   && chown -R rstudio /home/rstudio/land_con_monteregie \
+#   && git clone https://github.com/VLucet/landchange-connectivity-monteregie.git /home/rstudio/land_con_monteregie
 
 # Move to the working directory
 WORKDIR /home/rstudio/land_con_monteregie
