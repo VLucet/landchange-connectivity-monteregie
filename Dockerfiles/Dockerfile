@@ -18,7 +18,6 @@ MAINTAINER Valentin Lucet <valentin.lucet@gmail.com>
 
 # ENV vars
 ENV PATH="$PATH:/home/rstudio/julia-1.4.2/bin"
-ENV RENV_VERSION 1.0.7
 
 # Install System dependencies
 RUN apt-get -y --allow-releaseinfo-change update -qq 
@@ -57,7 +56,7 @@ RUN apt-get install -y --no-install-recommends \
 RUN tlmgr install setspace ulem sectsty datetime ms psnfss subfig multirow \ 
     adjustbox collectbox enumitem lipsum lineno pdfpages siunitx biblatex \
     logreq courier soul biblatex-apa
-#    
+    
 # # Julia install
 # ENV JULIA_DEPOT_PATH=/opt/julia
 # ENV JULIA_PKGDIR=/opt/julia
@@ -105,7 +104,7 @@ WORKDIR /home/rstudio/land_con_monteregie
 
 # Set up renv and Restore renv library
 RUN R -e "install.packages('remotes', repos = c(CRAN = 'https://cloud.r-project.org'))"
-RUN R -e "remotes::install_github('rstudio/renv@${RENV_VERSION}')"
+RUN R -e "remotes::install_github('rstudio/renv@1.0.7')"
 RUN R -e "renv::restore()"
 
 # Set up links
