@@ -20,14 +20,12 @@ MAINTAINER Valentin Lucet <valentin.lucet@gmail.com>
 ENV PATH="$PATH:/home/rstudio/julia-1.4.2/bin"
 ENV RENV_VERSION 0.10.0
 
-RUN echo 'we are running some # of cool things'
-
 # Install System dependencies
 RUN apt-get -y --allow-releaseinfo-change update -qq 
 
 RUN apt-get install -y --no-install-recommends \
     libgsl-dev=2.5+dfsg-6 \
-    mono-devel=5.18.0.240+dfsg-3 \
+    mono-devel=5.18.0.240+dfsg-3+deb10u1 \
     grass-dev=7.6.0-1 \
     curl \
     cargo \
