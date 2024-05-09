@@ -1660,30 +1660,6 @@
       "Hash": "3924a1c20ce2479e89a08b0ca4c936c6",
       "Requirements": []
     },
-    "rstan": {
-      "Package": "rstan",
-      "Version": "2.19.3",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "73129bed7783ff433c190b5fce836959",
-      "Requirements": []
-    },
-    "rstanarm": {
-      "Package": "rstanarm",
-      "Version": "2.19.3",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "40be87e712cf1ed87c16ffaf94b7897b",
-      "Requirements": []
-    },
-    "rstantools": {
-      "Package": "rstantools",
-      "Version": "2.0.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "fd4a4bf7068df96dfdd8551827ccb969",
-      "Requirements": []
-    },
     "rstudioapi": {
       "Package": "rstudioapi",
       "Version": "0.11",
