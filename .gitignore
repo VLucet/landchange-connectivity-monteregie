@@ -8,9 +8,11 @@
 *.pdf
 !thesis/appendix/*pdf
 *.png
-!thesis/figures/*.png
+# !thesis/figures/*.png
 # test and temp folder
 test/
+# Icons
+thesis/figures/icons
 # Don't track these
 *.xz
 .idea
