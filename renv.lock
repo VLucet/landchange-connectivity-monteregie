@@ -1541,11 +1541,11 @@
     },
     "renv": {
       "Package": "renv",
-      "Version": "0.10.0",
-      "Source": "Repository",
+      "Version": "1.1.1",
+      "OS_type": null,
+      "NeedsCompilation": "no",
       "Repository": "CRAN",
-      "Hash": "0d3f1c2b63e70b3d918246b4e2ca59b7",
-      "Requirements": []
+      "Source": "Repository"
     },
     "reprex": {
       "Package": "reprex",
