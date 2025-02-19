@@ -47,7 +47,7 @@ suppressPackageStartupMessages({
   #library(gt)
   #library(webshot)
   #library(wesanderson)
-  # library(cowplot)
+  #library(cowplot)
 })
 
 theme_set(theme_minimal())
