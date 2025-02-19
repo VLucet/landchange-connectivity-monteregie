@@ -1740,112 +1740,112 @@ ggsave(net_6_2,
        width = the_width, height = the_height, dpi = the_dpi)
 ```
 
-```{r}
-networks %>% 
-  filter(scenario != 37, timestep %in% c(2,10)) %>% 
-  filter(species %in% c("MAAM", "URAM")) %>% 
-  pivot_longer(numNodes:overallECnatal, names_to = "metric", values_to = "values") %>% 
-  select (species, iteration, timestep, code_run, climate, metric, values) %>% 
-  group_by(species, timestep, code_run, climate, metric) %>% 
-  summarise(values = mean(values)) %>% 
-  ungroup() %>% 
-  pivot_wider(names_from = timestep, names_glue = "ts_{timestep}_{.value}", values_from = values) %>% 
-  mutate(percent_change = (ts_10_values - ts_2_values)/ts_2_values) %>% 
-  select(-starts_with("ts")) %>% 
-  pivot_wider(names_from = metric, values_from = percent_change) %>% 
-  mutate(code_run = fct_relevel(code_run, c("BAU", "BAUR", "CP", "CPR", "CPTR"))) %>% 
-  arrange(code_run) %>% 
-  mutate(climate = fct_relevel(climate, c("baseline", "RCP 8.5")))  %>% 
-  arrange(code_run, climate) %>% 
-  mutate(scenario = paste(code_run, climate)) %>%
-  arrange(code_run, climate, scenario) %>% 
-  select(-c(code_run, climate)) %>%
-  select(species, scenario, starts_with("overall"), numNodes, numLinks, meanAreaQuality, meanCost) %>% 
-  
-  gt(rowname_col = "scenario", groupname_col = "species") %>% 
-  fmt_percent(everything()) %>% 
-  cols_label(
-    overallECgap = "EC (gap)", 
-    overallECnatal = "EC (natal)", 
-    numNodes = "Nodes", 
-    numLinks = "Links", 
-    meanAreaQuality = "Mean Quality", 
-    meanCost = "Mean Cost"
-  ) %>% 
-  data_color(
-    columns = overallECgap:meanAreaQuality, 
-    colors = scales::col_bin(palette = as.character(paletteer::paletteer_c("scico::cork", n = 100)), 
-                             bins = seq(from =-1, to = 1, by = 0.1))) %>% 
-  data_color(
-    columns = meanCost, 
-    colors = scales::col_bin(palette = as.character(paletteer::paletteer_c("scico::cork", n = 100)), 
-                             bins = seq(from =-1, to = 1, by = 0.1), reverse = -1)) -> metrics_table 
-metrics_table
-gtsave(metrics_table, "../thesis/figures/metrics.png")
+```{r eval=FALSE}
+# networks %>% 
+#   filter(scenario != 37, timestep %in% c(2,10)) %>% 
+#   filter(species %in% c("MAAM", "URAM")) %>% 
+#   pivot_longer(numNodes:overallECnatal, names_to = "metric", values_to = "values") %>% 
+#   select (species, iteration, timestep, code_run, climate, metric, values) %>% 
+#   group_by(species, timestep, code_run, climate, metric) %>% 
+#   summarise(values = mean(values)) %>% 
+#   ungroup() %>% 
+#   pivot_wider(names_from = timestep, names_glue = "ts_{timestep}_{.value}", values_from = values) %>% 
+#   mutate(percent_change = (ts_10_values - ts_2_values)/ts_2_values) %>% 
+#   select(-starts_with("ts")) %>% 
+#   pivot_wider(names_from = metric, values_from = percent_change) %>% 
+#   mutate(code_run = fct_relevel(code_run, c("BAU", "BAUR", "CP", "CPR", "CPTR"))) %>% 
+#   arrange(code_run) %>% 
+#   mutate(climate = fct_relevel(climate, c("baseline", "RCP 8.5")))  %>% 
+#   arrange(code_run, climate) %>% 
+#   mutate(scenario = paste(code_run, climate)) %>%
+#   arrange(code_run, climate, scenario) %>% 
+#   select(-c(code_run, climate)) %>%
+#   select(species, scenario, starts_with("overall"), numNodes, numLinks, meanAreaQuality, meanCost) %>% 
+#   
+#   gt(rowname_col = "scenario", groupname_col = "species") %>% 
+#   fmt_percent(everything()) %>% 
+#   cols_label(
+#     overallECgap = "EC (gap)", 
+#     overallECnatal = "EC (natal)", 
+#     numNodes = "Nodes", 
+#     numLinks = "Links", 
+#     meanAreaQuality = "Mean Quality", 
+#     meanCost = "Mean Cost"
+#   ) %>% 
+#   data_color(
+#     columns = overallECgap:meanAreaQuality, 
+#     colors = scales::col_bin(palette = as.character(paletteer::paletteer_c("scico::cork", n = 100)), 
+#                              bins = seq(from =-1, to = 1, by = 0.1))) %>% 
+#   data_color(
+#     columns = meanCost, 
+#     colors = scales::col_bin(palette = as.character(paletteer::paletteer_c("scico::cork", n = 100)), 
+#                              bins = seq(from =-1, to = 1, by = 0.1), reverse = -1)) -> metrics_table 
+# metrics_table
+# gtsave(metrics_table, "../thesis/figures/metrics.png")
 
 ```
 
-```{r}
-networks_tbl <- networks
-# networks_tbl$code_run[networks_tbl$code_run == "BAUR"] <- "\n    BAUR"
-# networks_tbl$code_run[networks_tbl$code_run == "CP"] <- "    CP"
-# networks_tbl$code_run[networks_tbl$climate == "RCP 8.5"] <- "RCP 8.5"
-networks_tbl %>% 
-  filter(scenario != 37, timestep %in% c(2,10)) %>% 
-  # filter(species %in% c("MAAM", "URAM")) %>% 
-  pivot_longer(numNodes:overallECnatal, names_to = "metric", values_to = "values") %>% 
-  select (species, iteration, timestep, code_run, climate, metric, values) %>% 
-  group_by(species, timestep, code_run, climate, metric) %>% 
-  summarise(values = mean(values)) %>% 
-  ungroup() %>% 
-  pivot_wider(names_from = timestep, names_glue = "ts_{timestep}_{.value}", values_from = values) %>% 
-  mutate(percent_change = (ts_10_values - ts_2_values)/ts_2_values) %>% 
-  select(-starts_with("ts")) %>% 
-  
-  # pivot_wider(names_from = metric, values_from = percent_change) %>% 
-  
-  mutate(code_run = fct_relevel(code_run, c("BAU", "BAUR", "CP", "CPR", "CPTR"))) %>% 
-  arrange(code_run) %>% 
-  mutate(climate = fct_relevel(climate, c("baseline", "RCP 8.5")))  %>% 
-  arrange(code_run, climate) %>% 
-  mutate(scenario = paste(code_run, climate)) %>%
-  arrange(code_run, climate, scenario) %>% 
-  
-  select(-c(code_run, climate)) %>%
-  
-  pivot_wider(names_from = "scenario", values_from = "percent_change") %>% 
-  
-  # select(species, scenario, starts_with("overall"), numNodes, numLinks, meanAreaQuality, meanCost) %>% 
-  filter(metric %in% c("overallECgap", "overallECnatal", "numNodes", 
-                       "numLinks", "meanAreaQuality")) %>% 
-  
-  # mutate(metric = fct_relevel(metric, c("overallECgap", "overallECnatal", "numNodes", 
-  #                                       "numLinks", "meanAreaQuality"))) %>% 
-  left_join(data.frame(metric = c("overallECgap", "overallECnatal", "numNodes", 
-                                  "numLinks", "meanAreaQuality"), 
-                       metric_name = c("EC (gap)", "EC (natal)", "Nodes", 
-                                       "Links", "Quality"))) %>% 
-  mutate(metric_name = fct_relevel(metric_name, c("EC (gap)", "EC (natal)", "Nodes", 
-                                                  "Links", "Quality"))) %>%
-  arrange(metric_name) %>%
-  select(-metric) %>% 
-  
-  gt(rowname_col = "metric_name", groupname_col = "species") %>% 
-  fmt_percent(everything(), decimals=0) %>% 
-  data_color(
-    columns = `BAU baseline`:`CPTR RCP 8.5`, 
-    colors = scales::col_bin(palette = as.character(paletteer::paletteer_c("scico::cork", n = 100)), 
-                             bins = seq(from =-1, to = 1, by = 0.1))) %>%
-  tab_options(data_row.padding = px(1)) %>% 
-  cols_width(metric_name~px(89), everything()~px(68)) %>% 
-  tab_style(locations = cells_body(), cell_text(size = 12)) -> metrics_table_2 # %>% # 89
+```{r eval=FALSE}
+# networks_tbl <- networks
+# # networks_tbl$code_run[networks_tbl$code_run == "BAUR"] <- "\n    BAUR"
+# # networks_tbl$code_run[networks_tbl$code_run == "CP"] <- "    CP"
+# # networks_tbl$code_run[networks_tbl$climate == "RCP 8.5"] <- "RCP 8.5"
+# networks_tbl %>% 
+#   filter(scenario != 37, timestep %in% c(2,10)) %>% 
+#   # filter(species %in% c("MAAM", "URAM")) %>% 
+#   pivot_longer(numNodes:overallECnatal, names_to = "metric", values_to = "values") %>% 
+#   select (species, iteration, timestep, code_run, climate, metric, values) %>% 
+#   group_by(species, timestep, code_run, climate, metric) %>% 
+#   summarise(values = mean(values)) %>% 
+#   ungroup() %>% 
+#   pivot_wider(names_from = timestep, names_glue = "ts_{timestep}_{.value}", values_from = values) %>% 
+#   mutate(percent_change = (ts_10_values - ts_2_values)/ts_2_values) %>% 
+#   select(-starts_with("ts")) %>% 
+#   
+#   # pivot_wider(names_from = metric, values_from = percent_change) %>% 
+#   
+#   mutate(code_run = fct_relevel(code_run, c("BAU", "BAUR", "CP", "CPR", "CPTR"))) %>% 
+#   arrange(code_run) %>% 
+#   mutate(climate = fct_relevel(climate, c("baseline", "RCP 8.5")))  %>% 
+#   arrange(code_run, climate) %>% 
+#   mutate(scenario = paste(code_run, climate)) %>%
+#   arrange(code_run, climate, scenario) %>% 
+#   
+#   select(-c(code_run, climate)) %>%
+#   
+#   pivot_wider(names_from = "scenario", values_from = "percent_change") %>% 
+#   
+#   # select(species, scenario, starts_with("overall"), numNodes, numLinks, meanAreaQuality, meanCost) %>% 
+#   filter(metric %in% c("overallECgap", "overallECnatal", "numNodes", 
+#                        "numLinks", "meanAreaQuality")) %>% 
+#   
+#   # mutate(metric = fct_relevel(metric, c("overallECgap", "overallECnatal", "numNodes", 
+#   #                                       "numLinks", "meanAreaQuality"))) %>% 
+#   left_join(data.frame(metric = c("overallECgap", "overallECnatal", "numNodes", 
+#                                   "numLinks", "meanAreaQuality"), 
+#                        metric_name = c("EC (gap)", "EC (natal)", "Nodes", 
+#                                        "Links", "Quality"))) %>% 
+#   mutate(metric_name = fct_relevel(metric_name, c("EC (gap)", "EC (natal)", "Nodes", 
+#                                                   "Links", "Quality"))) %>%
+#   arrange(metric_name) %>%
+#   select(-metric) %>% 
+#   
+#   gt(rowname_col = "metric_name", groupname_col = "species") %>% 
+#   fmt_percent(everything(), decimals=0) %>% 
+#   data_color(
+#     columns = `BAU baseline`:`CPTR RCP 8.5`, 
+#     colors = scales::col_bin(palette = as.character(paletteer::paletteer_c("scico::cork", n = 100)), 
+#                              bins = seq(from =-1, to = 1, by = 0.1))) %>%
+#   tab_options(data_row.padding = px(1)) %>% 
+#   cols_width(metric_name~px(89), everything()~px(68)) %>% 
+#   tab_style(locations = cells_body(), cell_text(size = 12)) -> metrics_table_2 # %>% # 89
 # data_color(
 #   columns = meanCost, 
 #   colors = scales::col_bin(palette = as.character(paletteer::paletteer_c("scico::cork", n = 100)), 
 #                            bins = seq(from =-1, to = 1, by = 0.1), reverse = -1)) 
 
-metrics_table_2
-gtsave(metrics_table_2, "../thesis/figures/metrics_2.png")
+# metrics_table_2
+# gtsave(metrics_table_2, "../thesis/figures/metrics_2.png")
 
 ```
 
