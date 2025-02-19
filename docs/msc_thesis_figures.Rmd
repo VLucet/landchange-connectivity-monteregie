@@ -2115,46 +2115,47 @@ current_heatmap_df %>%
                        cluster_rows = TRUE,
                        palette_value = circlize::colorRamp2(c(-15, -10, -5, 0), viridis::magma(4))) -> heatmap_current
 ```
+
 #### Scenario map
 
 ```{r}
-library(tmap)
-library(stars)
-
-classes <- read_csv("../config/rcl_tables/land_use/recode_table.csv")
-
-corridors <- st_read("../data/raw/workshop/corridors/Key_links_smoothed_RegTables.shp", 
-                     quiet = TRUE) %>% sf::st_make_valid() %>% st_buffer(1000) %>% 
-  mutate(type = "Corridors")
-areas <- st_read("../data/raw/workshop/ensembles/Key_ensembles_smoothed_RegTables.shp", 
-                 quiet = TRUE) %>% sf::st_make_valid()%>% 
-  mutate(type = "Cores")
-background <- raster("../data/land_use/LandUse_mont_aafc_buffered_30by30_2010.tif")
-background_cropped <- crop(background, st_transform(areas, st_crs(background)))
-
-background_stars <- stars::st_as_stars(background_cropped) %>% 
-  mutate(`Land Use Class` = 
-           as.factor(case_when(LandUse_mont_aafc_buffered_30by30_2010 == 1 ~ "Agriculture", 
-                               LandUse_mont_aafc_buffered_30by30_2010 %in% c(2,4) ~ "Urban / Roads",
-                               LandUse_mont_aafc_buffered_30by30_2010 == 3 ~ "Forest",
-                               LandUse_mont_aafc_buffered_30by30_2010 == 5 ~ "Water",
-                               LandUse_mont_aafc_buffered_30by30_2010 == 6 ~ "Wetlands")))
-
-tmap_mode("plot")
-tmap_options(check.and.fix = TRUE)
-test <- tm_shape(background_stars, raster.downsample = FALSE) + 
-  tm_raster("Land.Use.Class", palette = c("#F9E79F", # Ag
-                                          "#58D68D", # Fo
-                                          "#ABB2B9", # Urb / Rd
-                                          "#5DADE2", # Wat
-                                          "#A569BD"),# Wet
-            title = "Land Use Class") +
-  tm_shape(areas) + 
-  tm_borders(lwd=1, col ="#283747") + 
-  tm_fill("type", col = "#196F3D", alpha = 0.3) +
-  tm_shape(corridors) + 
-  tm_borders(lwd=2, col = "#0B5345", lty = 3) +
-  tm_layout(legend.bg.color = "white", legend.bg.alpha = .9, 
-            legend.frame = "gray50")
-tmap_save(test, "../thesis/figures/corridors_cores.png")
+# library(tmap)
+# library(stars)
+# 
+# classes <- read_csv("../config/rcl_tables/land_use/recode_table.csv")
+# 
+# corridors <- st_read("../data/raw/workshop/corridors/Key_links_smoothed_RegTables.shp", 
+#                      quiet = TRUE) %>% sf::st_make_valid() %>% st_buffer(1000) %>% 
+#   mutate(type = "Corridors")
+# areas <- st_read("../data/raw/workshop/ensembles/Key_ensembles_smoothed_RegTables.shp", 
+#                  quiet = TRUE) %>% sf::st_make_valid()%>% 
+#   mutate(type = "Cores")
+# background <- raster("../data/land_use/LandUse_mont_aafc_buffered_30by30_2010.tif")
+# background_cropped <- crop(background, st_transform(areas, st_crs(background)))
+# 
+# background_stars <- stars::st_as_stars(background_cropped) %>% 
+#   mutate(`Land Use Class` = 
+#            as.factor(case_when(LandUse_mont_aafc_buffered_30by30_2010 == 1 ~ "Agriculture", 
+#                                LandUse_mont_aafc_buffered_30by30_2010 %in% c(2,4) ~ "Urban / Roads",
+#                                LandUse_mont_aafc_buffered_30by30_2010 == 3 ~ "Forest",
+#                                LandUse_mont_aafc_buffered_30by30_2010 == 5 ~ "Water",
+#                                LandUse_mont_aafc_buffered_30by30_2010 == 6 ~ "Wetlands")))
+# 
+# tmap_mode("plot")
+# tmap_options(check.and.fix = TRUE)
+# test <- tm_shape(background_stars, raster.downsample = FALSE) + 
+#   tm_raster("Land.Use.Class", palette = c("#F9E79F", # Ag
+#                                           "#58D68D", # Fo
+#                                           "#ABB2B9", # Urb / Rd
+#                                           "#5DADE2", # Wat
+#                                           "#A569BD"),# Wet
+#             title = "Land Use Class") +
+#   tm_shape(areas) + 
+#   tm_borders(lwd=1, col ="#283747") + 
+#   tm_fill("type", col = "#196F3D", alpha = 0.3) +
+#   tm_shape(corridors) + 
+#   tm_borders(lwd=2, col = "#0B5345", lty = 3) +
+#   tm_layout(legend.bg.color = "white", legend.bg.alpha = .9, 
+#             legend.frame = "gray50")
+# tmap_save(test, "../thesis/figures/corridors_cores.png")
 ```
