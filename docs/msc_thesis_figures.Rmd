@@ -1750,7 +1750,7 @@ networks %>%
   group_by(species, timestep, code_run, climate, metric) %>% 
   summarise(values = mean(values)) %>% 
   ungroup() %>% 
-  pivot_wider(names_from = timestep, names_glue = "ts_{timestep}_{.value}", values_from = values) %>% 
+  pivot_wider(names_from = timestep, values_from = values) %>% # names_glue = "ts_{timestep}_{.value}",
   mutate(percent_change = (ts_10_values - ts_2_values)/ts_2_values) %>% 
   select(-starts_with("ts")) %>% 
   pivot_wider(names_from = metric, values_from = percent_change) %>% 
