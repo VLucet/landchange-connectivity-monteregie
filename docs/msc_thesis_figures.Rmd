@@ -46,7 +46,6 @@ suppressPackageStartupMessages({
   library(ggplotify)
   #library(gt)
   #library(webshot)
-  #library(wesanderson)
   #library(cowplot)
 })
 
@@ -835,7 +834,7 @@ hist_plot_2
 
 #### BOTH
 ```{r hist_plot_3, message=FALSE, warning=FALSE, out.width="100%"}
-wes_2_colors = wes_palette("Zissou1", 2, type = "continuous")
+wes_2_colors = c("#3A9AB2", "#F11B00")
 hist_plot_3 <- histograms %>% 
   mutate(ts = as.factor(ts)) %>% 
   
