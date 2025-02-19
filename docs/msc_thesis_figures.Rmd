@@ -2017,15 +2017,15 @@ RASY <- networks %>%
 ```
 
 ```{r}
-mtcars_tidy <- 
-  mtcars %>% 
-  as_tibble(rownames="Car name") %>% 
-  mutate_at(vars(-`Car name`, -hp, -vs), scale) %>%
-  pivot_longer(cols = -c(`Car name`, hp, vs), names_to = "Property", values_to = "Value")
-mtcars_tidy_nested <- bind_rows(mutate(mtcars_tidy, Year=1990), mutate(mtcars_tidy, Year=2000)) %>% 
-  mutate(Value = runif(n = n(), min = 0, max = 10))
-mtcars_tidy_nested %>% 
-  heatmap(`Car name`, Property, Value) 
+# mtcars_tidy <- 
+#   mtcars %>% 
+#   as_tibble(rownames="Car name") %>% 
+#   mutate_at(vars(-`Car name`, -hp, -vs), scale) %>%
+#   pivot_longer(cols = -c(`Car name`, hp, vs), names_to = "Property", values_to = "Value")
+# mtcars_tidy_nested <- bind_rows(mutate(mtcars_tidy, Year=1990), mutate(mtcars_tidy, Year=2000)) %>% 
+#   mutate(Value = runif(n = n(), min = 0, max = 10))
+# mtcars_tidy_nested %>% 
+#   heatmap(`Car name`, Property, Value) 
 ```
 
 #### HEATMAP
