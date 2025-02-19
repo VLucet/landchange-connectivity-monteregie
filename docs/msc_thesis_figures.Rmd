@@ -87,7 +87,7 @@ trans_df <- read_csv("../outputs/final/land_use_trans_df.csv")
 vals_df <- read_csv("../outputs/final/land_use_vals_df.csv")
 
 # Results dir + mun and mrc shapefile
-# mun <- st_read("../data/mun/munic_SHP_clean.shp", quiet = TRUE)
+mun <- st_read("../data/mun/munic_SHP_clean.shp", quiet = TRUE)
 # mrc <- st_read("../data/raw/vector/mrc_SHP/mrc_polygone.shp",  quiet = TRUE)
 # mrc.mont <- mrc %>% filter(MRS_NM_REG=="Montérégie") 
 # mrc.mont.reproj <- st_transform(mrc.mont, crs = st_crs(mun))
@@ -354,11 +354,11 @@ trans_member.table <- data.frame(MUS_NM_MUN = rownames(trans_mat_1990to2000)) %>
 # tbl.names <- table(mun.sub.18.clean$MUS_NM_MUN)
 # more.than.one <- tbl.names[tbl.names>1]
 
-# mun %>% 
-#   select(MUS_NM_MUN) %>% 
-#   group_by(MUS_NM_MUN) %>%
-#   dplyr::summarise(MUS_NM_MUN_New = first(MUS_NM_MUN)) ->
-#   mun.sub.18.clean.merged
+mun %>% 
+  select(MUS_NM_MUN) %>% 
+  group_by(MUS_NM_MUN) %>%
+  dplyr::summarise(MUS_NM_MUN_New = first(MUS_NM_MUN)) ->
+  mun.sub.18.clean.merged
 
 trans_mun.sub.18.clean.mod <- 
   left_join(mun.sub.18.clean.merged, trans_member.table, by="MUS_NM_MUN")
