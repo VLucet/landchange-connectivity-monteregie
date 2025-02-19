@@ -88,9 +88,9 @@ vals_df <- read_csv("../outputs/final/land_use_vals_df.csv")
 
 # Results dir + mun and mrc shapefile
 mun <- st_read("../data/mun/munic_SHP_clean.shp", quiet = TRUE)
-# mrc <- st_read("../data/raw/vector/mrc_SHP/mrc_polygone.shp",  quiet = TRUE)
-# mrc.mont <- mrc %>% filter(MRS_NM_REG=="Montérégie") 
-# mrc.mont.reproj <- st_transform(mrc.mont, crs = st_crs(mun))
+mrc <- st_read("../data/raw/vector/mrc_SHP/mrc_polygone.shp",  quiet = TRUE)
+mrc.mont <- mrc %>% filter(MRS_NM_REG=="Montérégie")
+mrc.mont.reproj <- st_transform(mrc.mont, crs = st_crs(mun))
 
 # Classes
 classes <- read_csv("../config/rcl_tables/land_use/recode_table.csv")
