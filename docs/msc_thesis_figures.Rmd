@@ -354,11 +354,11 @@ trans_member.table <- data.frame(MUS_NM_MUN = rownames(trans_mat_1990to2000)) %>
 # tbl.names <- table(mun.sub.18.clean$MUS_NM_MUN)
 # more.than.one <- tbl.names[tbl.names>1]
 
-mun %>% 
-  select(MUS_NM_MUN) %>% 
-  group_by(MUS_NM_MUN) %>%
-  dplyr::summarise(MUS_NM_MUN_New = first(MUS_NM_MUN)) ->
-  mun.sub.18.clean.merged
+# mun %>% 
+#   select(MUS_NM_MUN) %>% 
+#   group_by(MUS_NM_MUN) %>%
+#   dplyr::summarise(MUS_NM_MUN_New = first(MUS_NM_MUN)) ->
+#   mun.sub.18.clean.merged
 
 trans_mun.sub.18.clean.mod <- 
   left_join(mun.sub.18.clean.merged, trans_member.table, by="MUS_NM_MUN")
