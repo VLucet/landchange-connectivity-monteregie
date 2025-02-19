@@ -57,43 +57,6 @@ RUN tlmgr install setspace ulem sectsty datetime ms psnfss subfig multirow \
     adjustbox collectbox enumitem lipsum lineno pdfpages siunitx biblatex \
     logreq courier soul biblatex-apa
     
-# # Julia install
-# ENV JULIA_DEPOT_PATH=/opt/julia
-# ENV JULIA_PKGDIR=/opt/julia
-# 
-# # Install julia and custom version of circuitscape
-# RUN curl -L https://julialang-s3.julialang.org/bin/linux/x64/1.4/julia-1.4.2-linux-x86_64.tar.gz --output /home/rstudio/julia-1.4.2-linux-x86_64.tar.gz \
-#   && tar -xzf /home/rstudio/julia-1.4.2-linux-x86_64.tar.gz -C /home/rstudio/ \
-#   && julia -e 'import Pkg; Pkg.activate("."); Pkg.instantiate(); Pkg.precompile()' \
-#   && chown -R rstudio /home/rstudio/julia-1.4.2 \ 
-#   && chown -R rstudio /opt/julia
-# 
-# # Install syncrosim and download package file
-# RUN mkdir /home/rstudio/syncrosim_2_10 \
-#   && chown -R rstudio /home/rstudio/syncrosim_2_10 \
-#   && curl -L https://syncrosim.com/download-id/syncrosim-for-linux-version-2-0-18/ --output /home/rstudio/syncrosim_2_10.zip \
-#   && unzip /home/rstudio/syncrosim_2_10.zip -d /home/rstudio/syncrosim_2_10 \
-#   && mkdir /home/rstudio/syncrosim_packages \
-#   && chown -R rstudio /home/rstudio/syncrosim_packages \
-#   && curl -L https://github.com/ApexRMS/stsim/releases/download/3.2.17/stsim-3-2-17.ssimpkg --output /home/rstudio/syncrosim_packages/stsim-3-2-17.ssimpkg
-# 
-# # OpenCV / python
-# RUN cd /home/rstudio \
-#   && git clone https://github.com/opencv/opencv.git \
-#   && git clone https://github.com/opencv/opencv_contrib.git \
-#   && cd /home/rstudio/opencv \
-#   && mkdir build \
-#   && cd build \
-#   && sudo cmake -D CMAKE_BUILD_TYPE=RELEASE \
-#   -D CMAKE_INSTALL_PREFIX=/usr/local \
-#   -D OPENCV_ENABLE_NONFREE=ON \
-#   -D OPENCV_EXTRA_MODULES_PATH=/home/rstudio/opencv_contrib/modules \
-#   -D PYTHON_INCLUDE_DIR=/usr/include/python3.7 \
-#   -D PYTHON3_EXECUTABLE=/usr/bin/python3 .. \
-#   && make -j4 \
-#   && sudo make install \
-# 	&& pip3 install numpy matplotlib pandas scikit-image scipy
-
 # Download repo
 RUN mkdir /home/rstudio/land_con_monteregie \
   && chown -R rstudio /home/rstudio/land_con_monteregie \
@@ -103,21 +66,60 @@ RUN mkdir /home/rstudio/land_con_monteregie \
 WORKDIR /home/rstudio/land_con_monteregie
 
 # Set up renv and Restore renv library
-RUN R --vanilla -s -e "install.packages('remotes', repos = c(CRAN = 'https://cloud.r-project.org'))"
-RUN R --vanilla -s -e "remotes::install_github('rstudio/renv@v1.0.7')"
-RUN R --vanilla -s -e 'renv::restore()'
+RUN R -e "install.packages('remotes', repos = c(CRAN = 'https://cloud.r-project.org'))"
+RUN R -e "remotes::install_github('rstudio/renv@v1.1.1')"
+RUN R -e "renv::restore()"
 
 # Set up links
 RUN chmod +x landcon.sh \
   && ln -s /home/rstudio/land_con_monteregie/landcon.sh /usr/bin/
+
+# Julia install
+ENV JULIA_DEPOT_PATH=/opt/julia
+ENV JULIA_PKGDIR=/opt/julia
+
+# Install julia and custom version of circuitscape
+RUN curl -L https://julialang-s3.julialang.org/bin/linux/x64/1.4/julia-1.4.2-linux-x86_64.tar.gz --output /home/rstudio/julia-1.4.2-linux-x86_64.tar.gz \
+ && tar -xzf /home/rstudio/julia-1.4.2-linux-x86_64.tar.gz -C /home/rstudio/ \
+ && julia -e 'import Pkg; Pkg.activate("."); Pkg.instantiate(); Pkg.precompile()' \
+ && chown -R rstudio /home/rstudio/julia-1.4.2 \ 
+ && chown -R rstudio /opt/julia
+ 
+# Install syncrosim and download package file
+RUN mkdir /home/rstudio/syncrosim_2_10 \
+ && chown -R rstudio /home/rstudio/syncrosim_2_10 \
+ && curl -L https://syncrosim.com/download-id/syncrosim-for-linux-version-2-0-18/ --output /home/rstudio/syncrosim_2_10.zip \
+ && unzip /home/rstudio/syncrosim_2_10.zip -d /home/rstudio/syncrosim_2_10 \
+ && mkdir /home/rstudio/syncrosim_packages \
+ && chown -R rstudio /home/rstudio/syncrosim_packages \
+ && curl -L https://github.com/ApexRMS/stsim/releases/download/3.2.17/stsim-3-2-17.ssimpkg --output /home/rstudio/syncrosim_packages/stsim-3-2-17.ssimpkg
+
+# OpenCV / python
+RUN cd /home/rstudio \
+  && git clone https://github.com/opencv/opencv.git \
+  && git clone https://github.com/opencv/opencv_contrib.git \
+  && cd /home/rstudio/opencv \
+  && mkdir build \
+  && cd build \
+  && sudo cmake -D CMAKE_BUILD_TYPE=RELEASE \
+  -D CMAKE_INSTALL_PREFIX=/usr/local \
+  -D OPENCV_ENABLE_NONFREE=ON \
+  -D OPENCV_EXTRA_MODULES_PATH=/home/rstudio/opencv_contrib/modules \
+  -D PYTHON_INCLUDE_DIR=/usr/include/python3.7 \
+  -D PYTHON3_EXECUTABLE=/usr/bin/python3 .. \
+  && make -j4 \
+  && sudo make install \
+	&& pip3 install numpy matplotlib pandas scikit-image scipy
   
 # ------------------------------------------------------------------------------
+
 # Set up git lfs 
-# RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash \
-#  && apt-get install git-lfs \
-#  && git lfs install \
-#  && git lfs fetch \
-#  && git lfs checkout
+RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash \
+ && apt-get install git-lfs \
+ && git lfs install \
+ && git lfs fetch \
+ && git lfs checkout
+
 # ------------------------------------------------------------------------------
 ## With renv cache, has not worked so far: 
 # RENV_PATHS_CACHE_HOST=/opt/local/renv/cache
