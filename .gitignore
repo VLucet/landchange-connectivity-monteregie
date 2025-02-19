@@ -3,7 +3,6 @@
 .Rhistory
 .RData
 .Ruserdata
-*.Rproj
 # Figures
 *.pdf
 !thesis/appendix/*pdf
