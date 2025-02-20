@@ -34,7 +34,7 @@ jobs:
         vlucet/land_con_monteregie:3.6.2-1 /bin/bash -c "git checkout * && git pull && make all -B"
         
     - name: Fix safety
-      run: git config --system --add safe.directory .
+      run: git config --global --add safe.directory .
         
     - name: Print git status
       run: git status
