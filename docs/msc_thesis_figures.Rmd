@@ -19,6 +19,8 @@ output:
 
 **This regroups most of the figures in the thesis (appendix figures are not included, except for the ROC resample figures, the BAU simulated land use change and the radar graph for change in flow for both chapters).**
 
+Note:updated in 2025 - repro checked.
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 suppressPackageStartupMessages({
