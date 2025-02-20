@@ -8,7 +8,7 @@ on:
       - "**.Rmd"
       - "**.tex"
   schedule:
-    - cron: '0 0 * * 0'  # Runs once a week (every Sunday at midnight UTC)
+    
 
 jobs:
   build:
@@ -27,9 +27,7 @@ jobs:
         docker run -e REPRO_FIGS_ONLY='TRUE' \
         -v "$(pwd)/docs/:/home/rstudio/land_con_monteregie/docs/" \
         -v "$(pwd)/thesis/:/home/rstudio/land_con_monteregie/thesis/" \
-        vlucet/land_con_monteregie:3.6.2-1 /bin/bash \
-        -c "git config --global --add safe.directory /github/workspace && \
-        git checkout * && git pull && make all"
+        vlucet/land_con_monteregie:3.6.2-1 /bin/bash -c "git checkout * && git pull && make all"
         
     - name: print git status
       run: git status
@@ -41,6 +39,7 @@ jobs:
     - name: Commit files
       if: steps.changes.outputs.changed == 1
       run: |
+        git config --global --add safe.directory /github/workspace
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git add docs/** thesis/**
