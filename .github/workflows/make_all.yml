@@ -23,25 +23,28 @@ jobs:
         persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal access token.
         fetch-depth: 0 # otherwise, there would be errors pushing refs to the destination repository.
 
-    - name: pull docker image
+    - name: Pull docker image
       run: docker pull vlucet/land_con_monteregie:3.6.2-1 
   
-    - name: knit rmd
+    - name: Knit rmd
       run: |
         docker run -e REPRO_FIGS_ONLY='TRUE' \
         -v "$(pwd)/docs/:/home/rstudio/land_con_monteregie/docs/" \
         -v "$(pwd)/thesis/:/home/rstudio/land_con_monteregie/thesis/" \
         vlucet/land_con_monteregie:3.6.2-1 /bin/bash -c "git checkout * && git pull && make all -B"
         
-    - name: print git status
+    - name: Fix safety
+      run: git config --system --add safe.directory .
+        
+    - name: Print git status
       run: git status
 
-    # - name: check for changes
-    #   id: changes
-    #   uses: UnicornGlobal/has-changes-action@v1.0.11
+    - name: Check for changes
+      id: get_changes
+      run: echo "changed=$(git status --porcelain | wc -l)" >> $GITHUB_OUTPUT
   
     - name: Commit files
-      if: steps.changes.outputs.changed == 1
+      if: steps.get_changes.outputs.changed == 1
       run: |
         git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
@@ -49,7 +52,7 @@ jobs:
         git commit -m "CI - figures"
         
     - name: Push changes
-      if: steps.changes.outputs.changed == 1
+      if: steps.get_changes.outputs.changed == 1
       uses: ad-m/github-push-action@master
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
