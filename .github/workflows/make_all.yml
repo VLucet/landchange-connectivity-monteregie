@@ -13,11 +13,15 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:                # Job-level permissions configuration starts here
+      contents: write           # 'write' access to repository contents
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
       with:
-        lfs: true
+        lfs: true # add git lfs
+        persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal access token.
+        fetch-depth: 0 # otherwise, there would be errors pushing refs to the destination repository.
 
     - name: pull docker image
       run: docker pull vlucet/land_con_monteregie:3.6.2-1 
@@ -27,7 +31,7 @@ jobs:
         docker run -e REPRO_FIGS_ONLY='TRUE' \
         -v "$(pwd)/docs/:/home/rstudio/land_con_monteregie/docs/" \
         -v "$(pwd)/thesis/:/home/rstudio/land_con_monteregie/thesis/" \
-        vlucet/land_con_monteregie:3.6.2-1 /bin/bash -c "git checkout * && git pull && make all"
+        vlucet/land_con_monteregie:3.6.2-1 /bin/bash -c "git checkout * && git pull && make all -B"
         
     - name: print git status
       run: git status
@@ -39,9 +43,8 @@ jobs:
     - name: Commit files
       if: steps.changes.outputs.changed == 1
       run: |
-        git config --global --add safe.directory /github/workspace
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
+        git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
         git add docs/** thesis/**
         git commit -m "CI - figures"
         
@@ -50,3 +53,4 @@ jobs:
       uses: ad-m/github-push-action@master
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: ${{ github.ref }}
