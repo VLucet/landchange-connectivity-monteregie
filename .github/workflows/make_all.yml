@@ -8,7 +8,7 @@ on:
       - "**.Rmd"
       - "**.tex"
   schedule:
-    
+      - cron: '0 0 * * 0'  # Runs once a week (every Sunday at midnight UTC)
 
 jobs:
   build:
