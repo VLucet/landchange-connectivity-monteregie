@@ -9,6 +9,8 @@ on:
       - "Dockerfiles/Dockerfile"
       - ".github/workflows/build_and_push.yml"
       - "renv.lock"
+  schedule:
+    - cron: '0 0 1 * *'  # Runs once a month (on the 1st day of every month at midnight UTC)
       
 env:
   IMAGE_NAME: vlucet/land_con_monteregie
