@@ -28,7 +28,8 @@ jobs:
         -v "$(pwd)/docs/:/home/rstudio/land_con_monteregie/docs/" \
         -v "$(pwd)/thesis/:/home/rstudio/land_con_monteregie/thesis/" \
         vlucet/land_con_monteregie:3.6.2-1 /bin/bash \
-        -c "git config --global --add safe.directory /github/workspace & git checkout * && git pull && make all"
+        -c "git config --global --add safe.directory /github/workspace && \
+        git checkout * && git pull && make all"
         
     - name: print git status
       run: git status
