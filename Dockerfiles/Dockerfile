@@ -90,8 +90,9 @@ RUN curl -L https://julialang-s3.julialang.org/bin/linux/x64/1.4/julia-1.4.2-lin
 # Install syncrosim and download package file
 RUN mkdir /home/rstudio/syncrosim_2_10 \
  && chown -R rstudio /home/rstudio/syncrosim_2_10 \
- && curl -L https://syncrosim.com/download-id/syncrosim-for-linux-version-2-0-18/ --output /home/rstudio/syncrosim_2_10.zip \
- && unzip /home/rstudio/syncrosim_2_10.zip -d /home/rstudio/syncrosim_2_10 \
+ # Link to past version of SS now broken, reducing reproducibility of the project
+ # && curl -L https://syncrosim.com/download-id/syncrosim-for-linux-version-2-0-18/ --output /home/rstudio/syncrosim_2_10.zip \
+ # && unzip /home/rstudio/syncrosim_2_10.zip -d /home/rstudio/syncrosim_2_10 \
  && mkdir /home/rstudio/syncrosim_packages \
  && chown -R rstudio /home/rstudio/syncrosim_packages \
  && curl -L https://github.com/ApexRMS/stsim/releases/download/3.2.17/stsim-3-2-17.ssimpkg --output /home/rstudio/syncrosim_packages/stsim-3-2-17.ssimpkg
